@@ -1,0 +1,24 @@
+.header {
+  height: 4rem;
+  font-size: 1.2rem;
+}
+
+.nav a {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+  opacity: 0.8;
+  outline: none;
+}
+
+.nav a:hover {
+  opacity: 1;
+  text-decoration-color: inherit;
+}
+
+.nav .right > * {
+  margin: auto;
+  padding: 0 6px;
+  cursor: pointer;
+}

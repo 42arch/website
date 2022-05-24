@@ -1,12 +1,17 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import Layout from '../components/Layout'
 
 const Home: NextPage = () => {
   return (
-    <h1 className="text-3xl font-bold underline cursor-pointer">
-      Hello world!
-    </h1>
+    <Layout home>
+
+      <section className=''>
+        <p>about me</p>
+      </section>
+
+    </Layout>
   )
 }
 
