@@ -2,9 +2,10 @@
 title: Markdown Examples
 date: 2021-03-19
 description: View examples of all possible Markdown options.
-tag: 
+tags: 
   - web development
 author: You
+coverImage: '/assets/post/pre-rendering/cover.png'
 ---
 
 # Markdown Examples

@@ -1,4 +1,5 @@
 import Head from "next/head"
+import Back from "./Back"
 import TheHeader from "./TheHeader"
 
 
@@ -19,6 +20,11 @@ export default function Layout({ children, home }: any) {
       <TheHeader></TheHeader>
       <main className="px-7 py-10">
         { children }
+        {/* {
+          !home && (
+            <Back />
+          )
+        } */}
       </main>
     </div>
   )

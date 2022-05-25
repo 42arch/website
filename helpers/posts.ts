@@ -48,6 +48,14 @@ export const getSortedPosts = () => {
   })
 }
 
+export const getPostsByPage = (page: number, size: number) => {
+  if(page === 0) {
+    page = 1
+  }
+  const allPosts = getSortedPosts()
+  return allPosts.slice((page - 1) * size, page * size)
+}
+
 export const getAllPostIds = () => {
   const fileNames = fs.readdirSync(postsDirectiry)
 

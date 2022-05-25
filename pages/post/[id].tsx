@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Layout from "../../components/Layout"
 import Date from '../../components/Date'
 import { getAllPostIds, getPostData, PostDataWithContent } from "../../helpers/posts"
+import Back from "../../components/Back"
 
 export async function getStaticPaths() {
   const paths = getAllPostIds()
@@ -28,17 +29,25 @@ const Post: NextPage<{ postData: PostDataWithContent }> = ({ postData }) => {
       <Head>
         <title>{ postData.title }</title>
       </Head>
-      <div className='prose m-auto mb-8'>
+      <div className='prose dark:prose-invert m-auto mb-8'>
         <h1>{ postData.title }</h1>
-        <p>
+        <p className="">
           <Date dateString={ postData.date } />
+          <a className="mx-8 opacity-80">{ `#${ postData.category }` }</a>
         </p>
       </div>
       <article>
-        <div className=' prose m-auto' dangerouslySetInnerHTML={{ __html: postData.contentHtml }}>
-
-        </div>
+        <div className='prose dark:prose-invert m-auto' dangerouslySetInnerHTML={{ __html: postData.contentHtml }}></div>
+        <p className="prose font-mono m-auto my-8 text-center text-xl">-- EOF --</p>
       </article>
+      <div className="prose m-auto flex flex-wrap justify-evenly my-8">
+        {
+          postData.tags.map(tag => (
+            <a className="mx-4 font-mono hover:opacity-90" key={tag}>{ `# ${tag}` }</a>
+          ))
+        }
+      </div>
+      <Back />
     </Layout>
   )
 }

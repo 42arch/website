@@ -12,10 +12,10 @@ module.exports = {
 		'./components/**/*.{js,ts,jsx,tsx}'
 	],
   theme: {
-    colors: {
-      primary: '#2563EB',
-      secodary: '#60A5FA'
-    },
+    // colors: {
+    //   primary: '#2563EB',
+    //   secodary: '#60A5FA'
+    // },
     extend: {
       
     },
