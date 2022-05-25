@@ -1,18 +1,26 @@
 import path from "path"
 import fs from "fs"
 import matter from "gray-matter"
-import { remark } from 'remark'
-import html from 'remark-html'
+import { markdownToHtml } from './markdown'
 
-export type PostData = {
-  id: string
+export type PostMeta = {
   title: string
   date: string
   category: string
   tags: string[]
+  excerpt: string
+  coverImage: string
 }
 
-const postsDirectiry = path.join(process.cwd(), 'posts')
+export type PostData = PostMeta & {
+  id: string
+}
+
+export type PostDataWithContent = PostData & {
+  contentHtml: string
+}
+
+const postsDirectiry = path.join(process.cwd(), '_posts')
 
 export const getSortedPosts = () => {
   const fileNames = fs.readdirSync(postsDirectiry)
@@ -24,10 +32,9 @@ export const getSortedPosts = () => {
     if(matterRes.data.date && matterRes.data.date instanceof Date) {
       matterRes.data.date = matterRes.data.date.toISOString()
     }
-
     return {
       id,
-      ...(matterRes.data as { title: string, date: string, category: string, tags: string[] })
+      ...(matterRes.data as PostMeta)
     }
   })
   return allPostsData.sort(({ date: a }, { date: b }) => {
@@ -57,13 +64,11 @@ export const getPostData = async (id: string) => {
   const fullPath = path.join(postsDirectiry, `${id}.md`)
   const fileContents = fs.readFileSync(fullPath, 'utf-8')
 
-  const matterRes = matter(fileContents)
-
-	const processedContent = await remark().use(html).process(matterRes.content)
-	const contentHtml = processedContent.toString()
-	return {
-		id,
-		contentHtml,
-		...matterRes.data
-	}
+  const { data, content } = matter(fileContents)
+  const contentHtml = await markdownToHtml(content)
+  return {
+    id,
+    contentHtml,
+    ...(data as PostMeta)
+  }
 }

@@ -1,11 +1,12 @@
 import Link from "next/link"
 import { FiBook, FiGithub, FiMeh, FiSun, FiUser } from "react-icons/fi"
 import styles from './TheHeader.module.css'
+import ToggleTheme from "./ToggleTheme"
 
 export default function TheHeader() {
   return (
     <header className={ styles.header }>
-      <nav className={ `${styles.nav} h-full px-2 md:px-4 w-full flex justify-between` }>
+      <nav className={ `${styles.nav} h-full px-2 md:px-14 w-full flex justify-between` }>
         <div className={ ` h-full flex justify-center items-center uppercase font-bold` }>
           <Link href='/'>
             MainIssues
@@ -37,7 +38,7 @@ export default function TheHeader() {
             </Link>
           </a>
           <a>
-            <FiSun />
+            <ToggleTheme />
           </a>
           <a>
             <FiGithub/>
