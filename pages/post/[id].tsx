@@ -29,27 +29,30 @@ const Post: NextPage<{ postData: PostDataWithContent }> = ({ postData }) => {
       <Head>
         <title>{ postData.title }</title>
       </Head>
-      <div className='prose dark:prose-invert m-auto mb-8'>
-        <h1>{ postData.title }</h1>
-        <p className="">
-          <Date dateString={ postData.date } />
-          <a className="mx-8 opacity-80">{ `#${ postData.category }` }</a>
-        </p>
+      <div className="prose dark:prose-invert m-auto mb-8">
+        <div>
+          <h1>{ postData.title }</h1>
+          <p>
+            {/* <Date dateString={ postData.date } /> */}
+            <a className="mx-8 opacity-80">{ `#${ postData.category }` }</a>
+          </p>
+        </div>
+        <article>
+          <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }}></div>
+          <p className="font-mono my-8 text-center text-xl">-- EOF --</p>
+        </article>
+        <div className="flex flex-wrap justify-evenly my-8">
+          {
+            postData.tags.map(tag => (
+              <Link key={tag} href={`/post/tag/${tag}`}>
+                <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>          
+              </Link>
+            ))
+          }
+        </div>
+        <Back />
       </div>
-      <article>
-        <div className='prose dark:prose-invert m-auto' dangerouslySetInnerHTML={{ __html: postData.contentHtml }}></div>
-        <p className="prose font-mono m-auto my-8 text-center text-xl">-- EOF --</p>
-      </article>
-      <div className="prose m-auto flex flex-wrap justify-evenly my-8">
-        {
-          postData.tags.map(tag => (
-            <Link key={tag} href={`/post/tag/${tag}`}>
-              <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>          
-            </Link>
-          ))
-        }
-      </div>
-      <Back />
+
     </>
   )
 }

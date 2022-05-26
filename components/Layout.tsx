@@ -1,9 +1,6 @@
 import Head from "next/head"
-import Back from "./Back"
 import TheHeader from "./TheHeader"
 
-
-const name = 'RenDan'
 const siteTitle = 'Next.js Blog Starter'
 
 export default function Layout({ children, home }: any) {

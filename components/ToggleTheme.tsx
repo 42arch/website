@@ -5,14 +5,15 @@ import { FiSun, FiMoon } from 'react-icons/fi'
 export default function ToggleTheme() {
   const { theme, setTheme } = useTheme()
 
-  // const [mounted, setMounted] = useState(false)
-  // useEffect(() => {
-  //   setTheme('dark')
-  //   setMounted(true)
-  // }, [])
-  // if (!mounted) {
-  //   return null
-  // }
+  // fix the hydration failed error
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setTheme('dark')
+    setMounted(true)
+  }, [])
+  if (!mounted) {
+    return null
+  }
 
   return (
     <div onClick={() => { setTheme(theme === 'light' ? 'dark' : 'light')}}>
