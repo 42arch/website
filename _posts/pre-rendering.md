@@ -3,7 +3,7 @@ title: Markdown Examples
 date: 2021-03-19
 description: View examples of all possible Markdown options.
 tags: 
-  - web development
+  - Markdown
 author: You
 coverImage: '/assets/post/pre-rendering/cover.png'
 ---

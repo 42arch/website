@@ -20,11 +20,6 @@ export default function Layout({ children, home }: any) {
       <TheHeader></TheHeader>
       <main className="px-7 py-10">
         { children }
-        {/* {
-          !home && (
-            <Back />
-          )
-        } */}
       </main>
     </div>
   )

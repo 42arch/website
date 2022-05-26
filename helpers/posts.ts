@@ -22,7 +22,7 @@ export type PostDataWithContent = PostData & {
 
 const postsDirectiry = path.join(process.cwd(), '_posts')
 
-export const getSortedPosts = () => {
+export const getAllPosts = () => {
   const fileNames = fs.readdirSync(postsDirectiry)
   const allPostsData: PostData[] = fileNames.map(fileName => {
     const id = fileName.replace(/\.md$/, '')
@@ -37,6 +37,11 @@ export const getSortedPosts = () => {
       ...(matterRes.data as PostMeta)
     }
   })
+  return allPostsData
+}
+
+export const getSortedPosts = () => {
+  const allPostsData = getAllPosts()
   return allPostsData.sort(({ date: a }, { date: b }) => {
     if(a < b) {
       return 1
@@ -48,12 +53,43 @@ export const getSortedPosts = () => {
   })
 }
 
-export const getPostsByPage = (page: number, size: number) => {
-  if(page === 0) {
-    page = 1
-  }
-  const allPosts = getSortedPosts()
-  return allPosts.slice((page - 1) * size, page * size)
+export const getSortedPostsByTag = (tag: string) => {
+  const allSortedPosts = getSortedPosts()
+  return allSortedPosts.filter(post => (post.tags && post.tags.includes(tag)))
+}
+
+export const getAllPostTags = () => {
+  const allPostsData = getAllPosts()
+  const tags: string[] = []
+  allPostsData.forEach(post => {
+    if(post.tags) {
+      post.tags.forEach(tag => {
+        if(!tags.includes(tag)) {
+          tags.push(tag)
+        }
+      })
+    }
+  })
+  return tags
+}
+
+export const getAllPostsCategories = () => {
+  const allPostsData = getAllPosts()
+  const categories: string[] = []
+  allPostsData.forEach(post => {
+    if(post.category) {
+      categories.push(post.category)
+    }
+  })
+  return categories
+}
+
+
+export const getSortedPostsByCategory = (category: string) => {
+  const allSortedPosts = getSortedPosts()
+  return allSortedPosts.filter(post => {
+    return (post.category && post.category === category)
+  })
 }
 
 export const getAllPostIds = () => {
@@ -67,6 +103,7 @@ export const getAllPostIds = () => {
     }
   ))
 }
+
 
 export const getPostData = async (id: string) => {
   const fullPath = path.join(postsDirectiry, `${id}.md`)

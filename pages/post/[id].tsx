@@ -1,9 +1,9 @@
 import { NextPage } from "next"
 import Head from 'next/head'
-import Layout from "../../components/Layout"
-import Date from '../../components/Date'
+import Date from '../../components/DateFormater'
 import { getAllPostIds, getPostData, PostDataWithContent } from "../../helpers/posts"
 import Back from "../../components/Back"
+import Link from "next/link"
 
 export async function getStaticPaths() {
   const paths = getAllPostIds()
@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({params}: any) {
+export async function getStaticProps({ params }: any) {
   const postData = await getPostData(params.id)
   console.log(555, postData)
   return {
@@ -25,7 +25,7 @@ export async function getStaticProps({params}: any) {
 
 const Post: NextPage<{ postData: PostDataWithContent }> = ({ postData }) => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>{ postData.title }</title>
       </Head>
@@ -43,12 +43,14 @@ const Post: NextPage<{ postData: PostDataWithContent }> = ({ postData }) => {
       <div className="prose m-auto flex flex-wrap justify-evenly my-8">
         {
           postData.tags.map(tag => (
-            <a className="mx-4 font-mono hover:opacity-90" key={tag}>{ `# ${tag}` }</a>
+            <Link key={tag} href={`/post/tag/${tag}`}>
+              <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>          
+            </Link>
           ))
         }
       </div>
       <Back />
-    </Layout>
+    </>
   )
 }
 

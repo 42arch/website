@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { FiBook, FiGithub, FiMeh, FiSun, FiUser } from "react-icons/fi"
+import { FiBook, FiClipboard, FiGithub, FiMeh, FiSun, FiUser } from "react-icons/fi"
 import styles from './TheHeader.module.css'
 import ToggleTheme from "./ToggleTheme"
 
@@ -22,10 +22,10 @@ export default function TheHeader() {
             </Link>
           </a>
           <a>
-            <Link href='/emotion'>
+            <Link href='/note'>
               <div>
-                <span className="hidden md:block">Emotion</span>
-                <FiMeh className="md:hidden"/>
+                <span className="hidden md:block">Note</span>
+                <FiClipboard className="md:hidden"/>
               </div>
             </Link>
           </a>
