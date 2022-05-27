@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 
-const Back = () => {
+export default function Back2Prev() {
   const router = useRouter()
 
   return (
@@ -11,5 +11,3 @@ const Back = () => {
     </div>
   )
 }
-
-export default Back

@@ -22,7 +22,7 @@ export const PostItem: FunctionComponent<IProps> = ({ post }) => {
     <small>
       <DateFormater dateString={ post.date } />
     </small>
-    <p>
+    <p className="opacity-80 text-sm">
       { post.excerpt }
     </p>
   </div>

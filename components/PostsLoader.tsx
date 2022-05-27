@@ -1,6 +1,7 @@
 import { FunctionComponent, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { PostData } from '../helpers/posts'
+import Back2Top from './Back2Top'
 import { PostItem } from './PostItem'
 
 interface IPorps {
@@ -21,7 +22,7 @@ const PostsLoader: FunctionComponent<IPorps> = ({ posts, loadSize }) => {
   }
 
   return (
-    <InfiniteScroll dataLength={ curPosts.length } next={loadMorePost} hasMore={hasMore} loader={<h3>loading</h3>} endMessage={<h4>Nothing more to show</h4>}>
+  <InfiniteScroll dataLength={ curPosts.length } next={loadMorePost} hasMore={hasMore} loader={<h3>loading</h3>} endMessage={<h4>Nothing more to show</h4>}>
     <div>
       {
         curPosts.map(post => (
@@ -29,6 +30,7 @@ const PostsLoader: FunctionComponent<IPorps> = ({ posts, loadSize }) => {
         ))
       }
     </div>
+    <Back2Top />
   </InfiniteScroll>
   )
 }

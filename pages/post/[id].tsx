@@ -1,9 +1,11 @@
 import { NextPage } from "next"
+import Link from "next/link"
 import Head from 'next/head'
 import Date from '../../components/DateFormater'
 import { getAllPostIds, getPostData, PostDataWithContent } from "../../helpers/posts"
-import Back from "../../components/Back"
-import Link from "next/link"
+import Back2Prev from "../../components/Back2Prev"
+import CoverImage from "../../components/CoverImage"
+import Back2Top from "../../components/Back2Top"
 
 export async function getStaticPaths() {
   const paths = getAllPostIds()
@@ -14,42 +16,48 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: any) {
-  const postData = await getPostData(params.id)
+  const post = await getPostData(params.id)
   return {
     props: {
-      postData
+      post
     }
   }
 }
 
-const Post: NextPage<{ postData: PostDataWithContent }> = ({ postData }) => {
+const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
   return (
     <>
       <Head>
-        <title>{ postData.title }</title>
+        <title>{ post.title }</title>
       </Head>
       <div className="prose dark:prose-invert m-auto mb-8">
         <div>
-          <h1>{ postData.title }</h1>
+          {
+            post.coverImage && (
+              <CoverImage src={ post.coverImage } slug={ post.id } width={1240} height={620} title={ post.title }></CoverImage>
+            )
+          }
+          <h1 className="mt-8">{ post.title }</h1>
           <p>
-            <Date dateString={ postData.date } />
-            <a className="mx-8 opacity-80">{ `#${ postData.category }` }</a>
+            <Date dateString={ post.date } />
+            <a className="mx-8 opacity-80">{ `#${ post.category }` }</a>
           </p>
         </div>
         <article>
-          <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }}></div>
-          <p className="font-mono my-8 text-center text-xl">-- EOF --</p>
+          <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
+          <p className="font-mono my-8 text-center text-xl opacity-80">-- EOF --</p>
         </article>
         <div className="flex flex-wrap justify-evenly my-8">
           {
-            postData.tags.map(tag => (
+            post.tags.map(tag => (
               <Link key={tag} href={`/post/tag/${tag}`}>
                 <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>          
               </Link>
             ))
           }
         </div>
-        <Back />
+        <Back2Prev/>
+        <Back2Top/>
       </div>
     </>
   )
