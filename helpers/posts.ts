@@ -2,6 +2,7 @@ import path from "path"
 import fs from "fs"
 import matter from "gray-matter"
 import { markdownToHtml } from './markdown'
+import { format, parseISO } from "date-fns"
 
 export type PostMeta = {
   title: string
@@ -29,8 +30,9 @@ export const getAllPosts = () => {
     const fullPath = path.join(postsDirectiry, fileName)
     const fileContent = fs.readFileSync(fullPath, 'utf-8')
     const matterRes = matter(fileContent)
-    if(matterRes.data.date && matterRes.data.date instanceof Date) {
-      matterRes.data.date = matterRes.data.date.toISOString()
+    if(matterRes.data.date) {
+      const date = new Date(matterRes.data.date)
+      matterRes.data.date = format(date, 'LLLL d, yyyy')
     }
     return {
       id,
@@ -110,9 +112,9 @@ export const getPostData = async (id: string) => {
   const fileContents = fs.readFileSync(fullPath, 'utf-8')
 
   const { data, content } = matter(fileContents)
-  console.log('test date', data.date)
-  if(data.date && data.date instanceof Date) {
-    data.date = data.date.toUTCString()
+  if(data.date) {
+    const date = new Date(data.date)
+    data.date = format(date, 'LLLL d, yyyy')
   }
   const contentHtml = await markdownToHtml(content)
   return {

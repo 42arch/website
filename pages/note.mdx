@@ -6,18 +6,21 @@ import MDXWrapper from '../components/MDXWrapper'
 > Quick Notes & Tips.
 
 <article>
-## 1. `range` in JavaScript
+## 1. a标签的 rel="noreferrer"
 
-_2021/09/13_
+_2022/05/28_
 
-Credit to [GitHub Copilot](https://copilot.github.com/).
+在开发此博客时，用了a标签的`target='_blank'`实现新窗口跳转其他网站。eslint提示警告`_Using target="_blank" without rel="noreferrer" (which implies rel="noopener") is a security risk in older browsers: see https://mathiasbynens.github.io/rel-noopener/#recommendationseslintreact/jsx-no-target-blank_ `。
+通过自动修复，在a标签后添加了`rel="noreferrer"`。
 
-I didn't know you could provide a map function to `Array.from` as a second argument until today.
-
-```js
-Array.from({ length: 10 }, (_, i) => i)
-// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+这样window.opener会为null，阻止攻击者通过其获取到源页面的部分控制权，可以防止钓鱼安全漏洞。
+```html
+<a href="https://github.com/REND42" target='_blank' className="hidden md:block" rel="noopener noreferrer" >
 ```
+参考：
+[rel属性](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel)
+[原理](https://mathiasbynens.github.io/rel-noopener/#recommendationseslintreact/jsx-no-target-blank)
+
 </article>
 
 </MDXWrapper>

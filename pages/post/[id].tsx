@@ -51,7 +51,7 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
         </article>
         <div className="flex flex-wrap justify-evenly my-8">
           {
-            post.tags.map(tag => (
+            post.tags && post.tags.map(tag => (
               <Link key={tag} href={`/post/tag/${tag}`}>
                 <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>
               </Link>

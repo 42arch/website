@@ -48,7 +48,7 @@ export default function TheHeader() {
           <a>
             <ToggleTheme />
           </a>
-          <a className="hidden md:block">
+          <a href="https://github.com/REND42" target='_blank' className="hidden md:block" rel="noreferrer" >
             <FiGithub/>
           </a>
         </div>

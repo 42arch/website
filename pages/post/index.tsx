@@ -1,12 +1,10 @@
-import InfiniteScroll from "react-infinite-scroll-component"
 import { NextPage } from 'next'
 import { getSortedPosts, PostData } from '../../helpers/posts'
-import { useState } from "react"
-import { PostItem } from "../../components/PostItem"
 import PostsLoader from "../../components/PostsLoader"
 
 export const getStaticProps = () => {
   const posts = getSortedPosts()
+  // console.log(333, posts)
   return {
     props: {  
       posts
