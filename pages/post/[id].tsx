@@ -33,7 +33,7 @@ const Post: NextPage<{ postData: PostDataWithContent }> = ({ postData }) => {
         <div>
           <h1>{ postData.title }</h1>
           <p>
-            {/* <Date dateString={ postData.date } /> */}
+            <Date dateString={ postData.date } />
             <a className="mx-8 opacity-80">{ `#${ postData.category }` }</a>
           </p>
         </div>
