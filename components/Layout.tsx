@@ -6,7 +6,7 @@ const siteTitle = 'Next.js Blog'
 
 export default function Layout({ children, home }: any) {
   return (
-    <div className="w-full h-screen min-h-full">
+    <div className="font-sans w-full h-screen min-h-full">
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta

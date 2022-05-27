@@ -2,6 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --c-bg: #fff;
+  --c-scrollbar: #eee;
+  --c-scrollbar-hover: #bbb;
+}
+
+html {
+  background-color: var(--c-bg);
+}
+
+html.dark {
+  --c-bg: #050505;
+  --c-scrollbar: #111;
+  --c-scrollbar-hover: #222;
+}
+
+html {
+  overflow: scroll;
+}
+
+* {
+  scrollbar-color: var(--c-scrollbar) var(--c-bg);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner {
+  background: var(--c-bg);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c-scrollbar);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-scrollbar-hover);
+}
+
 .prose a {
   font-weight: inherit;
   text-decoration: none;
@@ -9,3 +51,4 @@
   transition: border 0.3s ease-in-out;
   cursor: pointer;
 }
+
