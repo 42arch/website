@@ -34,7 +34,7 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
         <div>
           {
             post.coverImage && (
-              <CoverImage src={ post.coverImage } slug={ post.id } width={1240} height={620} title={ post.title }></CoverImage>
+              <CoverImage src={ post.coverImage } width={1240} height={620} title={ post.title }></CoverImage>
             )
           }
           <h1 className="mt-8">{ post.title }</h1>
@@ -45,13 +45,15 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
         </div>
         <article>
           <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
-          <p className="font-mono my-8 text-center text-xl opacity-80">-- EOF --</p>
+          <p className="font-mono my-8 text-center text-xl opacity-80">
+            -- EOF --
+          </p>
         </article>
         <div className="flex flex-wrap justify-evenly my-8">
           {
             post.tags.map(tag => (
               <Link key={tag} href={`/post/tag/${tag}`}>
-                <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>          
+                <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>
               </Link>
             ))
           }
