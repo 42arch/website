@@ -110,7 +110,8 @@ export const getPostData = async (id: string) => {
   const fileContents = fs.readFileSync(fullPath, 'utf-8')
 
   const { data, content } = matter(fileContents)
-  if(data.date) {
+  console.log('test date', data.date)
+  if(data.date && data.date instanceof Date) {
     data.date = new Date(data.date).toUTCString()
   }
   const contentHtml = await markdownToHtml(content)
