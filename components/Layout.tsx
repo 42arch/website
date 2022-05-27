@@ -1,7 +1,8 @@
 import Head from "next/head"
+import TheFooter from "./TheFooter"
 import TheHeader from "./TheHeader"
 
-const siteTitle = 'Next.js Blog Starter'
+const siteTitle = 'Next.js Blog'
 
 export default function Layout({ children, home }: any) {
   return (
@@ -10,7 +11,7 @@ export default function Layout({ children, home }: any) {
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
-          content="Track Spacex Missions"
+          content="Dan's Personal Site."
         />
         <meta name="og:title" content={siteTitle} />
       </Head>
@@ -18,6 +19,7 @@ export default function Layout({ children, home }: any) {
       <main className="px-7 py-10">
         { children }
       </main>
+      <TheFooter></TheFooter>
     </div>
   )
 }

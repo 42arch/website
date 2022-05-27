@@ -30,6 +30,14 @@ export default function TheHeader() {
             </Link>
           </a>
           <a>
+            <Link href='/record'>
+              <div>
+                <span className="hidden md:block">Record</span>
+                <FiMeh className="md:hidden"/>
+              </div>
+            </Link>
+          </a>
+          <a>
             <Link href='/about'>
               <div>
                 <span className="hidden md:block">About</span>
@@ -40,7 +48,7 @@ export default function TheHeader() {
           <a>
             <ToggleTheme />
           </a>
-          <a>
+          <a className="hidden md:block">
             <FiGithub/>
           </a>
         </div>

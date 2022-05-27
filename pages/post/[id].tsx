@@ -52,7 +52,6 @@ const Post: NextPage<{ postData: PostDataWithContent }> = ({ postData }) => {
         </div>
         <Back />
       </div>
-
     </>
   )
 }

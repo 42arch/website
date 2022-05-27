@@ -1,16 +1,24 @@
-import { FunctionComponent, ReactNode } from "react"
+import Head from "next/head"
+import React, { FunctionComponent, ReactNode } from "react"
 
 interface IProps {
   children: string | ReactNode
+  title: string
 }
 
-const MDXWrapper: FunctionComponent<IProps> = ({ children }) => {
+const MDXWrapper: FunctionComponent<IProps> = ({ children, title }) => {
   return (
-    <div className={`prose dark:prose-invert m-auto`}>
-      {
-        children
-      }
-    </div>
+    <>
+      <Head>
+        <title>{ title }</title>
+      </Head>
+      <div className={`prose dark:prose-invert m-auto`}>
+        {
+          children
+        }
+      </div>
+    </>
+
   )
 }
 
