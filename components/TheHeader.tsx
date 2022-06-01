@@ -7,7 +7,7 @@ export default function TheHeader() {
   return (
     <header className={ styles.header }>
       <nav className={ `${styles.nav} h-full px-2 md:px-14 w-full flex justify-between` }>
-        <div className={ ` h-full flex justify-center items-center uppercase font-bold` }>
+        <div className={ `h-full flex justify-center items-center uppercase font-bold` }>
           <Link href='/'>
             MainIssues
           </Link>

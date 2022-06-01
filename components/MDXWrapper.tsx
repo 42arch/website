@@ -18,7 +18,6 @@ const MDXWrapper: FunctionComponent<IProps> = ({ children, title }) => {
         }
       </div>
     </>
-
   )
 }
 
