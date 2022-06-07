@@ -6,6 +6,34 @@ import MDXWrapper from '../components/MDXWrapper'
 > Quick Notes & Tips.
 
 <article>
+
+## 3. `Array.prototype.forEach`的第二个参数
+
+_2022/06/07_
+
+今天才知道`forEach`除了第一个回调参数外，还有第二个可选参数，用于传递this。因为`forEach`的callback参数一直使用匿名函数，所以之前并未注意到该参数的作用。
+
+```js
+let obj = {
+  a: 'xxx',
+  run: function() {
+    let list = [2, 4, 6, 8]
+    list.forEach(function(item) {
+      console.log(this)  // 指向全局对象
+    })
+    console.log('---------')
+    list.forEach(item => {
+      console.log(this)  // 指向obj
+    })
+    console.log('---------')
+    list.forEach(function(item) {
+      console.log(this)  // 指向obj
+    }, this)
+  }
+}
+
+```
+
 ## 2. `npm login` 403问题
 
 _2022/05/29_
