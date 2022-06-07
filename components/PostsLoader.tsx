@@ -22,7 +22,7 @@ const PostsLoader: FunctionComponent<IPorps> = ({ posts, loadSize }) => {
   }
 
   return (
-  <InfiniteScroll dataLength={ curPosts.length } next={loadMorePost} hasMore={hasMore} loader={<h3>loading</h3>} endMessage={<h4>Nothing more to show</h4>}>
+  <InfiniteScroll dataLength={ curPosts.length } next={loadMorePost} hasMore={hasMore} loader={<h5 className='text-center opacity-80'>loading</h5>} endMessage={<h5 className='text-center opacity-80'>Nothing more to show</h5>}>
     <div>
       {
         curPosts.map(post => (

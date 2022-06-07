@@ -14,7 +14,7 @@ export const getStaticProps = () => {
 const PostIndex: NextPage<{ posts: PostData[] }> = ({ posts }) => {
   return (
     <article>
-      <div className='prose dark:prose-invert m-auto flex justify-between'>
+      <div className='prose dark:prose-invert m-auto'>
         <PostsLoader posts={ posts } loadSize={ 5 }/>
         {/* <div className='h-20 w-64 hidden md:block'>
         </div> */}
