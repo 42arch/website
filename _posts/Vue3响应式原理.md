@@ -5,6 +5,8 @@ excerpt: Vue3实现响应式的方式与Vue2相比有一些变化，本文将整
 tags: 
   - JavaScript
   - Vue
+category: 
+  - Tech
 ---
 
 > Vue3实现响应式的方式与Vue2相比有一些变化，本文将整理Vue3中实现响应式的基本原理并实现一个响应式引擎。
