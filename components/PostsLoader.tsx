@@ -26,8 +26,8 @@ const PostsLoader: FunctionComponent<IPorps> = ({ posts, loadSize }) => {
     dataLength={ curPosts.length } 
     next={loadMorePost} 
     hasMore={hasMore}
-    loader={<h5 className='text-center opacity-80'>loading...</h5>}
-    endMessage={<h5 className='text-center opacity-80'>Nothing more to show.</h5>}
+    loader={<h5 className='text-center opacity-80 my-6'>loading...</h5>}
+    endMessage={<h5 className='text-center opacity-80 my-6'>Nothing more to show.</h5>}
   >
     <div>
       {

@@ -26,7 +26,7 @@ const CoverImage: FunctionComponent<IProps> = ( {title, src, slug, height, width
   )
 
   return (
-    <div className="sm:mx-0">
+    <div className="sm:mx-0 py-2">
       {slug ? (
         <Link href={`/post/${slug}`}>
           <a aria-label={title}>{image}</a>
