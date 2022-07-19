@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { PostData } from '../helpers/posts'
 import Back2Top from './Back2Top'
 import { PostItem } from './PostItem'
+import SideMenu from './SideMenu'
 
 interface IPorps {
   posts: PostData[],
@@ -36,7 +37,8 @@ const PostsLoader: FunctionComponent<IPorps> = ({ posts, loadSize }) => {
         ))
       }
     </div>
-    <Back2Top />
+    {/* <Back2Top /> */}
+    <SideMenu />
   </InfiniteScroll>
   )
 }
