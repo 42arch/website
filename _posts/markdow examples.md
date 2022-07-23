@@ -8,6 +8,8 @@ category: 测试
 coverImage: '/assets/post/pre-rendering/cover.png'
 ---
 
+# Table of contents
+
 # Markdown Examples
 
 ## h2 Heading
