@@ -6,7 +6,7 @@ category: 测试
 
 # Alpha
 
-## Table of contents
+## 目录
 
 ## Bravo
 
