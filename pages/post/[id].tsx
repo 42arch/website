@@ -6,6 +6,7 @@ import { getAllPostIds, getPostData, PostDataWithContent } from "../../helpers/p
 import Back2Prev from "../../components/Back2Prev"
 import CoverImage from "../../components/CoverImage"
 import Back2Top from "../../components/Back2Top"
+import Giscus from "@giscus/react"
 
 export async function getStaticPaths() {
   const paths = getAllPostIds()
@@ -59,6 +60,21 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
           }
         </div>
         <Back2Prev/>
+        <Giscus
+          id="comments"
+          repo="REND42/giscus-content"
+          repoId="R_kgDOHtv2FQ"
+          category="Announcements"
+          categoryId="DIC_kwDOHtv2Fc4CQbKi"
+          mapping="pathname"
+          term="Welcome to @giscus/react component!"
+          reactionsEnabled="1"
+          emitMetadata="0"
+          inputPosition="top"
+          theme="dark_dimmed"
+          lang="en"
+          loading="lazy"
+        />
         <Back2Top/>
       </div>
     </>
