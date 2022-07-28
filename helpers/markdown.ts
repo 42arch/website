@@ -6,8 +6,9 @@ import { unified } from 'unified'
 import rehypeDocument from 'rehype-document'
 import rehypeFormat from 'rehype-format'
 import rehypeStringify from 'rehype-stringify'
-import rehypePrism from 'rehype-prism'
 import remarkGfm from 'remark-gfm'
+import remarkPrism from 'remark-prism'
+import rehypePrism from 'rehype-prism-plus'
 
 export const markdownToHtml = async (content: string): Promise<string> => {
   const result = await unified()
@@ -20,6 +21,7 @@ export const markdownToHtml = async (content: string): Promise<string> => {
     .use(rehypeStringify)
     .use(rehypeSlug)
     .use(rehypePrism)
+    .use(remarkPrism)
     .process(content)
     return String(result)
 }
