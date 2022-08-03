@@ -1,8 +1,7 @@
 import { FunctionComponent, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { PostData } from '../helpers/posts'
-import Back2Top from './Back2Top'
-import { PostItem } from './PostItem'
+import { PostItem } from './post/PostItem'
 import SideMenu from './SideMenu'
 
 interface IPorps {

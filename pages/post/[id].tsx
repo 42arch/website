@@ -4,11 +4,12 @@ import Head from 'next/head'
 import Date from '../../components/DateFormater'
 import { getAllPostIds, getPostData, PostDataWithContent } from "../../helpers/posts"
 import Back2Prev from "../../components/Back2Prev"
-import CoverImage from "../../components/CoverImage"
+import CoverImage from "../../components/post/CoverImage"
 import Back2Top from "../../components/Back2Top"
 import Giscus from "@giscus/react"
 import { FiCalendar, FiFolder, FiTag } from "react-icons/fi"
 import DateFormater from "../../components/DateFormater"
+import Metadata from "../../components/post/Metadata"
 
 export async function getStaticPaths() {
   const paths = getAllPostIds()
@@ -41,27 +42,7 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
             )
           }
           <h1 className="mt-8">{ post.title }</h1>
-          <small className="flex py-2">
-            <p className="flex items-center">
-              <FiCalendar className='w-4 h-4 mr-2'/>
-              <DateFormater dateString={ post.date } />
-            </p>
-            <p className="cursor-pointer ml-6 flex justify-center items-center hover:opacity-80">
-              <FiFolder className='w-4 h-4 mr-2'/>
-              { post.category }
-            </p>
-            <p className="flex items-center ml-6 hover:opacity-80">
-              <FiTag className='w-4 h-4 mr-2'/>
-              {
-                post.tags && post.tags.map((tag, idx) => (
-                  <Link key={tag} href={`/post/tag/${tag}`}>
-                    <span className="cursor-pointer mr-4" >{ tag }</span>
-                  </Link>
-                  // <span key={idx} className="cursor-pointer mr-4">{tag}</span>
-                ))
-              }
-            </p>
-          </small>
+          <Metadata post={ post } />
         </div>
         <article>
           <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
