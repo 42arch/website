@@ -1,18 +1,29 @@
+import type { AppProps } from 'next/app'
+import { ThemeProvider, useTheme } from 'next-themes'
+import Layout from '../components/Layout'
 import '../styles/globals.css'
 import '../styles/prisma-atom-dark.css'
-import type { AppProps } from 'next/app'
-import { ThemeProvider } from 'next-themes'
-import Layout from '../components/Layout'
+import AppContext from '../context/AppContext'
+import { useEffect, useState } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
+
+  const { theme, setTheme } = useTheme()
+  const [curTheme, setCurTheme ] = useState(theme)
+
   return (
-    <ThemeProvider attribute='class'>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
+    <AppContext.Provider value={{
+      curTheme,
+      setCurTheme
+    }}>
+      <ThemeProvider attribute='class'>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
+    </AppContext.Provider>
+
   )
-  
 }
 
 export default MyApp

@@ -1,15 +1,14 @@
 import { NextPage } from "next"
 import Link from "next/link"
 import Head from 'next/head'
-import Date from '../../components/DateFormater'
 import { getAllPostIds, getPostData, PostDataWithContent } from "../../helpers/posts"
 import Back2Prev from "../../components/Back2Prev"
 import CoverImage from "../../components/post/CoverImage"
 import Back2Top from "../../components/Back2Top"
 import Giscus from "@giscus/react"
-import { FiCalendar, FiFolder, FiTag } from "react-icons/fi"
-import DateFormater from "../../components/DateFormater"
 import Metadata from "../../components/post/Metadata"
+import { useContext, useEffect, useState } from "react"
+import AppContext from "../../context/AppContext"
 
 export async function getStaticPaths() {
   const paths = getAllPostIds()
@@ -29,6 +28,18 @@ export async function getStaticProps({ params }: any) {
 }
 
 const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
+
+  const { curTheme } = useContext(AppContext)
+  const [giscusTheme, setGiscusTheme] = useState<string>('')
+
+  useEffect(() => {
+    if(curTheme === 'dark') {
+      setGiscusTheme('dark_tritanopia')
+    } else if(curTheme === 'light') {
+      setGiscusTheme('light_tritanopia')
+    }
+  }, [curTheme])
+
   return (
     <>
       <Head>
@@ -71,7 +82,7 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
           reactionsEnabled="1"
           emitMetadata="0"
           inputPosition="top"
-          theme="dark_dimmed"
+          theme={giscusTheme}
           lang="en"
           loading="lazy"
         />
