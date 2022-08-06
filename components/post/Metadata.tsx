@@ -16,18 +16,28 @@ const Metadata: FunctionComponent<IProps> = ({ post }) => {
         <DateFormater dateString={ post.date } />
       </p>
       <p className="cursor-pointer ml-6 flex justify-center items-center hover:opacity-80">
-        <FiFolder className='w-4 h-4 mr-2'/>
-        { post.category }
+        {
+          post.category && <>
+            <FiFolder className='w-4 h-4 mr-2'/>
+            { post.category }
+          </>
+        }
+
       </p>
       <p className="flex items-center ml-6 hover:opacity-80">
-        <FiTag className='w-4 h-4 mr-2'/>
         {
-          post.tags && post.tags.map((tag, idx) => (
-            <Link key={tag} href={`/post/tag/${tag}`}>
-              <span className="cursor-pointer mr-4" >{ tag }</span>
-            </Link>
-          ))
+          post.tags && <>
+            <FiTag className='w-4 h-4 mr-2'/>
+            {
+              post.tags.map((tag, idx) => (
+                <Link key={tag} href={`/post/tag/${tag}`}>
+                  <span className="cursor-pointer mr-4" >{ tag }</span>
+                </Link>
+              ))
+            }
+          </>
         }
+
       </p>
     </small>
   )
