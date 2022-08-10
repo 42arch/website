@@ -21,7 +21,7 @@ export const markdownToHtml = async (content: string): Promise<string> => {
     .use(rehypeStringify)
     .use(rehypeSlug)
     .use(rehypePrism)
-    .use(remarkPrism)
+    // .use(remarkPrism)
     .process(content)
     return String(result)
 }
