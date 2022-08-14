@@ -13,9 +13,9 @@ module.exports = {
 	],
   theme: {
     extend: {
-			fontFamily: {
-				'DIN': ['DIN'],
-				'DIN-bold': ['DIN Bold'],
+      fontFamily: {
+				'common': ['DIN', 'Noto'],
+				'common-bold': ['DIN Bold', 'Noto Bold'],
 			},
     },
   },

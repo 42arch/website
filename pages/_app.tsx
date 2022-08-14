@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app'
 import { ThemeProvider, useTheme } from 'next-themes'
 import Layout from '../components/Layout'
-import '../styles/globals.css'
+import '../styles/global.css'
 import '../styles/prisma-atom-dark.css'
 import AppContext from '../context/AppContext'
 import { useEffect, useState } from 'react'
