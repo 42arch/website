@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { FiBook, FiClipboard, FiGithub, FiMeh, FiSun, FiUser } from "react-icons/fi"
 import styles from './TheHeader.module.css'
@@ -5,14 +6,17 @@ import ToggleTheme from "./ToggleTheme"
 
 export default function TheHeader() {
   return (
-    <header className={ styles.header }>
-      <nav className={ `${styles.nav} h-full px-2 md:px-14 w-full flex justify-between` }>
-        <div className={ `h-full flex justify-center items-center uppercase font-bold` }>
+    <header className='py-10 text-xl select-none'>
+      <nav className={ `${styles.nav} h-full md:px-14 w-full flex justify-between items-center` }>
+        <div className={ `cursor-pointer h-full flex justify-center items-center uppercase font-semibold` }>
           <Link href='/'>
-            MainIssues
+            <div className='flex justify-center items-center'>
+              <Image src={'/images/ghost.png'} width='48' height='48' alt="icon"></Image>
+              <span className='hidden md:block md:pl-6'>MainIssues</span>
+            </div>
           </Link>
         </div>
-        <div className={`${styles.right} h-full grid gap-2 md:gap-8 grid-flow-col`}>
+        <div className={`h-full grid gap-2 md:gap-8 grid-flow-col`}>
           <a>
             <Link href='/post'>
               <div>
