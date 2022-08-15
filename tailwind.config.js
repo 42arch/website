@@ -18,6 +18,9 @@ module.exports = {
 				'common-bold': ['DIN Bold', 'Noto Bold'],
 			},
     },
+    colors: {
+      primary: '#6366f1'
+    }
   },
   plugins: [
     require("@tailwindcss/typography")

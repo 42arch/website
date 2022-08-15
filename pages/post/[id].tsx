@@ -57,19 +57,10 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
         </div>
         <article>
           <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
-          <p className="font-mono my-8 text-center text-xl opacity-80">
+          <p className="py-10 text-center text-lg opacity-80">
             -- EOF --
           </p>
         </article>
-        <div className="flex flex-wrap justify-evenly my-8">
-          {
-            post.tags && post.tags.map(tag => (
-              <Link key={tag} href={`/post/tag/${tag}`}>
-                <a className="mx-4 font-mono hover:opacity-90" >{ `# ${tag}` }</a>
-              </Link>
-            ))
-          }
-        </div>
         <Back2Prev/>
         <Giscus
           id="comments"

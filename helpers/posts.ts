@@ -3,6 +3,7 @@ import fs from "fs"
 import matter from "gray-matter"
 import { markdownToHtml } from './markdown'
 import { format, parseISO } from "date-fns"
+import { Tag } from "./types"
 
 export type PostMeta = {
   title: string
@@ -62,12 +63,15 @@ export const getSortedPostsByTag = (tag: string) => {
 
 export const getAllPostTags = () => {
   const allPostsData = getAllPosts()
-  const tags: string[] = []
+  const tags: Tag[] = []
   allPostsData.forEach(post => {
     if(post.tags) {
       post.tags.forEach(tag => {
-        if(!tags.includes(tag)) {
-          tags.push(tag)
+        const exist = tags.find((t) => t.label === tag)
+        if(exist) {
+          exist.total++
+        } else {
+          tags.push({label: tag, total: 1})
         }
       })
     }
