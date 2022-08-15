@@ -1,5 +1,6 @@
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { FiPlus, FiChevronsUp, FiShare2, FiList } from 'react-icons/fi'
+import { FiPlus, FiChevronsUp, FiShare2, FiList, FiTag } from 'react-icons/fi'
 
 const SideMenu = () => {
   const [collapse, setCollapse] = useState<boolean>(false)
@@ -27,8 +28,11 @@ const SideMenu = () => {
     <div className='fixed flex flex-col cursor-pointer bottom-16 right-2 md:right-24'>
       {
         <div className={`flex flex-col justify-center items-center transition duration-150 ease-in-out ${collapse ? 'block' : 'hidden'}`}>
-          <FiList className='w-5 h-5 my-1 hover:opacity-80'/>
-          <FiShare2 className='w-5 h-5 my-1 hover:opacity-80'/>
+          <FiList className='w-5 h-5 my-2 hover:opacity-80'/>
+          <FiShare2 className='w-5 h-5 my-2 hover:opacity-80'/>
+          <Link href={'/post/tag'}>
+            <FiTag className='w-5 h-5 my-2 hover:opacity-80'/>
+          </Link>
         </div>
       }
       {

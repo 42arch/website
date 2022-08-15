@@ -1,7 +1,6 @@
 import { NextPage } from "next"
 import PostsLoader from "../../../components/PostsLoader"
 import { getAllPostTags, getSortedPostsByTag, PostData } from "../../../helpers/posts"
-import { Tag } from "../../../helpers/types"
 
 export async function getStaticPaths() {
   const tags = getAllPostTags()
@@ -15,7 +14,7 @@ export async function getStaticPaths() {
 export const getStaticProps = ({ params }: any) => {
   const posts = getSortedPostsByTag(params.slug)
   return {
-    props: {  
+    props: {
       posts,
       tag: params.slug
     }
