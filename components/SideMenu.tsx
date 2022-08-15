@@ -1,6 +1,19 @@
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { FiPlus, FiChevronsUp, FiShare2, FiList, FiTag } from 'react-icons/fi'
+
+interface MenuWrapperProps {
+  children: JSX.Element
+}
+const MenuWrapper: FunctionComponent<MenuWrapperProps> = ({ children }) => {
+  return (
+    <div className='w-8 h-8 my-1 bg-primary rounded-full flex justify-center items-center hover:opacity-80'>
+      {
+        children
+      }
+    </div>
+  )
+}
 
 const SideMenu = () => {
   const [collapse, setCollapse] = useState<boolean>(false)
@@ -28,20 +41,30 @@ const SideMenu = () => {
     <div className='fixed flex flex-col cursor-pointer bottom-16 right-2 md:right-24'>
       {
         <div className={`flex flex-col justify-center items-center transition duration-150 ease-in-out ${collapse ? 'block' : 'hidden'}`}>
-          <FiList className='w-5 h-5 my-2 hover:opacity-80'/>
-          <FiShare2 className='w-5 h-5 my-2 hover:opacity-80'/>
-          <Link href={'/post/tag'}>
-            <FiTag className='w-5 h-5 my-2 hover:opacity-80'/>
-          </Link>
+          <MenuWrapper>
+            <FiList className='w-4 h-4 my-1 hover:opacity-80'/>
+          </MenuWrapper>
+          <MenuWrapper>
+            <FiShare2 className='w-4 h-4 my-1 hover:opacity-80'/>
+          </MenuWrapper>
+          <MenuWrapper>
+            <Link href={'/post/tag'}>
+              <FiTag className='w-4 h-4 my-1 hover:opacity-80'/>
+            </Link>
+          </MenuWrapper>
         </div>
       }
       {
-        <div>
-          <FiPlus onClick={() => { setCollapse(!collapse) }} className='w-6 h-6 my-1 hover:opacity-80 transition duration-150 ease-in-out' style={ collapse ? {transform: 'rotate(135deg)'} : {}}/> 
-          {
-            topBtnShow && <FiChevronsUp className='w-6 h-6' onClick={ scrollUp } />
-          }
-        </div>
+          <>
+            <MenuWrapper>
+              <FiPlus onClick={() => { setCollapse(!collapse) }} className='w-4 h-4 my-1 hover:opacity-80 transition duration-150 ease-in-out' style={ collapse ? {transform: 'rotate(135deg)'} : {}}/> 
+            </MenuWrapper>
+            {
+              topBtnShow && <MenuWrapper>
+                <FiChevronsUp className='w-4 h-4 my-1 hover:opacity-80' onClick={ scrollUp } />
+              </MenuWrapper>
+            }
+          </>
       }
     </div>
   )
