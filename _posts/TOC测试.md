@@ -1,5 +1,6 @@
 ---
 title: TOC测试
+slug: toc-test
 date: 2022-07-20
 category: 测试
 tags: 

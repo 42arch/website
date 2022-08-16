@@ -17,9 +17,9 @@ module.exports = {
 				'common': ['DIN', 'Noto'],
 				'common-bold': ['DIN Bold', 'Noto Bold'],
 			},
-    },
-    colors: {
-      primary: '#6366f1'
+      colors: {
+        primary: '#6366f1'
+      }
     }
   },
   plugins: [

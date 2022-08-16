@@ -1,17 +1,16 @@
 import { NextPage } from "next"
-import Link from "next/link"
+import { useContext, useEffect, useState } from "react"
 import Head from 'next/head'
-import { getAllPostIds, getPostData, PostDataWithContent } from "../../helpers/posts"
+import Giscus from "@giscus/react"
+import { getAllPostIds, getAllPostSlugs, getPostBySlug, getPostData, PostDataWithContent } from "../../helpers/posts"
 import Back2Prev from "../../components/Back2Prev"
 import CoverImage from "../../components/post/CoverImage"
-import Back2Top from "../../components/Back2Top"
-import Giscus from "@giscus/react"
 import Metadata from "../../components/post/Metadata"
-import { useContext, useEffect, useState } from "react"
 import AppContext from "../../context/AppContext"
+import SideMenu from "../../components/SideMenu"
 
 export async function getStaticPaths() {
-  const paths = getAllPostIds()
+  const paths = getAllPostSlugs()
   return {
     paths,
     fallback: false
@@ -19,7 +18,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: any) {
-  const post = await getPostData(params.id)
+  console.log('paapapa', params)
+  const post = await getPostBySlug(params.slug)
   return {
     props: {
       post
@@ -46,7 +46,7 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
         <title>{ post.title }</title>
       </Head>
       <div className="prose dark:prose-invert m-auto mb-8">
-        <div>
+        <div className="pb-8">
           {
             post.coverImage && (
               <CoverImage src={ post.coverImage } width={1240} height={620} title={ post.title }></CoverImage>
@@ -77,7 +77,7 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
           lang="en"
           loading="lazy"
         />
-        <Back2Top/>
+       <SideMenu isPost/>
       </div>
     </>
   )

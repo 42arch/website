@@ -1,5 +1,6 @@
 ---
 title: VUE3响应式原理
+slug: reactivity in vue3
 date: 2021-12-26 19:03:40
 excerpt: Vue3实现响应式的方式与Vue2相比有一些变化，本文将整理Vue3中实现响应式的基本原理并实现一个响应式引擎。
 tags: 

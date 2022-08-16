@@ -1,5 +1,6 @@
 ---
 title: TypeScript类型操作
+slug: type-operate-in-typescript
 date: 2022-05-28
 excerpt: 根据TypeScript官方文档学习TS类型操作的笔记。
 category: Tech

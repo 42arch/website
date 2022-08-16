@@ -2,19 +2,10 @@ import path from "path"
 import fs from "fs"
 import matter from "gray-matter"
 import { markdownToHtml } from './markdown'
-import { format, parseISO } from "date-fns"
-import { Tag } from "./types"
+import { format } from "date-fns"
+import { PostMetaData, Tag } from "./types"
 
-export type PostMeta = {
-  title: string
-  date: string
-  category: string
-  tags: string[]
-  excerpt: string
-  coverImage: string
-}
-
-export type PostData = PostMeta & {
+export type PostData = PostMetaData & {
   id: string
 }
 
@@ -37,7 +28,7 @@ export const getAllPosts = () => {
     }
     return {
       id,
-      ...(matterRes.data as PostMeta)
+      ...(matterRes.data as PostMetaData)
     }
   })
   return allPostsData
@@ -98,6 +89,17 @@ export const getSortedPostsByCategory = (category: string) => {
   })
 }
 
+export const getAllPostSlugs = () => {
+  const allPostsData = getAllPosts()
+  return allPostsData.map((i) => (
+    {
+      params: {
+        slug: i.slug || i.id
+      }
+    }
+  ))
+}
+
 export const getAllPostIds = () => {
   const fileNames = fs.readdirSync(postsDirectiry)
 
@@ -108,6 +110,14 @@ export const getAllPostIds = () => {
       }
     }
   ))
+}
+
+export const getPostBySlug = (slug: string) => {
+  const allPostsData = getAllPosts()
+  const found = allPostsData.find((post) => post.slug === slug || post.id === slug)
+  if(found) {
+    return getPostData(found.id)
+  }
 }
 
 
@@ -124,6 +134,6 @@ export const getPostData = async (id: string) => {
   return {
     id,
     contentHtml,
-    ...(data as PostMeta)
+    ...(data as PostMetaData)
   }
 }

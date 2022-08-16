@@ -36,8 +36,7 @@ const PostsLoader: FunctionComponent<IPorps> = ({ posts, loadSize }) => {
         ))
       }
     </div>
-    {/* <Back2Top /> */}
-    <SideMenu />
+    <SideMenu/>
   </InfiniteScroll>
   )
 }
