@@ -56,7 +56,7 @@ const Post: NextPage<{ post: PostDataWithContent }> = ({ post }) => {
           <Metadata post={ post } />
         </div>
         <article>
-          <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
+          <div className="prose dark:prose-invert m-auto" dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
           <p className="py-10 text-center text-lg opacity-80">
             -- EOF --
           </p>
