@@ -16,7 +16,7 @@ export const markdownToHtml = async (content: string): Promise<string> => {
     .use(remarkGfm)
     .use(remarkToc, { tight: true, ordered: true, heading: '目录' })
     .use(remarkRehype)
-    .use(rehypeDocument)
+    // .use(rehypeDocument)
     .use(rehypeFormat)
     .use(rehypeStringify)
     .use(rehypeSlug)
