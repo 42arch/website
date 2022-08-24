@@ -1,3 +1,4 @@
+const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
   options: {
@@ -7,4 +8,8 @@ const withMDX = require('@next/mdx')({
 })
 module.exports = withMDX({
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  webpack(config) {
+    config.plugins.push(new WindiCSSWebpackPlugin())
+    return config
+  }
 })

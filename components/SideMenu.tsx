@@ -56,7 +56,9 @@ const SideMenu: FunctionComponent<IProps> = ({ isPost }) => {
           }
           <MenuWrapper>
             <Link href={'/post/tag'}>
-              <FiTag className='w-4 h-4 my-1 hover:opacity-80'/>
+              <>
+                <FiTag className='w-4 h-4 my-1 hover:opacity-80'/>            
+              </>
             </Link>
           </MenuWrapper>
         </div>
