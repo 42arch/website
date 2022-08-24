@@ -1,7 +1,9 @@
 const colors = require('tailwindcss/colors')
+const typography = require("@tailwindcss/typography")({
+  modifiers: ["sm"],
+});
 
 module.exports = {
-  mode: 'jit',
   darkMode: 'class',
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -22,7 +24,12 @@ module.exports = {
       }
     }
   },
+  variants: {
+    extend: {
+      typography: ["dark"]
+    }
+  },
   plugins: [
-    require("@tailwindcss/typography")
+    typography
   ]
 }

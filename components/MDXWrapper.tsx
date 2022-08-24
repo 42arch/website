@@ -12,7 +12,7 @@ const MDXWrapper: FunctionComponent<IProps> = ({ children, title }) => {
       <Head>
         <title>{ title ? title : "main-issues" }</title>
       </Head>
-      <div className={`prose dark:prose-invert m-auto font-serif`}>
+      <div className={`prose dark:prose-invert m-auto`}>
         {
           children
         }
