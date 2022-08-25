@@ -15,10 +15,10 @@ export default function TheHeader() {
             </div>
           </Link>
         </div>
-        <div className={`h-full grid gap-2 md:gap-8 grid-flow-col`}>
+        <div className={`h-full grid gap-3 md:gap-8 grid-flow-col`}>
           <a className="nav-link">
             <Link href='/post'>
-              <div>
+              <div className="nav-icon">
                 <span className="hidden md:block">Post</span>
                 <FiBook className="md:hidden"/>
               </div>
@@ -26,7 +26,7 @@ export default function TheHeader() {
           </a>
           <a className="nav-link">
             <Link href='/note'>
-              <div>
+              <div className="nav-icon">
                 <span className="hidden md:block">Note</span>
                 <FiClipboard className="md:hidden"/>
               </div>
@@ -34,7 +34,7 @@ export default function TheHeader() {
           </a>
           <a className="nav-link">
             <Link href='/record'>
-              <div>
+              <div className="nav-icon">
                 <span className="hidden md:block">Record</span>
                 <FiMeh className="md:hidden"/>
               </div>
@@ -42,7 +42,7 @@ export default function TheHeader() {
           </a>
           <a className="nav-link">
             <Link href='/about'>
-              <div>
+              <div className="nav-icon">
                 <span className="hidden md:block">About</span>
                 <FiUser className="md:hidden"/>
               </div>
