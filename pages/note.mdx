@@ -6,15 +6,26 @@ import MDXWrapper from '../components/MDXWrapper'
 > Quick Notes & Tips.
 
 <article>
+## 5. SVG元素如何继承父级元素的大小和颜色？
+
+_2022/08/25_
+
+设置SVG标签的的属性： `fill="currentColor" width="1em" height="1em"`。这样颜色继承自父元素的`color` css属性值，大小继承自父元素的`font-size`属性值。
+
+</article>
+
+<article>
 
 ## 4. TailwindCSS Typography 在部分浏览器（移动端居多）样式不生效的问题
 
 _2022/08/24_
 
 在使用TailwindCSS 的Typography插件对文章进行排版时，`prose`样式类在PC端浏览器可以显示正常样式，但是在手机端的浏览器上会出现样式丢失的问题。
-根据`https://github.com/tailwindlabs/tailwindcss/discussions/9090`的回答，`@tailwindcss/typography`大量使用了`:where`选择器，但是部分
+根据[该discussion](https://github.com/tailwindlabs/tailwindcss/discussions/9090)的问答，`@tailwindcss/typography`大量使用了`:where`选择器，但是部分
 （低版本）浏览器不支持该选择器，造成样式丢失的情况。关于`:where`选择器的支持情况见：[https://caniuse.com/?search=where](https://caniuse.com/?search=where)
 
+</article>
+<article>
 ## 3. `Array.prototype.forEach`的第二个参数
 
 _2022/06/07_
