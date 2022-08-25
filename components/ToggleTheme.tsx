@@ -22,7 +22,7 @@ export default function ToggleTheme() {
   }
 
   return (
-    <div onClick={() => { setTheme(theme === 'light' ? 'dark' : 'light')}}>
+    <div className="flex justify-center items-center" onClick={() => { setTheme(theme === 'light' ? 'dark' : 'light')}}>
       {
         theme === 'dark' ? <FiMoon /> : <FiSun />
       }

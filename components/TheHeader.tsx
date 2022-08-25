@@ -1,13 +1,12 @@
 import Image from "next/image"
 import Link from "next/link"
 import { FiBook, FiClipboard, FiGithub, FiMeh, FiSun, FiUser } from "react-icons/fi"
-import styles from './TheHeader.module.css'
 import ToggleTheme from "./ToggleTheme"
 
 export default function TheHeader() {
   return (
     <header className='py-10 text-xl select-none'>
-      <nav className={ `${styles.nav} h-full md:px-14 w-full flex justify-between items-center` }>
+      <nav className={ `text-xl h-full md:px-14 w-full flex justify-between items-center` }>
         <div className={ `cursor-pointer h-full flex justify-center items-center uppercase font-semibold` }>
           <Link href='/'>
             <div className='flex justify-center items-center'>
@@ -17,7 +16,7 @@ export default function TheHeader() {
           </Link>
         </div>
         <div className={`h-full grid gap-2 md:gap-8 grid-flow-col`}>
-          <a>
+          <a className="nav-link">
             <Link href='/post'>
               <div>
                 <span className="hidden md:block">Post</span>
@@ -25,7 +24,7 @@ export default function TheHeader() {
               </div>
             </Link>
           </a>
-          <a>
+          <a className="nav-link">
             <Link href='/note'>
               <div>
                 <span className="hidden md:block">Note</span>
@@ -33,7 +32,7 @@ export default function TheHeader() {
               </div>
             </Link>
           </a>
-          <a>
+          <a className="nav-link">
             <Link href='/record'>
               <div>
                 <span className="hidden md:block">Record</span>
@@ -41,7 +40,7 @@ export default function TheHeader() {
               </div>
             </Link>
           </a>
-          <a>
+          <a className="nav-link">
             <Link href='/about'>
               <div>
                 <span className="hidden md:block">About</span>
@@ -49,10 +48,10 @@ export default function TheHeader() {
               </div>
             </Link>
           </a>
-          <a>
+          <a className="nav-link">
             <ToggleTheme />
           </a>
-          <a href="https://github.com/REND42" target='_blank' className="hidden md:block" rel="noreferrer" >
+          <a className="nav-link hidden md:block" href="https://github.com/REND42" target='_blank' rel="noreferrer" >
             <FiGithub/>
           </a>
         </div>
