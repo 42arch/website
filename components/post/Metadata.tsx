@@ -15,23 +15,22 @@ const Metadata: FunctionComponent<IProps> = ({ post }) => {
         <FiCalendar className='w-4 h-4 mr-2'/>
         <DateFormater datetime={ post.date } />
       </p>
-      <p className="cursor-pointer ml-6 flex justify-center items-center hover:opacity-80">
+      <p className="cursor-pointer ml-6 flex justify-center items-center">
         {
           post.category && <>
             <FiFolder className='w-4 h-4 mr-2'/>
-            { post.category }
+            <span className='hover:opacity-80'>{ post.category }</span>
           </>
         }
-
       </p>
-      <p className="flex items-center ml-6 hover:opacity-80">
+      <p className="flex items-center ml-6 ">
         {
           post.tags && <>
             <FiTag className='w-4 h-4 mr-2'/>
             {
               post.tags.map((tag, idx) => (
                 <Link key={tag} href={`/post/tag/${tag}`}>
-                  <span className="cursor-pointer mr-4" >{ tag }</span>
+                  <span className="cursor-pointer mr-4 hover:opacity-80" >{ tag }</span>
                 </Link>
               ))
             }
