@@ -13,7 +13,7 @@ const Metadata: FunctionComponent<IProps> = ({ post }) => {
     <small className="flex py-2 not-prose">
       <p className="flex items-center">
         <FiCalendar className='w-4 h-4 mr-2'/>
-        <DateFormater dateString={ post.date } />
+        <DateFormater datetime={ post.date } />
       </p>
       <p className="cursor-pointer ml-6 flex justify-center items-center hover:opacity-80">
         {

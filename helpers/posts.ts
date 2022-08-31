@@ -2,7 +2,7 @@ import path from "path"
 import fs from "fs"
 import matter from "gray-matter"
 import { markdownToHtml } from './markdown'
-import { format } from "date-fns"
+// import * as dayjs from 'dayjs'
 import { PostMetaData, Tag } from "./types"
 
 export type PostData = PostMetaData & {
@@ -23,8 +23,8 @@ export const getAllPosts = () => {
     const fileContent = fs.readFileSync(fullPath, 'utf-8')
     const matterRes = matter(fileContent)
     if(matterRes.data.date) {
-      const date = new Date(matterRes.data.date)
-      matterRes.data.date = format(date, 'LLLL d, yyyy')
+      const date = new Date(matterRes.data.date).getTime()
+      matterRes.data.date = date
     }
     return {
       id,
@@ -128,7 +128,7 @@ export const getPostData = async (id: string) => {
   const { data, content } = matter(fileContents)
   if(data.date) {
     const date = new Date(data.date)
-    data.date = format(date, 'LLLL d, yyyy')
+    // data.date = format(date, 'LLLL d, yyyy')
   }
   const contentHtml = await markdownToHtml(content)
   return {

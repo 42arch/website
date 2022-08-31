@@ -12,7 +12,7 @@ export const PostItem: FunctionComponent<IProps> = ({ post }) => {
   return (
     <div key={post.id} className='no-underline py-6 not-prose'>
       <Link href={`/post/${post.slug}`}>
-        <p className='cursor-pointer text-2xl font-semibold tracking-wide text-center py-4 leading-tight no-underline hover:opacity-80'>{ post.title }</p>
+        <h1 className='cursor-pointer text-center opacity-80 hover:opacity-100'>{ post.title }</h1>
       </Link>
       <Metadata post={ post }/>
       {

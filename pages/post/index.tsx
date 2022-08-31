@@ -4,6 +4,7 @@ import PostsLoader from "../../components/PostsLoader"
 
 export const getStaticProps = () => {
   const posts = getSortedPosts()
+  console.log(23333, posts)
   return {
     props: {  
       posts

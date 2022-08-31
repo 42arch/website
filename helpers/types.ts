@@ -6,7 +6,7 @@ export type Tag = {
 export type PostMetaData = {
   title: string
   slug: string
-  date: string
+  date: number
   category: string
   tags: string[]
   excerpt: string
