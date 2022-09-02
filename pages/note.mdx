@@ -1,16 +1,44 @@
-import MDXWrapper from '../components/MDXWrapper'
+import MDXWrapper from '../components/MDXWrapper';
 
 <MDXWrapper title={ 'note' }>
 
 # Note
+
 > Quick Notes & Tips.
+
+<article>
+## 5. Nginx 反向代理配置
+
+_2022/09/02_
+
+```conf
+    server {
+        listen       8080;
+        server_name  localhost;
+
+        location / {
+            proxy_pass http://localhost:3000;  # 代理的地址
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
+            add_header Access-Control-Allow-Headers 'DNT,X-Mx-ReqToken,Keep-Alive,User-  Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
+
+            if ($request_method = 'OPTIONS') {
+                return 204;
+            }
+        }
+    }
+```
+
+</article>
 
 <article>
 ## 5. SVG元素如何继承父级元素的大小和颜色？
 
 _2022/08/25_
 
-设置SVG标签的的属性： `fill="currentColor" width="1em" height="1em"`。这样颜色继承自父元素的`color` css属性值，大小继承自父元素的`font-size`属性值。
+设置 SVG 标签的的属性： `fill="currentColor" width="1em" height="1em"`。这样颜色继承自父元素的`color` css 属性值，大小继承自父元素的`font-size`属性值。
 
 </article>
 
@@ -20,8 +48,8 @@ _2022/08/25_
 
 _2022/08/24_
 
-在使用TailwindCSS 的Typography插件对文章进行排版时，`prose`样式类在PC端浏览器可以显示正常样式，但是在手机端的浏览器上会出现样式丢失的问题。
-根据[该discussion](https://github.com/tailwindlabs/tailwindcss/discussions/9090)的问答，`@tailwindcss/typography`大量使用了`:where`选择器，但是部分
+在使用 TailwindCSS 的 Typography 插件对文章进行排版时，`prose`样式类在 PC 端浏览器可以显示正常样式，但是在手机端的浏览器上会出现样式丢失的问题。
+根据[该 discussion](https://github.com/tailwindlabs/tailwindcss/discussions/9090)的问答，`@tailwindcss/typography`大量使用了`:where`选择器，但是部分
 （低版本）浏览器不支持该选择器，造成样式丢失的情况。关于`:where`选择器的支持情况见：[https://caniuse.com/?search=where](https://caniuse.com/?search=where)
 
 </article>
@@ -30,28 +58,28 @@ _2022/08/24_
 
 _2022/06/07_
 
-`forEach`除了第一个回调参数外，还有第二个可选参数，用于传递this。因为`forEach`的callback参数一直使用匿名函数，所以之前并未注意到该参数的作用。
+`forEach`除了第一个回调参数外，还有第二个可选参数，用于传递 this。因为`forEach`的 callback 参数一直使用匿名函数，所以之前并未注意到该参数的作用。
 
 ```js
 let obj = {
   a: 'xxx',
-  run: function() {
-    let list = [2, 4, 6, 8]
-    list.forEach(function(item) {
-      console.log(this)  // 指向全局对象
-    })
-    console.log('---------')
-    list.forEach(item => {
-      console.log(this)  // 指向obj
-    })
-    console.log('---------')
-    list.forEach(function(item) {
-      console.log(this)  // 指向obj
-    }, this)
+  run: function () {
+    let list = [2, 4, 6, 8];
+    list.forEach(function (item) {
+      console.log(this); // 指向全局对象
+    });
+    console.log('---------');
+    list.forEach((item) => {
+      console.log(this); // 指向obj
+    });
+    console.log('---------');
+    list.forEach(function (item) {
+      console.log(this); // 指向obj
+    }, this);
   }
-}
-
+};
 ```
+
 </article>
 
 <article>
@@ -59,10 +87,8 @@ let obj = {
 
 _2022/05/29_
 
-在用`npm login`登录时，提示报错`403 Forbidden - PUT https://registry.npmmirror.com/-
-/user/org.couchdb.user:xxx - 
-[FORBIDDEN] Public registration is not allowed`。
-这是因为之前曾使用nrm工具切换过镜像源，如果要登录npm和发布包，需要切换回官方源，用`nrm use npm`即可。
+在用`npm login`登录时，提示报错`403 Forbidden - PUT https://registry.npmmirror.com/- /user/org.couchdb.user:xxx - [FORBIDDEN] Public registration is not allowed`。
+这是因为之前曾使用 nrm 工具切换过镜像源，如果要登录 npm 和发布包，需要切换回官方源，用`nrm use npm`即可。
 
 </article>
 
@@ -71,15 +97,22 @@ _2022/05/29_
 
 _2022/05/28_
 
-在开发此博客时，用了a标签的`target='_blank'`实现新窗口跳转其他网站。eslint提示警告`_Using target="_blank" without rel="noreferrer" (which implies rel="noopener") is a security risk in older browsers: see https://mathiasbynens.github.io/rel-noopener/#recommendationseslintreact/jsx-no-target-blank_ `。
-通过自动修复，在a标签后添加了`rel="noreferrer"`。
+在开发此博客时，用了 a 标签的`target='_blank'`实现新窗口跳转其他网站。eslint 提示警告`_Using target="_blank" without rel="noreferrer" (which implies rel="noopener") is a security risk in older browsers: see https://mathiasbynens.github.io/rel-noopener/#recommendationseslintreact/jsx-no-target-blank_ `。
+通过自动修复，在 a 标签后添加了`rel="noreferrer"`。
 
-这样window.opener会为null，阻止攻击者通过其获取到源页面的部分控制权，可以防止钓鱼安全漏洞。
+这样 window.opener 会为 null，阻止攻击者通过其获取到源页面的部分控制权，可以防止钓鱼安全漏洞。
+
 ```html
-<a href="https://github.com/REND42" target='_blank' className="hidden md:block" rel="noopener noreferrer" >
+<a
+  href="https://github.com/REND42"
+  target="_blank"
+  className="hidden md:block"
+  rel="noopener noreferrer"
+></a>
 ```
+
 参考：
-[rel属性](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel)
+[rel 属性](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel)
 [原理](https://mathiasbynens.github.io/rel-noopener/#recommendationseslintreact/jsx-no-target-blank)
 
 </article>
