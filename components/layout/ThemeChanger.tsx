@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { FiSun, FiMoon, FiCpu } from 'react-icons/fi'
 
-type Theme = 'Light' | 'Dark' | 'Cyber'
 const ThemeIcons: { [key: string]: JSX.Element } = {
   Light: <FiSun />,
   Dark: <FiMoon />,
