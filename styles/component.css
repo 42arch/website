@@ -1,8 +1,0 @@
-
-.nav-link {
-  @apply cursor-pointer no-underline opacity-80 hover:opacity-100 outline-none flex justify-center items-center;
-}
-
-.nav-icon {
-  @apply flex justify-center items-center;
-}
