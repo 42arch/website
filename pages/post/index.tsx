@@ -17,7 +17,7 @@ const index: NextPage<{ allPostsData: PostData[] }> = ({ allPostsData }) => {
   console.log(9999, allPostsData)
   return (
     <Layout>
-      <div className="prose m-auto py-2">
+      <div className="prose m-auto py-4">
         {allPostsData.map((item, idx) => {
           return (
             <Link key={idx} href={`/post/${item.slug}`}>

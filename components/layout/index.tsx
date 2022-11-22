@@ -19,7 +19,7 @@ const Layout: FC<Props> = ({ children }) => {
     type: 'website'
   }
   return (
-    <div className="bg-th-bg text-th-text relative font-rubik">
+    <div className="bg-th-bg text-th-text relative font-rubik  min-h-screen h-full">
       <Head>
         <title>{meta.title}</title>
         <meta name="robots" content="follow, index"></meta>
@@ -32,10 +32,10 @@ const Layout: FC<Props> = ({ children }) => {
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.image} />
       </Head>
-      <main className="px-2 md:px-16 relative min-h-screen h-full">
+      <main className="px-2 md:px-16 relative">
         <Header />
         <BackLayer />
-        <section className="max-w-[1000px] relative m-auto px-4">
+        <section className="max-w-[1000px] z-10 relative m-auto px-4">
           {children}
         </section>
       </main>

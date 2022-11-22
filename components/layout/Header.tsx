@@ -25,8 +25,8 @@ const NavItem: FC<{ href: string; text: string }> = ({ href, text }) => {
 
 const Header = () => {
   return (
-    <header className="relative z-10 flex flex-col justify-center px-4">
-      <nav className="flex items-center justify-between w-full py-8">
+    <header className="bg-th-bg sticky border-b-2 border-th-mark top-0 z-20 flex flex-col justify-center px-4">
+      <nav className="flex items-center justify-between w-full py-4 md:py-6">
         <div className="flex items-center">
           <div className="font-extrabold">
             <span className="font-bold text-lg">MAINISSUES.CC</span>

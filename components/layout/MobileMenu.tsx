@@ -55,8 +55,8 @@ const MobileMenu = () => {
             exit={{ y: -100 }}
             transition={{ ease: 'linear', duration: 0.3 }}
             ref={ref}
-            className="absolute w-full left-0 top-0 py-2">
-            <div className="py-6 px-4 shadow-2xl rounded-lg backdrop-blur-3xl ">
+            className="absolute z-50 w-full left-0 top-0 py-2">
+            <div className="py-2 md:py-4 px-4 shadow-2xl rounded-lg backdrop-blur-3xl ">
               <div className="flex justify-between items-center">
                 <span className="font-bold text-lg">MAINISSUES.CC</span>
                 <FiX
