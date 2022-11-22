@@ -1,4 +1,5 @@
 import { NextPage } from 'next'
+import Layout from '../../components/layout'
 import {
   getAllPostSlugs,
   getPostBySlug,
@@ -15,7 +16,6 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: any) {
   const postData = await getPostBySlug(params.slug)
-  console.log('paapapa', postData)
 
   return {
     props: {
@@ -25,11 +25,15 @@ export async function getStaticProps({ params }: any) {
 }
 
 const Post: NextPage<{ postData: PostDataWithHtml }> = ({ postData }) => {
-  console.log(98888, postData)
   return (
-    <article>
-      <div dangerouslySetInnerHTML={{ __html: postData.html }}></div>
-    </article>
+    <Layout>
+      <article className="prose prose-strong:text-th-text-h prose-code:text-th-text-h prose-p:text-th-text prose-headings:text-th-text-h  m-auto">
+        <section className="py-2">
+          <h1 className="text-center">{postData.title}</h1>
+        </section>
+        <div dangerouslySetInnerHTML={{ __html: postData.html }}></div>
+      </article>
+    </Layout>
   )
 }
 
