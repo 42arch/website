@@ -41,7 +41,8 @@ export const getSortedPostList = () => {
       ...(matterRes.data as PostMetaData)
     }
   })
-  return allPostList
+
+  return allPostList.sort((a, b) => b.date - a.date)
 }
 
 export const getAllPostSlugs = () => {

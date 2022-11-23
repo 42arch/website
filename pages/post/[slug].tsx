@@ -27,7 +27,7 @@ export async function getStaticProps({ params }: any) {
 const Post: NextPage<{ postData: PostDataWithHtml }> = ({ postData }) => {
   return (
     <Layout>
-      <article className="py-4 prose prose-strong:text-th-text-h prose-code:text-th-text-h prose-p:text-th-text prose-headings:text-th-text-h  m-auto">
+      <article className="py-4 mt-10 prose prose-strong:text-th-text-h prose-code:text-th-text-h prose-p:text-th-text prose-headings:text-th-text-h  m-auto">
         <section className="py-2">
           <h1 className="text-center">{postData.title}</h1>
         </section>

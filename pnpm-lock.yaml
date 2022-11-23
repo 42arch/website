@@ -10,6 +10,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.43.0
   autoprefixer: ^10.4.13
   classnames: ^2.3.2
+  dayjs: ^1.11.6
   eslint: 8.26.0
   eslint-config-next: 13.0.2
   eslint-config-prettier: ^8.5.0
@@ -32,6 +33,7 @@ specifiers:
 
 dependencies:
   classnames: 2.3.2
+  dayjs: 1.11.6
   framer-motion: 7.6.7_biqbaboplfbrettd7655fr4n2y
   gray-matter: 4.0.3
   markdown-it: 13.0.1
@@ -902,6 +904,10 @@ packages:
   /damerau-levenshtein/1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
+
+  /dayjs/1.11.6:
+    resolution: {integrity: sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ==}
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}

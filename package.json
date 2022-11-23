@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "classnames": "^2.3.2",
+    "dayjs": "^1.11.6",
     "framer-motion": "^7.6.4",
     "gray-matter": "^4.0.3",
     "markdown-it": "^13.0.1",
