@@ -1,8 +1,8 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
-import dayjs from 'dayjs'
 import Layout from '../../components/layout'
 import { getSortedPostList, PostData } from '../../helpers/post'
+import DateTime from '../../components/DateTime'
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostList()
@@ -26,7 +26,7 @@ const index: NextPage<{ allPostsData: PostData[] }> = ({ allPostsData }) => {
                 </Link>
               </h1>
               <div className="text-xs py-1 flex">
-                <time dateTime="">{dayjs(item.date).format('YYYY-MM-DD')}</time>
+                <DateTime datetime={item.date} />
               </div>
               <span className="inline-block my-2 py-1 text-sm">
                 {item.excerpt}
@@ -38,7 +38,7 @@ const index: NextPage<{ allPostsData: PostData[] }> = ({ allPostsData }) => {
                     <span
                       key={i}
                       className="mr-4 hover:opacity-80 cursor-pointer">
-                      {tag}
+                      # {tag}
                     </span>
                   )
                 })}

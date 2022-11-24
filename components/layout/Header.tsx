@@ -5,6 +5,7 @@ import cn from 'classnames'
 import MobileMenu from './MobileMenu'
 import ThemeChanger from './ThemeChanger'
 import s from './Header.module.css'
+import Link from 'next/link'
 
 const NavItem: FC<{ href: string; text: string }> = ({ href, text }) => {
   const router = useRouter()
@@ -29,7 +30,9 @@ const Header = () => {
       <nav className="flex items-center justify-between w-full py-4 md:py-6">
         <div className="flex items-center">
           <div className="font-extrabold">
-            <span className="font-bold text-lg">MAINISSUES.CC</span>
+            <Link href="/" className="font-bold text-lg">
+              MAINISSUES.CC
+            </Link>
           </div>
           <div className="px-8">
             <NavItem href="/" text="Home" />

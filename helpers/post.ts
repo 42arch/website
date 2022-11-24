@@ -64,7 +64,6 @@ export const getPostData = async (id: string) => {
   // }
   const html = await markdownToHtml(content)
 
-  // console.log(88888, html)
   return {
     id,
     html,
