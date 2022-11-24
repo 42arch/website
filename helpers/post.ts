@@ -57,11 +57,7 @@ export const getAllPostSlugs = () => {
 export const getPostData = async (id: string) => {
   const fullPath = path.join(postsDirectory, `${id}.md`)
   const fileContents = fs.readFileSync(fullPath, 'utf-8')
-
   const { data, content } = matter(fileContents)
-  // if (data.date) {
-  //   const date = new Date(data.date)
-  // }
   const html = await markdownToHtml(content)
 
   return {
@@ -76,7 +72,6 @@ export const getPostBySlug = async (slug: string) => {
   const found = allPostsData.find(
     (post) => post.slug === slug || post.id === slug
   )
-  console.log(656666666, slug, found)
 
   if (found) {
     return await getPostData(found.id)
