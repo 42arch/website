@@ -1,8 +1,8 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
-import Layout from '../../components/layout'
-import { getSortedPostList, PostData } from '../../helpers/post'
-import DateTime from '../../components/DateTime'
+import Layout from '@/layout'
+import { getSortedPostList, PostData } from '@/helpers/post'
+import DateTime from '@/components/DateTime'
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostList()

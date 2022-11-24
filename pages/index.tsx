@@ -2,8 +2,8 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { FiArrowRight } from 'react-icons/fi'
 import { SiNextdotjs, SiVercel } from 'react-icons/si'
-import GlitchText from '../components/GlitchText'
-import Layout from '../components/layout'
+import GlitchText from '@/components/GlitchText'
+import Layout from '@/layout'
 
 export default function Home() {
   return (

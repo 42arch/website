@@ -1,12 +1,12 @@
 import { NextPage } from 'next'
 import { FiFolder } from 'react-icons/fi'
-import DateTime from '../../components/DateTime'
-import Layout from '../../components/layout'
+import Layout from '@/layout'
+import DateTime from '@/components/DateTime'
 import {
   getAllPostSlugs,
   getPostBySlug,
   PostDataWithHtml
-} from '../../helpers/post'
+} from '@/helpers/post'
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs()
