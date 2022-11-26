@@ -52,7 +52,7 @@ Ordered
 
 Inline `code`
 
-```js
+```js showLineNumbers title="multiply.js" {3}
 export default function Nextra({ Component, pageProps }) {
   return (
     <>
