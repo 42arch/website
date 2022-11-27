@@ -4,7 +4,7 @@
     "paths": {
       "@/layout": ["components/layout"],
       "@/components/*": ["components/*"],
-      "@/helpers/*": ["helpers/*"],
+      "@/lib/*": ["lib/*"],
       "@/contentlayer/generated": ["./.contentlayer/generated"]
     },
     "target": "es5",

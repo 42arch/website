@@ -14,7 +14,7 @@ const Layout: FC<Props> = ({ children }) => {
   const router = useRouter()
   const meta = {
     title: 'mainissues',
-    description: "Dan's personal website.",
+    description: "mainissues.cc -- Dan's personal website.",
     image: '',
     type: 'website'
   }
@@ -22,15 +22,21 @@ const Layout: FC<Props> = ({ children }) => {
     <div className="bg-th-bg text-th-text relative font-rubik  min-h-screen h-full">
       <Head>
         <title>{meta.title}</title>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"></meta>
+        <meta name="keywords" content="mainissues, ren dan, dan, rend42" />
         <meta name="robots" content="follow, index"></meta>
         <meta content={meta.description} name="description"></meta>
         <meta property="og:url" content={`${SiteUrl}${router.asPath}`}></meta>
         <link rel="canonical" href={`${SiteUrl}${router.asPath}`}></link>
         <meta property="og:type" content={meta.type} />
-        <meta property="og:site_name" content="Dan" />
+        <meta property="og:site_name" content="mainissues.cc" />
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.image} />
+        <meta charSet="utf-8"></meta>
+        <link rel="icon" href="/favicon.ico"></link>
       </Head>
       <main className="px-2 md:px-16 relative">
         <Header />

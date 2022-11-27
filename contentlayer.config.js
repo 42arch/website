@@ -1,6 +1,7 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files'
 import rehypePrettyCode from 'rehype-pretty-code'
-import { rehypePrettyCodeOptions } from './helpers/rehypePrettyCode'
+import remarkGfm from 'remark-gfm'
+import { rehypePrettyCodeOptions } from '@/lib/rehypePrettyCode'
 
 export const Post = defineDocumentType(() => ({
   name: 'Post',
@@ -55,6 +56,7 @@ export default makeSource({
   contentDirPath: '_posts',
   documentTypes: [Post],
   markdown: {
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]]
   }
 })
