@@ -1,14 +1,11 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
-import { allPosts, Post } from '@/contentlayer/generated'
 import Layout from '@/layout'
 import DateTime from '@/components/DateTime'
-import dayjs from 'dayjs'
+import { getSortedPostList, type Post } from '@/lib/post'
 
 export async function getStaticProps() {
-  const posts: Post[] = allPosts.sort((a, b) => {
-    return dayjs(b.date).diff(a.date)
-  })
+  const posts = getSortedPostList()
   return {
     props: {
       posts
@@ -24,7 +21,7 @@ const index: NextPage<{ posts: Post[] }> = ({ posts }) => {
           return (
             <section key={idx} className="pt-6 pb-2">
               <h1 className="font-bold text-xl py-1 w-fit text-th-text-h hover:opacity-80 transition-all">
-                <Link href={`/post/${post.url}`} className="w-fit">
+                <Link href={`/post/${post.slug}`} className="w-fit">
                   {post.title}
                 </Link>
               </h1>

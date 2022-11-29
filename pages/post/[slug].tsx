@@ -1,11 +1,11 @@
 import { NextPage } from 'next'
 import { FiFolder } from 'react-icons/fi'
 import Layout from '@/layout'
-import { allPosts, Post } from '@/contentlayer/generated'
 import DateTime from '@/components/DateTime'
+import { getAllPostSlugs, getPostBySlug, type Post } from '@/lib/post'
 
 export async function getStaticPaths() {
-  const paths: string[] = allPosts.map((post) => `/post/${post.url}`)
+  const paths = getAllPostSlugs()
   return {
     paths,
     fallback: false
@@ -13,10 +13,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: any) {
-  const post: Post | undefined = allPosts.find(
-    (post) => post._raw.flattenedPath === params.slug
-  )
-
+  const post = await getPostBySlug(params.slug)
   return {
     props: {
       post
@@ -41,7 +38,7 @@ const Post: NextPage<{ post: Post }> = ({ post }) => {
             ))}
           </p>
         </section>
-        <div dangerouslySetInnerHTML={{ __html: post.body.html }}></div>
+        <div dangerouslySetInnerHTML={{ __html: post.html }}></div>
         <p className="text-center mt-10 mb-4">-- EOF --</p>
         <p className="flex items-center w-fit cursor-pointer hover:opacity-80">
           <FiFolder className="mr-2" />
