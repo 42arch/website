@@ -24,7 +24,7 @@ export async function getStaticProps({ params }: any) {
 const Post: NextPage<{ post: Post }> = ({ post }) => {
   return (
     <Layout>
-      <article className="py-4 my-10 prose prose-strong:text-th-text-h prose-code:text-th-text-h prose-p:text-th-text prose-headings:text-th-text-h  m-auto">
+      <article className="py-14 prose prose-strong:text-th-text-h prose-code:text-th-text-h prose-p:text-th-text prose-headings:text-th-text-h  m-auto">
         <section className="py-2">
           <h1 className="text-center">{post.title}</h1>
           <p className="text-center text-sm">
@@ -32,17 +32,22 @@ const Post: NextPage<{ post: Post }> = ({ post }) => {
           </p>
           <p className="m-0 text-center text-sm">
             {post.tags?.map((tag, idx) => (
-              <span key={idx} className="mr-4 hover:opacity-80 cursor-pointer">
+              <span key={idx} className="mx-2 hover:opacity-80 cursor-pointer">
                 # {tag}
               </span>
             ))}
           </p>
         </section>
-        <div dangerouslySetInnerHTML={{ __html: post.html }}></div>
+        <div
+          className="mt-10"
+          dangerouslySetInnerHTML={{ __html: post.html }}></div>
         <p className="text-center mt-10 mb-4">-- EOF --</p>
-        <p className="flex items-center w-fit cursor-pointer hover:opacity-80">
-          <FiFolder className="mr-2" />
-          {post.category}
+        <p className="flex justify-between items-center">
+          <span className="cursor-pointer hover:opacity-80">cd ..</span>
+          <span className="flex justify-between items-center cursor-pointer w-fit hover:opacity-80">
+            <FiFolder className="mr-2" />
+            {post.category}
+          </span>
         </p>
       </article>
     </Layout>
