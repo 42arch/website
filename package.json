@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@stefanprobst/remark-extract-toc": "^2.2.0",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.6",
     "framer-motion": "^7.6.4",
@@ -23,10 +24,15 @@
     "react-use": "^17.4.0",
     "rehype-pretty-code": "^0.5.1",
     "rehype-stringify": "^9.0.3",
+    "remark-extract-toc": "^1.1.0",
     "remark-gfm": "^3.0.1",
     "remark-parse": "^10.0.1",
     "remark-rehype": "^10.1.0",
-    "shiki": "^0.11.1"
+    "remark-slug": "^7.0.1",
+    "shiki": "^0.11.1",
+    "unified": "^10.1.2",
+    "unist-util-index": "^3.0.1",
+    "unist-util-visit": "^4.1.1"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.8",

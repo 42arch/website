@@ -4,8 +4,7 @@
     "paths": {
       "@/layout": ["components/layout"],
       "@/components/*": ["components/*"],
-      "@/lib/*": ["lib/*"],
-      "@/contentlayer/generated": ["./.contentlayer/generated"]
+      "@/lib/*": ["lib/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -22,11 +21,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".contentlayer/generated"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

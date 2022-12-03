@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { markdownToHtml } from './markdown'
+import { buildTOC, markdownToHtml } from './markdown'
 
 export type PostMetaData = {
   title: string
@@ -19,6 +19,7 @@ export type PostData = PostMetaData & {
 
 export type Post = PostMetaData & {
   html: string
+  toc: any
 }
 
 const postsDirectory = path.join(process.cwd(), '_posts')
@@ -59,10 +60,12 @@ export const getPostData = async (id: string) => {
   const fileContents = fs.readFileSync(fullPath, 'utf-8')
   const { data, content } = matter(fileContents)
   const html = await markdownToHtml(content)
+  const toc = await buildTOC(content)
 
   return {
     id,
     html,
+    toc,
     ...(data as PostMetaData)
   }
 }
