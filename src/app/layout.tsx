@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import "@/styles/globals.css"
-import { ThemeProvider } from "next-themes"
-import cn from "classnames"
+import SiteHeader from '@/components/SiteHeader'
+import '@/styles/globals.css'
+import { ThemeProvider } from 'next-themes'
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -16,9 +16,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className="min-h-screen bg-white font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50">
+      <body className="min-h-screen bg-white font-sans text-black antialiased dark:bg-gray-900 dark:text-white">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">
+            <SiteHeader />
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>
