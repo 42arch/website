@@ -3,7 +3,13 @@ import React from 'react'
 import ThemeToogle from './ThemeToogle'
 
 const NavItem = ({ href, title }: { href: string; title: string }) => {
-  return <Link href={href}>{title}</Link>
+  return (
+    <Link
+      href={href}
+      className="px-1 sm:px-4 font-medium cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+      {title}
+    </Link>
+  )
 }
 
 const SiteHeader = () => {
@@ -14,11 +20,13 @@ const SiteHeader = () => {
           42Arch
         </Link>
       </nav>
-      <div className="flex items-center text-base leading-5">
+      <div className="flex items-center text-base leading-4">
         <div className="hidden sm:block">
-          <NavItem href="/blog" title="blog" />
+          <NavItem href="/blog" title="Blog" />
+          <NavItem href="/project" title="Project" />
+          <NavItem href="/about" title="About" />
         </div>
-        <div className="ml-1 mr-1 h-8 w-8 rounded p-1 sm:ml-4">
+        <div className="rounded px-1 sm:px-4 flex items-center justify-center">
           <ThemeToogle />
         </div>
       </div>
