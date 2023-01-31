@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-
+const { fontFamily } = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
 module.exports = {
@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)', ...fontFamily.sans]
+      },
       colors: {
         primary: colors.teal,
         gray: colors.neutral
