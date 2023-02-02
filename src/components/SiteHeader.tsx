@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import MobileNav from './MobileNav'
 import ThemeToogle from './ThemeToogle'
 
 const NavItem = ({ href, title }: { href: string; title: string }) => {
@@ -13,6 +14,21 @@ const NavItem = ({ href, title }: { href: string; title: string }) => {
 }
 
 const SiteHeader = () => {
+  const navItems = [
+    {
+      href: '/blog',
+      title: 'blog'
+    },
+    {
+      href: '/project',
+      title: 'project'
+    },
+    {
+      href: '/about',
+      title: 'about'
+    }
+  ]
+
   return (
     <header className="flex items-center justify-between py-10">
       <nav>
@@ -22,12 +38,13 @@ const SiteHeader = () => {
       </nav>
       <div className="flex items-center text-base leading-4">
         <div className="hidden sm:block">
-          <NavItem href="/blog" title="Blog" />
-          <NavItem href="/project" title="Project" />
-          <NavItem href="/about" title="About" />
+          {navItems.map((i) => (
+            <NavItem key={i.title} href={i.href} title={i.title} />
+          ))}
         </div>
         <div className="rounded px-1 sm:px-4 flex items-center justify-center">
           <ThemeToogle />
+          <MobileNav navItems={navItems} />
         </div>
       </div>
     </header>
