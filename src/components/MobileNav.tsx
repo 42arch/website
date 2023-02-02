@@ -25,7 +25,7 @@ const MobileNav: FC<IProps> = ({ navItems }) => {
     <div className="sm:hidden">
       <button
         type="button"
-        // className="mx-1 rounded py-1"
+        className="flex"
         aria-label="Toggle Menu"
         onClick={onToggleNav}>
         <FiMenu className="m-1 cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100" />
@@ -38,7 +38,7 @@ const MobileNav: FC<IProps> = ({ navItems }) => {
         <div className="flex justify-end">
           <button
             type="button"
-            className="mr-5 mt-10 rounded"
+            className="mr-5 mt-10 rounded flex"
             aria-label="Toggle Menu"
             onClick={onToggleNav}>
             <FiX className="m-1 cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100" />
