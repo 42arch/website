@@ -11,7 +11,9 @@ const PostCard: FC<Post> = (post) => {
         {format(parseISO(post.date), 'LLLL d, yyyy')}
       </time>
       <h2 className="text-lg">
-        <Link href={post.slug} className="text-blue-700 hover:text-blue-900">
+        <Link
+          href={post.slug}
+          className="text-blue-700 hover:text-blue-900 no-underline">
           {post.title}
         </Link>
       </h2>
@@ -25,7 +27,7 @@ const BlogPage: FC = () => {
   })
 
   return (
-    <div className="mx-auto max-w-2xl py-16 text-center">
+    <div className="prose dark:prose-invert mx-auto max-w-2xl py-16 text-center">
       <Head>
         <title>Contentlayer Blog Example</title>
       </Head>

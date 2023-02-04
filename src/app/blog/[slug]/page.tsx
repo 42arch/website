@@ -30,7 +30,7 @@ export default async function Page({ params }: IProps) {
 
   return (
     <>
-      <article className="mx-auto max-w-2xl py-2">
+      <article className="prose dark:prose-invert mx-auto max-w-2xl py-2">
         <div className="mb-6 text-center">
           <h1 className="mb-1 text-3xl font-bold">{post.title}</h1>
           <time dateTime={post.date} className="text-sm text-slate-600">
