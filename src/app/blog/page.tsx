@@ -41,18 +41,6 @@ const PostCard: FC<Post> = (post) => {
         </div>
       </article>
     </li>
-    // <div className="mb-6">
-    //   <time dateTime={post.date} className="block text-sm ">
-    //     {format(parseISO(post.date), 'LLLL d, yyyy')}
-    //   </time>
-    //   <h2 className="text-lg">
-    //     <Link
-    //       href={post.slug}
-    //       className="text-blue-700 hover:text-blue-900 no-underline">
-    //       {post.title}
-    //     </Link>
-    //   </h2>
-    // </div>
   )
 }
 

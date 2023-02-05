@@ -1,7 +1,7 @@
 import React from 'react'
 
 const AboutPage = () => {
-  return <div>AboutPage</div>
+  return <div className="py-4">AboutPage</div>
 }
 
 export default AboutPage
