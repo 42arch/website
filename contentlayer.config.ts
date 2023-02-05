@@ -20,6 +20,10 @@ const Post = defineDocumentType(() => ({
       description: 'The date of the post',
       required: true
     },
+    description: {
+      type: 'string',
+      required: false
+    },
     tags: {
       type: 'list',
       of: { type: 'string' },
@@ -34,7 +38,7 @@ const Post = defineDocumentType(() => ({
     },
     slugAsParams: {
       type: 'string',
-      resolve: (doc) => doc._raw.flattenedPath.split('/').slice(1).join('/')
+      resolve: (post) => post._raw.flattenedPath.split('/').slice(1).join('/')
     }
   }
 }))

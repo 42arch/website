@@ -7,7 +7,7 @@ const NavItem = ({ href, title }: { href: string; title: string }) => {
   return (
     <Link
       href={href}
-      className="px-1 sm:px-4 font-medium cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+      className="px-2 sm:px-4 font-medium cursor-pointer hover:text-primary-400 dark:text-gray-200 dark:hover:text-primary-400">
       {title}
     </Link>
   )
@@ -17,15 +17,15 @@ const SiteHeader = () => {
   const navItems = [
     {
       href: '/blog',
-      title: 'blog'
+      title: 'Blog'
     },
     {
       href: '/project',
-      title: 'project'
+      title: 'Project'
     },
     {
       href: '/about',
-      title: 'about'
+      title: 'About'
     }
   ]
 

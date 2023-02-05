@@ -4,7 +4,9 @@ slug: markdown-examples
 date: 2021-03-02
 tags:
   - Markdown
+  - Candat
 category: 测试
+description: Markdown cheatsheet for all your blogging needs - headers, lists, images, tables and more! An illustrated guide based on GitHub Flavored Markdown.
 coverImage: '/assets/post/pre-rendering/cover.png'
 ---
 

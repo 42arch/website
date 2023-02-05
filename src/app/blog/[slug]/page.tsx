@@ -11,16 +11,11 @@ export async function generateStaticParams(): Promise<IProps['params'][]> {
   return allPosts.map((post) => ({
     slug: post.slug
   }))
-
-  // return allDocs.map((doc) => ({
-  //   slug: doc.slugAsParams.split('/')
-  // }))
 }
 
 export default async function Page({ params }: IProps) {
   const slug = params?.slug
   const post = allPosts.find((post) => {
-    console.log('fffxxxx', post.slug, slug)
     return post.slug === `blog/${slug}`
   })
 
