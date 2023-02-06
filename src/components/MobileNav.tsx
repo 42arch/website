@@ -22,7 +22,7 @@ const MobileNav: FC<IProps> = ({ navItems }) => {
   }
 
   return (
-    <div className="sm:hidden">
+    <div className="sm:hidden text-lg">
       <button
         type="button"
         className="flex"
