@@ -1,7 +1,7 @@
 import { allPosts } from 'contentlayer/generated'
 import { format, parseISO } from 'date-fns'
-import Link from 'next/link'
-import { FiChevronLeft } from 'react-icons/fi'
+// import Link from 'next/link'
+// import { FiChevronLeft } from 'react-icons/fi'
 
 interface IProps {
   params: {
