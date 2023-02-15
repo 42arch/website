@@ -27,13 +27,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={cn(
-          'min-h-screen bg-white font-sans text-black antialiased dark:bg-gray-900 dark:text-white',
+          'min-h-screen bg-white font-sans text-slate antialiased dark:bg-slate-900 dark:text-white',
           fontSans.className
         )}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">
+          <div className="flex min-h-screen flex-col">
             <SiteHeader />
-            {children}
+            <main className="mx-auto max-w-3xl z-10 px-4 sm:px-6 xl:max-w-5xl xl:px-0">
+              {children}
+            </main>
           </div>
         </ThemeProvider>
       </body>

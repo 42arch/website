@@ -28,20 +28,20 @@ const MobileNav: FC<IProps> = ({ navItems }) => {
         className="flex"
         aria-label="Toggle Menu"
         onClick={onToggleNav}>
-        <FiMenu className="m-1 cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100" />
+        <FiMenu className="m-1 cursor-pointer nav-link" />
       </button>
       <div
         className={cn(
-          'fixed top-0 left-0 z-10 h-full w-full transform bg-gray-200 opacity-95 duration-300 ease-in-out dark:bg-gray-800',
+          'fixed top-0 left-0 z-10 h-full w-full transform bg-slate-200 opacity-95 duration-300 ease-in-out dark:bg-slate-800',
           navShow ? 'translate-x-0' : 'translate-x-full'
         )}>
         <div className="flex justify-end">
           <button
             type="button"
-            className="mr-5 mt-10 rounded flex"
+            className="mr-7 mt-5 rounded flex"
             aria-label="Toggle Menu"
             onClick={onToggleNav}>
-            <FiX className="m-1 cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100" />
+            <FiX className="m-1 cursor-pointer nav-link" />
           </button>
         </div>
         <nav className="fixed mt-8 h-full">
@@ -49,7 +49,7 @@ const MobileNav: FC<IProps> = ({ navItems }) => {
             <div key={i.title} className="px-12 py-4">
               <Link
                 href={i.href}
-                className="text-2xl tracking-widest text-gray-900 dark:text-gray-100"
+                className="text-2xl tracking-widest nav-link"
                 onClick={onToggleNav}>
                 {i.title}
               </Link>

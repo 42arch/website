@@ -10,7 +10,7 @@ import {
 import { useMounted } from '@/hooks/useMounted'
 
 const className =
-  'm-1 cursor-pointer text-lg hover:text-primary-400 dark:text-gray-400 dark:hover:text-primary-400'
+  'm-1 cursor-pointer text-lg text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-400'
 
 const ThemeToogle = () => {
   const { theme, setTheme } = useTheme()
