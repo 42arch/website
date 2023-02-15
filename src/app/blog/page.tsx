@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { compareDesc, format, parseISO } from 'date-fns'
 import { allPosts, Post } from 'contentlayer/generated'
 import { FC } from 'react'
+import PostTag from '@/components/PostTag'
 
 const PostCard: FC<Post> = (post) => {
   return (
@@ -26,12 +27,7 @@ const PostCard: FC<Post> = (post) => {
             </h3>
             <div className="flex flex-wrap">
               {post.tags?.map((tag, idx) => (
-                <Link
-                  key={idx}
-                  href="/"
-                  className="mr-3 text-sm font-medium uppercase no-underline text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                  {tag}
-                </Link>
+                <PostTag key={idx} text={tag} />
               ))}
             </div>
           </div>

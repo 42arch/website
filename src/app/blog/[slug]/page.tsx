@@ -30,21 +30,16 @@ export default async function Page({ params }: IProps) {
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
           <header className="pt-6 xl:pb-6">
-            <div className="space-y-1 text-center">
-              <dl className="space-y-10">
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time
-                      dateTime={post.date}
-                      className="text-sm text-slate-600">
-                      {format(parseISO(post.date), 'LLLL d, yyyy')}
-                    </time>
-                  </dd>
-                </div>
-              </dl>
-              <div>
-                <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
+            <div className="space-y-1 ">
+              <div className="space-y-20">
+                <time
+                  dateTime={post.date}
+                  className="text-sm text-slate-700 dark:text-slate-500">
+                  Published on {format(parseISO(post.date), 'LLLL d, yyyy')}
+                </time>
+              </div>
+              <div className="">
+                <h1 className="mt-2 inline-block text-4xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 lg:text-5xl">
                   {post.title}
                 </h1>
               </div>
@@ -53,9 +48,9 @@ export default async function Page({ params }: IProps) {
           <div
             className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0"
             style={{ gridTemplateRows: 'auto 1fr' }}>
-            <dl className="pt-6 pb-10 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700"></dl>
+            {/* <dl className="pt-6 pb-10 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700"></dl> */}
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose dark:prose-invert max-w-none pt-10 pb-8">
+              <div className="prose dark:prose-invert max-w-none pt-20 pb-8">
                 <div
                   className="cl-post-body"
                   dangerouslySetInnerHTML={{ __html: post.body.html }}
@@ -72,7 +67,7 @@ export default async function Page({ params }: IProps) {
             <footer>
               <div className="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
                 {post.tags && (
-                  <div className="py-4 xl:py-8">
+                  <div className="py-4 xl:pb-8 xl:pt-20">
                     <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       Tags
                     </h2>
