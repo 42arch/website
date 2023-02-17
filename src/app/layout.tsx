@@ -33,9 +33,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
-            <main className="mx-auto max-w-3xl z-10 px-4 sm:px-6 xl:max-w-5xl xl:px-0">
-              {children}
-            </main>
+            <main className="flex-1">{children}</main>
           </div>
         </ThemeProvider>
       </body>

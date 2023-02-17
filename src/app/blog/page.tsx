@@ -10,7 +10,7 @@ const PostCard: FC<Post> = (post) => {
       <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
         <dl>
           <dt></dt>
-          <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+          <dd className="text-base font-medium leading-6 text-slate-500 dark:text-slate-400">
             <time dateTime={post.date} className="block text-sm">
               {format(parseISO(post.date), 'LLLL d, yyyy')}
             </time>
@@ -21,7 +21,7 @@ const PostCard: FC<Post> = (post) => {
             <h3 className="text-2xl font-bold leading-8 tracking-tight">
               <Link
                 href={post.slug}
-                className="text-gray-900 dark:text-gray-100 no-underline">
+                className="text-slate-900 dark:text-slate-100 no-underline">
                 {post.title}
               </Link>
             </h3>
@@ -31,7 +31,7 @@ const PostCard: FC<Post> = (post) => {
               ))}
             </div>
           </div>
-          <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+          <div className="prose max-w-none text-slate-500 dark:text-slate-400">
             {post.description || '--'}
           </div>
         </div>
@@ -46,9 +46,9 @@ const BlogPage: FC = () => {
   })
 
   return (
-    <div className="divide-y divide-gray-200 dark:divide-gray-700">
+    <div className="container max-w-4xl py-6 lg:py-10">
       <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-        <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+        <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
           All Posts
         </h1>
       </div>
