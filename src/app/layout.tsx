@@ -26,7 +26,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={cn(
-          'min-h-screen bg-white font-sans text-slate antialiased dark:bg-slate-900 dark:text-white',
+          'min-h-screen bg-white font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50',
           fontSans.className
         )}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
