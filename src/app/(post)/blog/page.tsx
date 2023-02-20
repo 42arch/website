@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { compareDesc, format, parseISO } from 'date-fns'
 import { allPosts, Post } from 'contentlayer/generated'
 import { FC } from 'react'
-import PostTag from '@/components/PostTag'
+import PostTag from '@/components/post-tag'
 
 const PostCard: FC<Post> = (post) => {
   return (

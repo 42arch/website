@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
-} from './ui/DropdownMenu'
+} from './ui/dropdown-menu'
 import { useMounted } from '@/hooks/useMounted'
 
 const className =

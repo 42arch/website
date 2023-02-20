@@ -1,9 +1,9 @@
-import TableOfContent from '@/components/TOC'
-import { getTableOfContents } from '@/lib/toc'
 import { allPosts } from 'contentlayer/generated'
 import { format, parseISO } from 'date-fns'
 import { FiChevronLeft } from 'react-icons/fi'
 import Link from 'next/link'
+import TableOfContent from '@/components/toc'
+import { getTableOfContents } from '@/lib/toc'
 
 const BackTo = () => {
   return (

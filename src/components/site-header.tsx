@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
-import MobileNav from './MobileNav'
-import ThemeToogle from './ThemeToogle'
+import MobileNav from './mobile-nav'
+import ThemeToogle from './theme-toggle'
 
 const NavItem = ({ href, title }: { href: string; title: string }) => {
   return (

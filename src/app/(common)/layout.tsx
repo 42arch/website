@@ -1,7 +1,7 @@
 'use client'
 
-import { SiteFooter } from '@/components/SiteFooter'
-import SiteHeader from '@/components/SiteHeader'
+import { SiteFooter } from '@/components/site-footer'
+import SiteHeader from '@/components/site-header'
 import React, { FC } from 'react'
 
 interface IProps {
