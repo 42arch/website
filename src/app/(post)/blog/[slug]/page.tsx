@@ -2,7 +2,7 @@ import { allPosts } from 'contentlayer/generated'
 import { format, parseISO } from 'date-fns'
 import { FiChevronLeft } from 'react-icons/fi'
 import Link from 'next/link'
-import TableOfContent from '@/components/toc'
+import TableOfContent from '@/components/table-of-content'
 import { getTableOfContents } from '@/lib/toc'
 
 const BackTo = () => {
