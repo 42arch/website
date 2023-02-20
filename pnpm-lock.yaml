@@ -9,6 +9,7 @@ specifiers:
   '@types/react-dom': 18.0.10
   '@typescript-eslint/eslint-plugin': ^5.49.0
   '@typescript-eslint/parser': ^5.49.0
+  '@vercel/analytics': ^0.1.10
   autoprefixer: ^10.4.13
   classnames: ^2.3.2
   contentlayer: ^0.3.0
@@ -40,6 +41,7 @@ specifiers:
 dependencies:
   '@next/font': 13.1.5
   '@radix-ui/react-dropdown-menu': 2.0.2_5ndqzdd6t4rivxsukjv3i3ak2q
+  '@vercel/analytics': 0.1.10_react@18.2.0
   classnames: 2.3.2
   contentlayer: 0.3.0
   date-fns: 2.29.3
@@ -1531,6 +1533,14 @@ packages:
       '@typescript-eslint/types': 5.49.0
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vercel/analytics/0.1.10_react@18.2.0:
+    resolution: {integrity: sha512-jjJ8GzcPnQp0cMxpfYoUycMRBtDiaIeyVjZPiEPe99Dj1PdjMzAFYEASiV/hpNsXHkpcNYCveDFh6jnmh0YSDQ==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}

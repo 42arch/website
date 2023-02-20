@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes'
 import cn from 'classnames'
 import '@/styles/globals.css'
 import '@/styles/markdown.css'
+import { AnalyticsWrapper } from '@/components/analytics'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
+          <AnalyticsWrapper />
         </ThemeProvider>
       </body>
     </html>
