@@ -16,7 +16,7 @@ const NavItem = ({ href, title }: { href: string; title: string }) => {
 const SiteHeader = () => {
   const navItems = [
     {
-      href: '/blog',
+      href: '/blog/page/1',
       title: 'Blog'
     },
     {

@@ -8,7 +8,7 @@ import { getTableOfContents } from '@/lib/toc'
 const BackTo = () => {
   return (
     <Link
-      href="/blog"
+      href="/blog/page/1"
       className="no-underline mb-4 inline-flex items-center justify-center text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-500">
       <FiChevronLeft className="mr-2 h-4 w-4" />
       See all posts
