@@ -9,7 +9,7 @@ import path from 'path'
 
 const Post = defineDocumentType(() => ({
   name: 'Post',
-  filePathPattern: `posts/**/*.mdx`,
+  filePathPattern: `blog/**/*.mdx`,
   fields: {
     title: {
       type: 'string',
@@ -35,7 +35,7 @@ const Post = defineDocumentType(() => ({
   computedFields: {
     slug: {
       type: 'string',
-      resolve: (post) => `blog/${post._raw.flattenedPath}`
+      resolve: (post) => `${post._raw.flattenedPath}`
     },
     slugAsParams: {
       type: 'string',

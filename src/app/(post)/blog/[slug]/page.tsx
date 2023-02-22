@@ -37,7 +37,6 @@ export default async function Page({ params }: IProps) {
   if (!post) {
     return <div>not found</div>
   }
-
   const toc = await getTableOfContents(post.body.raw)
 
   return (
