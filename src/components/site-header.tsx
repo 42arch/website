@@ -20,6 +20,10 @@ const SiteHeader = () => {
       title: 'Blog'
     },
     {
+      href: '/note',
+      title: 'Note'
+    },
+    {
       href: '/project',
       title: 'Project'
     },
