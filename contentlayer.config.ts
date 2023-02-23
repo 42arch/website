@@ -10,6 +10,7 @@ import path from 'path'
 const Post = defineDocumentType(() => ({
   name: 'Post',
   filePathPattern: `blog/**/*.mdx`,
+  contentType: 'mdx',
   fields: {
     title: {
       type: 'string',

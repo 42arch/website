@@ -4,6 +4,7 @@ import { FiChevronLeft } from 'react-icons/fi'
 import Link from 'next/link'
 import TableOfContent from '@/components/table-of-content'
 import { getTableOfContents } from '@/lib/toc'
+import { Mdx } from '@/components/mdx'
 
 const BackTo = () => {
   return (
@@ -57,8 +58,9 @@ export default async function Page({ params }: IProps) {
           </div>
           <hr className="my-4 lg:my-8 border-slate-200 dark:border-slate-700" />
         </header>
-        <div className="prose dark:prose-invert max-w-none py-4">
-          <div dangerouslySetInnerHTML={{ __html: post.body.html }} />
+        <div className=" max-w-none py-4">
+          <Mdx code={post.body.code} />
+          {/* <div dangerouslySetInnerHTML={{ __html: post.body.html }} /> */}
           <hr className="my-4 lg:my-8 border-slate-200 dark:border-slate-700" />
           <div className="lg:hidden flex justify-center py-6 lg:py-10">
             <BackTo />

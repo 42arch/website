@@ -3,9 +3,9 @@
 import { Inter as FontSans } from '@next/font/google'
 import { ThemeProvider } from 'next-themes'
 import cn from 'classnames'
-import '@/styles/globals.css'
-import '@/styles/markdown.css'
 import { AnalyticsWrapper } from '@/components/analytics'
+import '@/styles/globals.css'
+import '@/styles/mdx.css'
 
 const fontSans = FontSans({
   subsets: ['latin'],
