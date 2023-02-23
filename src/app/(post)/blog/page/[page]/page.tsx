@@ -48,7 +48,6 @@ interface IProps {
 }
 
 const BlogPage: FC<IProps> = ({ params }) => {
-  console.log(344444, params)
   const PAGE_SIZE = 5
   const posts = allPosts.sort((a, b) => {
     return compareDesc(new Date(a.date), new Date(b.date))

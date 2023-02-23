@@ -1,10 +1,10 @@
 import * as React from 'react'
 import Image from 'next/image'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-
 import cn from 'classnames'
 import { Callout } from '@/components/callout'
 import { Card } from '@/components/card'
+import { CopyButton } from './copy-button'
 
 const components = {
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
@@ -145,15 +145,37 @@ const components = {
     />
   ),
 
-  pre: ({ className, ...props }: React.HTMLAttributes<HTMLPreElement>) => {
+  pre: ({
+    className,
+    __rawString__,
+    __withMeta__,
+    __src__,
+    ...props
+  }: React.HTMLAttributes<HTMLPreElement> & {
+    __rawString__?: string
+    __withMeta__?: boolean
+    __src__?: string
+  }) => {
     return (
-      <pre
-        className={cn(
-          'mt-6 mb-4 overflow-x-auto rounded-lg border border-slate-900 bg-slate-900 py-4 px-2 dark:border-slate-700 dark:bg-black',
-          className
+      <>
+        <pre
+          className={cn(
+            'mt-6 mb-4 overflow-x-auto rounded-lg border border-slate-900 bg-slate-900 py-4 px-2 dark:border-slate-700 dark:bg-black',
+            className
+          )}
+          {...props}
+        />
+        {__rawString__ && (
+          <CopyButton
+            value={__rawString__}
+            src={__src__}
+            className={cn(
+              'absolute top-4 right-4 border-none text-slate-300 opacity-50 hover:bg-transparent hover:opacity-100',
+              __withMeta__ && 'top-20'
+            )}
+          />
         )}
-        {...props}
-      />
+      </>
     )
   },
   code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
