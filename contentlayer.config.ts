@@ -78,9 +78,32 @@ const Note = defineDocumentType(() => ({
   }
 }))
 
+const About = defineDocumentType(() => ({
+  name: 'About',
+  filePathPattern: `about.mdx`,
+  contentType: 'mdx',
+  fields: {
+    date: {
+      type: 'date',
+      description: 'The date of the post',
+      required: true
+    }
+  }
+  // computedFields: {
+  //   slug: {
+  //     type: 'string',
+  //     resolve: (post) => `blog/${post._raw.flattenedPath}`
+  //   },
+  //   slugAsParams: {
+  //     type: 'string',
+  //     resolve: (post) => post._raw.flattenedPath.split('/').slice(1).join('/')
+  //   }
+  // }
+}))
+
 export default makeSource({
   contentDirPath: './content',
-  documentTypes: [Post, Note],
+  documentTypes: [Post, Note, About],
   markdown: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [

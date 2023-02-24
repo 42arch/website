@@ -120,7 +120,7 @@ const components = {
   tr: ({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
     <tr
       className={cn(
-        'm-0 border-t border-slate-300 p-0 even:bg-slate-100',
+        'm-0 border-t border-slate-300 p-0 even:bg-slate-10 even:dark:bg-slate-800',
         className
       )}
       {...props}

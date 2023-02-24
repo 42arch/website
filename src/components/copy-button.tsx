@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import React from 'react'
 import cn from 'classnames'
 import { FiCheck, FiCopy } from 'react-icons/fi'
 
