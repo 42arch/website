@@ -18,6 +18,10 @@ module.exports = {
       colors: {
         primary: colors.teal,
         gray: colors.neutral
+      },
+      dropShadow: {
+        light: '8px 8px 0 rgb(209, 213, 219)',
+        dark: '8px 8px 0 rgb(0 0 0 / 1)'
       }
     }
   },
