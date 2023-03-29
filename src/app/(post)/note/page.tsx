@@ -1,5 +1,8 @@
+'use client'
+import NotePad from '@/components/note-pad'
 import { allNotes } from 'contentlayer/generated'
 import { compareDesc } from 'date-fns'
+import { Masonry } from 'react-plock'
 import { FC } from 'react'
 
 const BlogPage: FC = () => {
@@ -8,13 +11,15 @@ const BlogPage: FC = () => {
   })
 
   return (
-    <div className="w-full mx-auto prose dark:prose-invert columns-1 md:columns-2 gap-10">
-      {notes.map((note, idx) => (
-        <article key={idx} className="w-full mb-6">
-          <div dangerouslySetInnerHTML={{ __html: note.body.html }} key={idx} />
-        </article>
-      ))}
-    </div>
+    <Masonry
+      items={notes}
+      config={{
+        columns: [1, 2, 3],
+        gap: [24, 24, 24],
+        media: [768, 1024, 1280]
+      }}
+      render={(item, idx) => <NotePad key={idx} note={item} />}
+    />
   )
 }
 
