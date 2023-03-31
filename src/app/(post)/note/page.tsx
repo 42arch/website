@@ -14,9 +14,9 @@ const BlogPage: FC = () => {
     <Masonry
       items={notes}
       config={{
-        columns: [1, 2, 3],
-        gap: [24, 24, 24],
-        media: [768, 1024, 1280]
+        columns: [1, 2],
+        gap: [24, 24],
+        media: [1024, 1280]
       }}
       render={(item, idx) => <NotePad key={idx} note={item} />}
     />
