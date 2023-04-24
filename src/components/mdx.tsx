@@ -101,7 +101,10 @@ const components = {
   }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      className={cn('rounded-md border border-slate-200', className)}
+      className={cn(
+        'rounded-md border border-slate-200 inline-block',
+        className
+      )}
       alt={alt}
       {...props}
     />

@@ -89,16 +89,6 @@ const About = defineDocumentType(() => ({
       required: true
     }
   }
-  // computedFields: {
-  //   slug: {
-  //     type: 'string',
-  //     resolve: (post) => `blog/${post._raw.flattenedPath}`
-  //   },
-  //   slugAsParams: {
-  //     type: 'string',
-  //     resolve: (post) => post._raw.flattenedPath.split('/').slice(1).join('/')
-  //   }
-  // }
 }))
 
 export default makeSource({
