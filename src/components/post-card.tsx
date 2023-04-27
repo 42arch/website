@@ -13,7 +13,7 @@ const PostCard: FC<Post> = (post) => {
         height={452}
         src="/images/default-cover.jpg"
         alt={post.title}
-        className="rounded-md border border-slate-200 bg-slate-200 transition-colors group-hover:border-slate-900"
+        className="rounded-md border border-slate-200 bg-slate-200 cursor-pointer hover:scale-105 transition-all ease-in-out duration-300 group-hover:border-slate-900"
       />
       <h3 className="mt-4 text-2xl font-bold leading-8 tracking-tight">
         <Link

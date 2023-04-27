@@ -2,7 +2,6 @@
 import NotePad from '@/components/note-pad'
 import { allNotes } from 'contentlayer/generated'
 import { compareDesc } from 'date-fns'
-import { Masonry } from 'react-plock'
 import { FC } from 'react'
 
 const BlogPage: FC = () => {
@@ -11,15 +10,11 @@ const BlogPage: FC = () => {
   })
 
   return (
-    <Masonry
-      items={notes}
-      config={{
-        columns: [1, 2],
-        gap: [24, 24],
-        media: [1024, 1280]
-      }}
-      render={(item, idx) => <NotePad key={idx} note={item} />}
-    />
+    <div className="flex flex-col gap-12">
+      {notes.map((note, index) => (
+        <NotePad key={index} note={note} />
+      ))}
+    </div>
   )
 }
 
