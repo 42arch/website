@@ -19,7 +19,7 @@ const PostCard: FC<Post> = (post) => {
         <Link
           href={post.slug}
           className="text-slate-900 dark:text-slate-100 no-underline">
-          {post.title}
+          {post.title} {post.lang && <span>[{post.lang}]</span>}
         </Link>
       </h3>
       <div className="flex flex-wrap">

@@ -32,6 +32,12 @@ const Post = defineDocumentType(() => ({
       of: { type: 'string' },
       description: 'The tags of the post',
       required: false
+    },
+    lang: {
+      type: 'string',
+      default: 'en',
+      description: 'The language of the post',
+      required: false
     }
   },
   computedFields: {

@@ -53,7 +53,7 @@ export default async function Page({ params }: IProps) {
               </time>
             </div>
             <h1 className="inline-block mt-8 text-4xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 lg:text-5xl">
-              {post.title}
+              {post.title} {post.lang && <span>[{post.lang}]</span>}
             </h1>
           </div>
           <hr className="my-4 lg:my-8 border-slate-200 dark:border-slate-700" />
