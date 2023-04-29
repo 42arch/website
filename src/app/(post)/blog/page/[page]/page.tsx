@@ -25,7 +25,10 @@ const BlogPage: FC<IProps> = ({ params }) => {
   const totalPages = Math.ceil(posts.length / PAGE_SIZE)
 
   return (
-    <>
+    <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+      <h1 className=" text-4xl font-extrabold leading-9 tracking-tight text-slate-900 dark:text-slate-100 md:text-6xl md:leading-14">
+        All Posts
+      </h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-10">
         {currentPosts.map((post, idx) => (
           <PostCard key={idx} {...post} />
@@ -34,7 +37,7 @@ const BlogPage: FC<IProps> = ({ params }) => {
       {totalPages > 1 && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
-    </>
+    </div>
   )
 }
 

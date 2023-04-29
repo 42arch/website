@@ -44,7 +44,7 @@ export default async function Page({ params }: IProps) {
     <article className="relative py-2 lg:grid lg:grid-cols-[1fr_300px] lg:gap-10 lg:py-4 xl:gap-20">
       <div className="">
         <header className="pt-6">
-          <div className="space-y-1 ">
+          <div className="space-y-4">
             <div className="space-y-20">
               <time
                 dateTime={post.date}
@@ -52,7 +52,7 @@ export default async function Page({ params }: IProps) {
                 Published on {format(parseISO(post.date), 'LLLL d, yyyy')}
               </time>
             </div>
-            <h1 className="mt-2 inline-block text-4xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 lg:text-5xl">
+            <h1 className="inline-block mt-8 text-4xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 lg:text-5xl">
               {post.title}
             </h1>
           </div>
