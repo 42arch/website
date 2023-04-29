@@ -10,9 +10,13 @@ const BlogPage: FC = () => {
   })
 
   return (
+    // <div className="py-4">
+    //   <p>I made some projects.</p>
+    // </div>
     <div className="flex flex-col gap-12">
       {notes.map((note, index) => (
         <NotePad key={index} note={note} />
+        // <span key={index}>111</span>
       ))}
     </div>
   )
