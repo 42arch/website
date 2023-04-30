@@ -1,0 +1,63 @@
+---
+title: 使用Nest.js和Prisma搭建一个基于角色的访问控制的用户权限系统(WIP)
+date: 2023-03-01
+lang: 中
+description: 使用Nest.js和Prisma搭建一个基于角色的访问控制的用户权限系统。
+tags:
+  - Nest.js
+  - Prisma
+category:
+  - Tech
+---
+
+## 框架搭建
+
+### 安装 Nest.js
+
+```bash
+# 全局安装cli
+npm i -g @nestjs/cli
+# 新建项目
+nest new nest-auth
+
+cd nest-auth
+
+npm run start:dev
+```
+
+现在 api 成功运行在了 http:localhost:3000 服务下
+
+### 安装设置 Prisma
+
+```bash
+npm install prisma -D
+# 初始化 prisma
+npx prisma init
+```
+
+上述命令会在项目根目录下创建一个 prisma 目录和.env 文件
+
+### 设置数据库连接
+
+在 prisma 目录下的 schema.prisma 文件中的 datasource 部分为数据库配置信息，默认数据为 postgresql。
+
+```schema
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+```
+
+同时在`.env`文件，写入 PostgreSQL 数据库信息：
+
+```env
+DATABASE_URL="postgres://myuser:mypassword@localhost:5432/auth-db"
+```
+
+## 用户认证
+
+## 权限控制
