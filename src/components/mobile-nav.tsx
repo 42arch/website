@@ -28,7 +28,7 @@ const MobileNav: FC<IProps> = ({ navItems }) => {
         className="flex"
         aria-label="Toggle Menu"
         onClick={onToggleNav}>
-        <FiMenu className="m-1 cursor-pointer nav-link" />
+        <FiMenu className="m-1 cursor-pointer nav-link text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-400" />
       </button>
       <div
         className={cn(

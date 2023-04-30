@@ -13,7 +13,7 @@ const BlogPage: FC = () => {
     // <div className="py-4">
     //   <p>I made some projects.</p>
     // </div>
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-12 items-center">
       {notes.map((note, index) => (
         <NotePad key={index} note={note} />
         // <span key={index}>111</span>
