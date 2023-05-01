@@ -47,8 +47,8 @@ export async function generateMetadata({ params }: PageProps) {
 
   const url = env.NEXT_PUBLIC_APP_URL
   const ogUrl = new URL(`${url}/api/og`)
-  ogUrl.searchParams.set('heading', page.title)
-  ogUrl.searchParams.set('type', siteConfig.name)
+  ogUrl.searchParams.set('title', page.title)
+  ogUrl.searchParams.set('author', siteConfig.name)
   ogUrl.searchParams.set('mode', 'light')
 
   return {
