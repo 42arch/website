@@ -6,6 +6,9 @@ import TableOfContent from '@/components/table-of-content'
 import { getTableOfContents } from '@/lib/toc'
 import { Mdx } from '@/components/mdx'
 import GiscusComment from '@/components/giscus-comment'
+import { siteConfig } from '@/config/site'
+import { env } from 'process'
+import { absoluteUrl } from '@/lib/utils'
 
 const BackTo = () => {
   return (
@@ -18,19 +21,69 @@ const BackTo = () => {
   )
 }
 
-interface IProps {
+interface PageProps {
   params: {
     slug: string
   }
 }
 
-export async function generateStaticParams(): Promise<IProps['params'][]> {
+async function getPageFromParams(params: any) {
+  console.log(99999, params)
+  const slug = params?.slug
+  const page = allPosts.find((page) => page.slugAsParams === slug)
+
+  if (!page) {
+    null
+  }
+
+  return page
+}
+
+export async function generateMetadata({ params }: PageProps) {
+  const page = await getPageFromParams(params)
+  if (!page) {
+    return {}
+  }
+
+  const url = env.NEXT_PUBLIC_APP_URL
+  const ogUrl = new URL(`${url}/api/og`)
+  ogUrl.searchParams.set('heading', page.title)
+  ogUrl.searchParams.set('type', siteConfig.name)
+  ogUrl.searchParams.set('mode', 'light')
+
+  return {
+    title: page.title,
+    description: page.description,
+    openGraph: {
+      title: page.title,
+      description: page.description,
+      type: 'article',
+      url: absoluteUrl(page.slug),
+      images: [
+        {
+          url: ogUrl.toString(),
+          width: 1200,
+          height: 630,
+          alt: page.title
+        }
+      ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: page.title,
+      description: page.description,
+      images: [ogUrl.toString()]
+    }
+  }
+}
+
+export async function generateStaticParams(): Promise<PageProps['params'][]> {
   return allPosts.map((post) => ({
     slug: post.slug
   }))
 }
 
-export default async function Page({ params }: IProps) {
+export default async function Page({ params }: PageProps) {
   const slug = params?.slug
   const post = allPosts.find((post) => {
     return post.slug === `blog/${slug}`
