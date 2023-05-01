@@ -1,19 +1,33 @@
 import { ImageResponse } from '@vercel/og'
-import { NextRequest } from 'next/server'
 
-export const config = {
-  runtime: 'edge'
-}
+export const runtime = 'edge'
 
-export default function handler(request: NextRequest) {
+const interRegular = fetch(
+  new URL('../../../assets/fonts/Inter-Regular.ttf', import.meta.url)
+).then((res) => res.arrayBuffer())
+
+const interBold = fetch(
+  new URL('../../../assets/fonts/CalSans-SemiBold.ttf', import.meta.url)
+).then((res) => res.arrayBuffer())
+
+export async function GET(req: Request) {
   try {
-    const { searchParams } = new URL(request.url)
+    const fontRegular = await interRegular
+    const fontBold = await interBold
 
-    // ?title=<title>
+    const { searchParams } = new URL(req.url)
+    // const values = ogImageSchema.parse(Object.fromEntries(url.searchParams))
     const hasTitle = searchParams.has('title')
     const title = hasTitle
       ? searchParams.get('title')?.slice(0, 100)
       : 'My default title'
+
+    // const heading =
+    //   values.heading.length > 140
+    //     ? `${values.heading.substring(0, 140)}...`
+    //     : values.heading
+
+    // const { mode } = values
 
     return new ImageResponse(
       (
@@ -65,9 +79,8 @@ export default function handler(request: NextRequest) {
         height: 630
       }
     )
-  } catch (e: any) {
-    console.log(`${e.message}`)
-    return new Response(`Failed to generate the image`, {
+  } catch (error) {
+    return new Response(`Failed to generate image`, {
       status: 500
     })
   }

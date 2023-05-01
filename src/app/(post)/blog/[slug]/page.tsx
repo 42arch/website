@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: PageProps) {
       url: absoluteUrl(page.slug),
       images: [
         {
-          url: siteConfig.ogImage,
+          url: ogUrl.toString(),
           width: 1200,
           height: 630,
           alt: page.title
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: PageProps) {
       card: 'summary_large_image',
       title: page.title,
       description: page.description,
-      images: siteConfig.ogImage,
+      images: [ogUrl.toString()],
       creator: '42arch'
     }
   }
