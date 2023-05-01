@@ -2,21 +2,17 @@ import { ImageResponse } from '@vercel/og'
 
 export const runtime = 'edge'
 
-const interRegular = fetch(
-  new URL('../../../assets/fonts/Inter-Regular.ttf', import.meta.url)
-).then((res) => res.arrayBuffer())
+// const interRegular = fetch(
+//   new URL('../../../assets/fonts/Inter-Regular.ttf', import.meta.url)
+// ).then((res) => res.arrayBuffer())
 
-const interBold = fetch(
-  new URL('../../../assets/fonts/CalSans-SemiBold.ttf', import.meta.url)
-).then((res) => res.arrayBuffer())
+// const interBold = fetch(
+//   new URL('../../../assets/fonts/CalSans-SemiBold.ttf', import.meta.url)
+// ).then((res) => res.arrayBuffer())
 
 export async function GET(req: Request) {
   try {
-    const fontRegular = await interRegular
-    const fontBold = await interBold
-
     const { searchParams } = new URL(req.url)
-    // const values = ogImageSchema.parse(Object.fromEntries(url.searchParams))
     const hasTitle = searchParams.has('title')
     const title = hasTitle
       ? searchParams.get('title')?.slice(0, 100)
