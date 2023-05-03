@@ -27,6 +27,12 @@ const Post = defineDocumentType(() => ({
       type: 'string',
       required: false
     },
+    cover: {
+      type: 'string',
+      required: false,
+      description: 'The cover of the post',
+      default: '/images/default-cover.jpg'
+    },
     tags: {
       type: 'list',
       of: { type: 'string' },

@@ -28,7 +28,6 @@ interface PageProps {
 }
 
 async function getPageFromParams(params: any) {
-  console.log(99999, params)
   const slug = params?.slug
   const page = allPosts.find((page) => page.slugAsParams === slug)
 
@@ -50,6 +49,7 @@ export async function generateMetadata({ params }: PageProps) {
   ogUrl.searchParams.set('title', page.title)
   ogUrl.searchParams.set('author', siteConfig.name)
   ogUrl.searchParams.set('mode', 'light')
+  ogUrl.searchParams.set('cover', page.cover)
 
   return {
     title: page.title,
@@ -66,7 +66,8 @@ export async function generateMetadata({ params }: PageProps) {
           height: 630,
           alt: page.title
         }
-      ]
+      ],
+      creator: '42arch'
     },
     twitter: {
       card: 'summary_large_image',
