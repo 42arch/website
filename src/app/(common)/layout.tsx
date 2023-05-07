@@ -12,7 +12,9 @@ const CommonLayout: FC<IProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main className="container flex-1">
+        <div className="py-6 lg:py-10 px-0 lg:px-10">{children}</div>
+      </main>
       <SiteFooter />
     </div>
   )

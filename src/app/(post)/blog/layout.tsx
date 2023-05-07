@@ -5,7 +5,7 @@ interface IProps {
 }
 
 const BlogLayout: FC<IProps> = ({ children }) => {
-  return <div className="mx-auto max-w-5xl">{children}</div>
+  return <>{children}</>
 }
 
 export default BlogLayout

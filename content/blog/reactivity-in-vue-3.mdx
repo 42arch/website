@@ -1,0 +1,523 @@
+---
+title: VUE3响应式原理
+date: 2021-12-26 19:03:40
+lang: 中
+description: Vue3实现响应式的方式与Vue2相比有一些变化，本文将整理Vue3中实现响应式的基本原理并实现一个响应式引擎。
+cover: /images/reactivity-in-vue-3/cover.jpg
+tags:
+  - JavaScript
+  - Vue
+category:
+  - Tech
+---
+
+> Vue3 实现响应式的方式与 Vue2 相比有一些变化，本文将整理 Vue3 中实现响应式的基本原理并实现一个响应式引擎。
+
+## 一个例子
+
+在 Vue 中，当该 vue 实例中的 data 属性或者 computed 发生改变时，模板中值会自动更新。
+
+```html
+<div id="app">
+  <div>Price: ${{ price }}</div>
+  <div>Total: ${{ price * quantity }}</div>
+  <div>Taxes: ${{ totalPriceWithTax }}</div>
+</div>
+```
+
+```js
+var vm = new Vue({
+    el: '#app'
+    data: {
+        price: 10.00,
+        quantity: 2
+    },
+    computed: {
+        totalPriceWithTax() {
+            return this.price * this.quantity * 1.03
+        }
+    }
+})
+
+```
+
+Vue 是怎么知道去更新所有东西的？
+因为这并不是 JavaScript 的工作方式。如下，在 JS 中，改变 price 的值，total 并不会发生改变。
+
+```js
+let price = 5
+let quantity = 2
+let total = price * quantity
+
+console.log(`total is ${total}`)
+price = 20
+console.log(`total is ${total}`)
+```
+
+## Reactivity
+
+**问题 1: 我们怎么去存储`total`的计算函数，当`price`或者`quantity`发生改变时再去运行一遍？而且可能不止保存了一个函数。**
+
+```js
+let price = 5
+let quantity = 2
+let total = 0
+
+let dep = new Set() // 存储所有effect的容器
+
+// 想要存储的代码
+let effect = () => {
+  total = price * quantity
+}
+// 添加代码
+function track() {
+  dep.add(effect)
+}
+// 重新运行容器中的所有代码
+function trigger() {
+  dep.forEach((effect) => effect())
+}
+
+track()
+effect()
+console.log(total) // 10
+quantity = 3
+trigger()
+console.log(total) // 15
+```
+
+重写代码，在一个匿名函数中计算总数，把它存储在`effect`中。想要保存 effect 中的代码时，需要调用`track`，然后调用`effect`执行首次计算。之后将调用`trigger`来运行所有保存了的代码。
+
+这里的`effect`、`track`、`trigger`在 Vue3 响应式源码中都有相同的名称。
+
+**问题 2：通常一个对象中会有多个属性，而且每个属性都需要自己的`dep`（依赖关系，或者说 `effect`的 Set），如何存储这些`dep`呢？**
+
+要将`deps`存储起来，需要创建一个`depsMap`，它是一个存储了每个属性及其 dep 对象的`Map`。ES6 中一个`Map`拥有一个键值对，使用对象的属性名作为键，值就是一个`dep`(effect 集)了。
+
+```js
+const depsMap = new Map()
+
+function track(key) {
+  let dep = depsMap.get(key) // 通过对象属性名获取dep
+  if (!dep) {
+    depsMap.set(key, (dep = new Set())) // 如果没有，就创建一个
+  }
+  dep.add(effect) // 添加effect
+}
+
+function trigger() {
+  let dep = depsMap.get(key)
+  if (dep) {
+    dep.forEach((effect) => {
+      effect() // 如果dep存在，执行每个effect
+    })
+  }
+}
+
+let product = { price: 5, quantity: 2 }
+let total = 0
+let effect = () => {
+  total = product.price * product.quantity
+}
+track('quantity')
+effect()
+console.log(total) // 10
+product.quantity = 3
+trigger('quantity')
+console.log(total) // 15
+```
+
+**问题 3：如果我们有多个响应式对象呢？**
+
+这里我们需要一个对象（比如 Map），它的键以某种方式引用了响应式对象。在 Vue3 中，它被称为`targetMap`，是一个 WeakMap 类型。
+
+WeakMap 简单说就是一个 Map，但是它的键是一个对象。
+
+```js
+const targetMap = new WeakMap()
+
+function track(target, key) {
+  let depsMap = targetMap.get(target) // 获取目标（响应式对象）当前的depsMap, 如 product
+  if (!depsMap) {
+    targetMap.set(target, (depsMap = new Map()))
+  }
+  let dep = depsMap.get(key) // 获取属性的依赖对象，如 quantity
+  if (!dep) {
+    depsMap.set(key, (dep = new Set()))
+  }
+  dep.add(effect)
+}
+
+function trigger(target, key) {
+  const depsMap = targetMap.get(target) // 这个对象是否有存在依赖的属性？
+  if (!depsMap) {
+    return
+  }
+  let dep = depsMap.get(key) // 检查这个属性是否有依赖
+  if (dep) {
+    dep.forEach((effect) => {
+      effect()
+    }) // 运行
+  }
+}
+
+let product = { price: 5, quantity: 2 }
+let total = 0
+let effect = () => {
+  total = product.price * product.quantity
+}
+track(product, 'quantity')
+effect()
+console.log(total) // 10
+product.quantity = 3
+trigger(product, 'quantity')
+console.log(total) // 15
+```
+
+如上：`targetMap`中存储了与每个“响应式对象属性”关联的依赖，`depsMap`存储了每个属性的依赖，而`dep`是一个`effect`集（Set）的依赖，这些`effect`应该在值发生改变时重新运行。
+
+## Proxy 和 Reflect
+
+我们已经有了存储不同`effect`的方法，但是还不能让`effect`自动重新运行。我们希望响应式引擎自动调用跟踪和触发，即当访问响应式对象的属性（或使用了 GET）时，正是要调用`track`去保存`effect`的时候；如果对象的属性改变了（或者说使用了 SET）时，是调用`trigger`来运行那些保存了的`effect`的时候。这是问题就变成了我们如何拦截这些`GET`和`SET`方法？
+
+在 Vue2 中，使用 ES5 的`Obejct.defineProperty()`去拦截`GET`和`SET`。在 Vue3 中，使用的是 ES6 的`Proxy`和`Reflect`（反射和代理）。
+
+```js
+const targetMap = new WeakMap()
+
+function track(target, key) {
+  let depsMap = targetMap.get(target)
+  if (!depsMap) {
+    targetMap.set(target, (depsMap = new Map()))
+  }
+  let dep = depsMap.get(key)
+  if (!dep) {
+    depsMap.set(key, (dep = new Set()))
+  }
+  dep.add(effect)
+}
+
+function trigger(target, key) {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) {
+    return
+  }
+  let dep = depsMap.get(key)
+  if (dep) {
+    dep.forEach((effect) => {
+      effect()
+    })
+  }
+}
+
+function reactive(target) {
+  const handler = {
+    get(target, key, receiver) {
+      // console.log('get was called')
+      let result = Reflect.get(target, key, receiver)
+      track(target, key)
+      return result
+    },
+    set(target, key, value, receiver) {
+      // console.log('set was called')
+      let oldValue = target[key]
+      let result = Reflect.set(target, key, value, receiver)
+      if (oldValue != value) {
+        trigger(target, key)
+      }
+      return result
+    }
+  }
+  return new Proxy(target, handler)
+}
+
+let product = reactive({ price: 5, quantity: 2 }) // 返回一个proxy对象，可以像原始对象一样使用
+let total = 0
+let effect = () => {
+  total = product.price * product.quantity
+}
+effect()
+console.log(total) // 10
+product.quantity = 4
+console.log(total) // 20
+```
+
+如上：我们的响应式函数`reactive()`返回一个对象的代理，在第一次运行`effect`拿到 price 属性时，它将运行`track(product, 'price')`，这时在`targetMap`中将为 product 对象创建一个新的映射，它的值是一个新的`depsMap`，将 price 属性映射到一个新的`deps`，然后将全部 effect 加入到`deps`集中。调用`product.quantity`时同理。然后设置 quantity 为 3 时，会调用`trigger(product, 'quantity')`，然后运行存储了的`effect`。
+
+## activeEffect 和 ref
+
+如果我们再添加另一个`get`，比如`product.quantity`，它会调用`track(product, 'quantity')`，走一遍`targetMap`和各种`dep`，以确保当前`effect`被记录下来了。这不是我们想要的，我们应该只在`effect`中调用追踪函数。
+
+为此需要引入一个`activeEffect`变量，代表正在运行中的`effect`，用一个`effect`函数包裹，并修改`track()`函数。
+
+```js
+const targetMap = new WeakMap()
+
+function track(target, key) {
+  if (activeEffect) {
+    // 只在有activeEffect时追踪
+    let depsMap = targetMap.get(target)
+    if (!depsMap) {
+      targetMap.set(target, (depsMap = new Map()))
+    }
+    let dep = depsMap.get(key)
+    if (!dep) {
+      depsMap.set(key, (dep = new Set()))
+    }
+    dep.add(activeEffect)
+  }
+}
+
+function trigger(target, key) {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) {
+    return
+  }
+  let dep = depsMap.get(key)
+  if (dep) {
+    dep.forEach((effect) => {
+      effect()
+    })
+  }
+}
+
+function reactive(target) {
+  const handler = {
+    get(target, key, receiver) {
+      let result = Reflect.get(target, key, receiver)
+      track(target, key)
+      return result
+    },
+    set(target, key, value, receiver) {
+      let oldValue = target[key]
+      let result = Reflect.set(target, key, value, receiver)
+      if (oldValue != value) {
+        trigger(target, key)
+      }
+      return result
+    }
+  }
+  return new Proxy(target, handler)
+}
+
+let activeEffect = null // 正在运行的effect
+function effect(eff) {
+  activeEffect = eff // 设置activeEffect
+  activeEffect() // 运行
+  activeEffect = null // 复位activeEffect
+}
+
+let product = reactive({ price: 5, quantity: 2 }) // 返回一个proxy对象，可以像原始对象一样使用
+let salePrice = 0
+let total = 0
+// let effect = () => {
+//     total = product.price * product.quantity
+// }
+// effect()       // 不再需要调用，会在传递函数时调用
+effect(() => {
+  total = product.price * product.quantity
+})
+effect(() => {
+  salePrice = product.price * 0.9
+})
+console.log(`在更新前 total = ${total}, salePrice = ${salePrice}`) // 10, 4.5
+product.quantity = 3
+console.log(`在更新后 total = ${total}, salePrice = ${salePrice}`) // 15, 4.5
+product.price = 10
+console.log(`在更新后 total = ${total}, salePrice = ${salePrice}`) // 30, 9
+```
+
+这样`track`函数只有在有`activeEffect`时才会运行。
+
+在上面的代码中，如果想根据 salePrice 计算 total 是不行的，因为当 salePrice 被设置的时候，需要重新计算 total。但是 salePrice 不是响应式的！
+
+这时就需要 Vue3 中的`ref`了。`ref`接受一个值并返回一个响应的可变的`Ref`对象。`Ref`对象只有一个`.value`属性，指向内部的值。
+
+Vue3 中是使用**对象访问器**实现`ref`的。对象访问器有时也被称为计算属性（不是 Vue 中的）。下面是对象访问器`getter`和`setter`的用法。
+
+```js
+let uer = {
+    firstName: 'Joe',
+    lastName: 'Mike',
+
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`
+    },
+    set fullName() {
+        [this.firstName, this.lastName] = value.split(' ')
+    }
+}
+
+console.log(`Name is ${user.fullName}`)  // Name is Joe Mike
+user.fullName = 'Cris Paul'
+console.log(`Name is ${user.fullName}`)   // Name is Cris Paul
+```
+
+现在如何用对象访问器来定义`Ref`呢？
+
+```js
+// ...
+
+function ref(raw) {
+  const r = {
+    get value() {
+      track(r, 'value')
+      return raw
+    },
+    set value(newVal) {
+      if (raw !== newVal) {
+        raw = newVal
+        trigger(r, 'value')
+      }
+    }
+  }
+  return r
+}
+// ...
+
+let product = reactive({ price: 5, quantity: 2 })
+let salePrice = ref(0)
+let total = 0
+
+effect(() => {
+  total = salePrice.value * product.quantity
+})
+effect(() => {
+  salePrice.value = product.price * 0.9
+})
+console.log(`在更新前 total = ${total}, salePrice = ${salePrice.value}`) // 10,  4.5
+product.quantity = 3
+console.log(`在更新后 total = ${total}, salePrice = ${salePrice.value}`) // 13.5,  4.5
+product.price = 10
+console.log(`在更新后 total = ${total}, salePrice = ${salePrice.value}`) // 27, 9
+```
+
+## Computed
+
+在之前的代码种`effect`方法可以用 Vue 中的`Computed`方法去代替，只需返回一个匿名函数到一个计算函数`Computed()`中，然后返回一个值。就像：
+
+```js
+let product = reactive({ price: 5, quantity: 2 })
+// let salePrice = ref(0)
+// let total = 0
+
+// effect(() => {
+//     total = salePrice.value * product.quantity
+// })
+
+// effect(() => {
+//     salePrice.value = product.price * 0.9
+// })
+
+let salePrice = computed(() => {
+  return product.price * 0.9
+})
+
+let total = computed(() => {
+  return salePrice.value * product.quantity
+})
+```
+
+那么如何定义`Computed`方法呢？计算属性或计算值是响应式的，有点像`Ref`。
+
+首先，我们将定义一个计算函数，它接收一个称之为`getter`的参数，在函数内部，将创建一个称为`result`的响应式引用，然后在`effect`中运行 getter，这样就能监听响应值，然后把`getter`赋值于`result.value`，最后返回`result`。
+
+全部代码：
+
+```js
+const targetMap = new WeakMap()
+
+function track(target, key) {
+  if (activeEffect) {
+    let depsMap = targetMap.get(target)
+    if (!depsMap) {
+      targetMap.set(target, (depsMap = new Map()))
+    }
+    let dep = depsMap.get(key)
+    if (!dep) {
+      depsMap.set(key, (dep = new Set()))
+    }
+    dep.add(activeEffect)
+  }
+}
+
+function trigger(target, key) {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) {
+    return
+  }
+  let dep = depsMap.get(key)
+  if (dep) {
+    dep.forEach((effect) => {
+      effect()
+    })
+  }
+}
+
+function reactive(target) {
+  const handler = {
+    get(target, key, receiver) {
+      let result = Reflect.get(target, key, receiver)
+      track(target, key)
+      return result
+    },
+    set(target, key, value, receiver) {
+      let oldValue = target[key]
+      let result = Reflect.set(target, key, value, receiver)
+      if (oldValue != value) {
+        trigger(target, key)
+      }
+      return result
+    }
+  }
+  return new Proxy(target, handler)
+}
+
+function ref(raw) {
+  const r = {
+    get value() {
+      track(r, 'value')
+      return raw
+    },
+    set value(newVal) {
+      if (raw !== newVal) {
+        raw = newVal
+        trigger(r, 'value')
+      }
+    }
+  }
+  return r
+}
+
+function computed(getter) {
+  let result = ref()
+  effect(() => (result.value = getter()))
+  return result
+}
+
+let activeEffect = null
+function effect(eff) {
+  activeEffect = eff
+  activeEffect()
+  activeEffect = null
+}
+
+let product = reactive({ price: 5, quantity: 2 })
+let salePrice = computed(() => {
+  return product.price * 0.9
+})
+
+let total = computed(() => {
+  return salePrice.value * product.quantity
+})
+
+console.log(`在更新前 total = ${total.value}, salePrice = ${salePrice.value}`) // 10,  4.5
+product.quantity = 3
+console.log(`在更新后 total = ${total.value}, salePrice = ${salePrice.value}`) // 13.5,  4.5
+product.price = 10
+console.log(`在更新后 total = ${total.value}, salePrice = ${salePrice.value}`) // 27, 9     // 30, 9
+```
+
+以上就是 Vue3 中实现响应式的一些基础代码。
+
+在 Vue2 中，在创建一个响应式对象之后，无法再添加新的响应式属性，例如，设置 product 对象的 name 为'Shoes'，执行一次`effect`，但是如果改变 product 的 name 值为'Socks'，并不会运行`effect`。这是因为在 Vue2 中，`Get`和`Set`钩子是被添加到各个属性下的，如果要增加新的属性，需要像`Vue.set('product', 'name', 'Socks')`这样做。但是在 Vue3 中，使用了代理`Proxy`，意味着我们可以添加新属性，然后它们会自动变成响应式。

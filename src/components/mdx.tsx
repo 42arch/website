@@ -4,6 +4,7 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import cn from 'classnames'
 import { Callout } from '@/components/callout'
 import { Card } from '@/components/card'
+import LinkButton from '@/components/link-button'
 import { CopyButton } from './copy-button'
 
 const components = {
@@ -189,7 +190,8 @@ const components = {
   ),
   Image,
   Callout,
-  Card
+  Card,
+  LinkButton
 }
 
 interface MdxProps {

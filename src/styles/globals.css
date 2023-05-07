@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 .container {
-  @apply w-full mx-auto px-6;
+  @apply w-full mx-auto px-6 lg:px-12;
+}
+
+.content {
+  @apply px-6 lg:px-24;
 }
 
 .nav-link {

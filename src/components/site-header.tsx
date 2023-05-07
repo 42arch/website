@@ -37,7 +37,7 @@ const SiteHeader = () => {
     <header className="container sticky top-0 z-40 bg-white dark:bg-slate-900">
       <div className="flex h-16 items-center justify-between border-b border-b-slate-200 dark:border-b-slate-800 py-4">
         <nav>
-          <Link href={'/'} className="uppercase">
+          <Link href={'/'} className="uppercase text-xl font-bold">
             42Arch
           </Link>
         </nav>
