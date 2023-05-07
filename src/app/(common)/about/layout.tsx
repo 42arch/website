@@ -2,6 +2,13 @@ interface AboutLayoutProps {
   children: React.ReactNode
 }
 
+export async function generateMetadata() {
+  return {
+    title: '42arch | About',
+    description: "42Arch, Dan's personal site. About me and this website."
+  }
+}
+
 export default function AboutLayout({ children }: AboutLayoutProps) {
   return (
     <>

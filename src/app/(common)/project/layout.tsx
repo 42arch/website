@@ -2,6 +2,13 @@ interface ProjectLayoutProps {
   children: React.ReactNode
 }
 
+export async function generateMetadata() {
+  return {
+    title: '42arch | Project',
+    description: "42Arch, Dan's personal site. The projects i have made."
+  }
+}
+
 export default function ProjectLayout({ children }: ProjectLayoutProps) {
   return (
     <>
