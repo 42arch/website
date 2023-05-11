@@ -1,4 +1,6 @@
-import React, { FC, useState } from 'react'
+'use client'
+
+import { FC, useState } from 'react'
 import { FiMenu, FiX } from 'react-icons/fi'
 import cn from 'classnames'
 import Link from 'next/link'
