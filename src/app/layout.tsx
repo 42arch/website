@@ -17,13 +17,6 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export async function generateMetadata() {
-  return {
-    title: '42arch',
-    description: "42Arch, Dan's personal site."
-  }
-}
-
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
