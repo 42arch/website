@@ -9,6 +9,7 @@ import GiscusComment from '@/components/giscus-comment'
 import { siteConfig } from '@/config/site'
 import { env } from 'process'
 import { absoluteUrl } from '@/lib/utils'
+import { Balancer } from 'react-wrap-balancer'
 
 const BackTo = () => {
   return (
@@ -108,9 +109,11 @@ export default async function Page({ params }: PageProps) {
                 Published on {format(parseISO(post.date), 'LLLL d, yyyy')}
               </time>
             </div>
-            <h1 className="inline-block mt-8 text-4xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 lg:text-5xl">
-              {post.title} {post.lang && <span>[{post.lang}]</span>}
-            </h1>
+            <h2 className="inline-block w-full text-center mt-8 text-4xl font-extrabold text-slate-900 dark:text-slate-100 lg:text-5xl">
+              <Balancer ratio={0.8} className="text-center leading-snug">
+                {post.title}
+              </Balancer>
+            </h2>
           </div>
           <hr className="my-4 lg:my-8 border-slate-200 dark:border-slate-700" />
         </header>

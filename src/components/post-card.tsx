@@ -1,8 +1,9 @@
+import React, { FC } from 'react'
 import { Post } from 'contentlayer/generated'
 import { format, parseISO } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { FC } from 'react'
+import { Balancer } from 'react-wrap-balancer'
 import PostTag from './post-tag'
 
 const PostCard: FC<Post> = (post) => {
@@ -26,7 +27,7 @@ const PostCard: FC<Post> = (post) => {
         <Link
           href={post.slug}
           className="text-slate-900 dark:text-slate-100 no-underline">
-          {post.title} {post.lang && <span>[{post.lang}]</span>}
+          <Balancer>{post.title}</Balancer>
         </Link>
       </h3>
       <div className="flex flex-wrap">

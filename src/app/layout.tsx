@@ -3,6 +3,7 @@
 import { Inter as FontSans } from '@next/font/google'
 import { ThemeProvider } from 'next-themes'
 import cn from 'classnames'
+import { Provider } from 'react-wrap-balancer'
 import { AnalyticsWrapper } from '@/components/analytics'
 import '@/styles/globals.css'
 import '@/styles/mdx.css'
@@ -31,7 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontSans.className
         )}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <Provider>{children}</Provider>
           <AnalyticsWrapper />
         </ThemeProvider>
       </body>

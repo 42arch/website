@@ -26,6 +26,7 @@
     "react-icons": "^4.7.1",
     "react-plock": "^3.0.2",
     "react-use": "^17.4.0",
+    "react-wrap-balancer": "^1.0.0",
     "remark-code-import": "^1.1.1"
   },
   "devDependencies": {
