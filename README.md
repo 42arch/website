@@ -4,14 +4,7 @@ https://mainissues.cc
 
 ## Tech Stack
 
-- Next.js 13 `app` directory.
-
-- TailwindCSS for styling.
-
-- ContentLayer for handling static content.
-
-- Vercel for deploying.
-
-## Credits
-
-- https://ui.shadcn.com
+- Framework: Next.js (app router)
+- Deployment: Vercel
+- Styling: Tailwind CSS
+- Analytics: Vercel Analytics
