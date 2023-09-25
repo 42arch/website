@@ -8,7 +8,7 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx}', // Note the addition of the `app` directory.
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}',
-    './src/posts/**/*.md'
+    './content/**/*.{md,mdx}'
   ],
   theme: {
     extend: {
@@ -16,7 +16,7 @@ module.exports = {
         sans: ['var(--font-sans)', ...fontFamily.sans]
       },
       colors: {
-        primary: colors.teal,
+        primary: colors.zinc,
         gray: colors.neutral
       },
       dropShadow: {
