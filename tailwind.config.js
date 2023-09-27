@@ -13,6 +13,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        graphik: ['var(--font-graphik)'],
         sans: ['var(--font-sans)', ...fontFamily.sans]
       },
       colors: {

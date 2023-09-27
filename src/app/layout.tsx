@@ -1,40 +1,42 @@
-'use client'
+import clsx from 'clsx'
+import localFont from 'next/font/local'
+import '../styles/global.css'
 
-import { Inter as FontSans } from '@next/font/google'
-import { ThemeProvider } from 'next-themes'
-import cn from 'classnames'
-import { Provider } from 'react-wrap-balancer'
-import { AnalyticsWrapper } from '@/components/analytics'
-import '@/styles/globals.css'
-import '@/styles/mdx.css'
-
-const fontSans = FontSans({
-  subsets: ['latin'],
-  variable: '--font-sans',
+const graphik = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Graphik-Regular.ttf',
+      weight: '400',
+      style: 'normal'
+    },
+    {
+      path: '../../public/fonts/Graphik-Medium.ttf',
+      weight: '600',
+      style: 'bold'
+    }
+  ],
+  variable: '--font-graphik',
   display: 'swap'
 })
 
-interface RootLayoutProps {
+export default function RootLayout({
+  children
+}: {
   children: React.ReactNode
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-      <head />
-      <body
-        className={cn(
-          'min-h-screen bg-white font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50',
-          fontSans.className
-        )}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Provider>{children}</Provider>
-          <AnalyticsWrapper />
-        </ThemeProvider>
+    <html
+      lang="en"
+      className={clsx(
+        'text-black bg-white dark:text-white dark:bg-[#111010]',
+        graphik.variable
+      )}>
+      <body className="antialiased max-w-2xl mb-40 flex flex-col md:flex-row mx-4 mt-8 lg:mx-auto">
+        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+          {/* <Sidebar /> */}
+          {children}
+          {/* <Analytics /> */}
+        </main>
       </body>
     </html>
   )
