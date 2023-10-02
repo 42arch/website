@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/components/theme-provider'
 import clsx from 'clsx'
 import localFont from 'next/font/local'
 import '../styles/global.css'
@@ -25,18 +26,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      className={clsx(
-        'text-black bg-white dark:text-white dark:bg-[#111010]',
-        graphik.variable
-      )}>
-      <body className="antialiased max-w-2xl mb-40 flex flex-col md:flex-row mx-4 mt-8 lg:mx-auto">
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
-          {/* <Sidebar /> */}
-          {children}
-          {/* <Analytics /> */}
-        </main>
+    <html lang="en" className={clsx('', graphik.variable)}>
+      <body className="antialiased min-h-screen">
+        <ThemeProvider>
+          <div className="text-dark bg-light dark:text-light dark:bg-dark selection:bg-slate-100 selection:text-primary">
+            {children}
+          </div>
+        </ThemeProvider>
+        {/* <Sidebar /> */}
+        {/* <Analytics /> */}
       </body>
     </html>
   )

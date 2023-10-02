@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { useTheme } from 'next-themes'
 import { FiSun, FiMoon, FiMonitor } from 'react-icons/fi'
@@ -10,7 +12,7 @@ import {
 import { useMounted } from '@/hooks/useMounted'
 
 const className =
-  'm-1 cursor-pointer text-lg text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-400'
+  'm-1 cursor-pointer text-lg text-gray-600 hover:text-gray-500 dark:text-light dark:hover:text-gray-400'
 
 const ThemeToogle = () => {
   const { theme, setTheme } = useTheme()

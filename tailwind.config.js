@@ -3,7 +3,7 @@ const { fontFamily } = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-  darkMode: 'class',
+  darkMode: ['class'],
   content: [
     './src/app/**/*.{js,ts,jsx,tsx}', // Note the addition of the `app` directory.
     './src/pages/**/*.{js,ts,jsx,tsx}',
@@ -17,7 +17,9 @@ module.exports = {
         sans: ['var(--font-sans)', ...fontFamily.sans]
       },
       colors: {
-        primary: colors.zinc,
+        primary: colors.sky[600],
+        light: '#ffffff',
+        dark: '#111010',
         gray: colors.neutral
       },
       dropShadow: {
