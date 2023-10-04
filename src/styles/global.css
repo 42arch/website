@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.outline-button {
+  border-width: 2px;
+}
+
 .container {
   @apply w-full mx-auto px-6 lg:px-12;
 }
