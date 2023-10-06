@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ReactNode } from 'react'
 import { FiMail } from 'react-icons/fi'
 import { SiGithub, SiStackblitz } from 'react-icons/si'
+import LogoGrid from './logo-grid'
 
 function SocialIcon({ icon, href }: { icon: ReactNode; href: string }) {
   return (
@@ -26,7 +27,7 @@ export default async function Page() {
         </nav>
       </header>
       <main className="mt-16 px-16 font-bold text-2xl tracking-tighter mb-12">
-        <div className="flex justify-between gap-x-16">
+        <div className="flex justify-between gap-x-16 mb-8">
           <div className="flex flex-col w-[60%]">
             <p className="text-6xl font-bold leading-tight tracking-normal mb-10">
               Be <span className="text-sky-500">Curious</span>,{' '}
@@ -48,22 +49,15 @@ export default async function Page() {
                   Blog
                 </Link>
               </div>
-              {/* <div className="flex items-center gap-2 mb-4 cursor-pointer">
-                <Link
-                  href="/blog"
-                  className="text-base tracking-wide rounded border-2 border-zinc-800 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-zinc-800 py-1 px-7 duration-300">
-                  Blog
-                </Link>
-              </div> */}
             </div>
           </div>
           <div className="w-[40%]">
             <HeroBox />
           </div>
         </div>
-        {/* <div className="my-8 text-zinc-700 dark:text-zinc-300">
-          <p className="text-center">I build things with</p>
-        </div> */}
+        <div className="flex justify-center mb-8">
+          <LogoGrid />
+        </div>
       </main>
     </div>
   )
