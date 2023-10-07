@@ -21,20 +21,20 @@ export default async function Page() {
     <div className="flex flex-col">
       <div className="h-16 shrink-0"></div>
       <header className="fixed top-0 z-30 w-full backdrop-blur-md">
-        <nav className="transition-all duration-500 h-16 px-16 py-3 flex items-center justify-between ">
+        <nav className="transition-all duration-500 h-16 px-6 md:px-16 py-3 flex items-center justify-between ">
           <div>42Architect</div>
           <ThemeToogle />
         </nav>
       </header>
-      <main className="mt-16 px-16 font-bold text-2xl tracking-tighter mb-12">
+      <main className="mt-16 px-6 md:px-16 font-bold text-2xl tracking-tighter mb-12">
         <div className="flex justify-between gap-x-16 mb-8">
-          <div className="flex flex-col w-[60%]">
-            <p className="text-6xl font-bold leading-tight tracking-normal mb-10">
+          <div className="flex flex-col w-full md:w-[60%]">
+            <p className="text-3xl lg:text-5xl font-bold leading-tight tracking-normal mb-10">
               Be <span className="text-sky-500">Curious</span>,{' '}
               <span className="text-sky-500">Read</span> Widely,{' '}
               <span className="text-sky-500">Try</span> New Things.
             </p>
-            <p className="text-3xl font-bold tracking-wide text-zinc-800 dark:text-zinc-300 mb-8">
+            <p className=" font-handwrite text-xl lg:text-3xl font-base tracking-wide text-zinc-800 dark:text-zinc-300 mb-8">
               Hi👋, I'm Dan, A web developer. I'm interested in map (or GIS),
               data visualization, and fullstack development.
             </p>
@@ -51,7 +51,7 @@ export default async function Page() {
               </div>
             </div>
           </div>
-          <div className="w-[40%]">
+          <div className="hidden md:block w-[40%]">
             <HeroBox />
           </div>
         </div>

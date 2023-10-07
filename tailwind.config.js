@@ -13,13 +13,15 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        graphik: ['var(--font-graphik)'],
-        sans: ['var(--font-sans)', ...fontFamily.sans]
+        handwrite: ['var(--font-handwrite)'],
+        sans: ['var(--font-graphik)', ...fontFamily.sans]
       },
       colors: {
         primary: colors.sky[600],
-        light: '#ffffff',
-        dark: '#111010',
+        light: colors.gray[50],
+        'light-gray': colors.gray[100],
+        'dark-gray': colors.gray[900],
+        dark: colors.gray[950],
         gray: colors.neutral
       },
       dropShadow: {

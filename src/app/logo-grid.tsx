@@ -13,13 +13,12 @@ import {
   closestCenter,
   MouseSensor,
   TouchSensor,
-  DragOverlay,
   useSensor,
   useSensors
 } from '@dnd-kit/core'
 import { Icon } from '@iconify/react'
 
-const Item = forwardRef(({ id, icon, style, ...props }: any, ref) => {
+const Item = forwardRef(({ icon, style, ...props }: any, ref) => {
   const inlineStyles = {
     opacity: '1',
     transformOrigin: '0 0',
@@ -43,14 +42,7 @@ Item.displayName = 'Item'
 
 export const SortableItem = (props: any) => {
   const sortable = useSortable({ id: props.id })
-  const {
-    attributes,
-    listeners,
-    isDragging,
-    setNodeRef,
-    transform,
-    transition
-  } = sortable
+  const { attributes, listeners, setNodeRef, transform, transition } = sortable
 
   const style = {
     transform: CSS.Transform.toString(transform),
