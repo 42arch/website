@@ -24,16 +24,16 @@ export default async function Page() {
         </Link>
       </header>
       <main className="pt-8">
-        <section className="flex flex-col gap-8 lg:flex-row md:gap-10 lg:gap-12">
-          <div className="w-full lg:w-[60%]">
+        <section className="flex flex-col justify-between gap-8 lg:flex-row md:gap-10 lg:gap-12">
+          <div className="w-full lg:w-[60%] lg:max-w-[720px]">
             <h1 className="font-bold text-2xl md:text-4xl lg:text-5xl mb-4">
               I’m Dana Parker, a digital artist residing and crafting artwork in
-              Amsterdam. 站酷仓耳
+              Amsterdam.
             </h1>
-            <h2 className="text-zinc-700 dark:text-zinc-300 mb-4">
+            <h2 className="text-zinc-700 dark:text-zinc-300 mb-8">
               I was born in Portugal and studied graphic design at the Gerrit
               Rietveld Academie in Amsterdam. I have worked in branding and web
-              design studios as an art director. 站酷仓耳
+              design studios as an art director. 站酷仓耳 站酷仓耳 站酷仓耳;
             </h2>
             <div className="flex items-center gap-6 mb-4">
               <SocialIcon icon={<FiMail />} href="rend42@163.com" />
@@ -41,12 +41,12 @@ export default async function Page() {
               <SocialIcon icon={<SiStackblitz />} href="www.stackblitz.com" />
               <Link
                 href="/blog"
-                className="text-base tracking-wide rounded border-2 border-zinc-800 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-zinc-800 py-1 px-7 duration-300">
+                className="text-semibold tracking-wide rounded border-2 border-zinc-800 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-zinc-800 py-1 px-7 duration-300">
                 Blog
               </Link>
             </div>
           </div>
-          <div className="w-full lg:w-[40%]">xxx</div>
+          <div className="w-full lg:w-[40%] lg:max-w-[420px]">xxx</div>
         </section>
       </main>
     </div>
