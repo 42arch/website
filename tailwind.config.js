@@ -14,14 +14,19 @@ module.exports = {
     extend: {
       fontFamily: {
         handwrite: ['var(--font-handwrite)'],
-        sans: ['var(--font-graphik)', ...fontFamily.sans]
+        sans: [
+          'var(--font-onest)',
+          'var(--font-empo)',
+          'var(--font-jiangcheng)',
+          ...fontFamily.sans
+        ]
       },
       colors: {
         primary: colors.sky[600],
-        light: colors.gray[50],
+        light: colors.zinc[50],
+        dark: colors.zinc[950],
         'light-gray': colors.gray[100],
         'dark-gray': colors.gray[900],
-        dark: colors.gray[950],
         gray: colors.neutral
       },
       dropShadow: {
