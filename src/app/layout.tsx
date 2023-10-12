@@ -60,9 +60,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         empo.variable,
         handwrite.variable
       )}>
-      <body className="antialiased mx-auto px-4 font-sans dark:text-white dark:bg-dark">
+      <body className="antialiased mx-4 font-sans text-zinc-950 dark:text-zinc-50 bg-light dark:bg-dark">
         <ThemeProvider>
-          <div className="text-zinc-950 dark:text-zinc-50">{children}</div>
+          <div className="min-h-screen">{children}</div>
         </ThemeProvider>
         {/* <Sidebar /> */}
         {/* <Analytics /> */}

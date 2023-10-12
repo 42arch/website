@@ -1,4 +1,3 @@
-import HeroBox from '@/components/hero-box'
 import ThemeToogle from '@/components/theme-toggle'
 import Link from 'next/link'
 import { ReactNode } from 'react'
@@ -51,9 +50,7 @@ export default async function Page() {
               </div>
             </div>
           </div>
-          <div className="hidden md:block w-[40%]">
-            <HeroBox />
-          </div>
+          <div className="hidden md:block w-[40%]"></div>
         </div>
         <div className="flex justify-center mb-8">
           <LogoGrid />
