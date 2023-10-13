@@ -6,6 +6,7 @@ import { FiMail } from 'react-icons/fi'
 import { SiGithub, SiStackblitz } from 'react-icons/si'
 import nextIcon from '../../public/thirteen.svg'
 import LogoGrid from './logo-grid'
+import ProjectGallery from './project-gallery'
 
 function Arrow() {
   return (
@@ -85,7 +86,7 @@ export default async function Page() {
         </Link>
         <ThemeSwitch />
       </header>
-      <main className="pt-8">
+      <main className="py-8">
         <section className="flex flex-col justify-around gap-8 lg:flex-row md:gap-10 lg:gap-12">
           <div className="w-full lg:w-[60%] lg:max-w-[720px]">
             <h1 className="font-bold text-2xl md:text-4xl lg:text-5xl mb-4">
@@ -117,6 +118,9 @@ export default async function Page() {
             </div>
             <LogoGrid />
           </div>
+        </section>
+        <section className="w-full">
+          <ProjectGallery />
         </section>
       </main>
     </div>
