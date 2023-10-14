@@ -14,12 +14,7 @@ module.exports = {
     extend: {
       fontFamily: {
         handwrite: ['var(--font-handwrite)'],
-        sans: [
-          'var(--font-onest)',
-          'var(--font-empo)',
-          'var(--font-jiangcheng)',
-          ...fontFamily.sans
-        ]
+        sans: ['var(--font-onest)', 'var(--font-empo)']
       },
       colors: {
         primary: colors.sky[600],
