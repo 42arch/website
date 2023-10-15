@@ -87,7 +87,7 @@ export default async function Page() {
         <ThemeSwitch />
       </header>
       <main className="py-8">
-        <section className="flex flex-col justify-around gap-8 lg:flex-row md:gap-10 lg:gap-12">
+        <section className="flex flex-col gap-8 lg:flex-row md:gap-12 lg:gap-32">
           <div className="w-full lg:w-[60%] lg:max-w-[720px]">
             <h1 className="font-bold text-2xl md:text-4xl lg:text-5xl mb-4">
               I’m Dana Parker, a digital artist residing and crafting artwork in
@@ -98,7 +98,7 @@ export default async function Page() {
               Rietveld Academie in Amsterdam. I have worked in branding and web
               design studios as an art director. 站酷仓耳 站酷仓耳 站酷仓耳;
             </h2>
-            <div className="flex items-center gap-6 mb-4">
+            <div className="flex items-center justify-around gap-6 mb-4">
               <SocialIcon icon={<FiMail />} href="rend42@163.com" />
               <SocialIcon icon={<SiGithub />} href="www.github.com" />
               <SocialIcon icon={<SiStackblitz />} href="www.stackblitz.com" />
