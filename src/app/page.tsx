@@ -103,7 +103,7 @@ export default async function Page() {
               <SocialIcon icon={<SiGithub />} href="www.github.com" />
               <SocialIcon icon={<SiStackblitz />} href="www.stackblitz.com" />
               <Link
-                href="/blog"
+                href="/post"
                 className="text-semibold tracking-wide rounded border-2 border-zinc-800 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-zinc-800 py-1 px-7 duration-300">
                 Blog
               </Link>

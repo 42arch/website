@@ -10,7 +10,7 @@ import path from 'path'
 
 const Post = defineDocumentType(() => ({
   name: 'Post',
-  filePathPattern: `blog/**/*.mdx`,
+  filePathPattern: `post/**/*.mdx`,
   contentType: 'mdx',
   fields: {
     title: {
@@ -60,16 +60,16 @@ const Post = defineDocumentType(() => ({
 
 const Note = defineDocumentType(() => ({
   name: 'Note',
-  filePathPattern: `notes/**/*.md`,
+  filePathPattern: `note/**/*.md`,
   fields: {
     title: {
       type: 'string',
-      description: 'The title of the post',
+      description: 'The title of the note',
       required: true
     },
     date: {
       type: 'date',
-      description: 'The date of the post',
+      description: 'The date of the note',
       required: true
     },
     type: {
@@ -81,7 +81,7 @@ const Note = defineDocumentType(() => ({
   computedFields: {
     slug: {
       type: 'string',
-      resolve: (post) => `blog/${post._raw.flattenedPath}`
+      resolve: (post) => `post/${post._raw.flattenedPath}`
     },
     slugAsParams: {
       type: 'string',

@@ -57,10 +57,10 @@ const Tree: FC<TreeProps> = ({ tree, level = 1, activeItem }) => {
             <a
               href={item.url}
               className={cn(
-                'inline-block no-underline',
+                'inline-block no-underline duration-300',
                 item.url === `#${activeItem}`
-                  ? 'text-state-900 font-medium'
-                  : 'text-sm text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-500'
+                  ? 'text-state-900 font-base'
+                  : 'text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-500'
               )}>
               {item.title}
             </a>
@@ -78,7 +78,7 @@ interface TocProps {
   toc: TableOfContents
 }
 
-const TableOfContent: FC<TocProps> = ({ toc }) => {
+export default function TableOfContent({ toc }: TocProps) {
   const itemIds = useMemo(
     () =>
       toc.items
@@ -98,11 +98,9 @@ const TableOfContent: FC<TocProps> = ({ toc }) => {
     return null
   }
   return mounted ? (
-    <div className="space-y-2">
-      <p className="font-medium">On This Page</p>
+    <div className="space-y-2 text-right">
+      <p className="font-semibold">On This Page</p>
       <Tree tree={toc} activeItem={activeHeading} />
     </div>
   ) : null
 }
-
-export default TableOfContent

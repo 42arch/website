@@ -2,7 +2,8 @@ import { ReactNode } from 'react'
 import { ThemeProvider } from '@/components/theme-provider'
 import clsx from 'clsx'
 import localFont from 'next/font/local'
-import '../styles/global.css'
+import '@/styles/global.css'
+import '@/styles/mdx.css'
 
 const handwrite = localFont({
   src: '../../public/fonts/Virgil.woff2',

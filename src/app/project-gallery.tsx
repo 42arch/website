@@ -40,11 +40,11 @@ export default function ProjectGallery() {
 
       <div
         ref={containerRef}
-        className="flex mx-auto h-[400px] basis-[300px] gap-6 overflow-x-scroll scrollbar scrollbar-thumb-zinc-700 dark:scrollbar-track-zinc-50 scrollbar-track-zinc-50">
+        className="flex mx-auto h-[400px] basis-[300px] gap-6 overflow-x-scroll scrollbar scrollbar-rounded scrollbar-thumb-zinc-700 dark:scrollbar-track-zinc-50 scrollbar-track-zinc-50">
         {[1, 2, 3, 4, 5, 6, 7].map((i) => (
           <div
             key={i}
-            className="grow-0 shrink-0 basis-[400px] mb-6 flex items-center justify-center border-2 bg-zinc-50 dark:bg-zinc-800 border-zinc-700 dark:border-zinc-200 border-opacity-10 rounded ">
+            className="grow-0 shrink-0 basis-[400px] mb-4 flex items-center justify-center border-2 bg-zinc-50 dark:bg-zinc-800 border-zinc-700 dark:border-zinc-200 border-opacity-10 rounded ">
             {i}
           </div>
         ))}

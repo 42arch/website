@@ -11,7 +11,7 @@ const components = {
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
       className={cn(
-        'mt-2 scroll-m-20 text-4xl font-bold tracking-tight',
+        'mt-2 scroll-m-20 text-3xl font-bold tracking-tight',
         className
       )}
       {...props}
@@ -20,7 +20,7 @@ const components = {
   h2: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className={cn(
-        'mt-12 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight first:mt-0 dark:border-b-slate-700',
+        'mt-12 scroll-m-20 border-b border-b-zinc-200 pb-2 text-2xl font-semibold tracking-tight first:mt-0 dark:border-b-zinc-700',
         className
       )}
       {...props}
@@ -29,7 +29,7 @@ const components = {
   h3: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h3
       className={cn(
-        'mt-8 scroll-m-20 text-2xl font-semibold tracking-tight',
+        'mt-8 scroll-m-20 text-xl font-semibold tracking-tight',
         className
       )}
       {...props}
@@ -38,7 +38,7 @@ const components = {
   h4: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h4
       className={cn(
-        'mt-8 scroll-m-20 text-xl font-semibold tracking-tight',
+        'mt-8 scroll-m-20 text-lg font-semibold tracking-tight',
         className
       )}
       {...props}
@@ -47,7 +47,7 @@ const components = {
   h5: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h5
       className={cn(
-        'mt-8 scroll-m-20 text-lg font-semibold tracking-tight',
+        'mt-8 scroll-m-20 text-base font-semibold tracking-tight',
         className
       )}
       {...props}
@@ -65,7 +65,7 @@ const components = {
   a: ({ className, ...props }: React.HTMLAttributes<HTMLAnchorElement>) => (
     <a
       className={cn(
-        'font-medium text-slate-900 underline underline-offset-4 dark:text-slate-50',
+        'font-medium text-zinc-900 underline underline-offset-4 dark:text-zinc-50',
         className
       )}
       {...props}
@@ -89,7 +89,7 @@ const components = {
   blockquote: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
     <blockquote
       className={cn(
-        'mt-6 border-l-2 border-slate-300 pl-6 italic text-slate-800 [&>*]:text-slate-600',
+        'mt-6 border-l-2 border-zinc-300 dark:border-zinc-700 pl-6 italic text-zinc-600 [&>*]:text-zinc-400',
         className
       )}
       {...props}
@@ -102,14 +102,14 @@ const components = {
   }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      className={cn('rounded-md m-1 border-slate-200 inline-block', className)}
+      className={cn('rounded-md m-1 border-zinc-200 inline-block', className)}
       alt={alt}
       {...props}
     />
   ),
   hr: ({ ...props }: React.HTMLAttributes<HTMLHRElement>) => (
     <hr
-      className="my-4 border-slate-200 dark:border-slate-700 md:my-8"
+      className="my-4 border-zinc-200 dark:border-zinc-700 md:my-8"
       {...props}
     />
   ),
@@ -121,7 +121,7 @@ const components = {
   tr: ({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
     <tr
       className={cn(
-        'm-0 border-t border-slate-300 p-0 even:bg-slate-10 even:dark:bg-slate-800',
+        'm-0 border-t border-zinc-300 p-0 even:bg-zinc-10 even:dark:bg-zinc-800',
         className
       )}
       {...props}
@@ -130,7 +130,7 @@ const components = {
   th: ({ className, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <th
       className={cn(
-        'border border-slate-200 px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right',
+        'border border-zinc-200 px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right',
         className
       )}
       {...props}
@@ -139,7 +139,7 @@ const components = {
   td: ({ className, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td
       className={cn(
-        'border border-slate-200 px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right',
+        'border border-zinc-200 px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right',
         className
       )}
       {...props}
@@ -161,7 +161,7 @@ const components = {
       <>
         <pre
           className={cn(
-            'mt-6 mb-4 overflow-x-auto rounded-lg border border-slate-900 bg-slate-900 py-4 px-2 dark:border-slate-700 dark:bg-black',
+            'mt-6 mb-4 overflow-x-auto rounded-lg bg-zinc-900 border border-zinc-500 border-opacity-30 py-4 px-2 ',
             className
           )}
           {...props}
@@ -171,7 +171,7 @@ const components = {
             value={__rawString__}
             src={__src__}
             className={cn(
-              'absolute top-4 right-4 border-none text-slate-300 opacity-50 hover:bg-transparent hover:opacity-100',
+              'absolute top-4 right-4 border-none text-zinc-300 opacity-50 hover:bg-transparent hover:opacity-100',
               __withMeta__ && 'top-20'
             )}
           />
@@ -182,7 +182,7 @@ const components = {
   code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
     <code
       className={cn(
-        'relative rounded bg-slate-100 py-[0.2rem] px-[0.3rem] font-mono text-sm font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400',
+        'relative rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 py-[0.2rem] px-[0.3rem] mx-1 font-mono text-sm',
         className
       )}
       {...props}
