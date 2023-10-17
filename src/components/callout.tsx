@@ -1,4 +1,4 @@
-import cn from 'classnames'
+import clsx from 'clsx'
 
 interface CalloutProps {
   icon?: string
@@ -14,7 +14,7 @@ export function Callout({
 }: CalloutProps) {
   return (
     <div
-      className={cn(
+      className={clsx(
         'my-6 flex items-start rounded-md border border-b-4 border-slate-900 p-4',
         {
           'border-slate-900 dark:border-slate-700': type === 'default',

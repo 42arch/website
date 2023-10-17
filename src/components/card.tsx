@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   href?: string
@@ -15,7 +15,7 @@ export function Card({
 }: CardProps) {
   return (
     <div
-      className={cn(
+      className={clsx(
         'group relative rounded-lg border border-slate-200 bg-white p-6 shadow-md transition-shadow hover:shadow-lg',
         disabled && 'cursor-not-allowed opacity-60',
         className

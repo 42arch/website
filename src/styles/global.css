@@ -2,35 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.outline-button {
-  border-width: 2px;
+.heading-link {
+  margin-left: 0.8rem;
+  display: none;
 }
 
-.container {
-  @apply w-full mx-auto px-6 lg:px-12;
-}
-
-.content {
-  @apply px-6 lg:px-24;
-}
-
-.nav-link {
-  @apply text-slate-600 hover:text-slate-900 dark:text-slate-200 dark:hover:text-slate-400;
-}
-
-@layer utilities {
-  @variants responsive {
-    .masonry {
-      column-gap: 2rem;
-      column-count: 1;
-    }
-
-    .masonry-md {
-      column-gap: 2rem;
-      column-count: 2;
-    }
-    .break-inside {
-      break-inside: avoid;
-    }
-  }
+h2:hover .heading-link,
+h3:hover .heading-link {
+  display: block;
+  @apply text-xs text-zinc-700 dark:text-zinc-300
+  /* @apply text-primary; */;
 }

@@ -1,12 +1,13 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files'
 import remarkGfm from 'remark-gfm'
 import { codeImport } from 'remark-code-import'
-// import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import { visit } from 'unist-util-visit'
 import { getHighlighter, loadTheme } from 'shiki'
 import path from 'path'
+import { s } from 'hastscript'
 
 const Post = defineDocumentType(() => ({
   name: 'Post',
@@ -37,6 +38,11 @@ const Post = defineDocumentType(() => ({
       type: 'list',
       of: { type: 'string' },
       description: 'The tags of the post',
+      required: false
+    },
+    category: {
+      type: 'string',
+      description: 'The category of the post',
       required: false
     },
     lang: {
@@ -119,17 +125,17 @@ export default makeSource({
             )
             return await getHighlighter({ theme })
           },
-          onVisitLine(node: any) {
+          onVisitLine(node) {
             // Prevent lines from collapsing in `display: grid` mode, and allow empty
             // lines to be copy/pasted
             if (node.children.length === 0) {
               node.children = [{ type: 'text', value: ' ' }]
             }
           },
-          onVisitHighlightedLine(node: any) {
+          onVisitHighlightedLine(node) {
             node.properties.className.push('line--highlighted')
           },
-          onVisitHighlightedWord(node: any) {
+          onVisitHighlightedWord(node) {
             node.properties.className = ['word--highlighted']
           }
         }
@@ -140,6 +146,35 @@ export default makeSource({
     remarkPlugins: [remarkGfm, codeImport],
     rehypePlugins: [
       rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: 'append',
+          test: ['h2', 'h3'],
+          properties: { class: 'heading-link !text-primary' },
+          content: s(
+            'svg',
+            {
+              xmlns: 'http://www.w3.org/2000/svg',
+              viewBox: '0 0 24 24',
+              width: '24',
+              height: '24',
+              fill: 'none',
+              stroke: 'currentColor',
+              'stroke-width': '2',
+              'stroke-linecap': 'round',
+              'stroke-linejoin': 'round',
+              'aria-label': 'Anchor link'
+            },
+            [
+              s('line', { x1: '4', y1: '9', x2: '20', y2: '9' }),
+              s('line', { x1: '4', y1: '15', x2: '20', y2: '15' }),
+              s('line', { x1: '10', y1: '3', x2: '8', y2: '21' }),
+              s('line', { x1: '16', y1: '3', x2: '14', y2: '21' })
+            ]
+          )
+        }
+      ],
       () => (tree) => {
         visit(tree, (node) => {
           if (node?.type === 'element' && node?.tagName === 'pre') {
@@ -162,15 +197,15 @@ export default makeSource({
             )
             return await getHighlighter({ theme })
           },
-          onVisitLine(node: any) {
+          onVisitLine(node) {
             if (node.children.length === 0) {
               node.children = [{ type: 'text', value: ' ' }]
             }
           },
-          onVisitHighlightedLine(node: any) {
+          onVisitHighlightedLine(node) {
             node.properties.className.push('line--highlighted')
           },
-          onVisitHighlightedWord(node: any) {
+          onVisitHighlightedWord(node) {
             node.properties.className = ['word--highlighted']
           }
         }

@@ -11,6 +11,7 @@ const handwrite = localFont({
   display: 'swap'
 })
 
+// english font
 const onest = localFont({
   src: [
     {
@@ -33,6 +34,7 @@ const onest = localFont({
   display: 'swap'
 })
 
+// chinese font
 const empo = localFont({
   src: [
     {

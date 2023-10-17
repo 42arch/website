@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 function Copy() {
   return (
@@ -13,10 +13,10 @@ function Copy() {
       <g
         fill="none"
         stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round">
-        <g stroke-width="2">
-          <path stroke-dasharray="16" stroke-dashoffset="16" d="M12 3H19V11">
+        strokeLinecap="round"
+        strokeLinejoin="round">
+        <g strokeWidth="2">
+          <path strokeDasharray="16" strokeDashoffset="16" d="M12 3H19V11">
             <animate
               fill="freeze"
               attributeName="stroke-dashoffset"
@@ -24,10 +24,7 @@ function Copy() {
               values="16;0"
             />
           </path>
-          <path
-            stroke-dasharray="44"
-            stroke-dashoffset="44"
-            d="M19 17V21H5V3H12">
+          <path strokeDasharray="44" strokeDashoffset="44" d="M19 17V21H5V3H12">
             <animate
               fill="freeze"
               attributeName="stroke-dashoffset"
@@ -36,7 +33,7 @@ function Copy() {
               values="44;0"
             />
           </path>
-          <path stroke-dasharray="10" stroke-dashoffset="10" d="M21 14H12.5">
+          <path strokeDasharray="10" strokeDashoffset="10" d="M21 14H12.5">
             <animate
               fill="freeze"
               attributeName="stroke-dashoffset"
@@ -46,8 +43,8 @@ function Copy() {
             />
           </path>
           <path
-            stroke-dasharray="6"
-            stroke-dashoffset="6"
+            strokeDasharray="6"
+            strokeDashoffset="6"
             d="M12 14L15 17M12 14L15 11">
             <animate
               fill="freeze"
@@ -59,8 +56,8 @@ function Copy() {
           </path>
         </g>
         <path
-          stroke-dasharray="12"
-          stroke-dashoffset="12"
+          strokeDasharray="12"
+          strokeDashoffset="12"
           d="M14.5 3.5V6.5H9.5V3.5">
           <animate
             fill="freeze"
@@ -85,11 +82,11 @@ function Confirm() {
       <path
         fill="none"
         stroke="currentColor"
-        stroke-dasharray="24"
-        stroke-dashoffset="24"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
+        strokeDasharray="24"
+        strokeDashoffset="24"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
         d="M5 11L11 17L21 7">
         <animate
           fill="freeze"
@@ -131,8 +128,8 @@ export function CopyButton({
 
   return (
     <button
-      className={cn(
-        'z-20 inline-flex h-8 items-center justify-center rounded-md border-zinc-200 p-2 text-sm font-medium transition-all focus:outline-none dark:text-zinc-300 dark:hover:bg-zinc-800 absolute top-4 right-4 border-none text-zinc-700 hover:bg-transparent hover:opacity-100',
+      className={clsx(
+        'z-20 inline-flex h-8 items-center justify-center rounded-md border-zinc-200 p-2 text-sm font-medium transition-all focus:outline-none text-zinc-300 hover:bg-zinc-800 absolute top-14 right-4 border-none hover:bg-transparent hover:opacity-100',
         className
       )}
       onClick={() => {
