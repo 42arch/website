@@ -28,7 +28,7 @@ function GithubIcon() {
 export function SignOut() {
   return (
     <button
-      className="text-xs text-zinc-700 dark:text-zinc-300 mt-2 mb-6"
+      className="text-xs w-fit text-zinc-700 dark:text-zinc-300 mt-2 mb-6"
       onClick={() => signOut()}>
       Sign Out
     </button>

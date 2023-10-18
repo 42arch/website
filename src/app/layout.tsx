@@ -2,6 +2,8 @@ import { ReactNode } from 'react'
 import { ThemeProvider } from '@/components/theme-provider'
 import clsx from 'clsx'
 import localFont from 'next/font/local'
+import { Analytics } from '@vercel/analytics/react'
+import type { Metadata } from 'next'
 import '@/styles/global.css'
 import '@/styles/mdx.css'
 
@@ -52,6 +54,16 @@ const empo = localFont({
   display: 'swap'
 })
 
+export const metadata: Metadata = {
+  metadataBase: new URL('https://mainissues.cc'),
+  title: {
+    default: '42arch',
+    template: '%s | Lee Robinson'
+  },
+  description: '42arch, the personal website of Ren Dan.',
+  robots: {}
+}
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
@@ -67,8 +79,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeProvider>
           <div className="min-h-screen">{children}</div>
         </ThemeProvider>
-        {/* <Sidebar /> */}
-        {/* <Analytics /> */}
+        <Analytics />
       </body>
     </html>
   )

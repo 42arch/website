@@ -1,8 +1,6 @@
 import NextAuth from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 
-console.log('token', process.env.GITHUB_CLIENT_SECRET)
-
 export const {
   handlers: { GET, POST },
   auth

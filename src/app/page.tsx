@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { ReactNode } from 'react'
 import { FiMail } from 'react-icons/fi'
 import { SiGithub, SiStackblitz } from 'react-icons/si'
-import nextIcon from '../../public/thirteen.svg'
 import LogoGrid from './logo-grid'
 import ProjectGallery from './project-gallery'
+import { MotionDiv } from '@/lib/motion'
+import nextIcon from '../../public/thirteen.svg'
 
 function Arrow() {
   return (
@@ -80,7 +81,7 @@ function SocialIcon({ icon, href }: { icon: ReactNode; href: string }) {
 export default async function Page() {
   return (
     <div className="flex flex-col px-6 md:px-10 lg:px-16">
-      <header className="h-20 pt-6 pb-2 flex justify-between items-center">
+      <header className="sticky top-0 z-50 h-20 pt-6 pb-2 bg-light dark:bg-dark flex justify-between items-center">
         <Link href="/">
           <Image priority src={nextIcon} alt="" />
         </Link>
@@ -96,26 +97,30 @@ export default async function Page() {
             <h2 className="text-zinc-700 dark:text-zinc-300 mb-8">
               I was born in Portugal and studied graphic design at the Gerrit
               Rietveld Academie in Amsterdam. I have worked in branding and web
-              design studios as an art director. 站酷仓耳 站酷仓耳 站酷仓耳;
+              design studios as an art director.
             </h2>
-            <div className="flex items-center justify-around gap-6 mb-4">
+            <div className="flex items-center gap-6 mb-4">
               <SocialIcon icon={<FiMail />} href="rend42@163.com" />
               <SocialIcon icon={<SiGithub />} href="www.github.com" />
               <SocialIcon icon={<SiStackblitz />} href="www.stackblitz.com" />
               <Link
                 href="/post"
-                className="text-semibold tracking-wide rounded border-2 border-zinc-800 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-zinc-800 py-1 px-7 duration-300">
+                className="text-semibold tracking-wide py-1 px-8 rounded border-2 border-zinc-800 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-zinc-800 duration-300">
                 Blog
               </Link>
             </div>
           </div>
           <div className="w-full lg:w-[40%] lg:max-w-[420px]">
-            <div className="h-20 flex items-center -translate-y-2 -translate-x-16 text-zinc-700 dark:text-zinc-300">
+            <MotionDiv
+              initial={{ y: -160, x: -64, opacity: 0 }}
+              animate={{ y: 0, x: -64, opacity: 1 }}
+              transition={{ ease: 'easeOut', duration: 1.5 }}
+              className="h-20 flex items-center text-zinc-700 dark:text-zinc-300">
               <span className="font-handwrite text-2xl translate-x-16 translate-y-2">
                 drag this
               </span>
               <Arrow />
-            </div>
+            </MotionDiv>
             <LogoGrid />
           </div>
         </section>
