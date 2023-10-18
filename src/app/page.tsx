@@ -72,6 +72,7 @@ function SocialIcon({ icon, href }: { icon: ReactNode; href: string }) {
   return (
     <Link
       href={href}
+      target="__blank"
       className="rounded-full w-8 h-8 p-2 duration-300 text-base bg-zinc-800 text-white hover:opacity-80 dark:bg-white dark:text-zinc-800 flex items-center justify-center">
       {icon}
     </Link>
@@ -100,9 +101,15 @@ export default async function Page() {
               design studios as an art director.
             </h2>
             <div className="flex items-center gap-6 mb-4">
-              <SocialIcon icon={<FiMail />} href="rend42@163.com" />
-              <SocialIcon icon={<SiGithub />} href="www.github.com" />
-              <SocialIcon icon={<SiStackblitz />} href="www.stackblitz.com" />
+              <SocialIcon icon={<FiMail />} href="mailto:rend42@163.com" />
+              <SocialIcon
+                icon={<SiGithub />}
+                href="https://www.github.com/42arch"
+              />
+              <SocialIcon
+                icon={<SiStackblitz />}
+                href="https://stackblitz.com/@42arch"
+              />
               <Link
                 href="/post"
                 className="text-semibold tracking-wide py-1 px-8 rounded border-2 border-zinc-800 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-zinc-800 duration-300">
