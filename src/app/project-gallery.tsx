@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useScroll } from 'framer-motion'
+import { motion, useInView, useScroll } from 'framer-motion'
 import Image from 'next/image'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -66,27 +66,25 @@ const projects = [
 
 export default function ProjectGallery() {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const { scrollXProgress } = useScroll({ container: containerRef })
+  const isInView = useInView(containerRef, { once: true })
+  const galleryRef = useRef<HTMLDivElement | null>(null)
+  const { scrollXProgress } = useScroll({ container: galleryRef })
 
   return (
-    <>
+    <motion.section className="w-full" ref={containerRef}>
       <motion.svg
         width="140"
         height="140"
         viewBox="0 0 100 100"
         className="translate-y-12"
-        initial="hidden"
-        animate="visible"
+        animate={isInView ? 'visible' : 'hidden'}
         variants={{
           hidden: { pathLength: 0, opacity: 0 },
-          visible: (i) => {
-            const delay = 0 + i * 0.5
-            return {
-              pathLength: 1,
-              opacity: 0.6,
-              transition: {
-                opacity: { delay, duration: 0.3 }
-              }
+          visible: {
+            pathLength: 1,
+            opacity: 0.7,
+            transition: {
+              opacity: { delay: 0.3, duration: 1.5 }
             }
           }
         }}>
@@ -114,19 +112,23 @@ export default function ProjectGallery() {
       </motion.svg>
 
       <motion.div
-        ref={containerRef}
+        ref={galleryRef}
         className="flex mx-auto h-[380px] md:h-[440px] gap-6 md:gap-8 overflow-x-scroll overflow-y-hidden
-          scrollbar scrollbar-rounded scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800"
-        initial="hidden"
-        animate="show">
+          scrollbar scrollbar-rounded scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800">
         {projects.map((i, idx) => (
           <motion.div
             key={idx}
-            initial={{ y: 1200, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{
-              ease: 'easeOut',
-              duration: idx * 0.5 + 1
+            animate={isInView ? 'visible' : 'hidden'}
+            variants={{
+              hidden: { y: 1200, opacity: 0 },
+              visible: {
+                y: 0,
+                opacity: 1,
+                transition: {
+                  ease: 'easeOut',
+                  duration: idx * 0.5 + 1
+                }
+              }
             }}
             className={clsx(
               'grow-0 shrink-0 basis-[260px] md:basis-[320px] mb-4 rounded-lg flex flex-col justify-evenly bg-zinc-200 dark:bg-zinc-800',
@@ -183,6 +185,6 @@ export default function ProjectGallery() {
           </motion.div>
         ))}
       </motion.div>
-    </>
+    </motion.section>
   )
 }

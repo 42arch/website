@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
 import '@/styles/global.css'
 import '@/styles/mdx.css'
+import { SiteFooter } from '@/components/site-footer'
 
 const handwrite = localFont({
   src: '../../public/fonts/Virgil.woff2',
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="min-h-screen">{children}</div>
         </ThemeProvider>
         <Analytics />
+        <SiteFooter />
       </body>
     </html>
   )

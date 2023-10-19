@@ -32,7 +32,7 @@ export default async function BlogLayout({
 
   return (
     <div className="flex flex-col px-4 md:px-10 lg:px-16">
-      <header className="sticky top-0 z-50 h-20 pt-6 pb-2 bg-light dark:bg-dark flex justify-between items-center">
+      <header className="sticky top-0 z-40 h-20 pt-6 pb-2 bg-light dark:bg-dark flex justify-between items-center">
         <Link href="/">
           <Image priority src={nextIcon} alt="" />
         </Link>

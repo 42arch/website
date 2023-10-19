@@ -4,6 +4,7 @@ import { getTableOfContents } from '@/lib/toc'
 import { allPosts } from 'contentlayer/generated'
 import { parseISO, format } from 'date-fns'
 import Link from 'next/link'
+import ScrollBar from './scrollbar'
 
 function BackTo() {
   return (
@@ -69,36 +70,39 @@ export default async function PostPage({ params: { slug } }: PageProps) {
   const toc = await getTableOfContents(post.body.raw)
 
   return (
-    <article className="mx-auto max-w-7xl py-6 px-0 md:px-8 lg:px-24">
-      <header className="">
-        <div className="space-y-4">
-          <div className="space-y-20">
-            <time
-              dateTime={post.date}
-              className="text-sm text-zinc-700 dark:text-zinc-300 opacity-80">
-              Published on {format(parseISO(post.date), 'LLLL d, yyyy')}
-            </time>
-          </div>
-          <h2 className="inline-block w-full mt-8 tracking-wide text-2xl md:text-3xl lg:text-4xl font-bold">
-            {post.title}
-          </h2>
-        </div>
-        <hr className="my-4 lg:my-8 border-zinc-300 dark:border-zinc-700" />
-      </header>
-      <main className="pb-4 lg:flex lg:flex-row">
-        <section className="lg:w-[calc(100%-14rem)]">
-          <Mdx code={post.body.code} />
-          <p className="text-center pt-6 opacity-80 text-lg">-- EOF --</p>
-        </section>
-        <section className="hidden text-lg lg:block lg:w-48 lg:ml-8">
-          <div className="sticky top-16 -mt-10 overflow-y-auto pt-10">
-            <TableOfContent toc={toc} />
-            <div className="mt-8 text-right">
-              <BackTo />
+    <>
+      <ScrollBar />
+      <article className="mx-auto max-w-7xl py-6 px-0 md:px-8 lg:px-24">
+        <header className="">
+          <div className="space-y-4">
+            <div className="space-y-20">
+              <time
+                dateTime={post.date}
+                className="text-sm text-zinc-700 dark:text-zinc-300 opacity-80">
+                Published on {format(parseISO(post.date), 'LLLL d, yyyy')}
+              </time>
             </div>
+            <h2 className="inline-block w-full mt-8 tracking-wide text-2xl md:text-3xl lg:text-4xl font-bold">
+              {post.title}
+            </h2>
           </div>
-        </section>
-      </main>
-    </article>
+          <hr className="my-4 lg:my-8 border-zinc-300 dark:border-zinc-700" />
+        </header>
+        <main className="pb-4 lg:flex lg:flex-row">
+          <section className="lg:w-[calc(100%-14rem)]">
+            <Mdx code={post.body.code} />
+            <p className="text-center pt-6 opacity-80 text-lg">-- EOF --</p>
+          </section>
+          <section className="hidden text-lg lg:block lg:w-48 lg:ml-8">
+            <div className="sticky top-16 -mt-10 overflow-y-auto pt-10">
+              <TableOfContent toc={toc} />
+              <div className="mt-8 text-right">
+                <BackTo />
+              </div>
+            </div>
+          </section>
+        </main>
+      </article>
+    </>
   )
 }

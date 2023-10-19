@@ -131,9 +131,7 @@ export default async function Page() {
             <LogoGrid />
           </div>
         </section>
-        <section className="w-full">
-          <ProjectGallery />
-        </section>
+        <ProjectGallery />
       </main>
     </div>
   )
