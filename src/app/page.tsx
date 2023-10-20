@@ -91,14 +91,16 @@ export default async function Page() {
       <main className="py-8">
         <section className="flex flex-col gap-8 lg:flex-row md:gap-12 lg:gap-32">
           <div className="w-full lg:w-[60%] lg:max-w-[720px]">
-            <h1 className="font-bold text-2xl md:text-4xl lg:text-5xl mb-4">
-              I’m Dana Parker, a digital artist residing and crafting artwork in
-              Amsterdam.
+            <h1 className="font-bold text-2xl md:text-4xl lg:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-br from-dark dark:from-light to-zinc-600">
+              I'm Dan, Welcome to My Portfolio.
             </h1>
             <h2 className="text-zinc-700 dark:text-zinc-300 mb-8">
-              I was born in Portugal and studied graphic design at the Gerrit
-              Rietveld Academie in Amsterdam. I have worked in branding and web
-              design studios as an art director.
+              Where I'm going tomorrow? Let the wind be my guide. <br />
+              Currently I'm working as a frontend developer located at Shanghai,
+              China. <br />
+              I'm interested in map, data visiualization and web development.
+              React is my main, but I also use Nest.js, Vue and many awesome
+              JavaScript tools to reach ideas.
             </h2>
             <div className="flex items-center gap-6 mb-4">
               <SocialIcon icon={<FiMail />} href="mailto:rend42@163.com" />
