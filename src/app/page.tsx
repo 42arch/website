@@ -92,7 +92,8 @@ export default async function Page() {
         <section className="flex flex-col gap-8 lg:flex-row md:gap-12 lg:gap-32">
           <div className="w-full lg:w-[60%] lg:max-w-[720px]">
             <h1 className="font-bold text-2xl md:text-4xl lg:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-br from-dark dark:from-light to-zinc-600">
-              I'm Dan, Welcome to My Portfolio.
+              I'm Ren Dan<span className="text-base">@42arch</span>, Welcome to
+              My Portfolio.
             </h1>
             <h2 className="text-zinc-700 dark:text-zinc-300 mb-8">
               Where I'm going tomorrow? Let the wind be my guide. <br />
