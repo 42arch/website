@@ -1,0 +1,16 @@
+---
+title: 利用Github Actions创建定时脚本任务
+date: 2023-07-16
+lang: 中
+description: 利用Github Actions创建定时脚本任务。
+tags:
+  - Github Actions
+category: Tech
+---
+
+当前有一个需求，需要定时执行一个爬虫脚本，并将爬取到的数据存储到数据库中。正常来说这需要一个服务器来定时执行`crontab`命令，
+但是还有一种白嫖Github Actions的方法，省去了自行处理服务器的麻烦。
+
+## 前置条件
+
+首先，如果没有自己的数据库服务器，直接使用云服务器即可，
