@@ -49,6 +49,8 @@ interface TreeProps {
 }
 
 const Tree: FC<TreeProps> = ({ tree, level = 1, activeItem }) => {
+  console.log(4444, tree, level, activeItem)
+
   return tree?.items?.length && level < 3 ? (
     <ul className={clsx('m-0 list-none', { 'pl-4': level !== 1 })}>
       {tree.items.map((item, index) => {
@@ -57,10 +59,12 @@ const Tree: FC<TreeProps> = ({ tree, level = 1, activeItem }) => {
             <a
               href={item.url}
               className={clsx(
+                level === 1 && 'text-base',
+                level === 2 && 'text-sm opacity-80 mr-1',
                 'inline-block no-underline duration-300',
                 item.url === `#${activeItem}`
-                  ? 'text-primary font-base'
-                  : 'text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-500'
+                  ? 'text-primary text-base'
+                  : 'text-zinc-700 dark:text-zinc-300 hover:opacity-80'
               )}>
               {item.title}
             </a>

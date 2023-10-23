@@ -1,5 +1,4 @@
 import ThemeSwitch from '@/components/theme-switch'
-import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 import { FiMail } from 'react-icons/fi'
@@ -7,7 +6,7 @@ import { SiGithub, SiStackblitz } from 'react-icons/si'
 import LogoGrid from './logo-grid'
 import ProjectGallery from './project-gallery'
 import { MotionDiv } from '@/lib/motion'
-import nextIcon from '../../public/thirteen.svg'
+import Logo from '@/components/logo'
 
 function Arrow() {
   return (
@@ -84,7 +83,7 @@ export default async function Page() {
     <div className="flex flex-col px-6 md:px-10 lg:px-16">
       <header className="sticky top-0 z-50 h-20 pt-6 pb-2 bg-light dark:bg-dark flex justify-between items-center">
         <Link href="/">
-          <Image priority src={nextIcon} alt="" />
+          <Logo />
         </Link>
         <ThemeSwitch />
       </header>
