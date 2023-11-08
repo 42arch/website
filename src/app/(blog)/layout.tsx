@@ -24,8 +24,8 @@ export default async function BlogLayout({
       title: 'Guestbook'
     },
     {
-      href: '/project',
-      title: 'Project'
+      href: 'https://sketchbook42.vercel.app',
+      title: 'Sketchbook'
     }
   ]
 
