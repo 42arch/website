@@ -49,8 +49,6 @@ interface TreeProps {
 }
 
 const Tree: FC<TreeProps> = ({ tree, level = 1, activeItem }) => {
-  console.log(4444, tree, level, activeItem)
-
   return tree?.items?.length && level < 3 ? (
     <ul className={clsx('m-0 list-none', { 'pl-4': level !== 1 })}>
       {tree.items.map((item, index) => {
