@@ -5,6 +5,7 @@ import { allPosts } from 'contentlayer/generated'
 import { parseISO, format } from 'date-fns'
 import Link from 'next/link'
 import ScrollBar from './scrollbar'
+import PostNav from './post-nav'
 
 function BackTo() {
   return (
@@ -64,8 +65,8 @@ export default async function PostPage({ params: { slug } }: PageProps) {
   })
   const post = allPosts[currentPostIndex]
 
-  const prevPost = allPosts[currentPostIndex - 1]
-  const nextPost = allPosts[currentPostIndex + 1]
+  // const prevPost = allPosts[currentPostIndex - 1]
+  // const nextPost = allPosts[currentPostIndex + 1]
 
   if (!post) {
     return <div>Post Not Found</div>
@@ -96,28 +97,7 @@ export default async function PostPage({ params: { slug } }: PageProps) {
           <section className="lg:w-[calc(100%-14rem)]">
             <Mdx code={post.body.code} />
             <p className="text-center pt-6 opacity-80 text-lg">-- EOF --</p>
-            <div className="flex items-center justify-between pt-6">
-              <div className="w-1/2 text-left pr-4 h-16">
-                {prevPost && (
-                  <Link
-                    href={prevPost?.slugAsParams}
-                    title={prevPost.title}
-                    className="hover:text-primary line-clamp-2">
-                    Prev: {prevPost.title}
-                  </Link>
-                )}
-              </div>
-              <div className="w-1/2 text-right pl-4 h-16">
-                {nextPost && (
-                  <Link
-                    href={nextPost?.slugAsParams}
-                    title={nextPost.title}
-                    className="hover:text-primary line-clamp-2">
-                    Next: {nextPost.title}
-                  </Link>
-                )}
-              </div>
-            </div>
+            <PostNav slug={post.slug} />
             <div className="block lg:hidden">
               <BackTo />
             </div>
