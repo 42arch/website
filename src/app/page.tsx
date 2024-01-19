@@ -19,14 +19,14 @@ export default async function Page() {
   return (
     <>
       <City3D />
-      <section className="absolute text-light w-full bg-transparent h-1/2 translate-y-1/2 z-10">
+      <section className="absolute pointer-events-none text-light w-full bg-transparent h-1/2 translate-y-1/2 z-10">
         <h1 className="text-4xl lg:text-8xl text-center leading-relaxed font-bold">
           Welcome To City 42.
         </h1>
         <h4 className="text-sm text-center text-zinc-600 mt-4">
           -- This is dan's personal website, reach more from below. --
         </h4>
-        <div className="flex items-center justify-center gap-6 mt-8">
+        <div className="flex items-center justify-center gap-6 mt-8 pointer-events-auto">
           <SocialIcon icon={<FiMail />} href="mailto:rend42@163.com" />
           <SocialIcon
             icon={<SiGithub />}
