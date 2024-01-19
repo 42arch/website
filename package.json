@@ -1,6 +1,6 @@
 {
-  "name": "website-v4",
-  "version": "0.4.0",
+  "name": "website-v6",
+  "version": "0.6.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -26,6 +26,7 @@
     "contentlayer": "^0.3.4",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
+    "gsap": "^3.12.5",
     "kysely": "^0.26.3",
     "next": "13.5.5",
     "next-auth": "0.0.0-manual.dacbe24d",

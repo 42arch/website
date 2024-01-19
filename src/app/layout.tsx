@@ -76,9 +76,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         empo.variable,
         handwrite.variable
       )}>
-      <body className="antialiased mx-4 font-sans text-zinc-950 dark:text-zinc-50 bg-light dark:bg-dark">
+      <body className="antialiased font-sans text-zinc-950 dark:text-zinc-50 bg-light dark:bg-dark">
         <ThemeProvider>
-          <div className="min-h-screen">{children}</div>
+          <div className="min-h-[calc(100vh-96px)]">{children}</div>
         </ThemeProvider>
         <Analytics />
         <SiteFooter />
