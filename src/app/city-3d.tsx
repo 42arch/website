@@ -208,15 +208,20 @@ export const City3D = () => {
     function onDocumentTouchStart(event: TouchEvent) {
       if (event.touches.length == 1) {
         event.preventDefault()
-        mouse.x = event.touches[0].pageX - window.innerWidth / 2
-        mouse.y = event.touches[0].pageY - window.innerHeight / 2
+        console.log('touce started', event.touches[0])
+        // mouse.x = event.touches[0].pageX - window.innerWidth / 2
+        // mouse.y = event.touches[0].pageY - window.innerHeight / 2
+        mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1
+        mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1
       }
     }
     function onDocumentTouchMove(event: TouchEvent) {
       if (event.touches.length == 1) {
         event.preventDefault()
-        mouse.x = event.touches[0].pageX - window.innerWidth / 2
-        mouse.y = event.touches[0].pageY - window.innerHeight / 2
+        console.log('touce MOVE', event.touches[0])
+
+        mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1
+        mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1
       }
     }
     window.addEventListener('mousemove', onMouseMove, false)
