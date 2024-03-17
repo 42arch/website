@@ -4,6 +4,11 @@
   "tabWidth": 2,
   "printWidth": 80,
   "endOfLine": "auto",
+  "arrowParens": "always",
   "trailingComma": "none",
-  "jsxBracketSameLine": true
+  "jsxBracketSameLine": true,
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ],
+  "tailwindConfig": "./tailwind.config.ts"
 }
