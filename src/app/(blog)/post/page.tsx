@@ -8,24 +8,24 @@ export default async function PostListPage() {
   })
 
   return (
-    <div className="flex flex-col mx-auto max-w-6xl py-6 px-0 md:px-8 lg:px-24">
-      <h1 className="text-2xl font-semibold leading-9 mb-6 md:mb-8">
+    <div className="mx-auto flex max-w-6xl flex-col px-0 py-6 md:px-4 lg:px-12">
+      <h1 className="mb-6 text-2xl font-semibold leading-9 md:mb-8">
         All Posts
       </h1>
-      <div className="flex flex-col item-center justify-center">
+      <div className="item-center flex flex-col justify-center">
         {posts.map((post, idx) => (
-          <div key={idx} className="flex flex-col mb-6 md:mb-8">
+          <div key={idx} className="mb-6 flex flex-col md:mb-8">
             <Link
               href={post.slug}
-              className="text-lg tracking-wider cursor-pointer">
+              className="cursor-pointer text-lg tracking-wider">
               {post.title}
             </Link>
-            <p className="prose my-2 text-base max-w-none text-zinc-700 dark:text-zinc-300">
+            <p className="prose my-2 max-w-none text-base text-zinc-700 dark:text-zinc-300">
               {post?.description || ''}
             </p>
             <time
               dateTime={post.date}
-              className="mt-2 block text-sm text-zinc-700 dark:text-zinc-300 opacity-80">
+              className="mt-2 block text-sm text-zinc-700 opacity-80 dark:text-zinc-300">
               {format(parseISO(post.date), 'LLLL d, yyyy')}
             </time>
           </div>

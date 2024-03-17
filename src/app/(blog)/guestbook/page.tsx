@@ -30,14 +30,14 @@ export default async function Page() {
   console.log('session', session)
 
   return (
-    <div className="flex flex-col mx-auto max-w-6xl py-6 px-0 md:px-8 lg:px-24">
-      <h1 className="text-2xl font-semibold leading-9 mb-6 md:mb-8">
+    <div className="px-0md:px-4 mx-auto flex max-w-6xl flex-col py-6 lg:px-12">
+      <h1 className="mb-6 text-2xl font-semibold leading-9 md:mb-8">
         guestbook
       </h1>
       {user ? (
         <div className="flex flex-col">
-          <h2 className="text-xl mb-2">👋 Welcome! </h2>
-          <div className="flex items-end gap-4 mb-2 px-1">
+          <h2 className="mb-2 text-xl">👋 Welcome! </h2>
+          <div className="mb-2 flex items-end gap-4 px-1">
             <Image
               src={user.picture}
               alt={user.name}
