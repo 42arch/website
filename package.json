@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@openpanel/nextjs": "^1.0.7",
     "@prisma/client": "^5.18.0",
     "@radix-ui/react-aspect-ratio": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.2",

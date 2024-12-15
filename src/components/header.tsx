@@ -17,8 +17,8 @@ export default async function Header() {
 
   return (
     <header className='sticky top-0 z-20 flex h-[57px] w-full items-center border-b border-dashed'>
-      <div className='relative mx-3 flex w-full border-l border-r border-dashed border-blue-200 dark:border-blue-300/15 md:mx-12'>
-        <NavigationMenu className='relative z-[2] flex w-full justify-between gap-4 px-4 py-3 md:px-6 lg:gap-0'>
+      <div className='relative mx-4 flex w-full justify-center border-l border-r border-dashed border-blue-200 dark:border-blue-300/15 md:mx-12 lg:mx-24'>
+        <NavigationMenu className='relative z-[2] flex w-full max-w-4xl justify-between gap-4 px-4 py-3 md:px-12 lg:gap-0 lg:px-24'>
           <NavigationMenuList className=''>
             <Link href='/' legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>

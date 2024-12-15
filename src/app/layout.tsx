@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils'
 import Header from '@/components/header'
 import { Metadata } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
+import { OpenPanelComponent } from '@openpanel/nextjs'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
 const fontSans = localFont({
@@ -40,6 +42,7 @@ export default async function LocaleLayout({
 }: {
   children: React.ReactNode
 }) {
+  const opClientId = process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID
   const locale = await getLocale()
   const messages = await getMessages()
 
@@ -59,12 +62,18 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             <div className='relative flex min-h-screen w-screen flex-none flex-col justify-between'>
               <Header />
-              <main className='mx-3 grow border-l border-r border-dashed border-blue-200 dark:border-blue-300/15 md:mx-12'>
+              <main className='mx-4 grow border-l border-r border-dashed border-blue-200 dark:border-blue-300/15 md:mx-12 lg:mx-24'>
                 {children}
               </main>
             </div>
           </NextIntlClientProvider>
         </ThemeProvider>
+        <OpenPanelComponent
+          clientId={opClientId || ''}
+          trackScreenViews={true}
+          trackOutgoingLinks={true}
+        />
+        <Analytics />
       </body>
     </html>
   )
