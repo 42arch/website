@@ -1,0 +1,12 @@
+{
+  "nav": {
+    "home": "Home"
+  },
+  "Index": {
+    "title": "Starllow Lab!",
+    "locales": {
+      "en": "English",
+      "zh-Hans": "Chinese"
+    }
+  }
+}

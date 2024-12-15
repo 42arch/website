@@ -1,0 +1,12 @@
+{
+  "nav": {
+    "home": "首页"
+  },
+  "Index": {
+    "title": "Starllow 实验室!",
+    "locales": {
+      "en": "英文",
+      "zh-Hans": "中文"
+    }
+  }
+}
