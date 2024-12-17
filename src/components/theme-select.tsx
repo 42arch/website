@@ -252,15 +252,6 @@ export default function ThemeSwitch() {
       }}
     >
       {mounted && <>{theme === 'light' ? <Sun /> : <Moon />}</>}
-      {/* {mounted && (
-        <>
-          {theme === 'light' ? (
-            <span className='i-line-md-sun-rising-loop h-[1.2rem] w-[1.2rem]' />
-          ) : (
-            <span className='i-line-md-moon-alt-loop h-[1.2rem] w-[1.2rem]' />
-          )}
-        </>
-      )} */}
     </Button>
   )
 }

@@ -33,6 +33,7 @@ export default function LocaleSelect() {
       <DropdownMenuContent className='min-w-32'>
         {['en', 'zh-Hans'].map((lang) => (
           <DropdownMenuItem
+            key={lang}
             onClick={() => {
               if (lang !== locale) {
                 setUserLocale(lang as Locale)
