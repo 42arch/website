@@ -243,7 +243,6 @@ export default function ThemeSwitch() {
     <Button
       variant='ghost'
       size='icon'
-      className='cursor-pointer'
       onClick={() => {
         if (theme === 'light') {
           setTheme('dark')

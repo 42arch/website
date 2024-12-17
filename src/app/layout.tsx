@@ -62,9 +62,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             <div className='relative flex min-h-screen w-screen flex-none flex-col justify-between'>
               <Header />
-              <main className='mx-4 grow border-l border-r border-dashed border-blue-200 dark:border-blue-300/15 md:mx-12 lg:mx-24'>
-                {children}
-              </main>
+              <main className='mx-4 grow md:mx-12 lg:mx-24'>{children}</main>
             </div>
           </NextIntlClientProvider>
         </ThemeProvider>

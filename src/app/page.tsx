@@ -7,8 +7,6 @@ export default async function Index() {
   return (
     <section className='relative overflow-clip bg-gradient-to-t px-4 py-12 sm:px-6 md:mx-auto md:max-w-[1248px]'>
       <section className='flex w-full flex-col items-center '>
-        <p>🌟</p>
-
         <h1 className='mb-8 mt-2 text-center text-4xl font-bold'>
           {t('title')}
         </h1>
