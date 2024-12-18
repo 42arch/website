@@ -1,12 +1,5 @@
 'use client'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 import { Locale } from '@/i18n/config'
 import { setUserLocale } from '@/services/locale'
 import { useLocale, useTranslations } from 'next-intl'

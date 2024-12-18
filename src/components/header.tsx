@@ -13,6 +13,18 @@ import ThemeSelect from './theme-select'
 import { getTranslations } from 'next-intl/server'
 import { MenuIcon } from 'lucide-react'
 import { Button } from './ui/button'
+import MobileMenu from './mobile-menu'
+
+const items: { href: string; title: string }[] = [
+  {
+    href: '/',
+    title: 'home'
+  },
+  {
+    href: '/blog',
+    title: 'blog'
+  }
+]
 
 export default async function Header() {
   const t = await getTranslations('nav')
@@ -25,26 +37,31 @@ export default async function Header() {
             <Link href='/' legacyBehavior passHref>
               <NavigationMenuLink className='mr-3'>🌟</NavigationMenuLink>
             </Link>
-            <Link href='/' legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                {t('home')}
-              </NavigationMenuLink>
-            </Link>
+
+            <div className='hidden sm:block'>
+              {items.map((item) => (
+                <Link href={item.href} key={item.title} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    {t(item.title)}
+                  </NavigationMenuLink>
+                </Link>
+              ))}
+            </div>
+
+            {/* 
             <Link href='/blog' legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 {t('blog')}
               </NavigationMenuLink>
-            </Link>
+            </Link> */}
           </NavigationMenuList>
 
-          <div className='hidden gap-2 md:flex'>
+          <div className='hidden gap-2 sm:flex'>
             <ThemeSelect />
             <LocaleSelect />
           </div>
-          <div className='flex md:hidden'>
-            <Button variant='ghost' size='icon'>
-              <MenuIcon />
-            </Button>
+          <div className='flex sm:hidden'>
+            <MobileMenu items={items} />
           </div>
         </NavigationMenu>
       </div>
