@@ -3,6 +3,9 @@
     "home": "首页",
     "blog": "部落格"
   },
+  "info": {
+    "last-build": "最近构建于"
+  },
   "Index": {
     "title": "Starllow 实验室!",
     "locales": {

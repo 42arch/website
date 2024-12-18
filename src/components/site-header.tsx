@@ -1,18 +1,13 @@
 import Link from 'next/link'
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from './ui/navigation-menu'
 import LocaleSelect from './locale-select'
 import ThemeSelect from './theme-select'
 import { getTranslations } from 'next-intl/server'
-import { MenuIcon } from 'lucide-react'
-import { Button } from './ui/button'
 import MobileMenu from './mobile-menu'
 
 const items: { href: string; title: string }[] = [
@@ -26,7 +21,7 @@ const items: { href: string; title: string }[] = [
   }
 ]
 
-export default async function Header() {
+export default async function SiteHeader() {
   const t = await getTranslations('nav')
 
   return (

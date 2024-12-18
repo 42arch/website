@@ -2,12 +2,13 @@ import localFont from 'next/font/local'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { cn } from '@/lib/utils'
-import Header from '@/components/header'
+import SiteHeader from '@/components/site-header'
 import { Metadata } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { OpenPanelComponent } from '@openpanel/nextjs'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
+import SiteFooter from '@/components/site-footer'
 
 const fontSans = localFont({
   src: [
@@ -61,8 +62,9 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <div className='relative flex min-h-screen w-screen flex-none flex-col justify-between'>
-              <Header />
+              <SiteHeader />
               <main className='mx-4 grow md:mx-12 lg:mx-24'>{children}</main>
+              <SiteFooter />
             </div>
           </NextIntlClientProvider>
         </ThemeProvider>

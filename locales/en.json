@@ -3,6 +3,9 @@
     "home": "Home",
     "blog": "Blog"
   },
+  "info": {
+    "last-build": "Last build"
+  },
   "Index": {
     "title": "Starllow Lab!",
     "locales": {
