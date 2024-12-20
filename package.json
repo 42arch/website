@@ -23,6 +23,7 @@
     "date-fns": "^4.1.0",
     "lucide-react": "^0.468.0",
     "next": "14.2.3",
+    "next-auth": "^4.24.11",
     "next-intl": "^3.24.0",
     "next-themes": "^0.4.3",
     "react": "^18",
@@ -47,7 +48,7 @@
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "prisma": "^5.18.0",
+    "prisma": "^5.22.0",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }

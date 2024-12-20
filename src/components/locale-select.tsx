@@ -24,7 +24,7 @@ export default function LocaleSelect() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='min-w-32'>
-        {['en', 'zh-Hans'].map((lang) => (
+        {['en', 'zh-CN'].map((lang) => (
           <DropdownMenuItem
             key={lang}
             onClick={() => {

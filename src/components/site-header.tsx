@@ -8,9 +8,9 @@ import {
 import LocaleSelect from './locale-select'
 import ThemeSelect from './theme-select'
 import { getTranslations } from 'next-intl/server'
-import MobileMenu from './mobile-menu'
+import MobileNav from './mobile-nav'
 
-const items: { href: string; title: string }[] = [
+const navItems: { href: string; title: string }[] = [
   {
     href: '/',
     title: 'home'
@@ -18,6 +18,10 @@ const items: { href: string; title: string }[] = [
   {
     href: '/blog',
     title: 'blog'
+  },
+  {
+    href: '/shuoshuo',
+    title: 'shuoshuo'
   }
 ]
 
@@ -30,11 +34,13 @@ export default async function SiteHeader() {
         <NavigationMenu className='relative z-[2] flex w-full max-w-3xl justify-between gap-4 px-4 py-3 md:px-12 lg:gap-0 lg:px-24'>
           <NavigationMenuList className=''>
             <Link href='/' legacyBehavior passHref>
-              <NavigationMenuLink className='mr-3'>🌟</NavigationMenuLink>
+              <NavigationMenuLink className='mr-3 text-xl'>
+                🌠
+              </NavigationMenuLink>
             </Link>
 
             <div className='hidden sm:block'>
-              {items.map((item) => (
+              {navItems.map((item) => (
                 <Link href={item.href} key={item.title} legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     {t(item.title)}
@@ -56,7 +62,7 @@ export default async function SiteHeader() {
             <LocaleSelect />
           </div>
           <div className='flex sm:hidden'>
-            <MobileMenu items={items} />
+            <MobileNav items={navItems} />
           </div>
         </NavigationMenu>
       </div>

@@ -1,7 +1,8 @@
 {
   "nav": {
     "home": "首页",
-    "blog": "部落格"
+    "blog": "部落格",
+    "shuoshuo": "说说"
   },
   "info": {
     "last-build": "最近构建于"
@@ -10,7 +11,7 @@
     "title": "Starllow 实验室!",
     "locales": {
       "en": "英文",
-      "zh-Hans": "中文"
+      "zh-CN": "中文"
     }
   }
 }

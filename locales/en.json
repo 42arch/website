@@ -1,7 +1,8 @@
 {
   "nav": {
     "home": "Home",
-    "blog": "Blog"
+    "blog": "Blog",
+    "shuoshuo": "ShuoShuo"
   },
   "info": {
     "last-build": "Last build"
@@ -10,7 +11,7 @@
     "title": "Starllow Lab!",
     "locales": {
       "en": "English",
-      "zh-Hans": "Chinese"
+      "zh-CN": "Chinese"
     }
   }
 }

@@ -108,7 +108,7 @@ interface Props {
   items: { href: string; title: string }[]
 }
 
-export default function MobileMenu({ items }: Props) {
+export default function MobileNav({ items }: Props) {
   const t = useTranslations('nav')
   const [menuShow, setMenuShow] = useState<boolean>(false)
 
