@@ -9,6 +9,7 @@ import { OpenPanelComponent } from '@openpanel/nextjs'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import SiteFooter from '@/components/site-footer'
+import Providers from './provides'
 
 const fontSans = localFont({
   src: [
@@ -53,7 +54,7 @@ export default async function LocaleLayout({
       className={cn(fontSans.variable)}
       suppressHydrationWarning
     >
-      <body className='bg-background antialiased'>
+      <body className='overflow-x-hidden bg-background antialiased'>
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
@@ -61,13 +62,17 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-            <div className='relative flex min-h-screen w-screen flex-none flex-col justify-between'>
-              <SiteHeader />
-              <main className='mx-4 grow md:mx-12 lg:mx-24'>
-                <div className='px-4 md:px-12 lg:px-24'>{children}</div>
-              </main>
-              <SiteFooter />
-            </div>
+            <Providers>
+              <div className='relative flex min-h-screen w-screen flex-none flex-col justify-between'>
+                <SiteHeader />
+                <main className='mx-4 grow md:mx-12 lg:mx-24'>
+                  <div className='mx-auto max-w-4xl px-4 md:px-12 lg:px-24'>
+                    {children}
+                  </div>
+                </main>
+                <SiteFooter />
+              </div>
+            </Providers>
           </NextIntlClientProvider>
         </ThemeProvider>
         <OpenPanelComponent
