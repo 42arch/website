@@ -20,8 +20,8 @@ const navItems: { href: string; title: string }[] = [
     title: 'blog'
   },
   {
-    href: '/shuoshuo',
-    title: 'shuoshuo'
+    href: '/shuo',
+    title: 'shuo'
   }
 ]
 
