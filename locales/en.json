@@ -7,6 +7,12 @@
   "info": {
     "last-build": "Last build"
   },
+  "shuo": {
+    "placeholder": "Leave a message",
+    "send": "Send",
+    "load-more": "Load more",
+    "no-more": "No more content"
+  },
   "Index": {
     "title": "Starllow Lab!",
     "locales": {

@@ -7,6 +7,12 @@
   "info": {
     "last-build": "最近构建于"
   },
+  "shuo": {
+    "placeholder": "留下一条信息",
+    "send": "发送",
+    "load-more": "加载更多",
+    "no-more": "没有更多内容了"
+  },
   "Index": {
     "title": "Starllow 实验室!",
     "locales": {

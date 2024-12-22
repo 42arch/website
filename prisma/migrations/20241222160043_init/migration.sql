@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "Shuo" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "content" TEXT,
-    "authorId" INTEGER,
+    "authorId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Shuo_pkey" PRIMARY KEY ("id")
@@ -10,7 +10,7 @@ CREATE TABLE "Shuo" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
 

@@ -16,15 +16,14 @@ datasource db {
 
 
 model Shuo {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid())
   content   String?
   author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
+  authorId  String?
   createdAt DateTime @default(now())
 }
-
 model User {
-  id    Int     @id @default(autoincrement())
+  id    String  @id @default(uuid())
   email String  @unique
   name  String?
   posts Shuo[]
