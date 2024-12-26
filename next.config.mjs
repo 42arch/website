@@ -1,3 +1,4 @@
+import { withContentCollections } from '@content-collections/next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
 const currentTime = new Date().getTime()
@@ -8,7 +9,8 @@ const withNextIntl = createNextIntlPlugin()
 const nextConfig = {
   env: {
     NEXT_PUBLIC_BUILD_TIME: currentTime
-  }
+  },
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx']
 }
 
-export default withNextIntl(nextConfig)
+export default withContentCollections(withNextIntl(nextConfig))
