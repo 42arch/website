@@ -1,6 +1,8 @@
 'use client'
 
+import Datetime from '@/components/datetime'
 import Spin from '@/components/icon/spin'
+import ShuoContent from '@/components/shuo-content'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -10,13 +12,13 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import UploadButton from '@/components/upload-button'
 import { ShuoDto, ShuoResponse } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { Github } from 'lucide-react'
+import { FileUp, Github } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { FormEvent, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -72,6 +74,11 @@ export default function ContentList() {
     }
   })
 
+  const onUploadSuccess = (url: string) => {
+    const content = form.getValues('content')
+    form.setValue('content', content + '\n' + url)
+  }
+
   const { mutate } = useMutation({
     mutationFn: (params: ShuoDto) => createContent(params),
     onSuccess: (res) => {
@@ -88,7 +95,6 @@ export default function ContentList() {
     <div className='pb-2 text-muted-foreground'>
       <Form {...form}>
         <form
-          // ref={formRef}
           className='flex flex-col items-end gap-3'
           onSubmit={form.handleSubmit(onSubmit)}
         >
@@ -108,15 +114,20 @@ export default function ContentList() {
             <Button
               size='icon'
               variant='ghost'
+              className='!h-8 !w-8'
               onClick={(e) => {
                 e.preventDefault()
               }}
             >
               <Github />
             </Button>
-            <Button size='sm' className='w-1/5' type='submit'>
-              {t('send')}
-            </Button>
+
+            <div className='flex flex-grow justify-end gap-2'>
+              <UploadButton onSuccess={onUploadSuccess} />
+              <Button className='h-8 w-1/5' type='submit'>
+                {t('send')}
+              </Button>
+            </div>
           </div>
         </form>
       </Form>
@@ -138,11 +149,11 @@ export default function ContentList() {
                       key={item.id}
                       className='mb-6 rounded-md bg-accent p-2 text-sm text-accent-foreground'
                     >
-                      <p className='text-xs text-muted-foreground'>
-                        {format(item.createdAt, 'yyyy-MM-dd HH:mm:ss')}
-                      </p>
-
-                      <p className='my-2'>{item.content}</p>
+                      <Datetime
+                        className='text-xs text-muted-foreground'
+                        time={item.createdAt}
+                      />
+                      <ShuoContent content={item.content} />
                     </section>
                   ))}
                 </div>

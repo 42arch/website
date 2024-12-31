@@ -6,6 +6,7 @@ import path from 'path'
 import remarkGfm from 'remark-gfm'
 import { remarkCodeHike } from '@code-hike/mdx'
 import rehypeSlug from 'rehype-slug'
+import getReadingTime from '@/lib/reading-time'
 
 const postDirectory = 'src/content/posts'
 const exec = promisify(syncExec)
@@ -28,7 +29,9 @@ const posts = defineCollection({
     title: z.string(),
     published: z.boolean().nullable(),
     summary: z.string().nullable(),
-    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/),
+    category: z.string(),
+    tags: z.array(z.string()),
     author: z.string()
   }),
   transform: async (post, ctx) => {
@@ -63,11 +66,10 @@ const posts = defineCollection({
     //   lastModificationDate
     // )
 
-    console.log(222222, post)
-
     return {
       ...post,
       slug: post._meta.directory,
+      readingTime: getReadingTime(post.content),
       content: {
         mdx,
         raw: post.content

@@ -8,7 +8,6 @@ export function Internship({ children }: Props) {
       style={{
         border: '2px dashed red',
         padding: '1rem',
-        marginTop: '2rem',
         borderRadius: '1rem'
       }}
     >

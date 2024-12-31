@@ -7,6 +7,14 @@
   "info": {
     "last-build": "Last build"
   },
+  "blog": {
+    "all": "All Posts",
+    "published": "Published at",
+    "reading-time": "Reading time",
+    "minutes": "minutes",
+    "category": "Category",
+    "tags": "Tags"
+  },
   "shuo": {
     "placeholder": "Leave a message",
     "send": "Send",

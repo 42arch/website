@@ -1,11 +1,19 @@
 {
   "nav": {
     "home": "首页",
-    "blog": "部落格",
+    "blog": "博客",
     "shuo": "说说"
   },
   "info": {
     "last-build": "最近构建于"
+  },
+  "blog": {
+    "all": "全部贴文",
+    "published": "发布于",
+    "reading-time": "阅读时间",
+    "minutes": "分钟",
+    "category": "分类",
+    "tags": "标签"
   },
   "shuo": {
     "placeholder": "留下一条信息",
