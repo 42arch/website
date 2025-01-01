@@ -29,9 +29,10 @@ const posts = defineCollection({
     title: z.string(),
     published: z.boolean().nullable(),
     summary: z.string().nullable(),
-    date: z.string().regex(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/),
+    date: z.string(),
     category: z.string(),
     tags: z.array(z.string()),
+    lang: z.enum(['en', 'zh-CN']),
     author: z.string()
   }),
   transform: async (post, ctx) => {
@@ -68,7 +69,7 @@ const posts = defineCollection({
 
     return {
       ...post,
-      slug: post._meta.directory,
+      slug: post._meta.fileName.replace('.mdx', ''),
       readingTime: getReadingTime(post.content),
       content: {
         mdx,
