@@ -44,7 +44,6 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@code-hike/mdx": "^0.9.0",
     "@content-collections/core": "^0.8.0",
     "@content-collections/mdx": "^0.2.0",
     "@content-collections/next": "^0.2.4",

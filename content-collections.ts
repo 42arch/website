@@ -4,7 +4,7 @@ import { exec as syncExec } from 'node:child_process'
 import { compileMDX } from '@content-collections/mdx'
 import path from 'path'
 import remarkGfm from 'remark-gfm'
-import { remarkCodeHike } from '@code-hike/mdx'
+import { CodeHikeConfig, remarkCodeHike } from 'codehike/mdx'
 import rehypeSlug from 'rehype-slug'
 import getReadingTime from '@/lib/reading-time'
 
@@ -19,6 +19,12 @@ async function lastModificationDate(filePath: string) {
     return new Date(stdout.trim()).toISOString()
   }
   return new Date().toISOString()
+}
+
+const chConfig: CodeHikeConfig = {
+  components: {
+    code: 'Code'
+  }
 }
 
 const posts = defineCollection({
@@ -45,20 +51,7 @@ const posts = defineCollection({
         )
         appender.directory('./components', directory)
       },
-      remarkPlugins: [
-        remarkGfm,
-        [
-          remarkCodeHike,
-          {
-            theme: 'light-plus',
-            showExpandButton: false,
-            showCopyButton: true,
-            autoImport: true,
-            autoLink: true,
-            lineNumbers: true
-          }
-        ]
-      ],
+      remarkPlugins: [remarkGfm, [remarkCodeHike, chConfig]],
       rehypePlugins: [rehypeSlug]
     })
 

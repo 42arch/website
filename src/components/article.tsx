@@ -10,7 +10,12 @@ export default function Article({
   className
 }: PropsWithChildren<Props>) {
   return (
-    <article className={cn(className, 'prose prose-neutral dark:prose-invert')}>
+    <article
+      className={cn(
+        className,
+        'prose prose-neutral max-w-fit dark:prose-invert'
+      )}
+    >
       {children}
     </article>
   )

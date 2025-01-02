@@ -21,9 +21,9 @@ category: Tech
 npm install axios @tanstack/react-query
 ```
 
-3. 在 `App.js` 下：
+3. 在 `App.ts` 下：
 
-```ts
+```ts App.ts
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient({
@@ -51,7 +51,7 @@ export default App
 
 新建`utils/http.ts`文件
 
-```ts
+```ts http.ts
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -181,7 +181,7 @@ export default new Request()
 
 新建`api/auth.ts`文件：
 
-```ts
+```ts auth.ts
 import http from '@utils/http'
 
 export type LoginParams = { email: string; password: string }
