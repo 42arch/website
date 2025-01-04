@@ -9,6 +9,7 @@ import LocaleSelect from './locale-select'
 import ThemeSelect from './theme-select'
 import { getTranslations } from 'next-intl/server'
 import MobileNav from './mobile-nav'
+import { cn } from '@/lib/utils'
 
 const navItems: { href: string; title: string }[] = [
   {
@@ -39,10 +40,12 @@ export default async function SiteHeader() {
               </NavigationMenuLink>
             </Link>
 
-            <div className='hidden sm:block'>
+            <div className='mx-2 hidden sm:block'>
               {navItems.map((item) => (
                 <Link href={item.href} key={item.title} legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink
+                    className={cn(navigationMenuTriggerStyle(), 'mr-2')}
+                  >
                     {t(item.title)}
                   </NavigationMenuLink>
                 </Link>

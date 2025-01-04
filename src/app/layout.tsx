@@ -7,9 +7,9 @@ import { Metadata } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { OpenPanelComponent } from '@openpanel/nextjs'
 import { Analytics } from '@vercel/analytics/react'
-import './globals.css'
 import SiteFooter from '@/components/site-footer'
 import Providers from './provides'
+import './globals.css'
 
 const fontSans = localFont({
   src: [
@@ -35,8 +35,13 @@ const fontSans = localFont({
 
 export const metadata: Metadata = {
   title: 'Starllow',
-  description: 'Starllow lab, We build webapps and tools.',
-  keywords: ['starllow']
+  description: 'Starllow Lab, We build creative webapps and tools.',
+  keywords: ['starllow'],
+  alternates: {
+    types: {
+      'application/rss+xml': 'https://starllow.com/feed.xml'
+    }
+  }
 }
 
 export default async function LocaleLayout({

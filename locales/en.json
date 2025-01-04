@@ -2,10 +2,16 @@
   "nav": {
     "home": "Home",
     "blog": "Blog",
-    "shuo": "Shuo"
+    "shuo": "Shuo",
+    "about": "About"
   },
   "info": {
-    "last-build": "Last build"
+    "last-build": "Last build",
+    "copyright": "© 2020-2025 Starllow.",
+    "about": "About",
+    "track": "Track",
+    "sitemap": "Sitemap",
+    "rss": "RSS"
   },
   "blog": {
     "all": "All Posts",

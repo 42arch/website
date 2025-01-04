@@ -2,10 +2,16 @@
   "nav": {
     "home": "首页",
     "blog": "博客",
-    "shuo": "说说"
+    "shuo": "说说",
+    "about": "关于"
   },
   "info": {
-    "last-build": "最近构建于"
+    "last-build": "最近构建于",
+    "copyright": "© 2020-2025 Starllow.",
+    "about": "关于",
+    "track": "埋点",
+    "sitemap": "站点地图",
+    "rss": "RSS"
   },
   "blog": {
     "all": "全部贴文",
