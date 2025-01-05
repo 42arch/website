@@ -14,7 +14,7 @@ import { Button } from './ui/button'
 
 export default function LocaleSelect() {
   const locale = useLocale()
-  const t = useTranslations('Index')
+  const t = useTranslations('index')
 
   return (
     <DropdownMenu>

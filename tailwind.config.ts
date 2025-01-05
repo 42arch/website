@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { fontFamily } from 'tailwindcss/defaultTheme'
+import { iconsPlugin, getIconCollections } from '@egoist/tailwindcss-icons'
 
 const config = {
   darkMode: ['class'],
@@ -78,7 +79,13 @@ const config = {
       }
     }
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')]
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography'),
+    iconsPlugin({
+      collections: getIconCollections(['logos', 'fluent-emoji', 'lucide'])
+    })
+  ]
 } satisfies Config
 
 export default config

@@ -27,11 +27,14 @@
     "load-more": "Load more",
     "no-more": "No more content"
   },
-  "Index": {
+  "index": {
     "title": "Starllow Lab!",
     "locales": {
       "en": "English",
       "zh-CN": "Chinese"
-    }
+    },
+    "projects": "Projects",
+    "contact": "Contact Us",
+    "team": "Team Members"
   }
 }

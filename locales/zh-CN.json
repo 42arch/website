@@ -27,11 +27,14 @@
     "load-more": "加载更多",
     "no-more": "没有更多内容了"
   },
-  "Index": {
+  "index": {
     "title": "Starllow 实验室!",
     "locales": {
       "en": "英文",
       "zh-CN": "中文"
-    }
+    },
+    "projects": "项目",
+    "contact": "联系我们",
+    "team": "成员"
   }
 }
