@@ -4,8 +4,10 @@ import { exec as syncExec } from 'node:child_process'
 import { compileMDX } from '@content-collections/mdx'
 import path from 'path'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
 import { CodeHikeConfig, remarkCodeHike } from 'codehike/mdx'
 import rehypeSlug from 'rehype-slug'
+import rehypeKatex from 'rehype-katex'
 import getReadingTime from '@/lib/reading-time'
 
 const postDirectory = 'src/content/posts'
@@ -51,8 +53,8 @@ const posts = defineCollection({
         )
         appender.directory('./components', directory)
       },
-      remarkPlugins: [remarkGfm, [remarkCodeHike, chConfig]],
-      rehypePlugins: [rehypeSlug]
+      remarkPlugins: [remarkMath, remarkGfm, [remarkCodeHike, chConfig]],
+      rehypePlugins: [rehypeKatex, rehypeSlug]
     })
 
     // const lastModification = await ctx.cache(

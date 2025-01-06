@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import { PropsWithChildren } from 'react'
+import 'katex/dist/katex.min.css'
 
 type Props = {
   className: string
