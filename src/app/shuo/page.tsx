@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import ContentList from './content-list'
+import GiscusContent from '@/components/giscus-content'
 
 export default async function ShuoPage() {
   const t = await getTranslations('nav')
@@ -9,7 +9,8 @@ export default async function ShuoPage() {
         {t('shuo')}
       </h1>
 
-      <ContentList />
+      <GiscusContent />
+      {/* <ContentList /> */}
     </div>
   )
 }
