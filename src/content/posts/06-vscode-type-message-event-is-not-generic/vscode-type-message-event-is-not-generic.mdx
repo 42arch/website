@@ -1,0 +1,34 @@
+---
+title: VSCode 中 Type 'MessageEvent' is not generic 问题及解决方案
+summary: ''
+date: 2025-2-9
+author: Ren Dan
+lang: 'zh-CN'
+published: true
+tags: ['VSCode', 'TypeScript']
+category: Tech
+---
+
+## 问题描述
+
+有时克隆一个新的ts项目到本地，并安装完依赖后，项目中如果使用了MessageEvent定义，在VSCode中，会报错提示 `Type 'MessageEvent' is not generic`，或者
+使用了 `window` api，提示报错 `cannot find name 'window'`。
+
+## 解决方案
+
+这种情况第一反应是 Eslint 等lint工具的问题，或者是项目的typescript版本问题，但实际上这是 VSCode 的 IntelliSense 设置问题。
+VSCode中有一个 `typescript.tsdk` 配置选项，用于指定 TypeScript 语言服务（TypeScript Server）的路径，它决定了 VS Code 使用的 TypeScript 版本，从而影响 TypeScript 代码的检查、提示和编译行为。
+
+出现上述问题的原因是 `typescript.tsdk` 使用了默认的内置TypeScript，这导致了与项目中的TypeScript版本不兼容的问题。
+
+解决办法是指定下`typescript.tsdk`路径，让其使用项目的TS版本。
+
+第一种方式：在VSCode中按 `Ctrl + Shift + P` （或 `Cmd + Shift + P`）,输入 `TypeScript: Select TypeScript Version`，选择 `Use Workspace Version`;
+
+第二种方式：在项目 `.vscode/settings.json` 文件中添加设置：
+
+```json
+{
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
+```
