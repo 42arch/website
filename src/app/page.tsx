@@ -13,8 +13,16 @@ type Project = {
 
 const projects: Project[] = [
   {
+    name: 'Playground',
+    icon: 'i-fluent-emoji-circus-tent',
+    description:
+      'Our experimental demos and examples',
+    link: 'https://playground.starllow.com',
+    source: 'https://github.com/42arch/playground'
+  },
+  {
     name: 'geojson.io for vscode',
-    icon: '/images/geojson.png',
+    icon: 'i-fluent-emoji-globe-showing-europe-africa',
     description:
       'An extension that helps user to create, edit, and preview geojson data in VSCode.',
     link: 'https://marketplace.visualstudio.com/items?itemName=swallow.geojson-io-for-vscode',
@@ -22,7 +30,7 @@ const projects: Project[] = [
   },
   {
     name: '宝可梦中文图鉴',
-    icon: '/images/pokedex.png',
+    icon: 'i-fluent-emoji-cat-face',
     description: '快速查询，随时了解你的宝可梦伙伴！',
     link: 'https://pokedex.starllow.com',
     source: 'https://github.com/42arch/pokedex-zh'
@@ -30,8 +38,8 @@ const projects: Project[] = [
   {
     name: 'geoflow',
     wip: true,
-    icon: '',
-    description: 'Lightweight spatial analysis workflow.',
+    icon: 'i-fluent-emoji-toolbox',
+    description: 'Lightweight spatial analysis workflow. Working in progress',
     link: '',
     source: ''
   }
@@ -51,14 +59,10 @@ function ProjectItem({ name, icon, description, link, wip }: Project) {
       rel='noreferrer'
     >
       <div className={cn('flex h-full items-center')}>
-        {icon ? (
-          <Image src={icon} alt={name} width={32} height={32} />
-        ) : (
-          <span className='i-fluent-emoji-desktop-computer h-8 w-8'></span>
-        )}
-        <div className='ml-3 flex grow flex-col gap-1'>
+        <span className={cn('inline-block h-8 w-8', icon)}></span>
+        <div className='ml-2 flex grow flex-col gap-1 w-[calc(100%-32px)]'>
           <span className='text-left'>{name}</span>
-          <span className='text-left text-xs'>{description}</span>
+          <span className='text-left text-xs text-accent-foreground'>{description}</span>
         </div>
       </div>
     </a>
@@ -68,6 +72,7 @@ function ProjectItem({ name, icon, description, link, wip }: Project) {
 type Member = {
   name: string
   realname?: string
+  bio?: string
   avatar: string
   email?: string
   github?: string
@@ -79,6 +84,7 @@ const members: Member[] = [
   {
     name: '42arch',
     realname: 'Ren Dan',
+    bio: "The first and the only member of the lab.",
     email: 'rend42@163.com',
     avatar: 'https://avatars.githubusercontent.com/u/20656708?v=4',
     github: 'https://github.com/42arch',
@@ -86,7 +92,7 @@ const members: Member[] = [
   }
 ]
 
-function MemberItem({ name, avatar, realname, email, github, bsky }: Member) {
+function MemberItem({ name, avatar, realname, bio, email, github, bsky }: Member) {
   const socialCss =
     'flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
   return (
@@ -103,6 +109,10 @@ function MemberItem({ name, avatar, realname, email, github, bsky }: Member) {
           <span> {name}</span>
           {realname && <span className='ml-1 text-xs'>({realname})</span>}
         </div>
+      </div>
+
+      <div className='text-sm mt-3 text-accent-foreground'>
+        <p>{bio}</p>
       </div>
 
       <div className='mt-3 flex flex-wrap gap-4'>
