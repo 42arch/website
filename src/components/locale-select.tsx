@@ -9,7 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
-import { LanguagesIcon } from 'lucide-react'
 import { Button } from './ui/button'
 
 export default function LocaleSelect() {
@@ -20,7 +19,7 @@ export default function LocaleSelect() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size='icon' variant='ghost' aria-label='Select Language'>
-          <LanguagesIcon />
+          <span className='i-lucide-languages h-5 w-5'></span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='min-w-32'>

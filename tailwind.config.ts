@@ -83,7 +83,12 @@ const config = {
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
     iconsPlugin({
-      collections: getIconCollections(['logos', 'fluent-emoji', 'lucide'])
+      collections: getIconCollections([
+        'logos',
+        'fluent-emoji',
+        'lucide',
+        'line-md'
+      ])
     })
   ]
 } satisfies Config
