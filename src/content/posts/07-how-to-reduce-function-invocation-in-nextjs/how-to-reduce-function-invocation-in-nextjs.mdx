@@ -1,0 +1,119 @@
+---
+title: 如何降低 Next.js 项目中的函数调用量
+summary: ''
+date: 2024-12-31
+author: Ren Dan
+lang: 'zh-CN'
+published: true
+tags: ['Next.js', 'Vercel']
+category: Tech
+---
+
+## 问题
+
+为了学习最新的 Next.js，我开发了一个宝可梦中文图鉴的网站，并把它部署到了 Netlify 上，然而没过几天后，我就收到了 Netlify 发来的邮件，显示 invocations 使用达到了上限，
+再过了一段时间，又给我发来了账单。然而我通过 Google Analytics 查看，每天也就几个人的访问量，不至于到受欢迎的地步。
+
+<div
+  style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}
+>
+  <img src='/07/1.png' alt='1' width='300' height='100' />
+  <img src='/07/2.png' alt='2' width='300' height='100' />
+</div>
+
+于是我把网站部署到了Vercel上，几天后虽然没收到账单，但是查看统计，function invocation的使用量仍然达到了每天几千次，但是访问人数最多却只有十几人。两个平台都是如此，因此可以
+断定应该是框架的问题，而不是平台的问题，所以不得不去研究下 Next.js 中的 function invocation机制。
+
+<img src='/07/3.png' alt='3' width='500' height='200' />
+
+## Function Invocation的机制
+
+在 Vercel 的[文档](https://vercel.com/docs/pricing/serverless-functions#managing-function-invocations)中找到了关于 Function Invocation 的描述，总结成下面几部分。
+
+首先，什么是Function Invocation？它其实就是指的是 Serverless 函数的执行。Next.js 是一个全栈框架，其 api 路由生成的接口的调用，Server Component服务端组件里函数的调用，
+以及SSR渲染都会触发 serverless 函数的执行。
+
+如何实时看到Serverless 函数的执行？在 Vercel 中，可以通过项目的 Logs 选项查看请求。或者打开浏览器控制台，切换到 Network -> Fetch/XHR 查看请求。每次请求的发起都会在服务器
+中产生一次函数调用。
+
+<img src='/07/4.png' alt='4' width='600' height='200' />
+
+结合这篇[文章](https://vercel.com/guides/how-can-i-reduce-my-serverless-execution-usage-on-vercel)，官方给出的减少函数调用量的建议有：
+
+- 尽量使用 SSG 渲染，因为 SSR 在每次打开页面时服务器都会执行渲染。而 SSG 只会在构建时渲染一次。
+
+- 减少 api 实际调用量，包括设置缓存等。
+
+## 优化途径
+
+结合官方的建议，开始第一步优化。首先分析网站，因为目前的网站应用的数据量很大，但是每个详情页都是静态的，数据不会改变，所以完全可以用 SSG 代替 SSR。
+
+而在 Next.js 14 的 App Router 中，默认的渲染方式是 SSR，开启 SSG 的方式是在动态路由的 page 文件中添加 `generateStaticParams` 函数。这样会在应用构建阶段
+生成路由，而不是在请求时按需生成。
+
+```tsx
+
+export async function generateStaticParams() {
+  const list = await readFile<PokemonSimple[]>('pokemon_list.json')
+  return list.map((item) => ({
+    name: item.name
+  }))
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ name: string }>
+}) {
+  const { name } = params
+  const data = await getDetailData(name)
+
+  if (!data) {
+    notFound()
+  }
+}
+
+```
+
+第二步优化，减少api的调用次数。首先进入图鉴应用的主分类时会有查询页面，该查询页面是客户端渲染（CSR）的方式，需要调用一个分页接口，对于这部分所做的就是加大每页的数据量和设置下缓存。
+但整体来说，应该不会减少太多函数调用。
+
+完成上述两部分后，通过控制台查看请求，虽然相对减少了很多，但是还是存在大量的请求。尤其发生在查询页面列表滚动时，有相当多的以 `_rsc` 结尾的请求。该类请求通常与 React Server Components
+相关，是在服务端将渲染结果发送到客户端。但是，为什么会在列表滚动时产生服务端渲染呢？
+
+<img src='/07/5.png' alt='5' width='600' height='200' />
+
+分析代码，列表中每一项都是一个 `<Link />` 组件，这个组件是 Next.js 中路由导航的主要方式。而通过查看[文档](https://nextjs.org/docs/app/api-reference/components/link#prefetch)，发现它有一个 `prefetch` 属性。关于该属性的作用，文档中的解释是：在服务端预取并加载链接的路由及其数据，以提高客户端导航的性能，
+每次鼠标浮在组件上都会尝试预请求。对于动态路由，它默认是启用的，这就导致了列表滚动时大量请求的产生！
+
+Link组件的预请求适用于导航栏等场景，来提高加载速度。对于列表，是完全没必要的，因为用户查看列表时，不一定每个都会点进去看。所以要将 `prefetch`设置为 `false`来禁用。
+
+```tsx
+  <Link
+    href={`/pokemon/${name}`}
+    prefetch={false}
+    className=''
+  >
+    // ...
+  </Link>
+```
+
+最后，看下优化后的结果，Function Invocations使用量大幅下降，这下不用担心账单爆炸了！
+
+<img src='/07/6.png' alt='6' width='600' height='200' />
+
+## 总结
+
+降低 Next.js 项目中的函数调用量的方法：
+
+- 将 SSR 渲染转换成 SSG
+
+- 减少 API 的调用
+
+- 取消 Link 组件的预请求
+
+参考：
+
+https://vercel.com/docs/pricing/serverless-functions#managing-function-invocations
+https://vercel.com/guides/how-can-i-reduce-my-serverless-execution-usage-on-vercel
+https://nextjs.org/docs/app/api-reference/components/link#prefetch
