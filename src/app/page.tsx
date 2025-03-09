@@ -24,7 +24,7 @@ const projects: Project[] = [
     name: 'geojson.io for vscode',
     icon: 'i-fluent-emoji-globe-showing-europe-africa',
     description:
-      'An extension that helps user to create, edit, and preview geojson data in VSCode.',
+      'Create, edit, and preview geojson data in VSCode.',
     link: 'https://marketplace.visualstudio.com/items?itemName=swallow.geojson-io-for-vscode',
     source: 'https://github.com/42arch/geojson.io-for-vscode'
   },
@@ -34,6 +34,13 @@ const projects: Project[] = [
     description: '快速查询，随时了解你的宝可梦伙伴！',
     link: 'https://pokedex.starllow.com',
     source: 'https://github.com/42arch/pokedex-zh'
+  },
+  {
+    name: 'TripSeek',
+    icon: 'i-fluent-emoji-national-park',
+    description: 'AI Travel Planner',
+    link: 'https://tripseek.starllow.com',
+    source: 'https://github.com/42arch/tripseek'
   },
   {
     name: 'geoflow',
@@ -49,7 +56,7 @@ function ProjectItem({ name, icon, description, link, wip }: Project) {
   return (
     <a
       className={cn(
-        'rounded-md bg-accent px-4 py-3 transition-colors ',
+        'rounded-md bg-accent px-4 py-3 transition-colors',
         wip
           ? 'pointer-events-none cursor-not-allowed text-muted-foreground'
           : 'cursor-pointer hover:bg-secondary'
