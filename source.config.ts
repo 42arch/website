@@ -13,7 +13,6 @@ export const blogPosts = defineCollections({
     date: z.string().date().or(z.date()),
   }),
   mdxOptions: getDefaultMDXOptions({
-    providerImportSource: '@/components/mdx-components',
 
   }),
 })

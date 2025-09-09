@@ -2,20 +2,32 @@ import type { Metadata } from 'next'
 import type React from 'react'
 import { RootProvider } from 'fumadocs-ui/provider'
 // import { Analytics } from '@vercel/analytics/next'
-import { Montserrat, Ubuntu_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
 import { Suspense } from 'react'
 import './globals.css'
 
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  variable: '--font-montserrat',
+const fontSans = localFont({
+  src: [
+    {
+      path: '../../public/fonts/NotoSansSC-Regular.ttf',
+      weight: '400',
+      style: 'normal'
+    },
+    {
+      path: '../../public/fonts/NotoSansSC-SemiBold.ttf',
+      weight: '600',
+      style: 'semibold'
+    },
+    {
+      path: '../../public/fonts/NotoSansSC-Bold.ttf',
+      weight: '700',
+      style: 'bold'
+    }
+  ],
+  variable: '--font-sans',
+  display: 'swap'
 })
 
-const ubuntuMono = Ubuntu_Mono({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-ubuntu-mono',
-})
 
 export const metadata: Metadata = {
   title: 'Starllow Lab',
@@ -30,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans ${montserrat.variable} ${ubuntuMono.variable}`}>
+      <body className={fontSans.className}>
         <Suspense fallback={null}>
           <RootProvider>{children}</RootProvider>
         </Suspense>

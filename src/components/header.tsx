@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { GridBackground } from '@/components/gird-background'
+import { GridBackground } from '@/components/grid-background'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
 
@@ -21,7 +21,7 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 z-30 box-content w-full bg-background/80  border-border/70 border-b border-dashed dark:border-border">
+    <header className="sticky top-0 z-30 box-content w-full bg-background/80  border-border/70 border-b border-dashed dark:border-border">
       <div className="relative container mx-auto backdrop-blur-lg transition-colors flex size-full h-14 flex-row items-center">
         <GridBackground maxWidthClass="container" />
 
@@ -33,7 +33,7 @@ export default function Header() {
           </div>
 
           <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+            <div className="flex items-baseline space-x-8">
               <Link
                 href="/"
                 className={`transition-colors ${
