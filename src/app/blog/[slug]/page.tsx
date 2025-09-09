@@ -1,79 +1,51 @@
-import { allPosts } from 'content-collections'
-import { notFound } from 'next/navigation'
-import Markdown from '@/components/markdown'
+import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
+import defaultMdxComponents from 'fumadocs-ui/mdx'
 import Link from 'next/link'
-import Article from '@/components/article'
-import Datetime from '@/components/datetime'
-import { getTranslations } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { blog } from '@/lib/source'
 
-type Props = {
-  params: {
-    slug: string
-  }
+export default async function Page(props: {
+  params: Promise<{ slug: string }>
+}) {
+  const params = await props.params
+  const page = blog.getPage([params.slug])
+
+  if (!page)
+    notFound()
+  const Mdx = page.data.body
+
+  return (
+    <>
+      <div className="container rounded-xl border py-12 md:px-8 pt-28">
+        <h1 className="mb-2 text-3xl font-bold">{page.data.title}</h1>
+        <p className="mb-4 ">{page.data.description}</p>
+        <Link href="/blog">Back</Link>
+      </div>
+      <article className="container flex flex-col px-4 py-8">
+        <div className="prose min-w-0">
+          <InlineTOC items={page.data.toc} className="bg-card" />
+          <Mdx components={defaultMdxComponents} />
+        </div>
+      </article>
+    </>
+  )
 }
 
-export function generateStaticParams() {
-  return allPosts.map((post) => ({
-    slug: post._meta.path
+export function generateStaticParams(): { slug: string }[] {
+  return blog.getPages().map(page => ({
+    slug: page.slugs[0],
   }))
 }
 
-export default async function Post({ params: { slug } }: Props) {
-  const t = await getTranslations('blog')
-  const post = allPosts.find((post) => post.slug === slug)
-
-  if (!post) {
-    return notFound()
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>
+}) {
+  const params = await props.params
+  const page = blog.getPage([params.slug])
+  if (!page)
+    notFound()
+  return {
+    title: page.data.title,
+    description: page.data.description,
   }
-
-  return (
-    <div className='pt-4 md:pt-8'>
-      <div>
-        <Link
-          href='/blog'
-          className='text-balance text-sm text-accent-foreground hover:underline hover:underline-offset-2'
-        >
-          {t('all')}
-        </Link>
-      </div>
-      <header className='border-b border-dashed'>
-        <h1 className='mt-2 text-balance text-2xl font-bold md:mt-5'>
-          {post.title}
-        </h1>
-        <div className='flex flex-col gap-1 pb-4 pt-3 text-xs text-muted-foreground md:flex-row md:justify-between md:gap-4'>
-          <span>
-            {t('published')} <Datetime time={post.date} />
-          </span>
-          <span>
-            {t('reading-time')}{' '}
-            <span>
-              {Math.ceil(post.readingTime)} {t('minutes')}
-            </span>
-          </span>
-        </div>
-      </header>
-      <Article className='my-6'>
-        <Markdown code={post.content.mdx} />
-      </Article>
-      <div className='flex flex-col gap-1 border-t border-dashed py-4 text-xs text-muted-foreground md:flex'>
-        <span>
-          {t('category')}: <span className='ml-2'>{post.category}</span>
-        </span>
-        <span>
-          {t('tags')}:{' '}
-          <span className='ml-2'>
-            {post.tags.map((t, idx, arr) => (
-              <span
-                key={t}
-                className='mr-1 truncate underline underline-offset-2'
-              >
-                {t}
-                {idx !== arr.length - 1 && <span>,</span>}
-              </span>
-            ))}
-          </span>
-        </span>
-      </div>
-    </div>
-  )
 }

@@ -1,5 +1,13 @@
-import { PropsWithChildren } from 'react'
+import PageLayout from '@/components/page-layout'
 
-export default async function BlogLayout({ children }: PropsWithChildren) {
-  return <div className='p-4'>{children}</div>
+export default function BlogLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <PageLayout>
+      {children}
+    </PageLayout>
+  )
 }

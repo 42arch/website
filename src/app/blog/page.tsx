@@ -1,67 +1,67 @@
-import Datetime from '@/components/datetime'
-import { allPosts } from 'content-collections'
-import { Clock, Hash } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { ArrowRight, CalendarDays, Clock } from 'lucide-react'
 import Link from 'next/link'
+import PageLayout from '@/components/page-layout'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { blog } from '@/lib/source'
 
-const isProduction = process.env.NODE_ENV === 'production'
-
-export default async function BlogPage() {
-  const t = await getTranslations('blog')
-  const posts = allPosts
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .filter((post) => {
-      if (isProduction) {
-        return post.published
-      }
-      return true
-    })
+export default function BlogPage() {
+  const posts = blog.getPages()
 
   return (
-    <div className='pt-4'>
-      <h1 className='my-4 text-center text-2xl font-bold text-accent-foreground'>
-        {t('all')}
-      </h1>
+    <>
+      {/* Hero Section */}
+      <section className="pt-28 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl sm:text-5xl font-bold text-balance mb-6">
+            Creative Programming
+            {' '}
+            <span className="text-primary">Blog</span>
+          </h1>
+          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+            Exploring the intersection of code, mathematics, and visual art through WebGL, shaders, and creative
+            programming techniques.
+          </p>
+        </div>
+      </section>
 
-      <ul className=''>
-        {posts.map((post) => (
-          <li key={post.slug} className='pb-4 focus-visible:!shadow-none'>
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className='flex flex-col rounded-lg p-4 transition-all duration-300 hover:bg-secondary hover:text-secondary-foreground'
-            >
-              <h3 className='break-words text-xl font-medium'>{post.title}</h3>
-              <div className='relative mt-3 space-y-2'></div>
-              <div className='flex select-none flex-col flex-wrap gap-1 text-xs font-light text-muted-foreground md:flex-row md:items-center md:gap-4'>
-                <div className='flex items-center space-x-1 '>
-                  <Clock size={12} className='mt-[2px]' />
-                  <Datetime time={post.date} />
-                </div>
+      {/* Blog Posts Grid */}
+      <section className="pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {posts.map(post => (
+              <Link key={post.url} href={`/blog/${post.slugs}`} className="group">
+                <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                      <CalendarDays className="w-4 h-4" />
+                      {/* <span>{new Date(post).toLocaleDateString()}</span> */}
+                      <Clock className="w-4 h-4 ml-2" />
+                      {/* <span>{post.readTime}</span> */}
+                    </div>
+                    <CardTitle className="text-xl group-hover:text-primary transition-colors">{post.data.title}</CardTitle>
+                    <CardDescription className="text-base">{post.data.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {/* {post.data.tags.map(tag => (
+                        <Badge key={tag} variant="secondary" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))} */}
+                    </div>
+                    <div className="flex items-center text-primary font-medium group-hover:gap-2 transition-all">
+                      <span>Read more</span>
+                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <div className='flex items-center space-x-1'>
-                  <Hash size={10} className='mt-[2px]' />
-                  <div className='flex items-center'>
-                    <span className='truncate underline underline-offset-2'>
-                      {post.category}
-                    </span>
-                    <span className='mx-1'>/</span>
-                    {post.tags.map((t, idx, arr) => (
-                      <span
-                        key={t}
-                        className='mr-1 truncate underline underline-offset-2'
-                      >
-                        {t}
-                        {idx !== arr.length - 1 && <span>,</span>}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    </>
   )
 }

@@ -1,0 +1,60 @@
+---
+title: Getting Started
+description: Introducing Fumadocs MDX, the official content source of Fumadocs.
+author: Fuma Nama
+date: 2024-12-15
+---
+
+# Fumadocs MDX (the built-in content source): Getting Started
+URL: /docs/mdx
+Source: https://raw.githubusercontent.com/fuma-nama/fumadocs/refs/heads/main/apps/docs/content/docs/mdx/index.mdx
+
+Introducing Fumadocs MDX, the official content source of Fumadocs.
+
+## Quick Start
+
+Get started with Fumadocs MDX:
+
+## Introduction
+
+Fumadocs MDX is a tool to transform content into type-safe data, similar to Content Collections.
+
+It is not a full CMS but rather a content compiler + validator, you can use it to handle blog posts and other contents.
+
+### Defining Collections
+
+**Collection** refers to a collection containing a certain type of files. You can define collections in the config file (`source.config.ts`).
+
+Fumadocs MDX transforms collections into type-safe data, accessible in your app. Available collections:
+
+
+For example, a `doc` collection will transform the `.md` and `.mdx` files:
+
+
+### Accessing Collections
+
+Collections will be compiled into JavaScript files that your app can access, the output format varies according to the framework you use.
+
+[Get started](#quickstart) with your framework to learn more.
+
+## FAQ
+
+### Built-in Properties
+
+These properties are exported from MDX files by default.
+
+| Property         | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| `frontmatter`    | Frontmatter                                     |
+| `toc`            | Table of Contents                               |
+| `structuredData` | Structured Data, useful for implementing search |
+
+### Customise Frontmatter
+
+Use the [`schema`](/docs/mdx/collections#schema-1) option to pass a validation schema to validate frontmatter and define its output properties.
+
+### MDX Plugins
+
+Fumadocs MDX uses [MDX Compiler](https://mdxjs.com/packages/mdx) to compile MDX files into JavaScript files.
+
+You can customise it on [Global Config](/docs/mdx/global#mdx-options) or [Collection Config](/docs/mdx/collections#mdxoptions).
