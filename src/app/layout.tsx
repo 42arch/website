@@ -4,30 +4,29 @@ import { RootProvider } from 'fumadocs-ui/provider'
 // import { Analytics } from '@vercel/analytics/next'
 import localFont from 'next/font/local'
 import { Suspense } from 'react'
-import './globals.css'
+import './styles/globals.css'
 
 const fontSans = localFont({
   src: [
     {
       path: '../../public/fonts/NotoSansSC-Regular.ttf',
       weight: '400',
-      style: 'normal'
+      style: 'normal',
     },
     {
       path: '../../public/fonts/NotoSansSC-SemiBold.ttf',
       weight: '600',
-      style: 'semibold'
+      style: 'semibold',
     },
     {
       path: '../../public/fonts/NotoSansSC-Bold.ttf',
       weight: '700',
-      style: 'bold'
-    }
+      style: 'bold',
+    },
   ],
   variable: '--font-sans',
-  display: 'swap'
+  display: 'swap',
 })
-
 
 export const metadata: Metadata = {
   title: 'Starllow Lab',
@@ -41,8 +40,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={fontSans.className}>
+    <html
+      lang="en"
+      className={fontSans.className}
+      suppressHydrationWarning
+    >
+      <body>
         <Suspense fallback={null}>
           <RootProvider>{children}</RootProvider>
         </Suspense>

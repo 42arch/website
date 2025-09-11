@@ -11,7 +11,7 @@ export default function PageLayout({ children }: PageLayoutProps) {
     <main className="min-h-screen flex flex-1 flex-col pt-0">
       <Header />
       {children}
-      {/* <Footer /> */}
+      <Footer />
     </main>
   )
 }

@@ -5,7 +5,14 @@ const withMDX = createMDX({
   configPath: './source.config.ts',
 })
 
+const currentTime = new Date().getTime().toString()
+
+console.log(88888, currentTime)
+
 const nextConfig: NextConfig = {
+  publicRuntimeConfig: {
+    buildTime: currentTime,
+  },
   reactStrictMode: true,
 }
 

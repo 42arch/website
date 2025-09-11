@@ -1,56 +1,54 @@
+import Link from 'next/link'
+import { GridBackground } from './grid-background'
+import LastBuild from './last-build'
+
 export default function Footer() {
   return (
-    <footer className="bg-card border-t border-border py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <h3 className="text-lg font-bold text-primary mb-4">Starllow Lab</h3>
-            <p className="text-muted-foreground mb-4 max-w-md">
-              专注于创新技术研究与开发，致力于构建有意义的数字产品和解决方案。
-            </p>
-            <p className="text-sm text-muted-foreground">© 2024 Starllow Lab. All rights reserved.</p>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">快速链接</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#home" className="text-muted-foreground hover:text-primary transition-colors">
-                  首页
-                </a>
-              </li>
-              <li>
-                <a href="#projects" className="text-muted-foreground hover:text-primary transition-colors">
-                  项目
-                </a>
-              </li>
-              <li>
-                <a href="#blog" className="text-muted-foreground hover:text-primary transition-colors">
-                  博客
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">
-                  联系
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">技术栈</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>React & Next.js</li>
-              <li>TypeScript</li>
-              <li>Node.js</li>
-              <li>Python & AI/ML</li>
-            </ul>
-          </div>
+    <footer className="relative border-t border-dashed border-border z-10 bg-background py-12 text-center text-xs text-muted-foreground">
+      <GridBackground maxWidthClass="container" />
+      <div className="mx-auto flex max-w-8xl flex-col px-4 md:flex-row md:justify-between md:px-12 lg:px-24 ">
+        <div className="flex flex-col gap-1">
+          <p className="flex flex-row justify-center gap-3 truncate">
+            <a
+              className="flex cursor-pointer items-center underline-offset-2 hover:text-primary hover:underline"
+              href="https://dashboard.openpanel.dev/share/overview/a571gO"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Track</span>
+            </a>
+            <Link
+              href="/sitemap.xml"
+              className="flex cursor-pointer items-center underline-offset-2 hover:text-primary hover:underline"
+            >
+              <span>SiteMap</span>
+            </Link>
+            <Link
+              href="/feed.xml"
+              className="flex cursor-pointer items-center underline-offset-2 hover:text-primary hover:underline"
+            >
+              <span>RSS</span>
+            </Link>
+          </p>
+          <LastBuild />
         </div>
-
-        <div className="mt-8 pt-8 border-t border-border text-center">
-          <p className="text-sm text-muted-foreground">Built with ❤️ using Next.js and Tailwind CSS</p>
+        <div className="mt-2 md:mt-0">
+          <p>
+            <a
+              className="text-xs hover:text-primary text-muted-foreground"
+              href="https://icp.gov.moe/?keyword=20254242"
+              target="_blank"
+              rel="noreferrer"
+            >
+              萌ICP备20254242号
+            </a>
+          </p>
+          <p className="mt-1">© 2025 Starllow Lab. All rights reserved.</p>
         </div>
+      </div>
+
+      <div className="mt-4 pt-4 text-center">
+        <p className="text-xs text-muted-foreground">Built with ❤️ using Next.js and Fumadocs.</p>
       </div>
     </footer>
   )

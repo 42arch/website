@@ -1,0 +1,463 @@
+---
+title: Setup a Blog with NextJS & Fuma Docs
+description: A guide to setup a blog using Fuma Docs on NextJS
+date: 2025-04-23
+author: rajiv
+tags: [blog, template, fumadocs, nextjs, mdx]
+image: https://shadcnblocks.com/images/block/placeholder-5.svg
+---
+
+What features would you want on your blog? Here are the ones I chose:
+
+## Features
+
+- [x] Static site that can be published to GitHub Pages
+- [x] MDX support: I work on frontend code, so I need to embed React components in my posts
+- [x] Search
+- [x] Table of contents (Clerk style)
+- [x] A Blog Post
+- [x] List of Posts with Pagination
+- [x] Categories
+- [x] Series
+- [ ] Tags (WIP)
+- [x] Metadata with Social Images
+- [x] Static (yes, repeating for emphasis)
+
+## Setup
+
+The official FumaDocs documentation has an article on setting up a blog: [Setup a Blog](https://fumadocs.vercel.app/blog/make-a-blog). Using that as a foundation, I built my blog with the features above.
+
+You can proceed in two ways:
+
+- Clone the current repo
+- Follow the steps below to add these features to your existing Next.js site
+
+### Install and Configure Fuma Docs
+
+<Steps>
+
+<Step>
+
+### Install Fuma Docs
+
+You need a working Fuma Docs setup. If you don't have one, create it using the following command:
+
+```package-install
+pnpm create fumadocs-app
+```
+
+Or you can configure FumaDocs [manually](https://fumadocs.vercel.app/docs/ui/manual-installation).
+
+At this point, you should have a basic setup ready with the files: `source.config.ts` and `lib/source.ts`.
+
+</Step>
+
+<Step>
+
+### Setup ShadCN Components
+
+If you already have shadcn set up, you don't need to run the following command.
+
+```bash
+pnpm dlx shadcn@latest init
+```
+
+We need the following components:
+
+- button
+- popover
+- badge
+- card
+
+You can add all of the above with:
+
+```bash
+pnpm dlx shadcn@latest add button popover badge card
+```
+
+We also need a **book** icon component, which is used when displaying series:
+
+```bash
+pnpm dlx shadcn@latest add "https://21st.dev/r/designali-in/book"
+```
+
+</Step>
+
+<Step>
+
+### Define a Collection for Blog
+
+Install `zod` as we will use it to add a frontmatter schema.
+
+```package-install
+zod
+```
+
+Now define a collection for the blog. Add the following:
+
+```ts title="source.config.ts"
+import {
+  defineDocs,
+  defineConfig,
+  defineCollections,
+  frontmatterSchema,
+} from "fumadocs-mdx/config";
+import { z } from "zod";
+
+export const blog = defineCollections({
+  type: "doc",
+  dir: "content/blog",
+  schema: frontmatterSchema.extend({
+    author: z.string(),
+    date: z
+      .string()
+      .or(z.date())
+      .transform((value, context) => {
+        try {
+          return new Date(value);
+        } catch {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Invalid date",
+          });
+          return z.NEVER;
+        }
+      }),
+    tags: z.array(z.string()).optional(),
+    image: z.string().optional(),
+    draft: z.boolean().optional().default(false),
+    series: z.string().optional(),
+    seriesPart: z.number().optional(),
+  }),
+});
+```
+
+Add the following to `lib/source.ts`:
+
+```ts title="lib/source.ts"
+import { docs, blog } from "@/.source";
+import { loader } from "fumadocs-core/source";
+import { createMDXSource } from "fumadocs-mdx";
+
+export const blogSource = loader({
+  baseUrl: "/blog",
+  source: createMDXSource(blog),
+});
+
+export const {
+  getPage: getBlogPost,
+  getPages: getBlogPosts,
+  pageTree: pageBlogTree,
+} = blogSource;
+
+export type BlogPost = ReturnType<typeof getBlogPost>;
+```
+
+</Step>
+
+<Step>
+
+### Add fumadocs-blog components
+
+There are multiple features, so instead of adding files one by one, we'll copy entire folders using the giget command.
+
+**Add all the required components**
+
+```bash
+npx giget gh:rjvim/rjvim.github.io/packages/fumadocs-blog/src fumadocs-blog --force
+```
+
+**Add /blog route page**
+
+```bash
+npx giget gh:rjvim/rjvim.github.io/apps/web/app/\(home\)/blog app/\(home\)/blog --force
+```
+
+**Add /blog-og route page**
+
+```bash
+npx giget gh:rjvim/rjvim.github.io/apps/web/app/blog-og app/blog-og --force
+```
+
+**Correct the imports**
+
+_The original components are built to work with a monorepo, so we need to correct the imports._
+
+Run the following commands:
+
+```bash
+sed -i '' 's|@repo/fumadocs-blog/blog|@/fumadocs-blog|g' 'app/(home)/blog/[[...slug]]/page.tsx'
+```
+
+```bash
+sed -i '' 's|@repo/fumadocs-blog/blog|@/fumadocs-blog|g' 'app/blog-og/[[...slug]]/route.tsx'
+```
+
+**Add styles to global.css**
+
+```css title="global.css"
+@import "../fumadocs-blog/styles/globals.css";
+```
+
+</Step>
+
+<Step>
+
+### Configure the blog
+
+If fumadocs-blog was an npm package, all the above steps would be handled by that. Now, we need to configure the blog. Blog configuration drives following:
+
+- Metadata
+- Components
+- Categories
+- Series
+- Others
+
+_I will document a detailed guide, but as of now the following should give majority of the idea_
+
+Add the following file in your repo at root path, we import this using `@/blog-configuration`.
+
+```tsx title="blog-configuration.tsx"
+import type { Metadata } from "next/types";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
+import { Book } from "@/components/ui/book";
+import { Card } from "@/components/ui/card";
+import type { BlogConstants, BlogConfiguration } from "@/fumadocs-blog";
+import { PostCard } from "@/fumadocs-blog";
+import {
+  Brain,
+  Book as LucideBook,
+  Code,
+  Cog,
+  Lightbulb,
+  Megaphone,
+  Rocket,
+  Users,
+  Wrench,
+  BookIcon,
+} from "lucide-react";
+
+// Blog text constants that can be customized
+
+export const blogConstants: BlogConstants = {
+  // General
+  blogTitle: "Blog",
+  blogDescription: "Articles and thoughts",
+  siteName: "myblog.com",
+  defaultAuthorName: "My Name",
+  xUsername: "@my_x_username",
+  // Pagination
+  paginationTitle: (page: number) => `Blog - Page ${page}`,
+  paginationDescription: (page: number) =>
+    `Articles and thoughts - Page ${page}`,
+  categoryPaginationTitle: (category: string, page: number) =>
+    `${category.charAt(0).toUpperCase() + category.slice(1)} - Page ${page}`,
+  categoryPaginationDescription: (category: string, page: number) =>
+    `Articles in the ${category} category - Page ${page}`,
+  // URLs
+  blogBase: "/blog",
+  blogOgImageBase: "blog-og",
+  pageSize: 5,
+};
+
+export function createBlogMetadata(
+  override: Metadata,
+  blogConstants: BlogConstants
+): Metadata {
+  // Derive values from the core properties
+  const siteUrl = `https://${blogConstants.siteName}`;
+  const author = {
+    name: blogConstants.defaultAuthorName,
+    url: siteUrl,
+  };
+  const creator = blogConstants.defaultAuthorName;
+
+  return {
+    ...override,
+    authors: [author],
+    creator: creator,
+    openGraph: {
+      title: override.title ?? undefined,
+      description: override.description ?? undefined,
+      url: siteUrl,
+      siteName: blogConstants.siteName,
+      ...override.openGraph,
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: blogConstants.xUsername,
+      creator: blogConstants.xUsername,
+      title: override.title ?? undefined,
+      description: override.description ?? undefined,
+      ...override.twitter,
+    },
+    alternates: {
+      canonical: "/",
+      types: {
+        "application/rss+xml": "/api/rss.xml",
+      },
+      ...override.alternates,
+    },
+  };
+}
+
+export function getBlogConfiguration(): BlogConfiguration {
+  return {
+    PostCard: PostCard,
+    Button,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+    Badge,
+    Book,
+    Card,
+    cn,
+    config: {
+      blogBase: blogConstants.blogBase,
+      blogOgImageBase: blogConstants.blogOgImageBase,
+      pageSize: 5,
+    },
+  };
+}
+
+export const useBlogConfiguration = getBlogConfiguration;
+
+// Moved from lib/categories.ts
+export const getCategoryBySlug = (slug: string) => {
+  const categories = {
+    idea: {
+      label: "Idea",
+      icon: Brain,
+      description:
+        "Exploratory thoughts and wild concepts for Teurons and beyond.",
+    },
+    opinions: {
+      label: "Opinions",
+      icon: Megaphone,
+      description:
+        "Subjective, wild, gut-hunch takes—less informed, out-of-box rants.",
+    },
+  };
+
+  return (
+    categories[slug as keyof typeof categories] || {
+      label: slug.toString().replace(/-/g, " ").toLowerCase(),
+      icon: BookIcon,
+    }
+  );
+};
+
+export const getSeriesBySlug = (slug: string) => {
+  const series = {
+    x: {
+      label: "Series X",
+      icon: LucideBook,
+      description: "A Sample Series",
+    },
+    // Add more series here as needed
+  };
+
+  return (
+    series[slug as keyof typeof series] || {
+      label: slug.charAt(0).toUpperCase() + slug.slice(1),
+      icon: LucideBook,
+      description: `Articles in the ${
+        slug.charAt(0).toUpperCase() + slug.slice(1)
+      } series.`,
+    }
+  );
+};
+```
+
+</Step>
+
+<Step>
+
+### Add following sample post
+
+Add the sample `.mdx` file below to test if everything is working. Place it at `content/blog/idea/zero-trust-security.mdx`.
+
+A few things to note: "idea" is the category of the blog, and "zero-trust-security" will be the URL of the blog post.
+
+```mdx title="content/blog/idea/zero-trust-security.mdx"
+---
+title: Zero Trust Security
+description: Why modern security architectures assume breach and verify everything
+author: lina
+date: 2025-03-22
+tags: [security, zero trust, cybersecurity, enterprise]
+image: https://shadcnblocks.com/images/block/placeholder-5.svg
+---
+
+# Zero Trust Security
+
+Traditional security models operated on the principle of "trust but verify" and focused on perimeter defense. Zero Trust flips this paradigm with a simple principle: never trust, always verify.
+
+## Core Principles
+
+Zero Trust is built on several foundational ideas:
+
+### Assume Breach
+
+Zero Trust architectures operate under the assumption that attackers are already present within the network.
+
+### Verify Explicitly
+
+Every access request must be fully authenticated, authorized, and encrypted:
+
+1. Strong identity verification for all users
+2. Device health validation
+3. Just-in-time and just-enough access
+4. Context-aware policies
+
+## Implementation Strategies
+
+Moving to Zero Trust requires systematic changes:
+
+### Identity as the Control Plane
+
+Modern security centers on identity rather than network location:
+
+### Micro-Segmentation
+
+Network security shifts from perimeter-based to fine-grained segmentation between workloads.
+```
+
+</Step>
+
+<Step>
+
+### Test the blog
+
+If you open `http://localhost:3000/blog`, you'll see a list of posts—at this point, only one. You can add more, edit the content, and try it out. The pagination size is 5, so after 5 posts you'll see a paginator.
+
+You can open a blog detail page and see details like tags, series, categories, etc.
+
+If you want a post to be part of a series, add the following frontmatter to the `.mdx` file:
+
+```mdx
+series: building-react-component-library
+seriesPart: 1
+```
+
+</Step>
+</Steps>
+
+## Future
+
+This development is driven by my needs and the products I'm working on. Here are a few things in the pipeline:
+
+- Newsletter subscription (But how do you do it for a static site?)
+- Tags
+- Make other components overridable so you can style them better
+- Make this a clonable template
+- The biggest problem I have with templates is that once you clone and start changing them, updating is not easy. You're off-track from the first second. So, I'm leaning towards a monorepo where I can balance open code and updates like a package.
+
+Anything else? Hit me up on [Twitter](https://x.com/rjv_im) and follow for more updates.
