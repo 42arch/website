@@ -47,7 +47,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mt-4 pt-4 text-center">
+      <div className="mt-4 text-center">
         <p className="text-xs text-muted-foreground">Built with ❤️ using Next.js and Fumadocs.</p>
       </div>
     </footer>

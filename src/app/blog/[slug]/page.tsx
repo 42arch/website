@@ -8,15 +8,13 @@ export default async function Page(props: {
   const params = await props.params
   const page = getPage([params.slug])
 
-  console.log(8887777777, page)
-
   if (!page)
     notFound()
 
   return (
-    <>
+    <div className="container blog">
       <SinglePost page={page} />
-    </>
+    </div>
   )
 }
 

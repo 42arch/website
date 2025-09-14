@@ -11,6 +11,10 @@
     "lint:fix": "eslint --fix"
   },
   "dependencies": {
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-presence": "^1.1.5",
+    "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -28,6 +32,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "rehype-katex": "^7.0.1",
+    "shiki": "^3.12.2",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

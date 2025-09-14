@@ -157,3 +157,17 @@
   padding-inline: 0rem;
   @apply max-w-7xl;
 }
+
+.blog {
+  #nd-page {
+    @apply col-span-4 order-last;
+  }
+
+  #nd-toc {
+    @apply sticky top-0 self-start mx-auto px-4 lg:px-6 pt-10 pb-2;
+
+    div {
+      @apply pe-0;
+    }
+  }
+}

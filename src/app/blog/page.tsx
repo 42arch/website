@@ -8,8 +8,6 @@ import { getPages } from '@/lib/source'
 export default function BlogPage() {
   const posts = getPages()
 
-  console.log(88888888, posts)
-
   return (
     <>
       <section className="relative container px-4 py-8 lg:py-12 lg:px-6 text-left bg-zinc-50/50 dark:bg-zinc-900/50">
@@ -20,7 +18,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="relative container px-4 py-8 lg:py-12 lg:px-6 text-left">
         {posts.map(post => (
           <PostItem key={post.data.title} post={post} />
         ))}
@@ -34,7 +32,7 @@ function PostItem({ post }: { post: BlogPost }) {
   return (
     <div
       key={post.data.title}
-      className="group p-4 rounded-xs text-left border bg-background transition-all duration-200 "
+      className="group px-4 py-3 mt-4 rounded-xs text-left border bg-background transition-all duration-200 "
     >
       <div className="flex items-start gap-3">
         <div className="text-lg">{post.data.icon}</div>

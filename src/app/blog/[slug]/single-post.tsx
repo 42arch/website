@@ -7,6 +7,10 @@ import {
 } from 'fumadocs-ui/page'
 import { BookOpen, Calendar } from 'lucide-react'
 import React from 'react'
+// import { DocsLayout } from '@/components/layout/docs'
+// import { DocsPage } from '@/components/layout/page'
+
+import { GridBackground } from '@/components/grid-background'
 import { cn } from '@/lib/utils'
 
 interface SinglePostProps {
@@ -26,12 +30,13 @@ export function SinglePost({
   getCategoryBySlug,
   mdxComponents,
 }: SinglePostProps) {
-  // Use configuration.cn if available, otherwise use the imported cn
   const MDX = page.data.body
 
   return (
     <>
-      <div className="relative container px-4 py-8 lg:py-12 lg:px-6 text-left">
+      <div className="relative container border-b border-border/70 border-dashed px-4 py-8 lg:py-12 lg:px-6 text-left">
+        <GridBackground maxWidthClass="container" />
+
         {category && (
           <div className="mb-4 text-gray-600 dark:text-gray-400 text-sm font-medium">
             <div className="flex flex-wrap gap-3">
@@ -78,38 +83,33 @@ export function SinglePost({
           name: 'Tree',
           children: [],
         }}
+
         sidebar={{ enabled: false, prefetch: false, tabs: false }}
         containerProps={{
-          className: cn(
-            'flex-row-reverse',
-            'relative container [--fd-nav-height:calc(var(--spacing)*14)] md:[--fd-nav-height:57px]',
-          ),
+          className: 'relative pt-2 [--fd-nav-height:calc(var(--spacing)*14)] md:[--fd-nav-height:57px]',
         }}
       >
+        <GridBackground maxWidthClass="container" />
 
-        <div className="grid grid-cols-4">
-          <DocsPage
-            toc={page.data.toc}
-            full={page.data.full}
-            lastUpdate={lastUpdate}
-            footer={{
-              enabled: false,
-            }}
-            tableOfContent={{
-              style: 'clerk',
-              single: false,
-            }}
-            article={{
-              className: cn(
-                '!m-[unset] max-w-none bg-zinc-50/50 dark:bg-zinc-900/50 py-8 md:py-12',
-              ),
-            }}
-          >
-            <DocsBody>
-              <MDX configuration={mdxComponents} />
-            </DocsBody>
-          </DocsPage>
-        </div>
+        <DocsPage
+          toc={page.data.toc}
+          full={false}
+          lastUpdate={lastUpdate}
+          footer={{
+            enabled: false,
+          }}
+          tableOfContent={{
+            style: 'clerk',
+            single: true,
+          }}
+          container={{
+            className: 'pe-0 pb-8 relative max-w-full flex flex-row-reverse',
+          }}
+        >
+          <DocsBody>
+            <MDX configuration={mdxComponents} />
+          </DocsBody>
+        </DocsPage>
       </DocsLayout>
     </>
   )

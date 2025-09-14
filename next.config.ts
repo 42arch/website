@@ -7,8 +7,6 @@ const withMDX = createMDX({
 
 const currentTime = new Date().getTime().toString()
 
-console.log(88888, currentTime)
-
 const nextConfig: NextConfig = {
   publicRuntimeConfig: {
     buildTime: currentTime,
