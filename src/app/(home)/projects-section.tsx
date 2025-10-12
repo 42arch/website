@@ -58,42 +58,39 @@ function ProjectItem({ project }: { project: Project }) {
   return (
     <div
       key={project.name}
-      className="group p-4 rounded-xs text-left border bg-background transition-all duration-200 "
+      className="group flex flex-col gap-2 py-3 px-4 rounded-md border bg-white dark:bg-zinc-900 shadow-xs hover:shadow-sm transition-all duration-200"
     >
-      <div className="flex items-start gap-3">
-        <div className="text-lg">{project.icon}</div>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-base mb-1 transition-colors">
-            {project.name}
-          </h3>
-          <p className="text-xs text-muted-foreground mb-2 leading-relaxed">{project.description}</p>
-
-          <div className="flex flex-wrap gap-1 mb-3">
-            {project.tags.map(tag => (
-              <Badge key={tag} variant="secondary" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-
-          <div className="flex w-full items-end gap-4">
-            <Link
-              href={project.source}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Code2Icon className="w-4 h-4 opacity-85 hover:opacity-60" />
-            </Link>
-            <Link
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GlobeIcon className="w-4 h-4 opacity-85 hover:opacity-60" />
-            </Link>
-
-          </div>
-        </div>
+      <div className="flex items-center gap-2">
+        <div className="text-xl">{project.icon}</div>
+        <h3 className="font-semibold text-lg truncate transition-colors">
+          {project.name}
+        </h3>
+      </div>
+      <p className="text-sm text-left text-muted-foreground line-clamp-3 mb-2">{project.description}</p>
+      <div className="flex flex-wrap gap-2 ">
+        {project.tags.map(tag => (
+          <Badge key={tag} variant="secondary" className="text-xs">
+            {tag}
+          </Badge>
+        ))}
+      </div>
+      <div className="flex gap-3 mt-auto justify-end">
+        <Link
+          href={project.source}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:opacity-40 opacity-60 transition-opacity"
+        >
+          <Code2Icon className="w-5 h-5" />
+        </Link>
+        <Link
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:opacity-40 opacity-60 transition-opacity"
+        >
+          <GlobeIcon className="w-5 h-5" />
+        </Link>
       </div>
     </div>
   )
@@ -101,8 +98,8 @@ function ProjectItem({ project }: { project: Project }) {
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="py-10 px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 lg:gap-x-16">
+    <section id="projects" className="py-10 px-4 sm:px-6 lg:px-8 border-zinc-200 dark:border-zinc-800">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
         {projects.map((project, index) => (
           <ProjectItem key={index} project={project} />
         ))}

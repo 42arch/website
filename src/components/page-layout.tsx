@@ -8,10 +8,12 @@ interface PageLayoutProps {
 
 export default function PageLayout({ children }: PageLayoutProps) {
   return (
-    <main className="min-h-screen flex flex-1 flex-col pt-0">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      {children}
+      <main className="flex-1 flex flex-col border-border/70 border-dashed border-b dark:divide-border dark:border-border">
+        {children}
+      </main>
       <Footer />
-    </main>
+    </div>
   )
 }

@@ -4,9 +4,9 @@ import LastBuild from './last-build'
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-dashed border-border z-10 bg-background py-12 text-center text-xs text-muted-foreground">
-      <GridBackground maxWidthClass="container" />
-      <div className="mx-auto flex max-w-8xl flex-col px-4 md:flex-row md:justify-between md:px-12 lg:px-24 ">
+    <footer className="relative w-full mx-auto container z-10 bg-background py-12 text-center text-xs text-muted-foreground">
+      <GridBackground maxWidthClass="container" columns={1} />
+      <div className="flex max-w-8xl flex-col px-4 md:flex-row md:justify-between md:px-2 lg:px-4">
         <div className="flex flex-col gap-1">
           <p className="flex flex-row justify-center gap-3 truncate">
             <a

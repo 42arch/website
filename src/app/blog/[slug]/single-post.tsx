@@ -5,13 +5,9 @@ import {
   DocsPage,
   DocsTitle,
 } from 'fumadocs-ui/page'
-import { BookOpen, Calendar } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 import React from 'react'
-// import { DocsLayout } from '@/components/layout/docs'
-// import { DocsPage } from '@/components/layout/page'
-
 import { GridBackground } from '@/components/grid-background'
-import { cn } from '@/lib/utils'
 
 interface SinglePostProps {
   page: any
@@ -35,7 +31,7 @@ export function SinglePost({
   return (
     <>
       <div className="relative container border-b border-border/70 border-dashed px-4 py-8 lg:py-12 lg:px-6 text-left">
-        <GridBackground maxWidthClass="container" />
+        <GridBackground maxWidthClass="container" columns={1} />
 
         {category && (
           <div className="mb-4 text-gray-600 dark:text-gray-400 text-sm font-medium">
@@ -89,7 +85,7 @@ export function SinglePost({
           className: 'relative pt-2 [--fd-nav-height:calc(var(--spacing)*14)] md:[--fd-nav-height:57px]',
         }}
       >
-        <GridBackground maxWidthClass="container" />
+        <GridBackground maxWidthClass="container" columns={2} />
 
         <DocsPage
           toc={page.data.toc}
