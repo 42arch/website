@@ -58,7 +58,7 @@ function ProjectItem({ project }: { project: Project }) {
   return (
     <div
       key={project.name}
-      className="group flex flex-col gap-2 py-3 px-4 rounded-md border bg-white dark:bg-zinc-900 shadow-xs hover:shadow-sm transition-all duration-200"
+      className="group flex flex-col gap-2 py-3 px-6 border-b odd:border-r border-main"
     >
       <div className="flex items-center gap-2">
         <div className="text-xl">{project.icon}</div>
@@ -98,12 +98,10 @@ function ProjectItem({ project }: { project: Project }) {
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="py-10 px-4 sm:px-6 lg:px-8 border-zinc-200 dark:border-zinc-800">
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
-        {projects.map((project, index) => (
-          <ProjectItem key={index} project={project} />
-        ))}
-      </div>
+    <section className="w-full grid grid-cols-1 sm:grid-cols-2">
+      {projects.map((project, index) => (
+        <ProjectItem key={index} project={project} />
+      ))}
     </section>
   )
 }

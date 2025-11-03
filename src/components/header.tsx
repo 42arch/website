@@ -4,7 +4,6 @@ import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { GridBackground } from '@/components/grid-background'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
 
@@ -21,11 +20,9 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-30 box-content w-full bg-background/80  border-border/70 border-b border-dashed dark:border-border">
-      <div className="relative container mx-auto backdrop-blur-lg transition-colors flex size-full h-14 flex-row items-center">
-        <GridBackground maxWidthClass="container" />
-
-        <nav className="relative mx-auto grid h-full grid-cols-4 grid-rows-1 items-center size-full px-4 lg:px-6">
+    <>
+      <div className="relative px-4 lg:px-6 container mx-auto backdrop-blur-lg transition-colors flex size-full h-16 flex-row items-center">
+        <nav className="relative mx-auto grid h-full grid-cols-4 grid-rows-1 items-center size-full">
           <div className="flex-shrink-0">
             <Link href="/" className="text-xl font-medium text-primary hover:text-primary/80 transition-colors">
               Starllow
@@ -33,7 +30,7 @@ export default function Header() {
           </div>
 
           <div className="hidden md:block">
-            <div className="flex items-baseline space-x-8">
+            <div className="flex items-baseline space-x-8 text-sm">
               <Link
                 href="/"
                 className={`transition-colors ${
@@ -78,11 +75,8 @@ export default function Header() {
         </nav>
       </div>
 
-      {/* Mobile Navigation */}
       {isOpen && (
         <div className="md:hidden absolute top-14 left-0 right-0 bg-background/80 backdrop-blur-lg box-content z-50">
-          <GridBackground maxWidthClass="container" />
-
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-b border-dashed border-border">
             <Link
               href="/"
@@ -114,7 +108,6 @@ export default function Header() {
           </div>
         </div>
       )}
-    </header>
-
+    </>
   )
 }

@@ -12,7 +12,6 @@ export default function HeroSection() {
               <span className="text-spektr-cyan-50 font-bold">Starllow Lab</span>
               <span className="relative flex w-full justify-center overflow-hidden text-center md:pb-4 md:pt-1">
                 &nbsp;
-
               </span>
             </h1>
 

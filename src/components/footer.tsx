@@ -1,11 +1,9 @@
 import Link from 'next/link'
-import { GridBackground } from './grid-background'
 import LastBuild from './last-build'
 
 export default function Footer() {
   return (
-    <footer className="relative w-full mx-auto container z-10 bg-background py-12 text-center text-xs text-muted-foreground">
-      <GridBackground maxWidthClass="container" columns={1} />
+    <footer className="z-10 bg-background py-4 text-center text-xs text-muted-foreground">
       <div className="flex max-w-8xl flex-col px-4 md:flex-row md:justify-between md:px-2 lg:px-4">
         <div className="flex flex-col gap-1">
           <p className="flex flex-row justify-center gap-3 truncate">
@@ -43,7 +41,7 @@ export default function Footer() {
               萌ICP备20254242号
             </a>
           </p>
-          <p className="mt-1">© 2025 Starllow Lab. All rights reserved.</p>
+          <p className="mt-1">© 2025 Starllow Lab.</p>
         </div>
       </div>
 
