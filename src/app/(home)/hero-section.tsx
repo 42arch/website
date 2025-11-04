@@ -6,7 +6,7 @@ export default function HeroSection() {
   return (
     <div id="hero" className="w-full relative grid-magicpattern">
       <div className="container mx-auto top-0">
-        <div className="flex gap-8 py-24 items-center justify-center flex-col">
+        <div className="flex gap-8 py-20 items-center justify-center flex-col">
           <div className="flex gap-4 flex-col">
             <h1 className="text-5xl md:text-7xl max-w-2xl tracking-tighter text-center font-regular">
               <span className="text-spektr-cyan-50 font-bold">Starllow Lab</span>
@@ -24,14 +24,12 @@ export default function HeroSection() {
             <a href="#projects">
               <Button size="lg" className="gap-4 cursor-grab" variant="outline">
                 View Projects
-                {' '}
                 <SquareLibraryIcon className="w-4 h-4" />
               </Button>
             </a>
             <Link href="blog" target="_blank">
               <Button size="lg" className="gap-4">
                 View Posts
-                {' '}
                 <MoveRight className="w-4 h-4" />
               </Button>
             </Link>

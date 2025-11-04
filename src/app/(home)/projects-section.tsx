@@ -40,7 +40,7 @@ const projects: Project[] = [
     name: 'TripSeek',
     icon: '🏞️',
     tags: ['Next.js', 'AI', 'Travel'],
-    description: 'AI Travel Planner',
+    description: 'An AI travel planner powered by DeepSeek.',
     link: 'https://tripseek.starllow.com',
     source: 'https://github.com/42arch/tripseek',
   },
@@ -58,30 +58,30 @@ function ProjectItem({ project }: { project: Project }) {
   return (
     <div
       key={project.name}
-      className="group flex flex-col gap-2 py-3 px-6 border-b odd:border-r border-main"
+      className="group flex flex-col gap-2 py-2 px-4 sm:odd:border-r border-r-0 border-b [&:nth-last-child(-n+1)]:border-b-0 border-main"
     >
       <div className="flex items-center gap-2">
         <div className="text-xl">{project.icon}</div>
-        <h3 className="font-semibold text-lg truncate transition-colors">
+        <h3 className="text-base truncate transition-colors">
           {project.name}
         </h3>
       </div>
-      <p className="text-sm text-left text-muted-foreground line-clamp-3 mb-2">{project.description}</p>
-      <div className="flex flex-wrap gap-2 ">
+      <p className="text-sm text-left text-muted-foreground line-clamp-3 mb-1">{project.description}</p>
+      <div className="flex flex-wrap gap-2">
         {project.tags.map(tag => (
-          <Badge key={tag} variant="secondary" className="text-xs">
+          <Badge key={tag} variant="secondary" className="text-xs text-muted-foreground">
             {tag}
           </Badge>
         ))}
       </div>
-      <div className="flex gap-3 mt-auto justify-end">
+      <div className="flex gap-3 mt-auto justify-end text-accent-foreground">
         <Link
           href={project.source}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:opacity-40 opacity-60 transition-opacity"
         >
-          <Code2Icon className="w-5 h-5" />
+          <Code2Icon className="w-4 h-4" />
         </Link>
         <Link
           href={project.link}
@@ -89,7 +89,7 @@ function ProjectItem({ project }: { project: Project }) {
           rel="noopener noreferrer"
           className="hover:opacity-40 opacity-60 transition-opacity"
         >
-          <GlobeIcon className="w-5 h-5" />
+          <GlobeIcon className="w-4 h-4" />
         </Link>
       </div>
     </div>
@@ -98,7 +98,7 @@ function ProjectItem({ project }: { project: Project }) {
 
 export default function ProjectsSection() {
   return (
-    <section className="w-full grid grid-cols-1 sm:grid-cols-2">
+    <section className="w-full grid grid-cols-1 sm:grid-cols-2 border-b border-main">
       {projects.map((project, index) => (
         <ProjectItem key={index} project={project} />
       ))}

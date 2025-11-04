@@ -27,7 +27,7 @@ const themes = [
 ]
 
 const itemVariants = cva(
-  'relative size-6.5 rounded-full p-1.5 text-muted-foreground',
+  'relative size-5 rounded-full p-1 text-muted-foreground',
   {
     variants: {
       active: {
@@ -64,35 +64,37 @@ export function ThemeToggle({
       setTheme(theme)
     }
 
-    if (document.startViewTransition && theme !== resolvedTheme) {
-      // Get the toggle button position for the ripple effect
-      const toggleButton = document.querySelector('[data-theme-toggle]')
-      if (toggleButton) {
-        const rect = toggleButton.getBoundingClientRect()
-        const x = rect.left + rect.width / 2
-        const y = rect.top + rect.height / 2
+    update()
 
-        // Set the mask position for the ripple effect
-        document.documentElement.style.setProperty(
-          '--theme-toggle-x',
-          `${x}px`,
-        )
-        document.documentElement.style.setProperty(
-          '--theme-toggle-y',
-          `${y}px`,
-        )
+    // if (document.startViewTransition && theme !== resolvedTheme) {
+    //   // Get the toggle button position for the ripple effect
+    //   const toggleButton = document.querySelector('[data-theme-toggle]')
+    //   if (toggleButton) {
+    //     const rect = toggleButton.getBoundingClientRect()
+    //     const x = rect.left + rect.width / 2
+    //     const y = rect.top + rect.height / 2
 
-        // Add a class to identify this is a theme toggle transition
-        document.documentElement.classList.add('theme-toggle-transition')
-        document.documentElement.style.viewTransitionName = 'root'
-        await document.startViewTransition(update).finished
-        document.documentElement.style.viewTransitionName = ''
-        document.documentElement.classList.remove('theme-toggle-transition')
-      }
-    }
-    else {
-      update()
-    }
+    //     // Set the mask position for the ripple effect
+    //     document.documentElement.style.setProperty(
+    //       '--theme-toggle-x',
+    //       `${x}px`,
+    //     )
+    //     document.documentElement.style.setProperty(
+    //       '--theme-toggle-y',
+    //       `${y}px`,
+    //     )
+
+    //     // Add a class to identify this is a theme toggle transition
+    //     document.documentElement.classList.add('theme-toggle-transition')
+    //     document.documentElement.style.viewTransitionName = 'root'
+    //     await document.startViewTransition(update).finished
+    //     document.documentElement.style.viewTransitionName = ''
+    //     document.documentElement.classList.remove('theme-toggle-transition')
+    //   }
+    // }
+    // else {
+    //   update()
+    // }
   }
 
   const value = mounted

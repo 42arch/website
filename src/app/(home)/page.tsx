@@ -1,5 +1,7 @@
 import HeroSection from '@/app/(home)/hero-section'
 import ProjectsSection from '@/app/(home)/projects-section'
+import SectionIndicator from '@/components/section-indicator'
+import ContactSection from './contact-section'
 
 export default function HomePage() {
   return (
@@ -8,26 +10,25 @@ export default function HomePage() {
         <HeroSection />
       </div>
 
+      <div className="w-full h-20 border-b border-main"></div>
+
       <div className="relative flex flex-col items-center justify-center">
-        <div className="w-full flex flex-col items-center border-b border-main py-4">
-          <div className="flex flex-row items-center gap-2 px-6">
-            <div className="flex flex-row items-center">
-              <div className="from-muted h-px w-20 bg-gradient-to-l to-transparent sm:w-40"></div>
-              <div className="bg-muted/20 h-1.5 w-1.5 border"></div>
-            </div>
-            <div className="relative flex h-7 flex-row items-center whitespace-nowrap gap-2 rounded-md border px-4 text-sm font-medium">
-              <span>Our Projects</span>
-            </div>
-            <div className="flex flex-row items-center">
-              <div className="bg-muted/20 h-1.5 w-1.5 border"></div>
-              <div className="from-muted h-px w-20 bg-gradient-to-r to-transparent sm:w-40"></div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full mb-14">
+        <SectionIndicator title="Projects" className="border-b border-main" />
+        <div className="w-full">
           <ProjectsSection />
         </div>
       </div>
+
+      <div className="w-full h-20 border-b border-main"></div>
+
+      <div className="relative flex flex-col items-center justify-center">
+        <SectionIndicator title="Contact" className="border-b border-main" />
+        <div className="w-full ">
+          <ContactSection />
+        </div>
+      </div>
+
+      <div className="w-full h-20 border-b border-main"></div>
     </div>
   )
 }

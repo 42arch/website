@@ -45,7 +45,7 @@ export default function RootLayout({
       className={fontSans.className}
       suppressHydrationWarning
     >
-      <body>
+      <body className="text-sm">
         <Suspense fallback={null}>
           <RootProvider>{children}</RootProvider>
         </Suspense>

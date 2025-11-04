@@ -3,7 +3,7 @@ import LastBuild from './last-build'
 
 export default function Footer() {
   return (
-    <footer className="z-10 bg-background py-4 text-center text-xs text-muted-foreground">
+    <div className="z-10 bg-background py-4 px-2 text-center text-xs text-muted-foreground tracking-tight">
       <div className="flex max-w-8xl flex-col px-4 md:flex-row md:justify-between md:px-2 lg:px-4">
         <div className="flex flex-col gap-1">
           <p className="flex flex-row justify-center gap-3 truncate">
@@ -48,6 +48,6 @@ export default function Footer() {
       <div className="mt-4 text-center">
         <p className="text-xs text-muted-foreground">Built with ❤️ using Next.js and Fumadocs.</p>
       </div>
-    </footer>
+    </div>
   )
 }
