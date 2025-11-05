@@ -13,8 +13,7 @@ interface SinglePostProps {
   category?: string
   lastUpdate?: Date
   tags?: string[]
-  getCategoryBySlug: (slug: string) => any
-  mdxComponents: any
+  // getCategoryBySlug: (slug: string) => any
 }
 
 export function SinglePost({
@@ -22,8 +21,6 @@ export function SinglePost({
   category,
   lastUpdate,
   tags,
-  getCategoryBySlug,
-  mdxComponents,
 }: SinglePostProps) {
   const MDX = page.data.body
 
@@ -33,12 +30,12 @@ export function SinglePost({
         {category && (
           <div className="mb-4 text-sm font-medium">
             <div className="flex flex-wrap gap-3">
-              <span className="inline-flex items-center gap-1.5 capitalize">
+              {/* <span className="inline-flex items-center gap-1.5 capitalize">
                 {getCategoryBySlug(category).icon
                   && React.createElement(getCategoryBySlug(category).icon, {
                     className: 'h-4 w-4',
                   })}
-              </span>
+              </span> */}
               <span className="inline-flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
                 {lastUpdate?.toLocaleDateString('en-US', {
@@ -99,7 +96,7 @@ export function SinglePost({
           }}
         >
           <DocsBody className="text-sm">
-            <MDX configuration={mdxComponents} />
+            <MDX />
           </DocsBody>
         </DocsPage>
       </DocsLayout>

@@ -13,7 +13,7 @@ export default async function Page(props: {
 
   return (
     <div className="container blog border-b border-main">
-      <SinglePost page={page} />
+      <SinglePost page={page} category="" tags={page.data.tags} />
     </div>
   )
 }
