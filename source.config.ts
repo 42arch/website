@@ -1,7 +1,6 @@
 import {
   transformerMetaHighlight,
   transformerNotationFocus,
-  transformerNotationHighlight,
   transformerRemoveNotationEscape,
 } from '@shikijs/transformers'
 import { rehypeCodeDefaultOptions } from 'fumadocs-core/mdx-plugins'

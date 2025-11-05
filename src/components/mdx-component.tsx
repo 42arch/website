@@ -1,6 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
 import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock'
-import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock'
 import { Step, Steps } from 'fumadocs-ui/components/steps'
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
