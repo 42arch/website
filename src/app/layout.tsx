@@ -31,7 +31,8 @@ const fontSans = localFont({
 export const metadata: Metadata = {
   title: 'Starllow Lab',
   description: 'Personal website of Starllow Lab - Showcasing projects, blog posts, and creative work',
-  generator: 'v0.app',
+  generator: 'Next.js',
+  keywords: ['Starllow Lab', 'Starllow', 'rendan', 'Ren Dan', 'rend42', '42arch'],
 }
 
 export default function RootLayout({

@@ -12,7 +12,7 @@ export default async function Page(props: {
     notFound()
 
   return (
-    <div className="container blog">
+    <div className="container blog border-b border-main">
       <SinglePost page={page} />
     </div>
   )

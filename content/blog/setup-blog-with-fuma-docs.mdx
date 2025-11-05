@@ -46,6 +46,19 @@ You need a working Fuma Docs setup. If you don't have one, create it using the f
 pnpm create fumadocs-app
 ```
 
+<Tabs items={['Javascript', 'Rust']}>
+  <Tab value="Javascript">
+    ```javascript
+    console.log('Hello World')
+    ```
+  </Tab>
+  <Tab value="Rust">
+    ```rust
+    println!("Hello World");
+    ```
+  </Tab>
+</Tabs>
+
 Or you can configure FumaDocs [manually](https://fumadocs.vercel.app/docs/ui/manual-installation).
 
 At this point, you should have a basic setup ready with the files: `source.config.ts` and `lib/source.ts`.

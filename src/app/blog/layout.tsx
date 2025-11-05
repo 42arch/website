@@ -7,8 +7,7 @@ export default function BlogLayout({
 }>) {
   return (
     <PageLayout>
-      blog container
-      {/* {children} */}
+      {children}
     </PageLayout>
   )
 }

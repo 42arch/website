@@ -30,7 +30,7 @@ export function DocsLayout({ tree, children }: DocsLayoutProps) {
       </header> */}
       <main
         id="nd-docs-layout"
-        className="flex flex-1 flex-row [--fd-nav-height:56px]"
+        className="flex flex-1 flex-row"
       >
         {/* <Sidebar /> */}
         {children}

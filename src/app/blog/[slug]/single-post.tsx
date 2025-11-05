@@ -7,7 +7,6 @@ import {
 } from 'fumadocs-ui/page'
 import { Calendar } from 'lucide-react'
 import React from 'react'
-import { GridBackground } from '@/components/grid-background'
 
 interface SinglePostProps {
   page: any
@@ -30,11 +29,9 @@ export function SinglePost({
 
   return (
     <>
-      <div className="relative container border-b border-border/70 border-dashed px-4 py-8 lg:py-12 lg:px-6 text-left">
-        <GridBackground maxWidthClass="container" columns={1} />
-
+      <div className="relative container border-b border-main px-4 py-4 lg:py-8 lg:px-6 text-left">
         {category && (
-          <div className="mb-4 text-gray-600 dark:text-gray-400 text-sm font-medium">
+          <div className="mb-4 text-sm font-medium">
             <div className="flex flex-wrap gap-3">
               <span className="inline-flex items-center gap-1.5 capitalize">
                 {getCategoryBySlug(category).icon
@@ -53,11 +50,10 @@ export function SinglePost({
             </div>
           </div>
         )}
-        <DocsTitle className="text-left dark:text-white flex items-center gap-2">
+        <DocsTitle className="text-left text-2xl flex items-center gap-2">
           {page.data.title}
-
         </DocsTitle>
-        <DocsDescription className="text-left mt-3 dark:text-gray-300">
+        <DocsDescription className="text-left mb-3 mt-3 text-base text-muted-foreground">
           {page.data.description}
         </DocsDescription>
         <div className="flex flex-wrap gap-2 mt-4">
@@ -79,14 +75,11 @@ export function SinglePost({
           name: 'Tree',
           children: [],
         }}
-
         sidebar={{ enabled: false, prefetch: false, tabs: false }}
         containerProps={{
-          className: 'relative pt-2 [--fd-nav-height:calc(var(--spacing)*14)] md:[--fd-nav-height:57px]',
+          className: 'relative pt-0',
         }}
       >
-        <GridBackground maxWidthClass="container" columns={2} />
-
         <DocsPage
           toc={page.data.toc}
           full={false}
@@ -95,14 +88,17 @@ export function SinglePost({
             enabled: false,
           }}
           tableOfContent={{
-            style: 'clerk',
+            style: 'normal',
             single: true,
           }}
           container={{
-            className: 'pe-0 pb-8 relative max-w-full flex flex-row-reverse',
+            className: 'pe-0 relative max-w-full flex',
+          }}
+          article={{
+            className: 'border-r border-main pb-16',
           }}
         >
-          <DocsBody>
+          <DocsBody className="text-sm">
             <MDX configuration={mdxComponents} />
           </DocsBody>
         </DocsPage>

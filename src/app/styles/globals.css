@@ -2,13 +2,16 @@
 @import "tw-animate-css";
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
+@import './patterns.css';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --radius: .6rem;
-  --background: oklch(100% 0 0);
-  --foreground: oklch(14.1% .005 285.823);
+  --fd-nav-height: 64px;
+
+  --background: oklch(100% 0 0); /* #ffffff */
+  --foreground: oklab(14.077% 0.0012 -0.00424); /* #09090b */
   --card: oklch(98% 0 0);
   --card-foreground: oklch(14.1% .005 285.823);
   --popover: oklch(100% 0 0);
@@ -43,8 +46,8 @@
 }
 
 .dark {
-  --background: oklch(20.463% 0.00002 271.152 / 0.971);
-  --foreground: oklch(98% 0 0);
+  --background: oklch(20.463% 0.00002 271.152 / 0.971); /* #171717 */
+  --foreground: oklch(98% 0 0); /* #f8f8f8 */
   --card: oklch(21% .006 285.885);
   --card-foreground: oklch(98% 0 0);
   --popover: oklch(21% .006 285.885);
@@ -130,6 +133,7 @@
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
 }
+
 body {
   letter-spacing: var(--tracking-normal);
 }

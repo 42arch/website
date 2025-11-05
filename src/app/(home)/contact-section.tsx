@@ -23,7 +23,7 @@ const SocialLinks = [
   },
   {
     name: 'BiliBili',
-    href: 'https://space.bilibili.com/42arch',
+    href: 'https://space.bilibili.com/22589532',
     icon: <SiBilibili />,
   },
 ]
@@ -33,7 +33,7 @@ function ContactSection() {
     <section className="w-full grid grid-cols-3 sm:grid-cols-6 border-b border-main">
       {
         SocialLinks.map(link => (
-          <div key={link.name} className="p-6 border-r hover:bg-accent/20 transition-opacity [&:nth-child(-n+3)]:border-b sm:[&:nth-child(-n+6)]:border-b-0 border-main">
+          <div key={link.name} className="p-6 border-r hover:bg-accent/40 transition-opacity [&:nth-child(-n+3)]:border-b sm:[&:nth-child(-n+6)]:border-b-0 border-main">
             <a href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center" title={link.name}>
               {link.icon}
             </a>

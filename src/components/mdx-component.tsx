@@ -11,13 +11,17 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
     pre: ({ ref: _ref, ...props }) => (
-      <CodeBlock {...props}>
+      <CodeBlock {...props} className="rounded-sm bg-muted text-sm">
         <Pre>{props.children}</Pre>
       </CodeBlock>
     ),
 
-    Tab,
-    Tabs,
+    Tab: ({ ref: _ref, ...props }) => (
+      <Tab {...props} className="rounded-none" />
+    ),
+    Tabs: ({ ref: _ref, ...props }) => (
+      <Tabs {...props} className="rounded-sm" />
+    ),
     Step,
     Steps,
     GithubCodeBlock,

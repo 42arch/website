@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button'
 
 export default function HeroSection() {
   return (
-    <div id="hero" className="w-full relative grid-magicpattern">
+    <div id="hero" className="w-full relative grid-pattern">
       <div className="container mx-auto top-0">
-        <div className="flex gap-8 py-20 items-center justify-center flex-col">
+        <div className="flex gap-8 py-16 items-center justify-center flex-col">
           <div className="flex gap-4 flex-col">
             <h1 className="text-5xl md:text-7xl max-w-2xl tracking-tighter text-center font-regular">
               <span className="text-spektr-cyan-50 font-bold">Starllow Lab</span>

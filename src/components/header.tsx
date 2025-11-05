@@ -76,8 +76,8 @@ export default function Header() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden absolute top-14 left-0 right-0 bg-background/80 backdrop-blur-lg box-content z-50">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-b border-dashed border-border">
+        <div className="md:hidden absolute top-16 left-0 right-0 bg-background/80 backdrop-blur-lg box-content z-50">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-b border-main">
             <Link
               href="/"
               className={`block px-3 py-2 ${

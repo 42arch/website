@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 interface Project {
   name: string
   icon: string
+  type: string
   tags: string[]
   description: string
   link: string
@@ -15,6 +16,7 @@ const projects: Project[] = [
   {
     name: 'Playground',
     icon: '🎪',
+    type: 'graphic',
     tags: ['WebGL', 'Three.js', 'GLSL'],
     description: 'Our experimental demos and examples',
     link: 'https://playground.starllow.com',
@@ -23,6 +25,7 @@ const projects: Project[] = [
   {
     name: 'geojson.io for vscode',
     icon: '🌍',
+    type: 'extension',
     tags: ['VSCode', 'GeoJSON'],
     description: 'Create, edit, and preview geojson data in VSCode.',
     link: 'https://marketplace.visualstudio.com/items?itemName=swallow.geojson-io-for-vscode',
@@ -31,6 +34,7 @@ const projects: Project[] = [
   {
     name: '宝可梦中文图鉴',
     icon: '🐱',
+    type: 'web',
     tags: ['Next.js', 'Pokemon', 'Game'],
     description: '快速查询，随时了解你的宝可梦伙伴！',
     link: 'https://pokedex.starllow.com',
@@ -39,6 +43,7 @@ const projects: Project[] = [
   {
     name: 'TripSeek',
     icon: '🏞️',
+    type: 'web',
     tags: ['Next.js', 'AI', 'Travel'],
     description: 'An AI travel planner powered by DeepSeek.',
     link: 'https://tripseek.starllow.com',
@@ -47,6 +52,7 @@ const projects: Project[] = [
   {
     name: 'Procedural Island Generator',
     icon: '🏝️',
+    type: 'graphic',
     tags: ['WebGL', 'GLSL', 'Noise'],
     description: 'A multiple-style random island generator',
     link: 'https://procedural-island-generator.netlify.app',
