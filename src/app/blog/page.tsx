@@ -38,7 +38,7 @@ function PostItem({ post }: { post: BlogPost }) {
       <div className="flex gap-3 mb-1 items-center">
         <Link
           href={post.url}
-          className="font-semibold text-base hover:opacity-70 transition-colors truncate"
+          className="font-medium text-base hover:opacity-70 transition-colors truncate"
         >
           {post.data.title}
         </Link>

@@ -6,25 +6,25 @@ import localFont from 'next/font/local'
 import { Suspense } from 'react'
 import './styles/globals.css'
 
-const fontSans = localFont({
+const fontMono = localFont({
   src: [
     {
-      path: '../../public/fonts/NotoSansSC-Regular.ttf',
+      path: '../../public/fonts/JetBrainsMapleMono-Regular.ttf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: '../../public/fonts/NotoSansSC-SemiBold.ttf',
-      weight: '600',
-      style: 'semibold',
+      path: '../../public/fonts/JetBrainsMapleMono-Medium.ttf',
+      weight: '500',
+      style: 'medium',
     },
     {
-      path: '../../public/fonts/NotoSansSC-Bold.ttf',
+      path: '../../public/fonts/JetBrainsMapleMono-Bold.ttf',
       weight: '700',
       style: 'bold',
     },
   ],
-  variable: '--font-sans',
+  variable: '--font-mono',
   display: 'swap',
 })
 
@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={fontSans.className}
+      className={fontMono.className}
       suppressHydrationWarning
     >
       <body className="text-sm">

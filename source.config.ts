@@ -35,6 +35,7 @@ export const blog = defineCollections({
           return z.NEVER
         }
       }),
+    category: z.string().optional().default('Uncategorized'),
     tags: z.array(z.string()).optional(),
     image: z.string().optional(),
     draft: z.boolean().optional().default(false),

@@ -7,11 +7,12 @@ import {
 } from 'fumadocs-ui/page'
 import { Calendar } from 'lucide-react'
 import React from 'react'
+import { getMDXComponents } from '@/components/mdx-component'
 
 interface SinglePostProps {
   page: any
   category?: string
-  lastUpdate?: Date
+  lastModified?: Date
   tags?: string[]
   // getCategoryBySlug: (slug: string) => any
 }
@@ -19,26 +20,23 @@ interface SinglePostProps {
 export function SinglePost({
   page,
   category,
-  lastUpdate,
+  lastModified,
   tags,
 }: SinglePostProps) {
   const MDX = page.data.body
 
   return (
     <>
-      <div className="relative container border-b border-main px-4 py-4 lg:py-8 lg:px-6 text-left">
+      <div className="relative container border-b border-main px-4 pb-4 pt-14 lg:py-8 lg:px-6 text-left">
         {category && (
           <div className="mb-4 text-sm font-medium">
             <div className="flex flex-wrap gap-3">
-              {/* <span className="inline-flex items-center gap-1.5 capitalize">
-                {getCategoryBySlug(category).icon
-                  && React.createElement(getCategoryBySlug(category).icon, {
-                    className: 'h-4 w-4',
-                  })}
-              </span> */}
+              <span className="inline-flex items-center gap-1.5 capitalize">
+                {category}
+              </span>
               <span className="inline-flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                {lastUpdate?.toLocaleDateString('en-US', {
+                {lastModified?.toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -80,7 +78,7 @@ export function SinglePost({
         <DocsPage
           toc={page.data.toc}
           full={false}
-          lastUpdate={lastUpdate}
+          lastUpdate={lastModified}
           footer={{
             enabled: false,
           }}
@@ -92,11 +90,11 @@ export function SinglePost({
             className: 'pe-0 relative max-w-full flex',
           }}
           article={{
-            className: 'border-r border-main pb-16',
+            className: 'border-r border-main pb-16 tracking-tighter',
           }}
         >
           <DocsBody className="text-sm">
-            <MDX />
+            <MDX components={getMDXComponents()} />
           </DocsBody>
         </DocsPage>
       </DocsLayout>

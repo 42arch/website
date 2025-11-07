@@ -69,7 +69,7 @@ export default function Header() {
           <div className="md:hidden flex items-center space-x-2 justify-self-end">
             <ThemeToggle />
             <Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
           </div>
         </nav>
