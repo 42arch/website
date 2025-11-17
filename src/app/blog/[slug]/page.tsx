@@ -13,8 +13,6 @@ export default async function Page(props: {
 
   const lastModified = page.data.lastModified
 
-  console.log(page.data.category)
-
   return (
     <div className="container blog border-b border-main">
       <SinglePost page={page} category={page.data.category} tags={page.data.tags} lastModified={new Date(lastModified!)} />

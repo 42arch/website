@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import type React from 'react'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { RootProvider } from 'fumadocs-ui/provider'
 // import { Analytics } from '@vercel/analytics/next'
 import localFont from 'next/font/local'
@@ -40,6 +41,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
+
   return (
     <html
       lang="en"
@@ -50,6 +53,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <RootProvider>{children}</RootProvider>
         </Suspense>
+        <GoogleAnalytics gaId={gaId || ''} />
         {/* <Analytics /> */}
       </body>
     </html>

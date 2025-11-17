@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix"
   },
   "dependencies": {
+    "@next/third-parties": "^16.0.3",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-presence": "^1.1.5",
