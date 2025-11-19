@@ -11,11 +11,9 @@ export default async function Page(props: {
   if (!page)
     notFound()
 
-  const lastModified = page.data.lastModified
-
   return (
     <div className="container blog border-b border-main">
-      <SinglePost page={page} category={page.data.category} tags={page.data.tags} lastModified={new Date(lastModified!)} />
+      <SinglePost page={page} category={page.data.category} tags={page.data.tags} date={page.data.date} lastModified={page.data.lastModified} />
     </div>
   )
 }

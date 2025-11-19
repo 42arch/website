@@ -27,7 +27,7 @@ export default function HeroSection() {
                 <SquareLibraryIcon className="w-4 h-4" />
               </Button>
             </a>
-            <Link href="blog" target="_blank">
+            <Link href="blog">
               <Button size="lg" className="gap-4">
                 View Posts
                 <MoveRight className="w-4 h-4" />
