@@ -1,0 +1,273 @@
+---
+title: WebGL 编程中的数学知识之矩阵
+description: 介绍矩阵的定义、表示方式、运算规则等，以及在 WebGL 编程中的用法。
+date: 2025-08-03 12:00:00
+author: Ren Dan
+tags: [Mathmatic, WebGL, Programming]
+category: Programming
+draft: false
+---
+
+## 什么是向量
+
+直观理解：向量就是一个“有大小和方向的箭头”，大小（magnitude）指箭头有多长，方向（direction）指箭头指向哪。
+
+- 表示方式：
+  - 2D 向量：
+
+  $$
+    \vec{v} = (x, y)
+  $$
+    
+- 3D 向量：
+  $$
+    \vec{v} = (x, y, z)
+  $$
+      
+  其中的 x, y, z 被称为分量。
+
+- 与点的区别：点（point）表示在空间的位置，比如 `(3, 2, 1)` 。而向量（vector）位移或方向，比如 `(3, 2, 1)` 只是代表“从原点走到这个位置的箭头”。
+
+## 向量的长度
+
+计算公式：
+
+$$
+|\vec{v}| = \sqrt{x^2 + y^2 + z^2}
+$$
+
+比如，`(3, 4, 0)` 的长度是 $\sqrt{3^2 + 4^2} = 5$ 。
+
+Three.js示例：
+
+```js
+const v = new THREE.Vector3(3, 4, 0)
+console.log(v.length()); // 5
+```
+
+GLSL示例：
+
+```glsl
+vec3 v = vec3(3.0, 4.0, 0.0);
+float len = length(v);  // 5.0
+```
+
+## 单位向量（归一化）
+
+单位向量的长度是 **1**，只表示方向，没有大小。
+
+$$
+\hat{v} = \frac{\vec{v}}{|\vec{v}|}
+$$
+
+单位向量 $\hat{v}$ 是一个方向与原向量相同，但长度为 1 的向量。计算方法是先计算向量的模（即长度），然后将向量的每个分量除以它的模。
+
+比如：`(3, 4, 0)` 的模是 $\sqrt{3^2+4^2​} = 5$ ，单位向量是 `(3 / 5, 4 / 5, 0 / 5)` ，即`(0.6, 0.8, 0)` 。
+
+Three.js示例：
+
+```js
+const v = new THREE.Vector3(3, 4, 0)
+v.normalize()  // 变成 (0.6, 0.8, 0)
+```
+
+GLSL示例：
+
+```glsl
+vec3 v = vec3(3.0, 4.0, 0.0);
+vec3 unitV = normalize(v);  // vec3(0.6, 0.8, 0)
+```
+
+## 向量的加减
+
+给定两个向量  $\vec{a} = (x_a, y_a, z_a)$ ，$\vec{b} = (x_b, y_b, z_b)$，
+
+那么向量的加法：
+
+$$
+\vec{c} = \vec{a} + \vec{b} = (x_a + x_b, y_a + y_b, z_a + z_b)
+$$
+
+向量的减法：
+
+$$
+\vec{c} = \vec{a} - \vec{b} = (x_a - x_b, y_a - y_b, z_a - z_b)
+$$
+
+![向量加减](/images/mathmatic-knowledge-in-webgl-programming-1/1.png)
+
+几何意义：如图所示，根据三角形法则，加法是首尾相连，将 b 的起点移到 a 的终点，连接 a 的起点和 b的终点，就是a + b相加后的向量。而减法 a - b 表示从 b 指向 a 的向量，即 b 的终点指向 a 的终点。
+
+Three.js示例：
+
+```js
+const a = THREE.Vector3(1, 0, 0)
+const b = THREE.Vector3(0, 1, 0)
+
+const sum = THREE.Vector3().addVectors(a, b)
+// 等价于 a.clone().add(b)
+console.log(sum.toArray()) // [1, 1, 0]
+
+const diff = new THREE.Vector3().subVectors(a, b)
+// 等价于 a.clone().sub(b)
+console.log(diff.toArray()) // [1, -1, 0]
+```
+
+GLSL示例：
+
+```glsl
+vec3 a = vec3(1.0, 0.0, 0.0);
+vec3 b = vec3(0.0, 1.0, 0.0);
+
+vec3 sum = a + b;  // (1.0, 1.0, 0.0)
+vec3 diff = a - b; // (1.0, -1.0, 0.0)
+```
+
+## 向量的数乘
+
+给定一个向量 v 和一个实数（标量）k，数乘的结果是：每个分量都乘以 k。
+
+公式：
+
+$$
+k \cdot \vec{v} = (k v_x, k v_y, k v_z)a
+$$
+
+几何意义：
+
+- 当 k > 1：向量方向不变，长度变长。
+- 当 0 < k < 1：向量方向不变，长度缩短。
+- 当 k = -1：向量反向，长度不变。
+- 当 k < 0：向量反向并伸缩。
+
+Three.js示例：
+
+```js
+const v = new THREE.Vector3(1, 2, 0)
+
+const a = v.clone().multiplyScalar(2)    // (2, 4, 0)
+const b = v.clone().multiplyScalar(-0.5) // (-0.5, -1, 0)
+```
+
+GLSL示例：
+
+```glsl
+vec3 v = vec3(1.0, 2.0, 0.0);
+
+vec3 a = 2.0 * v;   // (2.0, 4.0, 0.0) → 放大两倍
+vec3 b = -0.5 * v;  // (-0.5, -1.0, 0.0) → 缩小一半并反向
+```
+
+## 向量的点乘（点积，内积，数量积）
+
+点乘指： $\vec{a} \cdot \vec{b}$，两个向量点乘的结果，得到一个数量（标量），而不是向量。
+
+从代数角度看，是两个向量对应位置上的值相乘再相加的操作，公式如下：
+
+$$
+\vec{a} \cdot \vec{b} = x_a x_b + y_a y_b + z_a z_b 
+$$
+
+从几何角度看，点乘是两个向量的长度与它们夹角余弦的积，假如两个向量之间的夹角是 $\theta$，公式如下：
+
+$$
+\vec{a} \cdot \vec{b} = |\vec{a}| |\vec{b}| \cos\theta
+$$
+
+几何意义：点乘的结果表示向量 a 在向量 b 方向上的投影与向量 b 长度的乘积，反应了两个向量在方向上的相似度，结果越大越相似。基于结果可以判断两个向量是否是同一方向，是否垂直，具体为：
+
+- 结果 > 0，方向基本相同，夹角在0°到90°之间
+- 结果 = 0，则正交，相互垂直
+- 结果 < 0，则方向基本相反，夹角在90°到180°之间
+
+点乘用来计算向量之间的夹角：根据上面的公式，可以得到：
+
+$$
+\theta = \arccos(\frac{\vec{a}\cdot\vec{b}} {|\vec{a}||\vec{b}|} ) = \arccos(\frac{\vec{a}}{|\vec{a}|} \cdot \frac{\vec{b}}{|\vec{b}|})
+$$
+
+换句话说，如果两个向量都归一化，它们的点乘直接等于夹角余弦。
+
+注意：
+
+- 点积满足交换律和结合律
+
+Three.js示例：
+
+```js
+const a = new THREE.Vector3(1, 0, 0)
+const b = new THREE.Vector3(0.5, 0.5, 0)
+
+// 点乘
+const dotAB = a.dot(b)  // 1 * 0.5 + 0 * 0.5 + 0 * 0 = 0.5
+
+// 夹角
+const cosTheta = a.clone().normalize().dot(b.clone().normalize())
+const theta = Math.acos(cosTheta) // 弧度制
+console.log('a·b =', dotAB, '夹角(°) =', theta * 180 / Math.PI)
+```
+
+GLSL示例：
+
+```glsl
+vec3 a = vec3(1.0, 0.0, 0.0);
+vec3 b = vec3(0.5, 0.5, 0.0);
+
+float dotAB = dot(a, b); // = 1 * 0.5 + 0 * 0.5 = 0.5
+
+// 用点乘算夹角余弦
+float cosTheta = dot(normalize(a), normalize(b));
+```
+
+## 向量的叉乘（叉积，外积）
+
+叉乘：两个向量  $\vec{a} \times \vec{b}$ 的结果是一个新的向量，公式如下：
+
+$$
+\vec{a} \times \vec{b} = \begin{vmatrix}
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+x_a & y_a & z_a \\
+x_b & y_b & z_b
+\end{vmatrix}
+$$
+
+展开后：
+
+$$
+\vec{a} \times \vec{b} = (y_a z_b - z_a y_b, z_a x_b - x_a z_b, x_a y_b - y_a x_b)
+$$
+
+几何意义：
+
+1. 叉乘的结果是一个向量，方向垂直于向量 a，b 所在的平面。方向可由 **右手法则**决定，右手四指从 a 转向 b，大拇指方向就是结果向量的方向。
+2. 叉乘结果的长度（模）等于两个向量张成的平行四边形面积，其中 $\theta$ 是两个向量的夹角。
+
+$$
+|\vec{a} \times \vec{b}| = |\vec{a}||\vec{b}|\sin\theta
+$$
+
+![向量叉乘](/images/mathmatic-knowledge-in-webgl-programming-1/2.png)
+
+注意：
+
+- 叉乘不满足交换律，a x b 不等于 b x a
+- 两个非零向量平行，则叉乘结果是零向量
+- |a x a| = 0
+
+Three.js示例：
+
+```js
+const a = new THREE.Vector3(1, 0, 0)
+const b = new THREE.Vector3(0, 1, 0)
+
+const c = a.clone().cross(b)  // (0, 0, 1)
+```
+
+GLSL示例：
+
+```glsl
+vec3 a = vec3(1.0, 0.0, 0.0);
+vec3 b = vec3(0.0, 1.0, 0.0);
+
+vec3 c = cross(a, b); // (0, 0, 1)
+```
