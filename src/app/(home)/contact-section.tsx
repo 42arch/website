@@ -18,7 +18,7 @@ const SocialLinks = [
   },
   {
     name: 'X',
-    href: 'https://x.com/42arch',
+    href: 'https://x.com/42archy',
     icon: <SiX />,
   },
   {

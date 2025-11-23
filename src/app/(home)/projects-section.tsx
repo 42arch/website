@@ -1,6 +1,7 @@
 import { Code2Icon, GlobeIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/cn'
 
 interface Project {
   name: string
@@ -9,6 +10,7 @@ interface Project {
   tags: string[]
   description: string
   link: string
+  wip?: boolean
   source: string
 }
 
@@ -58,6 +60,16 @@ const projects: Project[] = [
     link: 'https://procedural-island-generator.netlify.app',
     source: 'https://github.com/42arch/procedural-island-generator',
   },
+  {
+    name: 'HDMap Viewer',
+    icon: '🛣️',
+    type: 'tools',
+    wip: true,
+    tags: ['OpenDRIVE', 'XODR'],
+    description: 'JavaScript OpenDRIVE parser and viewer',
+    link: '',
+    source: '',
+  },
 ]
 
 function ProjectItem({ project }: { project: Project }) {
@@ -80,7 +92,7 @@ function ProjectItem({ project }: { project: Project }) {
           </Badge>
         ))}
       </div>
-      <div className="flex gap-3 mt-auto justify-end text-accent-foreground">
+      <div className={cn('flex gap-3 mt-auto justify-end text-accent-foreground', project.wip ? 'pointer-none pointer-events-none' : '')}>
         <Link
           href={project.source}
           target="_blank"

@@ -28,7 +28,7 @@ export default function HeroSection() {
               </Button>
             </a>
             <Link href="blog">
-              <Button size="lg" className="gap-4">
+              <Button size="lg" className="gap-4 cursor-pointer">
                 View Posts
                 <MoveRight className="w-4 h-4" />
               </Button>
