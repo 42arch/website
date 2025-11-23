@@ -8,266 +8,361 @@ category: Programming
 draft: false
 ---
 
-## 什么是向量
+## 什么是矩阵
 
-直观理解：向量就是一个“有大小和方向的箭头”，大小（magnitude）指箭头有多长，方向（direction）指箭头指向哪。
+矩阵就是一个按照长方形排列的数表，本质上就是一个二维数组。
 
-- 表示方式：
-  - 2D 向量：
+将m x n 个元素按 m 行，n 列的方式排列，可用下面的方式表示：
 
-  $$
-    \vec{v} = (x, y)
-  $$
+$$
+\mathbf{A} =
+\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{m1} & a_{m2} & \cdots & a_{mn}
+\end{bmatrix}
+$$
+
+常见的有：2x2，3x3，4x4等。
+
+矩阵可用来表示线性变换，图形学中的平移、缩放、旋转、投影、相机视角等变换，全靠矩阵。
+
+## 矩阵的加减法
+
+矩阵加减法计算是在矩阵对应位置上元素的加减法计算，结果还是一个矩阵。
+
+假设有两个3x3矩阵 A 和 B，它们的加法计算公式为：
+
+$$
+\mathbf{A} + \mathbf{B} = \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix} + \begin{bmatrix} b_{11} & b_{12} & b_{13} \\ b_{21} & b_{22} & b_{23} \\ b_{31} & b_{32} & b_{33} \end{bmatrix} = \begin{bmatrix} a_{11} + b_{11} & a_{12} + b_{12} & a_{13} + b_{13} \\ a_{21} + b_{21} & a_{22} + b_{22} & a_{23} + b_{23} \\ a_{31} + b_{31} & a_{32} + b_{32} & a_{33} + b_{33} \end{bmatrix}
+$$
+
+它们的减法公式为：
+
+$$
+\mathbf{A} - \mathbf{B} = \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix} + \begin{bmatrix} b_{11} & b_{12} & b_{13} \\ b_{21} & b_{22} & b_{23} \\ b_{31} & b_{32} & b_{33} \end{bmatrix} = \begin{bmatrix} a_{11} - b_{11} & a_{12} - b_{12} & a_{13} - b_{13} \\ a_{21} - b_{21} & a_{22} - b_{22} & a_{23} - b_{23} \\ a_{31} - b_{31} & a_{32} - b_{32} & a_{33} - b_{33} \end{bmatrix}
+$$
+
+注意：
+
+- 只有相同维度的矩阵才能进行加减法运算
+- 矩阵加法使用交换律和结合律：A + B = B + A；(A + B) + C = A + (B + C)
+
+GLSL示例：
+
+```glsl
+mat3 A = mat3(
+    1.0, 2.0, 3.0,
+    4.0, 5.0, 6.0,
+    7.0, 8.0, 9.0
+);
+
+mat3 B = mat3(
+    9.0, 8.0, 7.0,
+    6.0, 5.0, 4.0,
+    3.0, 2.0, 1.0
+);
+
+mat3 C = A + B; // mat(10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0)
+mat3 D = A - B; // mat(-8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0)
+```
+
+## 矩阵的数乘
+
+矩阵的数乘就是用一个数（标量）去乘m x n矩阵的所有元素，结果还是一个m x n矩阵。
+
+$$
+k \mathbf{A} = k \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix} = \begin{bmatrix} ka_{11} & ka_{12} & ka_{13} \\ ka_{21} & ka_{22} & ka_{23} \\ ka_{31} & ka_{32} & ka_{33} \end{bmatrix}
+$$
+
+几何意义：矩阵本身可以看作是一种“空间变换规则”，例如矩阵S，对它数乘一个系数 k=2后：
+
+$$
+2 \mathbf{S} = 2 \begin{bmatrix} 2 & 0 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 1 \end{bmatrix} = \begin{bmatrix} 4 & 0 & 0 \\ 0 & 6 & 0 \\ 0 & 0 & 2 \end{bmatrix}
+$$
+
+矩阵 S 是一个缩放矩阵，表示：在x方向缩放 2 倍，在y方向缩放 3 倍，在z方向不变。数乘 2 之后，表示x方向缩放4倍，y方向缩放6倍，z方向缩放2倍。这说明数乘改变了缩放比例，整体放大了原变换的强度。
+
+注：
+
+- 矩阵数乘满足分配律：(k + v) A = kA + vA; k(A + B) = kA + kB
+- 矩阵数乘满足结合律：(kv)A = k(vA)
+
+ThreeJS示例：
+
+```js
+const m = new THREE.Matrix3().set(
+  1, 2, 3,
+  4, 5, 6,
+  7, 8, 9
+)
+
+m.multiplyScalar(2)
+console.log(m.elements) // [2, 4, 6, 8, 10, 12, 14, 16, 18]
+```
+
+GLSL示例：
+
+```glsl
+const m = new THREE.Matrix3().set(
+  1, 2, 3,
+  4, 5, 6,
+  7, 8, 9
+)
+
+m.multiplyScalar(2)
+console.log(m.elements) // [2, 4, 6, 8, 10, 12, 14, 16, 18]
+```
+
+## 矩阵的转置
+
+矩阵转置是将一个矩阵的行列互换的操作，一个mxn的矩阵转置后，得到的结果是一个nxm的矩阵。
+
+$$
+(A^T)_{ij} = A_{ji}
+$$
+
+$$
+A =
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} \\
+a_{21} & a_{22} & a_{23} \\
+a_{31} & a_{32} & a_{33}
+\end{bmatrix},
+\quad
+A^T =
+\begin{bmatrix}
+a_{11} & a_{21} & a_{31} \\
+a_{12} & a_{22} & a_{32} \\
+a_{13} & a_{23} & a_{33}
+\end{bmatrix}
+$$
+
+例如：
+
+$$
+A =
+\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6
+\end{bmatrix}_{2 \times 3}, A^T =
+\begin{bmatrix}
+1 & 4 \\
+2 & 5 \\ 3 & 6
+\end{bmatrix}_{3 \times 3}
+$$
+
+注：
+
+- 转置的转置：$(A^T)^T = A$
+- 和的转置：$(A+B)^T = A^T + B^T$
+- 数乘的转置：$(kA)^T = kA^T$
+- 乘法的转置（注意顺序反转）：$(AB)^T = B^TA^T$
+
+Three.js 示例：
+
+```js
+const m = new THREE.Matrix3();
+m.set(1, 2, 3, 4, 5, 6, 7, 8, 9)
+const n = m.clone().transpose()
+
+console.log(m.elements) // [1, 4, 7, 2, 5, 8, 3, 6, 9]
+console.log(n.elements) // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+GLSL 示例：
+
+```glsl
+mat3 m = mat3(
+  1.0, 2.0, 3.0,
+  4.0, 5.0, 6.0,
+  7.0, 8.0, 9.0
+);
+
+mat3 t = transpose(m);
+```
+
+## 矩阵的乘法：矩阵乘矩阵
+
+两个矩阵相乘必须满足一个条件：被乘矩阵的列数等于乘数矩阵的行数，如果矩阵A的大小是 m x n，矩阵B的大小是 n x p，那么它们的乘积 C = A x B 就是一个 m x p 大小的矩阵。即：**前一个矩阵的列数 = 后一个矩阵的行数**，才能相乘。
+
+3 x 3矩阵的计算公式如下：
+
+$$
+\mathbf{C} = \mathbf{A} \times \mathbf{B} = \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix} \times \begin{bmatrix} b_{11} & b_{12} & b_{13} \\ b_{21} & b_{22} & b_{23} \\ b_{31} & b_{32} & b_{33} \end{bmatrix} =
+\begin{bmatrix}
+a_{11}b_{11}+a_{12}b_{21}+a_{13}b_{31} & a_{11}b_{12}+a_{12}b_{22}+a_{13}b_{32} & a_{11}b_{13}+a_{12}b_{23}+a_{13}b_{33} \\
+a_{21}b_{11}+a_{22}b_{21}+a_{23}b_{31} & a_{21}b_{12}+a_{22}b_{22}+a_{23}b_{32} & a_{21}b_{13}+a_{22}b_{23}+a_{23}b_{33} \\
+a_{31}b_{11}+a_{32}b_{21}+a_{33}b_{31} & a_{31}b_{12}+a_{32}b_{22}+a_{33}b_{32} & a_{31}b_{13}+a_{32}b_{23}+a_{33}b_{33}
+\end{bmatrix}
+$$
+
+即
+
+$$
+C =
+\begin{bmatrix}
+c_{11} & c_{12} & c_{13} \\
+c_{21} & c_{22} & c_{23} \\
+c_{31} & c_{32} & c_{33}
+\end{bmatrix}, \quad
+c_{ij} = \sum_{k=1}^{3} a_{ik} b_{kj}
+$$
+
+C 也是一个 3x3 矩阵，每个元素的计算公式为：
+
+$$
+c_{ij} = a_{i1}b_{1j} + a_{i2}b_{2j} + a_{i3}b_{3j},  \quad i, j = 1, 2, 3
+$$
+
+记忆技巧：结果矩阵的每个元素 Cij 等于 A 的第 i 行与 B 的第 j 列对应元素乘积之和。
+
+一般形式的公式为：
+
+设：
+
+$$
+A = [a_{ik}]_{m \times p}, \quad B = [b_{kj}]_{p \times n}, \quad C = AB = [c_{ij}]_{m \times n}
+$$
+
+每个元素的公式是：
+
+$$
+c_{ij} = \sum_{k=1}^{p} a_{ik} b_{kj}, \quad i=1,\dots,m, \; j=1,\dots,n
+$$
+
+注：
+
+- 矩阵相乘满足分配律：A(B + C) = AB + AC， (A + B)C = AC + BC
+- 满足结合律：(AB)C = A(BC)
+- 满足标量结合律：k(AB) = (kA)B = A(kB)
+- 不满足交换律，顺序很重要：AB ≠ BA
+
+Three.js 示例：
+
+```js
+// A 矩阵
+const A = new THREE.Matrix3().set(
+  1, 2, 3,
+  4, 5, 6,
+  7, 8, 9
+);
+
+// B 矩阵
+const B = new THREE.Matrix3().set(
+  9, 8, 7,
+  6, 5, 4,
+  3, 2, 1
+);
+
+// C = A × B
+const C = new THREE.Matrix3().copy(A).multiply(B);
+
+console.log(C.elements);
+// [1*9+2*6+3*3, 1*8+2*5+3*2, 1*7+2*4+3*1
+// 4*9+5*6+6*3, 4*8+5*5+6*2, 4*7+5*4+6*1
+// 7*9+8*6+9*3, 7*8+8*5+9*2, 7*7+8*4+9*1]
+
+//[ 30, 24, 18,
+//  84, 69, 54, 
+// 138, 114, 90]
+```
+
+GLSL 示例：
+
+```glsl
+mat3 A = mat3(
+    1.0, 2.0, 3.0,
+    4.0, 5.0, 6.0,
+    7.0, 8.0, 9.0
+);
+
+mat3 B = mat3(
+    9.0, 8.0, 7.0,
+    6.0, 5.0, 4.0,
+    3.0, 2.0, 1.0
+);
+
+// 矩阵相乘
+mat3 C = A * B;
+```
+
+## 矩阵的乘法：矩阵和向量相乘
+
+任何一个向量都可以用一维矩阵表示，行向量可以看成一个`1xn`的矩阵（一行n列），列向量可以看成是一个`mx1`的矩阵（m行一列）。
+
+根据两个矩阵可以相乘的条件，矩阵和向量相乘有两种形式：
+
+- **列向量形式**：如果 $x$ 是列向量 $(n \times 1)$，常见的乘法是：
     
-- 3D 向量：
+    $$
+    A_{m \times n} \cdot x_{n \times 1} = y_{m \times 1}
+    $$
+    
+    结果是一个`mx1`的列向量，这是最常用的「矩阵乘向量」。
+    
+- **行向量形式**：如果 $x^T$是行向量 $(1 \times m)$，那么它可以乘在矩阵的左边：
+    
+    $$
+    
+    x^T_{1 \times m} \cdot A_{m \times n} = y^T_{1 \times n}
+    $$
+    
+    结果是一个`1xn`的行向量。
+    
+
+计算过程可以参考矩阵相乘的过程，但只需更少的计算，比如：
+
+$$
+y = Ax = \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix} \cdot \begin{bmatrix} x_{1} \\ x_{2} \\ x_{3} \end{bmatrix} = \begin{bmatrix} a_{11}x_{1} + a_{12}x_{2} + a_{13}x_{3} \\ a_{21}x_{1} + a_{22}x_{2} + a_{23}x_{3} \\ a_{31}x_{1} + a_{32}x_{2}+ a_{33}x_{3} \end{bmatrix}
+$$
+
+几何意义：可以把矩阵看成一个线性变换，它把一个向量映射为一个新的向量。如在计算机图形学中，旋转或缩放矩阵作用在向量上得到旋转或缩放后的向量，投影矩阵作用在向量上得到投影坐标。
+
+Three.js 示例：
+
+```js
+const m = new THREE.Matrix3().set(
+  1, 2, 3,
+  4, 5, 6,
+  7, 8, 9
+)
+const v = new THREE.Vector3(1, 2, 3)
+
+// y = m * v
+const result = v.clone().applyMatrix3(m)
+console.log(result) // {x: 14, y: 32, z: 50}
+// {x: 1*1+2*2+3*3, y: 4*1+5*2+6*3, z: 7*1+8*2+9*3}
+```
+
+GLSL 示例：
+
+```glsl
+mat3 m = mat3(
+  1.0, 2.0, 3.0,
+  4.0, 5.0, 6.0,
+  7.0, 8.0, 9.0
+);
+
+vec3 v = vec3(1.0, 2.0, 3.0);
+vec3 y = m * v;
+```
+
+## 常用矩阵
+
+- 方阵（Square Matrix）：行数与列数相同，常用于线性变换、特征值、逆矩阵等。
+
+- 零矩阵（Zero Matrix）：所有元素都为 0。
+
+- 单位矩阵（Identity Matrix）：对角线为 1，其余为 0。
+
   $$
-    \vec{v} = (x, y, z)
+  I_n = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}
   $$
-      
-  其中的 x, y, z 被称为分量。
 
-- 与点的区别：点（point）表示在空间的位置，比如 `(3, 2, 1)` 。而向量（vector）位移或方向，比如 `(3, 2, 1)` 只是代表“从原点走到这个位置的箭头”。
+- 对角矩阵（Diagonal Matrix）：也是缩放矩阵，仅主对角线上有元素。运算简单、常用于缩放变换。
 
-## 向量的长度
-
-计算公式：
-
-$$
-|\vec{v}| = \sqrt{x^2 + y^2 + z^2}
-$$
-
-比如，`(3, 4, 0)` 的长度是 $\sqrt{3^2 + 4^2} = 5$ 。
-
-Three.js示例：
-
-```js
-const v = new THREE.Vector3(3, 4, 0)
-console.log(v.length()); // 5
-```
-
-GLSL示例：
-
-```glsl
-vec3 v = vec3(3.0, 4.0, 0.0);
-float len = length(v);  // 5.0
-```
-
-## 单位向量（归一化）
-
-单位向量的长度是 **1**，只表示方向，没有大小。
-
-$$
-\hat{v} = \frac{\vec{v}}{|\vec{v}|}
-$$
-
-单位向量 $\hat{v}$ 是一个方向与原向量相同，但长度为 1 的向量。计算方法是先计算向量的模（即长度），然后将向量的每个分量除以它的模。
-
-比如：`(3, 4, 0)` 的模是 $\sqrt{3^2+4^2​} = 5$ ，单位向量是 `(3 / 5, 4 / 5, 0 / 5)` ，即`(0.6, 0.8, 0)` 。
-
-Three.js示例：
-
-```js
-const v = new THREE.Vector3(3, 4, 0)
-v.normalize()  // 变成 (0.6, 0.8, 0)
-```
-
-GLSL示例：
-
-```glsl
-vec3 v = vec3(3.0, 4.0, 0.0);
-vec3 unitV = normalize(v);  // vec3(0.6, 0.8, 0)
-```
-
-## 向量的加减
-
-给定两个向量  $\vec{a} = (x_a, y_a, z_a)$ ，$\vec{b} = (x_b, y_b, z_b)$，
-
-那么向量的加法：
-
-$$
-\vec{c} = \vec{a} + \vec{b} = (x_a + x_b, y_a + y_b, z_a + z_b)
-$$
-
-向量的减法：
-
-$$
-\vec{c} = \vec{a} - \vec{b} = (x_a - x_b, y_a - y_b, z_a - z_b)
-$$
-
-![向量加减](/images/mathmatic-knowledge-in-webgl-programming-1/1.png)
-
-几何意义：如图所示，根据三角形法则，加法是首尾相连，将 b 的起点移到 a 的终点，连接 a 的起点和 b的终点，就是a + b相加后的向量。而减法 a - b 表示从 b 指向 a 的向量，即 b 的终点指向 a 的终点。
-
-Three.js示例：
-
-```js
-const a = THREE.Vector3(1, 0, 0)
-const b = THREE.Vector3(0, 1, 0)
-
-const sum = THREE.Vector3().addVectors(a, b)
-// 等价于 a.clone().add(b)
-console.log(sum.toArray()) // [1, 1, 0]
-
-const diff = new THREE.Vector3().subVectors(a, b)
-// 等价于 a.clone().sub(b)
-console.log(diff.toArray()) // [1, -1, 0]
-```
-
-GLSL示例：
-
-```glsl
-vec3 a = vec3(1.0, 0.0, 0.0);
-vec3 b = vec3(0.0, 1.0, 0.0);
-
-vec3 sum = a + b;  // (1.0, 1.0, 0.0)
-vec3 diff = a - b; // (1.0, -1.0, 0.0)
-```
-
-## 向量的数乘
-
-给定一个向量 v 和一个实数（标量）k，数乘的结果是：每个分量都乘以 k。
-
-公式：
-
-$$
-k \cdot \vec{v} = (k v_x, k v_y, k v_z)a
-$$
-
-几何意义：
-
-- 当 k > 1：向量方向不变，长度变长。
-- 当 0 < k < 1：向量方向不变，长度缩短。
-- 当 k = -1：向量反向，长度不变。
-- 当 k < 0：向量反向并伸缩。
-
-Three.js示例：
-
-```js
-const v = new THREE.Vector3(1, 2, 0)
-
-const a = v.clone().multiplyScalar(2)    // (2, 4, 0)
-const b = v.clone().multiplyScalar(-0.5) // (-0.5, -1, 0)
-```
-
-GLSL示例：
-
-```glsl
-vec3 v = vec3(1.0, 2.0, 0.0);
-
-vec3 a = 2.0 * v;   // (2.0, 4.0, 0.0) → 放大两倍
-vec3 b = -0.5 * v;  // (-0.5, -1.0, 0.0) → 缩小一半并反向
-```
-
-## 向量的点乘（点积，内积，数量积）
-
-点乘指： $\vec{a} \cdot \vec{b}$，两个向量点乘的结果，得到一个数量（标量），而不是向量。
-
-从代数角度看，是两个向量对应位置上的值相乘再相加的操作，公式如下：
-
-$$
-\vec{a} \cdot \vec{b} = x_a x_b + y_a y_b + z_a z_b 
-$$
-
-从几何角度看，点乘是两个向量的长度与它们夹角余弦的积，假如两个向量之间的夹角是 $\theta$，公式如下：
-
-$$
-\vec{a} \cdot \vec{b} = |\vec{a}| |\vec{b}| \cos\theta
-$$
-
-几何意义：点乘的结果表示向量 a 在向量 b 方向上的投影与向量 b 长度的乘积，反应了两个向量在方向上的相似度，结果越大越相似。基于结果可以判断两个向量是否是同一方向，是否垂直，具体为：
-
-- 结果 > 0，方向基本相同，夹角在0°到90°之间
-- 结果 = 0，则正交，相互垂直
-- 结果 < 0，则方向基本相反，夹角在90°到180°之间
-
-点乘用来计算向量之间的夹角：根据上面的公式，可以得到：
-
-$$
-\theta = \arccos(\frac{\vec{a}\cdot\vec{b}} {|\vec{a}||\vec{b}|} ) = \arccos(\frac{\vec{a}}{|\vec{a}|} \cdot \frac{\vec{b}}{|\vec{b}|})
-$$
-
-换句话说，如果两个向量都归一化，它们的点乘直接等于夹角余弦。
-
-注意：
-
-- 点积满足交换律和结合律
-
-Three.js示例：
-
-```js
-const a = new THREE.Vector3(1, 0, 0)
-const b = new THREE.Vector3(0.5, 0.5, 0)
-
-// 点乘
-const dotAB = a.dot(b)  // 1 * 0.5 + 0 * 0.5 + 0 * 0 = 0.5
-
-// 夹角
-const cosTheta = a.clone().normalize().dot(b.clone().normalize())
-const theta = Math.acos(cosTheta) // 弧度制
-console.log('a·b =', dotAB, '夹角(°) =', theta * 180 / Math.PI)
-```
-
-GLSL示例：
-
-```glsl
-vec3 a = vec3(1.0, 0.0, 0.0);
-vec3 b = vec3(0.5, 0.5, 0.0);
-
-float dotAB = dot(a, b); // = 1 * 0.5 + 0 * 0.5 = 0.5
-
-// 用点乘算夹角余弦
-float cosTheta = dot(normalize(a), normalize(b));
-```
-
-## 向量的叉乘（叉积，外积）
-
-叉乘：两个向量  $\vec{a} \times \vec{b}$ 的结果是一个新的向量，公式如下：
-
-$$
-\vec{a} \times \vec{b} = \begin{vmatrix}
-\mathbf{i} & \mathbf{j} & \mathbf{k} \\
-x_a & y_a & z_a \\
-x_b & y_b & z_b
-\end{vmatrix}
-$$
-
-展开后：
-
-$$
-\vec{a} \times \vec{b} = (y_a z_b - z_a y_b, z_a x_b - x_a z_b, x_a y_b - y_a x_b)
-$$
-
-几何意义：
-
-1. 叉乘的结果是一个向量，方向垂直于向量 a，b 所在的平面。方向可由 **右手法则**决定，右手四指从 a 转向 b，大拇指方向就是结果向量的方向。
-2. 叉乘结果的长度（模）等于两个向量张成的平行四边形面积，其中 $\theta$ 是两个向量的夹角。
-
-$$
-|\vec{a} \times \vec{b}| = |\vec{a}||\vec{b}|\sin\theta
-$$
-
-![向量叉乘](/images/mathmatic-knowledge-in-webgl-programming-1/2.png)
-
-注意：
-
-- 叉乘不满足交换律，a x b 不等于 b x a
-- 两个非零向量平行，则叉乘结果是零向量
-- |a x a| = 0
-
-Three.js示例：
-
-```js
-const a = new THREE.Vector3(1, 0, 0)
-const b = new THREE.Vector3(0, 1, 0)
-
-const c = a.clone().cross(b)  // (0, 0, 1)
-```
-
-GLSL示例：
-
-```glsl
-vec3 a = vec3(1.0, 0.0, 0.0);
-vec3 b = vec3(0.0, 1.0, 0.0);
-
-vec3 c = cross(a, b); // (0, 0, 1)
-```
+  $$
+  D = \begin{bmatrix} d_1 & 0 & 0 \\ 0 & d_2 & 0 \\ 0 & 0 & d_3 \end{bmatrix}
+  $$
