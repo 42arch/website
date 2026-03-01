@@ -45,35 +45,28 @@ function parseBlogDate(date: string | Date) {
   return Number.isNaN(timestamp) ? 0 : timestamp
 }
 
-function estimateReadTime(rawContent: string, locale: AppLocale) {
-  const contentWithoutFrontmatter = rawContent.replace(/^---[\s\S]*?---\s*/m, '')
-  const contentWithoutCodeBlocks = contentWithoutFrontmatter.replace(/```[\s\S]*?```/g, ' ')
-  const contentWithoutMathBlocks = contentWithoutCodeBlocks.replace(/\$\$[\s\S]*?\$\$/g, ' ')
-  const contentWithoutInlineMath = contentWithoutMathBlocks.replace(/\$(.+?)\$/g, ' ')
-  const plainText = contentWithoutInlineMath
-    .replace(/`[^`]*`/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
-    .replace(/\[[^\]]*\]\([^)]+\)/g, ' ')
-    .replace(/[>#*_~\-]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
+function formatReadTime(minutes: number, locale: AppLocale) {
+  return locale === 'zh-CN' ? `${minutes} 分钟` : `${minutes} min`
+}
 
+function estimateReadTime(text: string, locale: AppLocale) {
+  const plainText = text.replace(/\s+/g, ' ').trim()
   const cjkCount = (plainText.match(/[\u3400-\u9FFF]/g) ?? []).length
   const latinWordCount = (plainText.match(/[a-z0-9]+(?:'[a-z0-9]+)*/gi) ?? []).length
   const readingUnits = cjkCount + latinWordCount
   const minutes = Math.max(1, Math.ceil(readingUnits / 220))
 
-  return locale === 'zh-CN' ? `${minutes} 分钟` : `${minutes} min`
+  return formatReadTime(minutes, locale)
 }
 
-async function toListItem(page: BlogPage, locale: AppLocale): Promise<BlogPostListItem | null> {
+function toListItem(page: BlogPage, locale: AppLocale): BlogPostListItem | null {
   const rawSlug = page.slugs.at(-1)
   if (!rawSlug)
     return null
 
   const slug = normalizeBlogSlug(rawSlug)
-  const rawText = await page.data.getText('raw')
-  const readTime = estimateReadTime(rawText, locale)
+  const previewText = `${page.data.title} ${page.data.description ?? ''} ${page.data.tags.join(' ')}`
+  const readTime = page.data.readTime ?? estimateReadTime(previewText, locale)
 
   return {
     slug,
@@ -88,9 +81,7 @@ async function toListItem(page: BlogPage, locale: AppLocale): Promise<BlogPostLi
 }
 
 export async function getBlogPosts(locale: AppLocale): Promise<BlogPostListItem[]> {
-  const posts = await Promise.all(
-    blogSource.getPages(locale).map(page => toListItem(page, locale)),
-  )
+  const posts = blogSource.getPages(locale).map(page => toListItem(page, locale))
 
   return posts
     .filter((post): post is BlogPostListItem => post !== null)
