@@ -33,7 +33,7 @@ export default async function ProjectsPage() {
           <Card key={project.name} className="flex h-full flex-col bg-[var(--pixel-card)]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <span>{project.icon}</span>
+                <span className="text-xl">{project.icon}</span>
                 <span>{project.name}</span>
               </CardTitle>
               <CardDescription>{project.description}</CardDescription>

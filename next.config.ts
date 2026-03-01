@@ -4,10 +4,12 @@ import createNextIntlPlugin from 'next-intl/plugin'
 
 const currentTime = new Date().getTime().toString()
 
+console.log(99999, currentTime)
+
 const withMDX = createMDX()
 const nextConfig: NextConfig = {
   env: {
-    buildTime: currentTime,
+    NEXT_PUBLIC_BUILD_TIME: currentTime,
   },
   reactStrictMode: true,
   reactCompiler: true,

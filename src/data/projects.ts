@@ -25,7 +25,7 @@ export interface Project {
 const localizedProjects: LocalizedProject[] = [
   {
     icon: '🎪',
-    type: 'graphic',
+    type: 'Graphic',
     name: {
       'en': 'Playground',
       'zh-CN': 'Playground',
@@ -40,7 +40,7 @@ const localizedProjects: LocalizedProject[] = [
   },
   {
     icon: '🌍',
-    type: 'extension',
+    type: 'Extension',
     name: {
       'en': 'geojson.io for vscode',
       'zh-CN': 'geojson.io for vscode',
@@ -55,7 +55,7 @@ const localizedProjects: LocalizedProject[] = [
   },
   {
     icon: '🐱',
-    type: 'web',
+    type: 'WebApp',
     name: {
       'en': 'Pokemon Pokedex (ZH)',
       'zh-CN': '宝可梦中文图鉴',
@@ -70,7 +70,7 @@ const localizedProjects: LocalizedProject[] = [
   },
   {
     icon: '🏝️',
-    type: 'graphic',
+    type: 'Graphic',
     name: {
       'en': 'Procedural Island Generator',
       'zh-CN': 'Procedural Island Generator',
@@ -84,20 +84,34 @@ const localizedProjects: LocalizedProject[] = [
     repoUrl: 'https://github.com/42arch/procedural-island-generator',
   },
   {
+    icon: '👾',
+    type: 'WebApp',
+    name: {
+      'en': 'Game of Life',
+      'zh-CN': '生命游戏',
+    },
+    description: {
+      'en': 'Conway\'s Game of Life built with Three.js and WebGL',
+      'zh-CN': '基于 Three.js 和 WebGL 构建的康威生命游戏',
+    },
+    tags: ['WebGL', 'Three.js'],
+    liveUrl: 'https://game-of-life.starllow.com',
+    repoUrl: 'https://github.com/42arch/game-of-life',
+  },
+  {
     icon: '🛣️',
-    type: 'tools',
-    wip: true,
+    type: 'Tool',
     name: {
       'en': 'HDMap Viewer',
       'zh-CN': 'HDMap Viewer',
     },
     description: {
-      'en': 'JavaScript OpenDRIVE parser and viewer',
-      'zh-CN': 'JavaScript OpenDRIVE 解析与可视化工具。',
+      'en': 'JavaScript ported OpenDRIVE parser and viewer',
+      'zh-CN': '基于 JavaScript 的 OpenDRIVE 解析与可视化工具。',
     },
     tags: ['OpenDRIVE', 'XODR'],
-    liveUrl: '',
-    repoUrl: '',
+    liveUrl: 'https://hdmap-viewer.starllow.com',
+    repoUrl: 'https://github.com/42arch/hdmap-viewer',
   },
 ]
 

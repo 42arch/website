@@ -20,19 +20,22 @@ function formatRelativeBuildTime(timestamp: number) {
 }
 
 interface LastBuildProps {
-  buildTime?: number
   label?: string
 }
 
-export function LastBuild({ buildTime, label = 'Last build' }: LastBuildProps) {
+export function LastBuild({ label = 'Last build' }: LastBuildProps) {
+  // eslint-disable-next-line node/prefer-global/process
+  const rawBuildTime = process.env.NEXT_PUBLIC_BUILD_TIME
+
+  const buildTime = rawBuildTime ? Number(rawBuildTime) : Number.NaN
   const parsedBuildTime = typeof buildTime === 'number' ? buildTime : Number.NaN
 
   if (Number.isNaN(parsedBuildTime)) {
-    return <p className="text-[9px] text-[var(--muted-foreground)]">{`${label}: unknown`}</p>
+    return <p className="text-[9px] text-muted-foreground">{`${label}: unknown`}</p>
   }
 
   return (
-    <p className="truncate text-[9px] text-[var(--muted-foreground)]">
+    <p className="truncate text-[9px] text-muted-foreground">
       {label}
       {': '}
       {formatRelativeBuildTime(parsedBuildTime)}
