@@ -1,17 +1,18 @@
 import type { NextConfig } from 'next'
 import { createMDX } from 'fumadocs-mdx/next'
-
-const withMDX = createMDX({
-  configPath: './source.config.ts',
-})
+import createNextIntlPlugin from 'next-intl/plugin'
 
 const currentTime = new Date().getTime().toString()
 
+const withMDX = createMDX()
 const nextConfig: NextConfig = {
-  publicRuntimeConfig: {
+  env: {
     buildTime: currentTime,
   },
   reactStrictMode: true,
+  reactCompiler: true,
 }
 
-export default withMDX(nextConfig)
+const withNextIntl = createNextIntlPlugin()
+
+export default withNextIntl(withMDX(nextConfig))

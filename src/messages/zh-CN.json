@@ -1,0 +1,93 @@
+{
+  "Nav": {
+    "home": "首页",
+    "blog": "博客",
+    "projects": "项目",
+    "about": "关于",
+    "subtitle": "starllow.com // 像素实验室"
+  },
+  "ThemeToggle": {
+    "trigger": "主题",
+    "choose": "选择主题",
+    "active": "当前",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "系统"
+  },
+  "LocaleToggle": {
+    "trigger": "语言",
+    "choose": "选择语言",
+    "active": "当前",
+    "en": "English",
+    "zhCN": "简体中文"
+  },
+  "Footer": {
+    "track": "统计",
+    "sitemap": "站点地图",
+    "rss": "RSS",
+    "lastBuild": "最近构建",
+    "icp": "萌ICP备20254242号",
+    "copyrightSimple": "© {year} Starllow Lab.",
+    "builtWith": "Vibe-Coded 且完全开源。前往 GitHub 查看"
+  },
+  "HomeHero": {
+    "booting": "Starllow 实验室启动中",
+    "title": "STARLLOW LAB",
+    "line1": "以像素风构建产品世界",
+    "line2": "TypeScript + Next.js + 叙事设计",
+    "line3": "复古美学，现代工程",
+    "intro1": "Starllow Lab 是 位于 starllow.com 上的个人数字实验室，",
+    "intro2": "在这里归档我们的开源项目，分享想法和灵感。",
+    "viewProjects": "查看项目",
+    "readBlog": "阅读博客",
+    "quests": "任务",
+    "years": "年限",
+    "commits": "提交"
+  },
+  "RecentPosts": {
+    "title": "最新文章",
+    "viewAll": "[ 查看全部文章 >> ]",
+    "category": "分类："
+  },
+  "HomeContact": {
+    "title": "联系方式",
+    "description": "可通过下方渠道联系和找到我们",
+    "email": "邮箱",
+    "github": "GitHub",
+    "stackblitz": "StackBlitz",
+    "x": "X",
+    "bilibili": "BiliBili"
+  },
+  "BlogList": {
+    "filter": "筛选：",
+    "all": "全部",
+    "noResults": "没有匹配的日志。",
+    "category": "分类："
+  },
+  "BlogPage": {
+    "title": "博客任务日志",
+    "description": "浏览 Starllow Lab 的开发记录：界面系统、前端架构与产品叙事。"
+  },
+  "BlogDetail": {
+    "back": "<< 返回博客列表",
+    "top": "顶部",
+    "toc": "目录",
+    "noToc": "暂无标题",
+    "section": "章节 {index}",
+    "previous": "上一篇",
+    "next": "下一篇",
+    "none": "暂无"
+  },
+  "ProjectsPage": {
+    "title": "项目仓库",
+    "description": "来自 Starllow Lab 的生产实验、可复用工具与互动产品。",
+    "live": "访问",
+    "source": "源码"
+  },
+  "AboutPage": {
+    "badge": "关于 42arch",
+    "domain": "域名",
+    "skillMatrix": "技能矩阵",
+    "originStory": "个人故事"
+  }
+}

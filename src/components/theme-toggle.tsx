@@ -1,155 +1,83 @@
 'use client'
 
-import type { HTMLAttributes } from 'react'
-import { cva } from 'class-variance-authority'
-import { motion } from 'framer-motion'
-import { Airplay, Moon, Sun } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
-import { useLayoutEffect, useState } from 'react'
-import { cn } from '@/lib/utils'
+import { useEffect, useMemo, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
-const themes = [
-  {
-    key: 'light',
-    icon: Sun,
-    label: 'Light theme',
-  },
-  {
-    key: 'dark',
-    icon: Moon,
-    label: 'Dark theme',
-  },
-  {
-    key: 'system',
-    icon: Airplay,
-    label: 'System theme',
-  },
-]
+const themeOptions = [
+  { value: 'light', key: 'light' },
+  { value: 'dark', key: 'dark' },
+  { value: 'system', key: 'system' },
+] as const
 
-const itemVariants = cva(
-  'relative size-5 rounded-full p-1 text-muted-foreground',
-  {
-    variants: {
-      active: {
-        true: 'text-accent-foreground bg-accent',
-        false: 'text-muted-foreground',
-      },
-    },
-  },
-)
-
-type Theme = 'light' | 'dark' | 'system'
-
-export function ThemeToggle({
-  className,
-  mode = 'light-dark',
-  ...props
-}: HTMLAttributes<HTMLDivElement> & {
-  mode?: 'light-dark' | 'light-dark-system'
-}) {
-  const { setTheme, theme: currentTheme, resolvedTheme } = useTheme()
+export function ThemeToggle() {
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const t = useTranslations('ThemeToggle')
 
-  const container = cn(
-    'relative inline-flex items-center rounded-full p-1 ring-1 ring-border',
-    className,
-  )
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     setMounted(true)
   }, [])
 
-  const handleChangeTheme = async (theme: Theme) => {
-    function update() {
-      setTheme(theme)
-    }
+  const currentLabel = useMemo(() => {
+    if (!theme)
+      return 'system'
 
-    update()
+    return themeOptions.find(option => option.value === theme)?.key ?? 'system'
+  }, [theme])
 
-    // if (document.startViewTransition && theme !== resolvedTheme) {
-    //   // Get the toggle button position for the ripple effect
-    //   const toggleButton = document.querySelector('[data-theme-toggle]')
-    //   if (toggleButton) {
-    //     const rect = toggleButton.getBoundingClientRect()
-    //     const x = rect.left + rect.width / 2
-    //     const y = rect.top + rect.height / 2
-
-    //     // Set the mask position for the ripple effect
-    //     document.documentElement.style.setProperty(
-    //       '--theme-toggle-x',
-    //       `${x}px`,
-    //     )
-    //     document.documentElement.style.setProperty(
-    //       '--theme-toggle-y',
-    //       `${y}px`,
-    //     )
-
-    //     // Add a class to identify this is a theme toggle transition
-    //     document.documentElement.classList.add('theme-toggle-transition')
-    //     document.documentElement.style.viewTransitionName = 'root'
-    //     await document.startViewTransition(update).finished
-    //     document.documentElement.style.viewTransitionName = ''
-    //     document.documentElement.classList.remove('theme-toggle-transition')
-    //   }
-    // }
-    // else {
-    //   update()
-    // }
-  }
-
-  const value = mounted
-    ? mode === 'light-dark'
-      ? resolvedTheme
-      : currentTheme
-    : null
+  if (!mounted)
+    return <div className="h-8 w-[154px]" />
 
   return (
-    <div
-      className={container}
-      onClick={() => {
-        if (mode !== 'light-dark')
-          return
-        handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-      }}
-      data-theme-toggle=""
-      aria-label={mode === 'light-dark' ? 'Toggle Theme' : undefined}
-      {...props}
-    >
-      {themes.map(({ key, icon: Icon, label }) => {
-        const isActive = value === key
-        if (mode === 'light-dark' && key === 'system')
-          return null
+    <div className="flex flex-col items-end gap-1">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button type="button" size="sm" variant="ghost">
+            {t('trigger')}
+            :
+            {' '}
+            {t(currentLabel)}
+          </Button>
+        </DropdownMenuTrigger>
 
-        return (
-          <button
-            type="button"
-            key={key}
-            className={itemVariants({ active: isActive })}
-            onClick={() => {
-              if (mode === 'light-dark')
-                return
-              handleChangeTheme(key as Theme)
-            }}
-            aria-label={label}
-          >
-            {isActive && (
-              <motion.div
-                layoutId="activeTheme"
-                className="absolute inset-0 rounded-full bg-accent"
-                layout
-                transition={{
-                  type: 'spring',
-                  duration: mode === 'light-dark' ? 1.5 : 1,
-                }}
-              />
-            )}
-            <Icon
-              className="relative m-auto size-full"
-              fill="currentColor"
-            />
-          </button>
-        )
-      })}
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>{t('choose')}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {themeOptions.map(option => (
+            <DropdownMenuItem
+              key={option.value}
+              onSelect={(event) => {
+                event.preventDefault()
+                setTheme(option.value)
+              }}
+            >
+              <span className="w-3 text-[var(--pixel-yellow)]" aria-hidden>
+                {theme === option.value ? '▶' : ''}
+              </span>
+              <span>{t(option.key)}</span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <p className="text-[8px] text-[var(--muted-foreground)]">
+        {t('active')}
+        :
+        {' '}
+        {theme === 'system'
+          ? `${t('system')} (${resolvedTheme ? t(resolvedTheme) : t('light')})`
+          : theme ? t(theme) : t('system')}
+      </p>
     </div>
   )
 }

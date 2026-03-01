@@ -1,0 +1,93 @@
+{
+  "Nav": {
+    "home": "HOME",
+    "blog": "BLOG",
+    "projects": "PROJECTS",
+    "about": "ABOUT",
+    "subtitle": "starllow.com // Pixel Lab"
+  },
+  "ThemeToggle": {
+    "trigger": "THEME",
+    "choose": "Choose Theme",
+    "active": "ACTIVE",
+    "light": "LIGHT",
+    "dark": "DARK",
+    "system": "SYSTEM"
+  },
+  "LocaleToggle": {
+    "trigger": "LANG",
+    "choose": "Choose Language",
+    "active": "ACTIVE",
+    "en": "ENGLISH",
+    "zhCN": "简体中文"
+  },
+  "Footer": {
+    "track": "Track",
+    "sitemap": "SiteMap",
+    "rss": "RSS",
+    "lastBuild": "Last build",
+    "icp": "萌ICP备20254242号",
+    "copyrightSimple": "© {year} Starllow Lab.",
+    "builtWith": "Vibe-Coded & Fully Open Sourced. View on GitHub"
+  },
+  "HomeHero": {
+    "booting": "Starllow Lab Booting",
+    "title": "STARLLOW LAB",
+    "line1": "Building Product Worlds in Pixel Style",
+    "line2": "TypeScript + Next.js + Storytelling",
+    "line3": "Retro Aesthetic, Modern Engineering",
+    "intro1": "Starllow Lab is a personal digital laboratory on starllow.com,",
+    "intro2": "where we archive open-source projects and share ideas and inspiration.",
+    "viewProjects": "VIEW PROJECTS",
+    "readBlog": "READ BLOG",
+    "quests": "QUESTS",
+    "years": "YEARS",
+    "commits": "COMMITS"
+  },
+  "RecentPosts": {
+    "title": "LATEST POSTS",
+    "viewAll": "[ VIEW ALL POSTS >> ]",
+    "category": "CATEGORY: "
+  },
+  "HomeContact": {
+    "title": "CONTACT CHANNELS",
+    "description": "Reach and find us through the channels below.",
+    "email": "Email",
+    "github": "GitHub",
+    "stackblitz": "StackBlitz",
+    "x": "X",
+    "bilibili": "BiliBili"
+  },
+  "BlogList": {
+    "filter": "FILTER:",
+    "all": "ALL",
+    "noResults": "NO QUEST LOGS FOUND.",
+    "category": "CATEGORY: "
+  },
+  "BlogPage": {
+    "title": "Blog Quest Log",
+    "description": "Scroll through development notes from Starllow Lab: interface systems, frontend architecture, and product narrative."
+  },
+  "BlogDetail": {
+    "back": "<< BACK TO BLOG LIST",
+    "top": "TOP",
+    "toc": "TOC",
+    "noToc": "NO HEADINGS",
+    "section": "Section {index}",
+    "previous": "PREVIOUS",
+    "next": "NEXT",
+    "none": "NONE"
+  },
+  "ProjectsPage": {
+    "title": "Project Vault",
+    "description": "Production experiments, reusable tooling, and interactive products from Starllow Lab.",
+    "live": "LIVE",
+    "source": "SOURCE"
+  },
+  "AboutPage": {
+    "badge": "About 42arch",
+    "domain": "DOMAIN",
+    "skillMatrix": "SKILL MATRIX",
+    "originStory": "ORIGIN STORY"
+  }
+}

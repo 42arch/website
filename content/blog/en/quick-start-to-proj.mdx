@@ -1,0 +1,51 @@
+---
+title: Proj 字符串格式简介
+description: Proj 字符串是一种用于描述地图投影和坐标参考系统（CRS，Coordinate Reference System）的格式，应用于很多GIS软件和库中。
+author: Ren Dan
+date: 2025-04-19
+tags: [GIS, Map, 坐标系统]
+category: Map
+draft: false
+---
+
+## 说明
+Proj 字符串是一种用于描述地图投影和坐标参考系统（CRS，Coordinate Reference System）的格式，应用于很多GIS软件和库中。
+
+PROJ字符串是一个基于参数的文本格式，通常是这样的：
+
+```diff
++proj=utm +zone=33 +datum=WGS84 +units=m +no_defs
+```
+
+它是由一系列 键值对参数组成，每个参数都以加号 `+` 开头，用空格分隔。同时用等号 `=` 分隔键和值。
+
+## 参数说明
+
+| 参数名 | 含义 |
+| --- | --- |
+| `+proj` | 投影类型，例如 `utm`（通用横轴墨卡托）、`longlat`（地理经纬度坐标）、`mec` （标准墨卡托投影）、`webmerc`（web墨卡托，用于web地图），`tmerc`（横轴墨卡托）等。 |
+| `+zone` | 只有在 `+proj=utm` 时生效，UTM 投影使用的分区（1 到 60），每个zone跨6个经度，zone的计算方式：（经度整数位 / 6) 的整数部分 + 31。默认北半球，南半球需加参数 `+south`  。 |
+| `+datum` | 使用的地理（大地）基准面，比如 `WGS84`（全球通用） ，`NAD27`（用于北美老地图）。`+datum=XXX` 是一个快捷方式，自动设置了：`+ellps=XXX` 和 `+towgs84=…` （如果该datum不是WGS84）。 |
+| `+ellps` | 椭球体定义，常见有 `WGS84` 、`GRS80` （NAD83使用）、`clrk66` （NAD27使用）、`krass` （北京53，西安80等使用）。也可手动定义椭球，如：`+a=6378245.0 +rf=298.3` 等价于`+ellps=krass` ，因为一个椭球体由两个参数定义：`a`：长半轴（赤道半径），`f或b`：扁率 或 短半轴（极半径）。 |
+| `+towgs84` | 定义一个datum 向 WGS84 的7参数转换。格式为：`+towgs84=dx,dy,dz[,rx,ry,rz,scale]` ，其中：dx, dy, dz，单位为米，代表三维平移（X/Y/Z方向）；rx, ry, rz，单位弧度或角秒，代表旋转角（绕 X/Y/Z 轴）；scale，单位 ppm（百万分之一），代表尺寸缩放。比如 西安80的设置：`+ellps=krass  +towgs84=-10,-158,-47` 。 |
+| `+units` | 单位，主要影响投影坐标系，对经纬度一般无效。常用的有 `m`（米）、`ft`（英尺）、`km`（千米）、`mi`（英里）、`degrees`（角度，仅限经纬）等。 |
+| `+no_defs` | 表示不使用默认参数文件（历史原因，现代版本可以忽略），一般放在末尾。 |
+| `+axis` | 定义坐标轴方向，格式为：`+axis=xyz`，其中：x 设置为 `e`（东） 或 `w`（西）， y设置为 `n`（北）或 `s`（南），z 设置为 `u`（上）或 `d`（下）。例如 `enu` 表示东-北-上，默认值。用于高精度项目，坐标转换系统等。 |
+| `+lat_0` 和 `+lon_0` | 指定投影原点的纬度和中央经线。例如：在北京（纬度 39.9°，经度 116.4°）画一张局部地图，`+proj=aeqd +lat_0=39.9 +lon_0=116.4 +datum=WGS84 +units=m +no_defs` 的意思是把北京设置为投影中心，其他点都会以北京为参考点计算距离和方向。 |
+
+## JavaScript 示例
+
+  * JS中利用proj4.js实现两个投影系统的坐标转换
+
+    ```js
+    import proj4 from 'proj4'
+
+    // 定义两个投影系统
+    const wgs84 = "+proj=longlat +datum=WGS84 +no_defs"
+    const utm32 = "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs"
+
+    // 转换点
+    const [x, y] = proj4(wgs84, utm32, [12, 55])
+    console.log(x, y)  // 输出：691875.63 6098907.83
+    ```
+

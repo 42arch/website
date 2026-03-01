@@ -1,5 +1,7 @@
 import RSS from 'rss'
-import { getPages } from '@/lib/source'
+import { getBlogPosts, normalizeBlogDateInput } from '@/lib/blog-source'
+
+const SITE_URL = 'https://starllow.com'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 60
@@ -8,29 +10,24 @@ export async function GET() {
   const feed = new RSS({
     title: 'Starllow',
     description: 'Starllow Lab, we build creative web apps!',
-    site_url: 'https://starllow.com',
-    feed_url: `https://starllow.com/feed.xml`,
+    site_url: SITE_URL,
+    feed_url: `${SITE_URL}/feed.xml`,
     copyright: `${new Date().getFullYear()} Starllow Lab`,
     language: 'en',
     pubDate: new Date(),
   })
 
-  const posts = getPages()
-  const sortedPosts = posts.filter(post => !post.data.draft).sort((a, b) => {
-    return b.data.date.getTime() - a.data.date.getTime()
-  })
-
-  sortedPosts.forEach((post) => {
+  const posts = await getBlogPosts('en')
+  for (const post of posts) {
     feed.item({
-      title: post.data.title,
-      guid: `https://starllow.com/blog/${post.slugs[0]}`,
-      url: `https://starllow.com/blog/${post.slugs[0]}`,
-      date: post.data.date,
-      description: post.data.description ?? '',
-      author: post.data.author,
-      categories: [post.data.category],
+      title: post.title,
+      guid: `${SITE_URL}${post.url}`,
+      url: `${SITE_URL}${post.url}`,
+      date: normalizeBlogDateInput(post.date),
+      description: post.excerpt,
+      categories: [post.category],
     })
-  })
+  }
 
   return new Response(feed.xml({ indent: true }), {
     headers: {

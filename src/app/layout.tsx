@@ -1,60 +1,39 @@
 import type { Metadata } from 'next'
-import type React from 'react'
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { RootProvider } from 'fumadocs-ui/provider'
-// import { Analytics } from '@vercel/analytics/next'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import localFont from 'next/font/local'
-import { Suspense } from 'react'
-import './styles/globals.css'
+import { PixelLayout } from '@/components/pixel-layout'
+import { ThemeProvider } from '@/components/theme-provider'
+import 'katex/dist/katex.min.css'
+import './globals.css'
 
-const fontMono = localFont({
-  src: [
-    {
-      path: '../../public/fonts/JetBrainsMapleMono-Regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/JetBrainsMapleMono-Medium.ttf',
-      weight: '500',
-      style: 'medium',
-    },
-    {
-      path: '../../public/fonts/JetBrainsMapleMono-Bold.ttf',
-      weight: '700',
-      style: 'bold',
-    },
-  ],
-  variable: '--font-mono',
+const zpix = localFont({
+  src: '../../public/fonts/zpix.ttf',
   display: 'swap',
+  variable: '--font-zpix',
 })
 
 export const metadata: Metadata = {
   title: 'Starllow Lab',
-  description: 'Personal website of Starllow Lab - Showcasing projects, blog posts, and creative work',
-  generator: 'Next.js',
-  keywords: ['Starllow Lab', 'Starllow', 'rendan', 'Ren Dan', 'rend42', '42arch'],
+  description: 'starllow.com - Pixel laboratory of 42arch.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
+  const locale = await getLocale()
+  const messages = await getMessages()
 
   return (
-    <html
-      lang="en"
-      className={fontMono.className}
-      suppressHydrationWarning
-    >
-      <body className="text-sm">
-        <Suspense fallback={null}>
-          <RootProvider>{children}</RootProvider>
-        </Suspense>
-        <GoogleAnalytics gaId={gaId || ''} />
-        {/* <Analytics /> */}
+    <html lang={locale} suppressHydrationWarning>
+      <body className={zpix.variable}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ThemeProvider>
+            <PixelLayout>{children}</PixelLayout>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

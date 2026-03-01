@@ -1,41 +1,45 @@
 import type { MetadataRoute } from 'next'
-import { getPages } from '@/lib/source'
+import { getBlogPosts, normalizeBlogDateInput } from '@/lib/blog-source'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+const SITE_URL = 'https://starllow.com'
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const links: MetadataRoute.Sitemap = [
     {
-      url: 'https://starllow.com',
+      url: SITE_URL,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,
     },
     {
-      url: 'https://starllow.com/blog',
+      url: `${SITE_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: 'https://starllow.com/about',
+      url: `${SITE_URL}/projects`,
       lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.5,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/about`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
     },
   ]
 
-  const posts = getPages()
-  const sortedPosts = posts.filter(post => !post.data.draft).sort((a, b) => {
-    return b.data.date.getTime() - a.data.date.getTime()
-  })
-
-  sortedPosts.forEach((post) => {
+  const posts = await getBlogPosts('en')
+  for (const post of posts) {
     links.push({
-      url: `https://starllow.com/blog/${post.slugs[0]}`,
-      lastModified: new Date(post.data.date),
+      url: `${SITE_URL}${post.url}`,
+      lastModified: normalizeBlogDateInput(post.date),
       changeFrequency: 'daily',
       priority: 0.9,
     })
-  })
+  }
 
   return links
 }
