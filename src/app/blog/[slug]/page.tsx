@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import { resolveLocale } from '@/i18n/config'
+import { formatDate } from '@/lib/date-utils'
 import {
   getBlogPostPage,
   getBlogPosts,
@@ -56,11 +57,6 @@ export default async function BlogDetailPage({ params }: PageProps) {
   const t = await getTranslations('BlogDetail')
   const page = getBlogPostPage(slug, locale)
   const posts = await getBlogPosts(locale)
-  const dateFormatter = new Intl.DateTimeFormat(locale === 'zh-CN' ? 'zh-CN' : 'en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
 
   if (!page)
     notFound()
@@ -120,7 +116,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
           <h1 className="text-base leading-8 text-[var(--pixel-yellow)] md:text-lg">{page.data.title}</h1>
 
           <div className="flex flex-wrap items-center gap-3 text-[9px] text-[var(--muted-foreground)]">
-            <span>{dateFormatter.format(new Date(normalizedDate))}</span>
+            <span>{formatDate(normalizedDate, locale, 'PPP')}</span>
             <span className="text-[var(--pixel-cyan)]">{currentPost?.readTime ?? '--'}</span>
           </div>
 

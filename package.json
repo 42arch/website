@@ -12,6 +12,7 @@
   "dependencies": {
     "@iconify-json/pixel": "^1.2.1",
     "@iconify/react": "^6.0.2",
+    "@next/third-parties": "^16.1.6",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-separator": "^1.1.8",
@@ -19,6 +20,7 @@
     "@types/mdx": "^2.0.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "fumadocs-core": "^16.6.7",
     "fumadocs-mdx": "^14.2.8",
     "katex": "^0.16.33",

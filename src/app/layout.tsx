@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import localFont from 'next/font/local'
@@ -23,6 +24,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
   const locale = await getLocale()
   const messages = await getMessages()
 
@@ -34,6 +36,7 @@ export default async function RootLayout({
             <PixelLayout>{children}</PixelLayout>
           </ThemeProvider>
         </NextIntlClientProvider>
+        <GoogleAnalytics gaId={gaId || ''} />
       </body>
     </html>
   )

@@ -26,6 +26,7 @@
     "sitemap": "SiteMap",
     "rss": "RSS",
     "lastBuild": "Last build",
+    "unknown": "unknown",
     "icp": "萌ICP备20254242号",
     "copyrightSimple": "© {year} Starllow Lab.",
     "builtWith": "Vibe-Coded & Fully Open Sourced. View on GitHub"

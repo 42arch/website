@@ -10,16 +10,12 @@ import {
 } from '@/components/ui/card'
 import { resolveLocale } from '@/i18n/config'
 import { getBlogPosts } from '@/lib/blog-source'
+import { formatDate } from '@/lib/date-utils'
 
 export async function RecentPosts() {
   const locale = resolveLocale(await getLocale())
   const t = await getTranslations('RecentPosts')
   const recent = (await getBlogPosts(locale)).slice(0, 3)
-  const dateFormatter = new Intl.DateTimeFormat(locale === 'zh-CN' ? 'zh-CN' : 'en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
 
   return (
     <section className="mx-auto mt-12 w-full max-w-3xl">
@@ -38,7 +34,7 @@ export async function RecentPosts() {
                     {t('category')}
                     {post.category}
                   </span>
-                  <span>{dateFormatter.format(new Date(post.date))}</span>
+                  <span>{formatDate(post.date, locale)}</span>
                   <span className="text-[var(--pixel-cyan)]">{post.readTime}</span>
                 </div>
                 <CardTitle className="text-[11px] leading-6 md:text-sm">{post.title}</CardTitle>

@@ -15,6 +15,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
+import { formatDate } from '@/lib/date-utils'
+
 interface BlogListProps {
   locale: AppLocale
   posts: BlogPostListItem[]
@@ -22,11 +24,6 @@ interface BlogListProps {
 
 export function BlogList({ locale, posts }: BlogListProps) {
   const t = useTranslations('BlogList')
-  const dateFormatter = new Intl.DateTimeFormat(locale === 'zh-CN' ? 'zh-CN' : 'en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
   const allTags = useMemo(() => Array.from(new Set(posts.flatMap(post => post.tags))), [posts])
   const [activeTag, setActiveTag] = useState<string | null>(null)
 
@@ -80,7 +77,7 @@ export function BlogList({ locale, posts }: BlogListProps) {
                     {t('category')}
                     {post.category}
                   </span>
-                  <span>{dateFormatter.format(new Date(post.date))}</span>
+                  <span>{formatDate(post.date, locale)}</span>
                   <span className="text-[var(--pixel-cyan)]">{post.readTime}</span>
                 </div>
                 <CardTitle className="text-[11px] leading-6 md:text-sm">{post.title}</CardTitle>

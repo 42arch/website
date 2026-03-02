@@ -353,6 +353,25 @@ a {
   line-height: inherit;
 }
 
+.blog-content :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.625rem; /* 10px */
+  margin: 1.25rem 0;
+}
+
+.blog-content :where(th, td) {
+  border: 1px solid var(--pixel-border-highlight);
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.blog-content :where(th) {
+  background: color-mix(in srgb, var(--pixel-darker) 86%, var(--background) 14%);
+  color: var(--pixel-yellow);
+}
+
 .blog-content .katex {
   font-size: 0.82em;
 }
