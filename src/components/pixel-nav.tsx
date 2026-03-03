@@ -26,7 +26,7 @@ export function PixelNav() {
     <header className="pixel-nav-shell sticky top-0 z-50 border-b-4 border-[var(--pixel-border-highlight)] bg-[var(--nav-bg)]">
       <nav className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-col gap-2 md:gap-1">
-          <Link href="/" className="text-[13px] text-[var(--pixel-green)] transition-colors hover:text-[var(--pixel-yellow)]">
+          <Link href="/" className="text-[13px] text-pixel-green transition-colors hover:text-[var(--pixel-yellow)]">
             {'<'}
             STARLLOW
             {'/>'}

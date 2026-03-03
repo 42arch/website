@@ -1,60 +1,30 @@
-export function StarMascot({ size = 160 }: { size?: number }) {
-  const pixel = size / 16
+import Image from 'next/image'
+import { cn } from '@/lib/utils'
 
-  const grid = [
-    '......yyyy......',
-    '.....yyyyyy.....',
-    '....yyymmyyy....',
-    'yyyyyymmmmyyyyyy',
-    'yccyyymmmmyyyccy',
-    '..yyyyyrryyyyy..',
-    '...yyyyyyyyyy...',
-    '..yyyyyyyyyyyy..',
-    '.yyyyyggggyyyyy.',
-    'yyyyyggggggyyyyy',
-    '..yyyyyyyyyyyy..',
-    '...yyyyyyyyyy...',
-    '....yyyyyyyy....',
-    '.....yyyyyy.....',
-    '......yyyy......',
-    '.......yy.......',
-  ]
+type StarMascotVariant = 'hero' | 'logo' | 'avatar'
 
-  const colorMap: Record<string, string> = {
-    'y': '#ffcc00',
-    'm': '#ff44cc',
-    'c': '#00ccff',
-    'g': '#00ff88',
-    'r': '#ff7766',
-    '.': 'transparent',
-  }
+interface StarMascotProps {
+  size?: number
+  variant?: StarMascotVariant
+  className?: string
+}
 
+const variantClassMap: Record<StarMascotVariant, string> = {
+  hero: 'pixel-fade-in drop-shadow-[0_0_18px_rgba(255,213,51,0.45)]',
+  logo: 'drop-shadow-[2px_2px_0_rgba(0,0,0,0.4)]',
+  avatar: 'drop-shadow-[0_0_10px_rgba(255,213,51,0.35)]',
+}
+
+export function StarMascot({ size = 160, variant = 'hero', className }: StarMascotProps) {
   return (
-    <svg
+    <Image
+      src="/logo-pixel.svg"
+      alt="Smiling pixel yellow star mascot"
       width={size}
       height={size}
-      viewBox={`0 0 ${size} ${size}`}
-      role="img"
-      aria-label="Starllow cartoon star mascot"
-      className="pixel-fade-in drop-shadow-[0_0_16px_rgba(255,204,0,0.45)]"
-    >
-      {grid.map((row, y) =>
-        row.split('').map((char, x) => {
-          if (char === '.')
-            return null
-
-          return (
-            <rect
-              key={`${x}-${y}`}
-              x={x * pixel}
-              y={y * pixel}
-              width={pixel}
-              height={pixel}
-              fill={colorMap[char]}
-            />
-          )
-        }),
-      )}
-    </svg>
+      priority={variant === 'hero'}
+      className={cn('block [image-rendering:pixelated]', variantClassMap[variant], className)}
+      unoptimized
+    />
   )
 }
