@@ -353,6 +353,43 @@ a {
   line-height: inherit;
 }
 
+.blog-content .blog-code-block {
+  position: relative;
+}
+
+.blog-content .blog-code-block :where(pre) {
+  padding-top: 1.65rem;
+  padding-right: 2.2rem;
+}
+
+.blog-content .blog-code-copy-button {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--pixel-border-highlight);
+  background: color-mix(in srgb, var(--pixel-darker) 86%, var(--background) 14%);
+  color: var(--pixel-cyan);
+  padding: 0.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 120ms steps(2, end), color 120ms steps(2, end), border-color 120ms steps(2, end);
+}
+
+.blog-content .blog-code-copy-button:hover {
+  transform: translate(-1px, -1px);
+  color: var(--pixel-green);
+  border-color: var(--pixel-cyan);
+}
+
+.blog-content .blog-code-copy-button[data-copied='true'] {
+  color: var(--pixel-yellow);
+  border-color: var(--pixel-yellow);
+}
+
 .blog-content :where(table) {
   width: 100%;
   border-collapse: collapse;
@@ -393,9 +430,25 @@ a {
   color: var(--shiki-light, var(--foreground)) !important;
 }
 
+.blog-content .shiki span {
+  color: var(--shiki-light, var(--foreground)) !important;
+  background-color: var(--shiki-light-bg, transparent) !important;
+  font-style: var(--shiki-light-font-style, normal) !important;
+  font-weight: var(--shiki-light-font-weight, inherit) !important;
+  text-decoration: var(--shiki-light-text-decoration, none) !important;
+}
+
 .dark .blog-content .shiki {
   background-color: var(--shiki-dark-bg, var(--pixel-darker)) !important;
   color: var(--shiki-dark, var(--foreground)) !important;
+}
+
+.dark .blog-content .shiki span {
+  color: var(--shiki-dark, var(--foreground)) !important;
+  background-color: var(--shiki-dark-bg, transparent) !important;
+  font-style: var(--shiki-dark-font-style, normal) !important;
+  font-weight: var(--shiki-dark-font-weight, inherit) !important;
+  text-decoration: var(--shiki-dark-text-decoration, none) !important;
 }
 
 @keyframes blink {

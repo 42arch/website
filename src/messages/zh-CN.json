@@ -77,7 +77,9 @@
     "section": "章节 {index}",
     "previous": "上一篇",
     "next": "下一篇",
-    "none": "暂无"
+    "none": "暂无",
+    "copyCode": "复制代码",
+    "copied": "已复制"
   },
   "ProjectsPage": {
     "title": "项目仓库",

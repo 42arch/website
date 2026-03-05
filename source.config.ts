@@ -20,6 +20,13 @@ export const blog = defineDocs({
 export default defineConfig({
   mdxOptions: {
     remarkImageOptions: false,
+    rehypeCodeOptions: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      langs: ['js', 'jsx', 'ts', 'tsx', 'glsl', 'diff'],
+    },
     remarkPlugins: plugins => [remarkMath, ...plugins],
     rehypePlugins: plugins => [rehypeKatex, ...plugins],
   },

@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { isValidElement } from 'react'
+import { BlogCodeBlock } from '@/components/blog-code-block'
 import { ScrollToTopButton } from '@/components/scroll-to-top-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,7 +17,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import { resolveLocale } from '@/i18n/config'
-import { formatDate } from '@/lib/date-utils'
 import {
   getBlogPostPage,
   getBlogPosts,
@@ -24,6 +24,7 @@ import {
   normalizeBlogDateInput,
   normalizeBlogSlug,
 } from '@/lib/blog-source'
+import { formatDate } from '@/lib/date-utils'
 
 interface PageProps {
   params: Promise<{
@@ -69,6 +70,15 @@ export default async function BlogDetailPage({ params }: PageProps) {
   const previousPost = currentIndex > 0 ? posts[currentIndex - 1] : null
   const nextPost = currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null
   const normalizedDate = normalizeBlogDateInput(page.data.date)
+  const mdxComponents = {
+    pre: (props: ComponentPropsWithoutRef<'pre'>) => (
+      <BlogCodeBlock
+        {...props}
+        copyLabel={t('copyCode')}
+        copiedLabel={t('copied')}
+      />
+    ),
+  }
 
   return (
     <div id="article-top" className="relative pt-8 pb-14">
@@ -123,7 +133,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
           <Separator className="bg-[var(--pixel-border)]" />
 
           <div className="blog-content">
-            <Content />
+            <Content components={mdxComponents} />
           </div>
 
           <Separator className="bg-[var(--pixel-border)]" />

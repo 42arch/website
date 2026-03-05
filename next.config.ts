@@ -4,8 +4,6 @@ import createNextIntlPlugin from 'next-intl/plugin'
 
 const currentTime = new Date().getTime().toString()
 
-console.log(99999, currentTime)
-
 const withMDX = createMDX()
 const nextConfig: NextConfig = {
   env: {

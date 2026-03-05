@@ -22,30 +22,36 @@ These flows must work end-to-end:
 
 ## 不要做的事
 
-❌ 不使用真实后端，博客和项目数据均为静态 mock 数据
-
 ❌ 不使用圆角卡片/扁平设计，保持像素风硬边框风格
 
 ❌ 不使用渐变柔和色调，保持高对比像素游戏色彩
 
+❌ 不要在组件中使用非像素字体，除非为了极个别的可读性
+
 ## 技术要求
 
-Next.js + TypeScript + Tailwind CSS + Shadcn/UI。使用 Google Fonts 的 Press Start 2P 像素字体。博客文章和项目数据使用本地静态数据（mock data）存储在前端。路由使用客户端路由实现多页面切换。
+- **核心框架**: Next.js 16 (App Router), React 19, TypeScript
+- **样式引擎**: Tailwind CSS 4, Shadcn/UI (自定义像素风主题)
+- **内容管理**: fumadocs-mdx (博客文章存储在 `content/blog/`，支持 MDX)
+- **国际化**: next-intl (支持英文 `en` 和中文 `zh-CN`)
+- **字体**: ZPix (像素中文字体, 本地加载 `public/fonts/zpix.ttf`)
+- **主题管理**: next-themes (支持深色模式切换)
+- **图标系统**: Iconify / `@iconify-json/pixel`
 
 ## 设计偏好
 
 像素游戏风（Pixel Art / Retro Game）美学：
 
-背景：深色系（深蓝/深绿/黑色）带像素网格纹理
+背景：深色系（深蓝/深绿/黑色）带像素网格纹理 (`pixel-grid`) 和 扫描线效果 (`scanlines`)
 
-字体：像素字体（Press Start 2P from Google Fonts）
+字体：像素字体 ZPix，提供一致的 8-bit 视觉体验
 
 色彩：高对比亮色点缀（亮绿、亮黄、亮青、品红），类似经典像素游戏调色板
 
-边框与卡片：像素风8-bit样式边框（双线/阴影偏移）
+边框与卡片：像素风 8-bit 样式边框（4px 像素边框，无圆角）
 
-动效：打字机效果、闪烁光标、像素溶解过渡、8bit风格hover效果
+动效：打字机效果、闪烁光标、像素溶解过渡、8-bit 风格 hover 效果
 
 导航：顶部导航栏带像素风选中指示器（▶ 光标）
 
-整体感：如同在玩一款RPG游戏的主菜单界面
+整体感：如同在玩一款 RPG 游戏的主菜单界面，强调沉浸感和交互反馈

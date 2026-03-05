@@ -77,7 +77,9 @@
     "section": "Section {index}",
     "previous": "PREVIOUS",
     "next": "NEXT",
-    "none": "NONE"
+    "none": "NONE",
+    "copyCode": "COPY CODE",
+    "copied": "COPIED"
   },
   "ProjectsPage": {
     "title": "Project Vault",
