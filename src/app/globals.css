@@ -321,7 +321,32 @@ a {
 
 .blog-content :where(ul, ol) {
   margin: 0.9rem 0;
+  padding-left: 0;
+}
+
+.blog-content :where(ul) {
+  list-style: none;
+}
+
+.blog-content :where(ol) {
   padding-left: 1.25rem;
+  list-style: decimal;
+}
+
+.blog-content :where(ul li) {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.blog-content :where(ul li)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.95rem; /* Half of 1.9 line-height */
+  transform: translateY(-150%);
+  width: 4px;
+  height: 4px;
+  background-color: var(--pixel-cyan);
 }
 
 .blog-content :where(a) {
