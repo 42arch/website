@@ -75,62 +75,54 @@ export function BottomPanel() {
   }, [visibleEntries])
 
   return (
-    <AnimatePresence initial={false}>
-      {bottomPanelOpen && (
-        <motion.div
-          id="bottom-panel"
-          initial={{ height: 0 }}
-          animate={{ height: bottomPanelHeight }}
-          exit={{ height: 0 }}
-          transition={{ duration: 0.2, ease: 'easeInOut' }}
-          className="flex shrink-0 flex-col overflow-hidden border-t border-os-border"
-        >
-          {/* Panel header */}
-          <div className="flex h-7 shrink-0 items-center justify-between border-b border-os-border bg-os-toolbar px-3">
-            <div className="flex items-center gap-2">
-              <TerminalIcon size={12} className="text-os-terminal-fg" />
-              <span className="font-mono text-[10px] font-semibold tracking-wider text-muted-foreground">
-                ACTIVITY
-              </span>
-              <span className="ml-1 rounded-sm bg-os-accent-muted px-1.5 py-0.5 font-mono text-[9px] text-os-accent">
-                {ACTIVITY_LOG.length}
-              </span>
-            </div>
-            <div className="flex items-center gap-1 font-mono text-[9px] text-muted-foreground">
-              <div className="size-1.5 rounded-full bg-os-indicator animate-pulse" />
-              live
-            </div>
-          </div>
+    <div
+      id="bottom-panel"
+      className="flex h-full w-full shrink-0 flex-col overflow-hidden border-t border-os-border"
+    >
+      {/* Panel header */}
+      <div className="flex h-7 shrink-0 items-center justify-between border-b border-os-border bg-os-toolbar px-3">
+        <div className="flex items-center gap-2">
+          <TerminalIcon size={12} className="text-os-terminal-fg" />
+          <span className="font-mono text-[10px] font-semibold tracking-wider text-muted-foreground">
+            ACTIVITY
+          </span>
+          <span className="ml-1 rounded-sm bg-os-accent-muted px-1.5 py-0.5 font-mono text-[9px] text-os-accent">
+            {ACTIVITY_LOG.length}
+          </span>
+        </div>
+        <div className="flex items-center gap-1 font-mono text-[9px] text-muted-foreground">
+          <div className="size-1.5 rounded-full bg-os-indicator animate-pulse" />
+          live
+        </div>
+      </div>
 
-          {/* Log content */}
-          <div
-            ref={scrollRef}
-            className="os-scrollbar flex-1 overflow-y-auto bg-os-terminal-bg p-3 font-mono text-[11px] leading-relaxed"
+      {/* Log content */}
+      <div
+        ref={scrollRef}
+        className="os-scrollbar flex-1 overflow-y-auto bg-os-terminal-bg p-3 font-mono text-[11px] leading-relaxed"
+      >
+        {visibleEntries.map((entry, i) => (
+          <motion.div
+            key={`${entry.timestamp}-${i}`}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.15 }}
+            className="flex gap-2"
           >
-            {visibleEntries.map((entry, i) => (
-              <motion.div
-                key={`${entry.timestamp}-${i}`}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.15 }}
-                className="flex gap-2"
-              >
-                <span className="shrink-0 text-os-terminal-fg/50">{entry.timestamp}</span>
-                <span className={`shrink-0 font-semibold ${TYPE_COLORS[entry.type]}`}>
-                  {TYPE_PREFIX[entry.type]}
-                </span>
-                <span className="text-os-terminal-fg">{entry.message}</span>
-              </motion.div>
-            ))}
-            {visibleEntries.length > 0 && (
-              <div className="mt-1 flex items-center gap-1">
-                <span className="text-os-terminal-fg/50">$</span>
-                <span className="inline-block h-3.5 w-1.5 animate-pulse bg-os-terminal-fg/70" />
-              </div>
-            )}
+            <span className="shrink-0 text-os-terminal-fg/50">{entry.timestamp}</span>
+            <span className={`shrink-0 font-semibold ${TYPE_COLORS[entry.type]}`}>
+              {TYPE_PREFIX[entry.type]}
+            </span>
+            <span className="text-os-terminal-fg">{entry.message}</span>
+          </motion.div>
+        ))}
+        {visibleEntries.length > 0 && (
+          <div className="mt-1 flex items-center gap-1">
+            <span className="text-os-terminal-fg/50">$</span>
+            <span className="inline-block h-3.5 w-1.5 animate-pulse bg-os-terminal-fg/70" />
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </div>
+    </div>
   )
 }

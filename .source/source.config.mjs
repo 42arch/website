@@ -22,6 +22,24 @@ var notes = defineDocs({
     })
   }
 });
+var osTheme = {
+  name: "os-theme",
+  type: "dark",
+  colors: {
+    "editor.foreground": "var(--shiki-foreground)",
+    "editor.background": "var(--shiki-background)"
+  },
+  tokenColors: [
+    { scope: "keyword", settings: { foreground: "var(--shiki-token-keyword)" } },
+    { scope: "string", settings: { foreground: "var(--shiki-token-string)" } },
+    { scope: "comment", settings: { foreground: "var(--shiki-token-comment)" } },
+    { scope: "constant", settings: { foreground: "var(--shiki-token-constant)" } },
+    { scope: "parameter", settings: { foreground: "var(--shiki-token-parameter)" } },
+    { scope: "function", settings: { foreground: "var(--shiki-token-function)" } },
+    { scope: "punctuation", settings: { foreground: "var(--shiki-token-punctuation)" } },
+    { scope: "link", settings: { foreground: "var(--shiki-token-link)" } }
+  ]
+};
 var source_config_default = defineConfig({
   mdxOptions: {
     rehypePlugins: [
@@ -29,8 +47,8 @@ var source_config_default = defineConfig({
         rehypeCode,
         {
           themes: {
-            light: "vitesse-light",
-            dark: "vitesse-dark"
+            light: osTheme,
+            dark: osTheme
           }
         }
       ]

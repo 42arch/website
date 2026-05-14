@@ -1,3 +1,5 @@
+'use client'
+
 import { ArticleIcon, BookmarkIcon, CalendarIcon, TagIcon } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
 import Link from 'next/link'

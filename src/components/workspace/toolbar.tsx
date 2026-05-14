@@ -2,8 +2,8 @@
 
 import {
   ClockIcon,
+  ColumnsIcon,
   CommandIcon,
-  ListIcon,
   SidebarIcon,
   TerminalIcon,
 } from '@phosphor-icons/react'
@@ -37,7 +37,14 @@ function LiveClock() {
 }
 
 export function Toolbar() {
-  const { toggleSidebar, toggleBottomPanel, toggleCommandPalette, sidebarOpen, bottomPanelOpen } = useWorkspaceStore()
+  const { 
+    toggleSidebar, 
+    toggleBottomPanel, 
+    toggleCommandPalette, 
+    toggleSidebarPosition,
+    sidebarOpen, 
+    bottomPanelOpen 
+  } = useWorkspaceStore()
 
   return (
     <header
@@ -90,10 +97,11 @@ export function Toolbar() {
         <div className="mx-1 h-4 w-px bg-os-border" />
         <div className="flex items-center gap-1">
           <button
+            onClick={toggleSidebarPosition}
             className="flex size-7 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-os-accent-muted hover:text-foreground"
-            title="Notifications"
+            title="Switch Sidebar Side"
           >
-            <ListIcon size={14} />
+            <ColumnsIcon size={14} />
           </button>
           <ModeToggle />
         </div>

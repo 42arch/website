@@ -11,6 +11,7 @@ import {
   HouseIcon,
   ImagesIcon,
   NotepadIcon,
+  GearIcon,
 } from '@phosphor-icons/react'
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
@@ -29,6 +30,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number, weight?: 're
   notepad: NotepadIcon,
   activity: ActivityIcon,
   envelope: EnvelopeIcon,
+  gear: GearIcon,
 }
 
 interface TreeSection {
@@ -50,7 +52,7 @@ const TREE_SECTIONS: TreeSection[] = [
   },
   {
     label: 'SYSTEM',
-    items: ['notes', 'activity', 'contact'],
+    items: ['notes', 'activity', 'contact', 'settings'],
     defaultOpen: true,
   },
 ]
@@ -118,37 +120,29 @@ export function ExplorerSidebar() {
   const { sidebarOpen, sidebarWidth } = useWorkspaceStore()
 
   return (
-    <AnimatePresence initial={false}>
-      {sidebarOpen && (
-        <motion.aside
-          id="explorer-sidebar"
-          initial={{ width: 0, opacity: 0 }}
-          animate={{ width: sidebarWidth, opacity: 1 }}
-          exit={{ width: 0, opacity: 0 }}
-          transition={{ duration: 0.2, ease: 'easeInOut' }}
-          className="flex shrink-0 flex-col overflow-hidden border-r border-os-border bg-os-sidebar"
-        >
-          {/* Sidebar header */}
-          <div className="flex h-9 items-center px-3 font-mono text-[10px] font-semibold tracking-widest text-muted-foreground border-b border-os-border">
-            EXPLORER
-          </div>
+    <aside
+      id="explorer-sidebar"
+      className="flex h-full w-full flex-col overflow-hidden border-r border-os-border bg-os-sidebar"
+    >
+      {/* Sidebar header */}
+      <div className="flex h-9 items-center px-3 font-mono text-[10px] font-semibold tracking-widest text-muted-foreground border-b border-os-border">
+        EXPLORER
+      </div>
 
-          {/* Tree sections */}
-          <nav className="os-scrollbar flex-1 overflow-y-auto py-2">
-            {TREE_SECTIONS.map(section => (
-              <TreeSectionGroup key={section.label} section={section} />
-            ))}
-          </nav>
+      {/* Tree sections */}
+      <nav className="os-scrollbar flex-1 overflow-y-auto py-2">
+        {TREE_SECTIONS.map(section => (
+          <TreeSectionGroup key={section.label} section={section} />
+        ))}
+      </nav>
 
-          {/* Sidebar footer: status */}
-          <div className="border-t border-os-border px-3 py-2">
-            <div className="flex items-center gap-2 font-mono text-[10px] text-muted-foreground">
-              <div className="size-1.5 rounded-full bg-os-indicator animate-pulse" />
-              <span>system active</span>
-            </div>
-          </div>
-        </motion.aside>
-      )}
-    </AnimatePresence>
+      {/* Sidebar footer: status */}
+      <div className="border-t border-os-border px-3 py-2">
+        <div className="flex items-center gap-2 font-mono text-[10px] text-muted-foreground">
+          <div className="size-1.5 rounded-full bg-os-indicator animate-pulse" />
+          <span>system active</span>
+        </div>
+      </div>
+    </aside>
   )
 }

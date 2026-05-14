@@ -67,10 +67,15 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
         <div className="h-[1px] w-full bg-os-border" />
 
         {/* Content */}
-        <div className="prose prose-sm prose-neutral dark:prose-invert md:prose-base max-w-none text-muted-foreground
+        <div className="prose prose-sm md:prose-base max-w-none text-muted-foreground
           prose-headings:text-foreground prose-headings:font-heading prose-headings:font-bold
-          prose-strong:text-foreground prose-code:text-os-accent prose-code:bg-os-accent-muted/20 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:before:content-none prose-code:after:content-none
-          prose-pre:bg-os-terminal-bg prose-pre:border prose-pre:border-os-border prose-pre:rounded-sm"
+          prose-strong:text-foreground 
+          prose-a:text-os-accent prose-a:no-underline hover:prose-a:underline
+          prose-blockquote:border-l-os-accent prose-blockquote:bg-os-accent-muted/5 prose-blockquote:py-1 prose-blockquote:text-foreground/80
+          prose-code:text-os-accent prose-code:bg-os-accent-muted/20 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:before:content-none prose-code:after:content-none
+          prose-pre:bg-os-terminal-bg prose-pre:border prose-pre:border-os-border prose-pre:rounded-sm
+          prose-ol:marker:text-os-accent prose-ul:marker:text-os-accent
+          prose-hr:border-os-border"
         >
           {children}
         </div>
