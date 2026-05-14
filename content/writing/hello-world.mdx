@@ -1,0 +1,107 @@
+---
+title: Hello World from Fumadocs
+description: This is a sample post managed by Fumadocs in the folio-os project.
+date: 2026-05-14
+tags: ["intro", "fumadocs", "syntax-highlighting"]
+category: "announcement"
+---
+
+# Building the OS Portfolio
+
+Welcome to my new workspace! This content is managed by **Fumadocs**. Now that we have integrated a powerful headless CMS, we can seamlessly write technical documentation, engineering logs, and notes with beautiful typography.
+
+## Why Fumadocs?
+
+- **Type-safe content loading**: The `.source` directory is generated automatically and provides full TypeScript safety.
+- **MDX support out of the box**: Write standard Markdown and embed React components when necessary.
+- **Syntax Highlighting**: Powered by **Shiki** and configured directly inside `source.config.ts`.
+
+## Syntax Highlighting Showcase
+
+To test out our new Shiki integration and the `vitesse-dark` theme, here are a few code snippets in different languages.
+
+### TypeScript / React
+
+```tsx
+import { useState, useEffect } from 'react'
+
+export function Terminal() {
+  const [output, setOutput] = useState<string[]>([])
+
+  useEffect(() => {
+    console.log("Terminal initialized.")
+    setOutput(["workspace://folio-os > system online"])
+  }, [])
+
+  return (
+    <div className="bg-os-terminal-bg text-os-terminal-fg p-4 rounded-md font-mono text-sm">
+      {output.map((line, i) => (
+        <p key={i}>{line}</p>
+      ))}
+    </div>
+  )
+}
+```
+
+### Rust
+
+Rust's strict type system and borrowing rules look great with the new theme:
+
+```rust
+fn main() {
+    let mut system_status = String::from("Booting");
+    
+    // Ownership transferred and borrowed
+    print_status(&system_status);
+    
+    system_status.push_str("... Done!");
+    println!("Final Status: {}", system_status);
+}
+
+fn print_status(status: &str) {
+    println!("Current System Status: {}", status);
+}
+```
+
+### Python
+
+A quick snippet of Python to demonstrate standard library imports and list comprehensions:
+
+```python
+import os
+import json
+
+def load_config(path: str) -> dict:
+    """Loads a JSON configuration file."""
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Config file not found at: {path}")
+        
+    with open(path, 'r') as file:
+        data = json.load(file)
+        
+    # Process valid keys
+    return { k: v for k, v in data.items() if v is not None }
+
+config = load_config('./os-config.json')
+print(config)
+```
+
+### Bash / Shell
+
+And finally, some standard shell commands for the workspace:
+
+```bash
+#!/bin/bash
+
+# Start the development server
+echo "Starting OS Portfolio..."
+pnpm install
+pnpm dev --port 3000
+```
+
+## Inline Highlighting
+
+You can also highlight code inline! For example, when you want to mention a specific JavaScript function like `console.log("Hello OS")` or a Rust macro like `println!("Ready!")`.
+
+---
+*System log ended. Connection closed.*
