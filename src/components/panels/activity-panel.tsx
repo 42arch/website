@@ -13,7 +13,7 @@ interface LogEntry {
 }
 
 const ACTIVITY_DATA: LogEntry[] = [
-  { timestamp: '2026-05-14 15:30', type: 'commit', message: 'feat: implement portfolio-os workspace layout', hash: 'a3f2c1d', branch: 'main' },
+  { timestamp: '2026-05-14 15:30', type: 'commit', message: 'feat: implement folio-os workspace layout', hash: 'a3f2c1d', branch: 'main' },
   { timestamp: '2026-05-14 14:22', type: 'build', message: 'build #142 completed successfully (12.3s)' },
   { timestamp: '2026-05-14 12:45', type: 'deploy', message: 'deployed to production (v0.4.2)' },
   { timestamp: '2026-05-13 23:10', type: 'commit', message: 'refactor: migrate to zustand store architecture', hash: 'b7e4f2a', branch: 'main' },

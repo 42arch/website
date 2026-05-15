@@ -1,22 +1,21 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { notFound } from 'next/navigation'
-import { WritingDetailPanel } from '@/components/panels/writing-detail-panel'
-import { calculateReadingTime } from '@/lib/content'
-import { writing } from '@/lib/source'
+import { NoteDetailPanel } from '@/components/panels/note-detail-panel'
+import { notes } from '@/lib/source'
 
 interface PageProps {
   params: Promise<{ slug: string[] }>
 }
 
 export async function generateStaticParams() {
-  return writing.getPages().map(page => ({
+  return notes.getPages().map(page => ({
     slug: page.slugs,
   }))
 }
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
-  const page = writing.getPage(slug)
+  const page = notes.getPage(slug)
 
   if (!page)
     return { title: 'Not Found | Folio OS' }
@@ -27,9 +26,9 @@ export async function generateMetadata({ params }: PageProps) {
   }
 }
 
-export default async function WritingDetailPage({ params }: PageProps) {
+export default async function NoteDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const page = writing.getPage(slug)
+  const page = notes.getPage(slug)
 
   if (!page) {
     notFound()
@@ -37,18 +36,13 @@ export default async function WritingDetailPage({ params }: PageProps) {
 
   const Content = page.data.body
 
-  const readingTime = calculateReadingTime(page.data.structuredData.contents)
-
   return (
-    <WritingDetailPanel
+    <NoteDetailPanel
       title={page.data.title}
       date={(page.data as any).date || new Date()}
       tags={(page.data as any).tags || []}
-      category={(page.data as any).category}
-      readingTime={readingTime}
-      description={page.data.description}
     >
       <Content components={defaultMdxComponents} />
-    </WritingDetailPanel>
+    </NoteDetailPanel>
   )
 }

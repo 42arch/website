@@ -4,12 +4,15 @@ import {
   ClockIcon,
   ColumnsIcon,
   CommandIcon,
+  ListIcon,
+  MagnifyingGlassIcon,
   SidebarIcon,
   TerminalIcon,
 } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 
 import { ModeToggle } from '@/components/mode-toggle'
+import { useIsMobile } from '@/lib/use-mobile'
 import { useWorkspaceStore } from '@/store/workspace'
 
 function LiveClock() {
@@ -45,6 +48,36 @@ export function Toolbar() {
     sidebarOpen, 
     bottomPanelOpen 
   } = useWorkspaceStore()
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return (
+      <header
+        id="os-toolbar"
+        className="flex h-12 shrink-0 items-center justify-between border-b border-os-border bg-os-toolbar px-3"
+      >
+        {/* Left: Brand */}
+        <div className="flex items-center gap-1.5 font-mono text-[11px]">
+          <span className="font-semibold tracking-wider text-foreground">FOLIO-OS</span>
+          <span className="text-muted-foreground">/</span>
+          <span className="text-muted-foreground">workspace</span>
+        </div>
+
+        {/* Right: Command Palette trigger + Theme */}
+        <div className="flex items-center gap-1">
+          <ModeToggle />
+          <button
+            id="mobile-command-palette-btn"
+            onClick={toggleCommandPalette}
+            className="flex size-9 items-center justify-center rounded-sm text-muted-foreground transition-colors active:bg-os-accent-muted active:text-foreground"
+            title="Navigate"
+          >
+            <ListIcon size={18} weight="bold" />
+          </button>
+        </div>
+      </header>
+    )
+  }
 
   return (
     <header
@@ -74,7 +107,7 @@ export function Toolbar() {
 
         {/* Breadcrumb-style title */}
         <div className="flex items-center gap-1.5 font-mono text-[11px]">
-          <span className="font-semibold tracking-wider text-foreground">PORTFOLIO</span>
+          <span className="font-semibold tracking-wider text-foreground">FOLIO-OS</span>
           <span className="text-muted-foreground">/</span>
           <span className="text-muted-foreground">workspace</span>
         </div>

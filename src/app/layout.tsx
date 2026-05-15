@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { WorkspaceShell } from '@/components/workspace/workspace-shell'
@@ -24,6 +24,13 @@ export const metadata: Metadata = {
   title: 'Folio OS — Developer Workspace',
   description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a digital operating system.',
   keywords: ['developer', 'portfolio', 'workspace', 'interactive', 'experimental'],
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({

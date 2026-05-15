@@ -308,3 +308,11 @@ html[data-theme="cobalt"] {
     background: oklch(0.5 0 0 / 35%);
   }
 }
+
+/* ── Mobile responsive adjustments ──────────────── */
+@media (max-width: 767px) {
+  /* Reduce panel padding on mobile */
+  #workspace-content .os-scrollbar {
+    padding: 1rem;
+  }
+}

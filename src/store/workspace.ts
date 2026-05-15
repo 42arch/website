@@ -42,6 +42,8 @@ interface WorkspaceState {
   setSidebarWidth: (w: number) => void
   setThemePreset: (preset: 'folio-dark' | 'folio-light' | 'vesper' | 'nord' | 'rose' | 'cobalt', setTheme?: (t: string) => void) => void
   setOpenTabs: (tabs: string[]) => void
+  closeAllTabs: () => void
+  closeOtherTabs: (id: string) => void
 }
 
 export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
@@ -95,4 +97,10 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     }
   },
   setOpenTabs: tabs => set({ openTabs: tabs }),
+  closeAllTabs: () => {
+    set({ openTabs: ['overview'] })
+  },
+  closeOtherTabs: (id) => {
+    set({ openTabs: [id] })
+  },
 }))

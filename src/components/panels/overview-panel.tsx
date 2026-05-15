@@ -75,6 +75,83 @@ function FeaturedProject({ title, description, tags, status }: {
   )
 }
 
+function HeroSection() {
+  const asciiArt = `
+███████╗ ██████╗ ██╗     ██╗ ██████╗      ██████╗ ███████╗
+██╔════╝██╔═══██╗██║     ██║██╔═══██╗    ██╔═══██╗██╔════╝
+█████╗  ██║   ██║██║     ██║██║   ██║    ██║   ██║███████╗
+██╔══╝  ██║   ██║██║     ██║██║   ██║    ██║   ██║╚════██║
+██║     ╚██████╔╝███████╗██║╚██████╔╝    ╚██████╔╝███████║
+╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝      ╚═════╝ ╚══════╝
+  `.trim();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="group relative mb-8 flex min-h-[240px] flex-col items-center justify-center overflow-hidden rounded-sm border border-os-border bg-os-surface/50 p-12 backdrop-blur-sm"
+    >
+      {/* Dynamic Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-os-accent/5 to-transparent opacity-50" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,var(--os-accent-muted),transparent_70%)] opacity-30" />
+
+      {/* Grid Pattern */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{ backgroundImage: 'linear-gradient(var(--os-border) 1px, transparent 1px), linear-gradient(90deg, var(--os-border) 1px, transparent 1px)', backgroundSize: '20px 20px' }}
+      />
+
+      {/* ASCII Art with Depth Layering */}
+      <div className="relative">
+        {/* Deep Depth Layer */}
+        <pre className="pointer-events-none absolute left-[4px] top-[4px] z-0 select-none font-mono text-[7px] leading-none text-os-accent/5 transition-all duration-700 sm:text-[9px] md:text-[11px] lg:text-[13px] group-hover:left-[6px] group-hover:top-[6px] group-hover:opacity-10">
+          {asciiArt}
+        </pre>
+        {/* Mid Depth Layer */}
+        <pre className="pointer-events-none absolute left-[2px] top-[2px] z-0 select-none font-mono text-[7px] leading-none text-os-accent/20 transition-all duration-700 sm:text-[9px] md:text-[11px] lg:text-[13px] group-hover:left-[3px] group-hover:top-[3px] group-hover:opacity-30">
+          {asciiArt}
+        </pre>
+        {/* Main Text Layer */}
+        <pre className="pointer-events-none relative z-10 select-none font-mono text-[7px] leading-none text-os-accent transition-all duration-700 sm:text-[9px] md:text-[11px] lg:text-[13px] group-hover:translate-x-[-1px] group-hover:translate-y-[-1px] group-hover:drop-shadow-[0_0_15px_var(--os-accent-muted)]">
+          {asciiArt}
+        </pre>
+        {/* Top Highlight (Glow Overlay) */}
+        <pre className="pointer-events-none absolute inset-0 z-20 select-none font-mono text-[7px] opacity-0 leading-none text-white/20 transition-all duration-700 blur-[1px] sm:text-[9px] md:text-[11px] lg:text-[13px] group-hover:opacity-40">
+          {asciiArt}
+        </pre>
+      </div>
+
+      {/* Decorative elements */}
+      <div className="relative z-10 mt-8 flex flex-col items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="h-px w-12 bg-gradient-to-r from-transparent via-os-border to-transparent" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-muted-foreground/60">
+            System Executive Environment
+          </span>
+          <div className="h-px w-12 bg-gradient-to-r from-transparent via-os-border to-transparent" />
+        </div>
+        <div className="font-mono text-[8px] uppercase tracking-widest text-os-accent/40">
+          Build 0x4F53_2026 // Status: Optimal
+        </div>
+      </div>
+
+      {/* Corners */}
+      <div className="absolute left-4 top-4 size-4 border-l border-t border-os-border/40" />
+      <div className="absolute right-4 top-4 size-4 border-r border-t border-os-border/40" />
+      <div className="absolute bottom-4 left-4 size-4 border-b border-l border-os-border/40" />
+      <div className="absolute bottom-4 right-4 size-4 border-b border-r border-os-border/40" />
+
+      {/* Scanning Line */}
+      <motion.div
+        animate={{ top: ['0%', '100%', '0%'] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+        className="pointer-events-none absolute left-0 z-20 h-1 w-full bg-gradient-to-r from-transparent via-os-accent/10 to-transparent"
+      />
+    </motion.div>
+  )
+}
+
 export function OverviewPanel() {
   return (
     <motion.div
@@ -94,6 +171,8 @@ export function OverviewPanel() {
             当前正在探索实验性交互系统与可视化工具。
           </p>
         </div>
+
+        <HeroSection />
 
         {/* Status Grid */}
         <div>

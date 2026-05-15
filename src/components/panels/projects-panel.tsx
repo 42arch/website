@@ -42,7 +42,7 @@ const PROJECTS: Project[] = [
     url: '#',
   },
   {
-    id: 'portfolio-os',
+    id: 'folio-os',
     title: 'Folio OS',
     description: 'This website. An experimental workspace interface inspired by IDE, developer tools, and retro operating system aesthetics. Panel-based navigation with command palette, explorer tree, and activity monitoring.',
     tags: ['experimental', 'interface', 'workspace'],

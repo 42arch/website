@@ -14,7 +14,7 @@ interface ActivityEntry {
 
 const ACTIVITY_LOG: ActivityEntry[] = [
   { timestamp: '2026-05-14 15:30:01', type: 'system', message: 'workspace initialized' },
-  { timestamp: '2026-05-14 14:22:17', type: 'commit', message: 'feat: implement portfolio-os workspace layout' },
+  { timestamp: '2026-05-14 14:22:17', type: 'commit', message: 'feat: implement folio-os workspace layout' },
   { timestamp: '2026-05-14 12:45:33', type: 'build', message: 'build #142 completed successfully' },
   { timestamp: '2026-05-13 23:10:05', type: 'deploy', message: 'deployed to production (v0.4.2)' },
   { timestamp: '2026-05-13 21:30:44', type: 'commit', message: 'refactor: migrate to zustand store architecture' },

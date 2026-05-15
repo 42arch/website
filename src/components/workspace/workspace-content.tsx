@@ -10,7 +10,7 @@ export function WorkspaceContent({ children }: { children: ReactNode }) {
   return (
     <main
       id="workspace-content"
-      className="flex-1 overflow-hidden bg-os-panel"
+      className="flex flex-1 flex-col overflow-hidden bg-os-panel"
     >
       <AnimatePresence mode="wait">
         <motion.div

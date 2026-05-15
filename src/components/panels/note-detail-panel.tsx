@@ -1,65 +1,45 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { ArrowLeftIcon, CalendarIcon, ClockIcon, FolderIcon, TagIcon } from '@phosphor-icons/react'
+import { ArrowLeftIcon, CalendarIcon, TagIcon } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
 import Link from 'next/link'
 
-interface WritingDetailPanelProps {
+interface NoteDetailPanelProps {
   title: string
   date: Date
   tags: string[]
-  category?: string
-  readingTime?: string
-  description?: string
   children: ReactNode
 }
 
-export function WritingDetailPanel({ title, date, tags, category, readingTime, description, children }: WritingDetailPanelProps) {
+export function NoteDetailPanel({ title, date, tags, children }: NoteDetailPanelProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="os-scrollbar h-full overflow-y-auto p-6">
       <div className="mx-auto max-w-3xl space-y-8">
         {/* Header */}
         <div className="space-y-4">
-          <Link href="/writing" className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground hover:text-os-accent transition-colors">
+          <Link href="/notes" className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground hover:text-os-accent transition-colors">
             <ArrowLeftIcon size={12} />
             cd ../
           </Link>
 
           <div className="space-y-3">
+            <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              {title}
+            </h1>
             <div className="flex flex-wrap items-center gap-4">
               <span className="flex items-center gap-1 font-mono text-[11px] text-muted-foreground">
                 <CalendarIcon size={12} />
                 {new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
               </span>
-              {category && (
-                <span className="flex items-center gap-1 font-mono text-[11px] text-muted-foreground uppercase tracking-wider">
-                  <FolderIcon size={12} />
-                  {category}
-                </span>
-              )}
-              {readingTime && (
-                <span className="flex items-center gap-1 font-mono text-[11px] text-muted-foreground">
-                  <ClockIcon size={12} />
-                  {readingTime}
-                </span>
-              )}
-            </div>
-            <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl lg:text-4xl">
-              {title}
-            </h1>
-            {description && (
-              <p className="font-mono text-[11px] text-muted-foreground leading-relaxed">
-                {description}
-              </p>
-            )}
-            <div className="flex flex-wrap gap-1.5 pt-2">
-              {tags.map(tag => (
-                <span key={tag} className="flex items-center gap-1 font-mono text-[10px] text-muted-foreground bg-os-surface border border-os-border px-2 py-0.5 rounded-sm">
-                  <TagIcon size={10} />
-                  {tag}
-                </span>
-              ))}
+              <div className="flex flex-wrap gap-1.5">
+                {tags.map(tag => (
+                  <span key={tag} className="flex items-center gap-1 font-mono text-[10px] text-muted-foreground bg-os-surface border border-os-border px-2 py-0.5 rounded-sm">
+                    <TagIcon size={10} />
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
