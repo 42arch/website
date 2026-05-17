@@ -8,7 +8,6 @@ import {
   UserCircleIcon,
 } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
-import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { OsCard } from '@/components/ui/os-card'
 import { PanelBadge } from '@/components/ui/panel-badge'
@@ -18,7 +17,6 @@ import { cn } from '@/lib/utils'
 import { useWorkspaceStore } from '@/store/workspace'
 
 export function SettingsPanel() {
-  const { theme, setTheme } = useTheme()
   const {
     sidebarPosition,
     setSidebarPosition,
@@ -91,18 +89,20 @@ export function SettingsPanel() {
                 <p className="text-[11px] text-muted-foreground">Select a complete visual environment for your workstation.</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {[
-                  { id: 'folio-dark', label: 'Folio Dark', color: 'bg-[#1a1a1a]', desc: 'Classic Graphite' },
-                  { id: 'folio-light', label: 'Folio Light', color: 'bg-[#f5f5f0]', desc: 'Warm Ivory' },
-                  { id: 'vesper', label: 'Vesper', color: 'bg-[#101010]', desc: 'Shiki High Contrast' },
-                  { id: 'nord', label: 'Nord', color: 'bg-[#2e3440]', desc: 'Arctic Frost' },
-                  { id: 'rose', label: 'Catppuccin', color: 'bg-[#1e1e2e]', desc: 'Soft Pastel' },
-                  { id: 'cobalt', label: 'GitHub Light', color: 'bg-[#ffffff]', desc: 'Classic Light' },
+                  { id: 'graphite', label: 'Graphite', color: 'bg-[#141414]', accent: 'bg-[#63e2b7]', desc: 'Industrial Cyan' },
+                  { id: 'linen', label: 'Linen', color: 'bg-[#f8f6f1]', accent: 'bg-[#b87333]', desc: 'Warm Ivory' },
+                  { id: 'vesper', label: 'Vesper', color: 'bg-[#101010]', accent: 'bg-[#ffc799]', desc: 'Deep Amber' },
+                  { id: 'nord', label: 'Nord', color: 'bg-[#2e3440]', accent: 'bg-[#88c0d0]', desc: 'Arctic Frost' },
+                  { id: 'catppuccin', label: 'Catppuccin', color: 'bg-[#1e1e2e]', accent: 'bg-[#f5c2e7]', desc: 'Soft Pastel' },
+                  { id: 'tokyo-night', label: 'Tokyo Night', color: 'bg-[#1a1b26]', accent: 'bg-[#7aa2f7]', desc: 'Neon Blue' },
+                  { id: 'dracula', label: 'Dracula', color: 'bg-[#282a36]', accent: 'bg-[#bd93f9]', desc: 'Classic Purple' },
+                  { id: 'github-dark', label: 'GitHub Dark', color: 'bg-[#0d1117]', accent: 'bg-[#58a6ff]', desc: 'Official Dark' },
                 ].map(p => (
                   <button
                     key={p.id}
-                    onClick={() => setThemePreset(p.id as any, setTheme)}
+                    onClick={() => setThemePreset(p.id as any)}
                     className={cn(
                       'group relative flex flex-col items-start gap-3 rounded-sm border p-3 text-left transition-all',
                       themePreset === p.id
@@ -110,7 +110,10 @@ export function SettingsPanel() {
                         : 'border-os-border bg-os-surface hover:border-os-accent/30',
                     )}
                   >
-                    <div className={cn('size-4 rounded-full border border-os-border', p.color)} />
+                    <div className="flex items-center gap-1.5">
+                      <div className={cn('size-4 rounded-full border border-os-border', p.color)} />
+                      <div className={cn('size-2.5 rounded-full', p.accent)} />
+                    </div>
                     <div className="space-y-0.5">
                       <div className="text-[11px] font-bold text-foreground">{p.label}</div>
                       <div className="text-[9px] leading-tight text-muted-foreground">{p.desc}</div>

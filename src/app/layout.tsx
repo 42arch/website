@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Inter } from 'next/font/google'
-import { ThemeProvider } from '@/components/theme-provider'
 import { WorkspaceShell } from '@/components/workspace/workspace-shell'
 import { cn } from '@/lib/utils'
 
@@ -45,14 +44,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="h-full overflow-hidden">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <WorkspaceShell>{children}</WorkspaceShell>
-        </ThemeProvider>
+        <WorkspaceShell>{children}</WorkspaceShell>
       </body>
     </html>
   )

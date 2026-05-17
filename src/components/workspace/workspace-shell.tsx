@@ -146,12 +146,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
 
   // Sync theme preset with DOM
   useEffect(() => {
-    if (['folio-dark', 'folio-light'].includes(themePreset)) {
-      document.documentElement.removeAttribute('data-theme')
-    }
-    else {
-      document.documentElement.setAttribute('data-theme', themePreset)
-    }
+    document.documentElement.setAttribute('data-theme', themePreset)
   }, [themePreset])
 
   // Pre-hydration: viewport not yet determined — show matching background to avoid flash

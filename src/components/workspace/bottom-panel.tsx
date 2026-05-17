@@ -2,7 +2,6 @@
 
 import type { TerminalLine } from '@/lib/terminal'
 import { TerminalIcon, XIcon } from '@phosphor-icons/react'
-import { useTheme } from 'next-themes'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
@@ -14,7 +13,6 @@ import { useWorkspaceStore } from '@/store/workspace'
 
 export function BottomPanel() {
   const { bottomPanelOpen, openTab, setThemePreset, setBottomPanelOpen } = useWorkspaceStore()
-  const { setTheme } = useTheme()
 
   const [lines, setLines] = useState<TerminalLine[]>([])
   const [input, setInput] = useState('')
@@ -78,13 +76,12 @@ export function BottomPanel() {
     executeCommand(input, {
       openTab,
       setThemePreset,
-      setTheme,
       addLines,
       clearLines,
     })
 
     setInput('')
-  }, [input, openTab, setThemePreset, setTheme, addLines, clearLines])
+  }, [input, openTab, setThemePreset, addLines, clearLines])
 
   // Keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {

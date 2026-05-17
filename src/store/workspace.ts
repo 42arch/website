@@ -28,7 +28,7 @@ interface WorkspaceState {
   commandPaletteOpen: boolean
   sidebarWidth: number
   sidebarPosition: 'left' | 'right'
-  themePreset: 'folio-dark' | 'folio-light' | 'vesper' | 'nord' | 'rose' | 'cobalt'
+  themePreset: 'graphite' | 'linen' | 'vesper' | 'nord' | 'catppuccin' | 'tokyo-night' | 'dracula' | 'github-dark'
 
   openTab: (id: string) => void
   closeTab: (id: string) => void
@@ -41,7 +41,7 @@ interface WorkspaceState {
   toggleCommandPalette: () => void
   setCommandPaletteOpen: (open: boolean) => void
   setSidebarWidth: (w: number) => void
-  setThemePreset: (preset: 'folio-dark' | 'folio-light' | 'vesper' | 'nord' | 'rose' | 'cobalt', setTheme?: (t: string) => void) => void
+  setThemePreset: (preset: 'graphite' | 'linen' | 'vesper' | 'nord' | 'catppuccin' | 'tokyo-night' | 'dracula' | 'github-dark') => void
   setOpenTabs: (tabs: string[]) => void
   closeAllTabs: () => void
   closeOtherTabs: (id: string) => void
@@ -57,7 +57,9 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   commandPaletteOpen: false,
   sidebarWidth: 220,
   sidebarPosition: 'left',
-  themePreset: 'folio-dark',
+  themePreset: (typeof window !== 'undefined'
+    ? localStorage.getItem('folio-os-theme') as any
+    : null) || 'linen',
 
   openTab: (id) => {
     const { openTabs } = get()
@@ -92,21 +94,15 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   toggleCommandPalette: () => set(s => ({ commandPaletteOpen: !s.commandPaletteOpen })),
   setCommandPaletteOpen: open => set({ commandPaletteOpen: open }),
   setSidebarWidth: w => set({ sidebarWidth: w }),
-  setThemePreset: (preset, setTheme) => {
+  setThemePreset: (preset) => {
     set({ themePreset: preset })
 
-    // Sync with next-themes if provided
-    if (setTheme) {
-      const isLight = ['folio-light', 'cobalt'].includes(preset)
-      setTheme(isLight ? 'light' : 'dark')
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('folio-os-theme', preset)
     }
 
     if (typeof document !== 'undefined') {
-      // Clear all theme attributes first
-      document.documentElement.removeAttribute('data-theme')
-      if (!['folio-dark', 'folio-light'].includes(preset)) {
-        document.documentElement.setAttribute('data-theme', preset)
-      }
+      document.documentElement.setAttribute('data-theme', preset)
     }
   },
   setOpenTabs: tabs => set({ openTabs: tabs }),

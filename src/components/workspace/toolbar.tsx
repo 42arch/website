@@ -10,7 +10,6 @@ import {
 } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 
-import { ModeToggle } from '@/components/mode-toggle'
 import { useIsMobile } from '@/lib/use-mobile'
 import { useWorkspaceStore } from '@/store/workspace'
 
@@ -64,7 +63,6 @@ export function Toolbar() {
 
         {/* Right: Command Palette trigger + Theme */}
         <div className="flex items-center gap-1">
-          <ModeToggle />
           <button
             id="mobile-command-palette-btn"
             onClick={toggleCommandPalette}
@@ -135,7 +133,6 @@ export function Toolbar() {
           >
             <ColumnsIcon size={14} />
           </button>
-          <ModeToggle />
         </div>
       </div>
     </header>

@@ -8,8 +8,7 @@ export interface TerminalLine {
 // ── Command Registry ──
 interface CommandContext {
   openTab: (id: string) => void
-  setThemePreset: (preset: 'folio-dark' | 'folio-light' | 'vesper' | 'nord' | 'rose' | 'cobalt', setTheme?: (t: string) => void) => void
-  setTheme?: (t: string) => void
+  setThemePreset: (preset: 'graphite' | 'linen' | 'vesper' | 'nord' | 'catppuccin' | 'tokyo-night' | 'dracula' | 'github-dark') => void
   addLines: (lines: TerminalLine[]) => void
   clearLines: () => void
 }
@@ -55,7 +54,7 @@ const PANELS: { id: string, label: string }[] = [
   { id: 'settings', label: 'Settings' },
 ]
 
-const THEMES = ['folio-dark', 'folio-light', 'vesper', 'nord', 'rose', 'cobalt'] as const
+const THEMES = ['graphite', 'linen', 'vesper', 'nord', 'catppuccin', 'tokyo-night', 'dracula', 'github-dark'] as const
 
 // ── Pet State ──
 const petState = {
@@ -187,7 +186,7 @@ const commands: Record<string, CommandHandler> = {
       return
     }
     if ((THEMES as readonly string[]).includes(target)) {
-      ctx.setThemePreset(target as typeof THEMES[number], ctx.setTheme)
+      ctx.setThemePreset(target as typeof THEMES[number])
       ctx.addLines([createLine('system', `Theme switched to "${target}".`)])
     }
     else {

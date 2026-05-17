@@ -4,282 +4,449 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
-@custom-variant dark (&:is(.dark *));
+/* ══════════════════════════════════════════════════
+   FOLIO OS — Unified Theme System
+   All visual tokens are defined per-theme.
+   No light/dark toggle — each preset is complete.
+   ══════════════════════════════════════════════════ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-base);
+  --color-foreground: var(--fg-default);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-heading);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
+
+  /* Shadcn compat mappings */
+  --color-card: var(--bg-surface);
+  --color-card-foreground: var(--fg-default);
+  --color-popover: var(--bg-overlay);
+  --color-popover-foreground: var(--fg-default);
+  --color-primary: var(--fg-default);
+  --color-primary-foreground: var(--bg-base);
+  --color-secondary: var(--bg-subtle);
+  --color-secondary-foreground: var(--fg-default);
+  --color-muted: var(--bg-subtle);
+  --color-muted-foreground: var(--fg-muted);
   --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
+  --color-accent-foreground: var(--fg-on-accent);
+  --color-destructive: var(--status-error);
+  --color-border: var(--border-default);
+  --color-input: var(--border-default);
+  --color-ring: var(--accent);
+
+  --color-sidebar: var(--bg-surface);
+  --color-sidebar-foreground: var(--fg-default);
+  --color-sidebar-primary: var(--accent);
+  --color-sidebar-primary-foreground: var(--fg-on-accent);
+  --color-sidebar-accent: var(--bg-subtle);
+  --color-sidebar-accent-foreground: var(--fg-default);
+  --color-sidebar-border: var(--border-default);
+  --color-sidebar-ring: var(--accent);
+
+  --color-chart-1: var(--accent);
+  --color-chart-2: var(--status-info);
+  --color-chart-3: var(--status-success);
+  --color-chart-4: var(--status-warning);
+  --color-chart-5: var(--fg-muted);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* OS-specific tokens */
-  --color-os-toolbar: var(--os-toolbar);
-  --color-os-sidebar: var(--os-sidebar);
-  --color-os-panel: var(--os-panel);
-  --color-os-accent: var(--os-accent);
-  --color-os-accent-muted: var(--os-accent-muted);
-  --color-os-surface: var(--os-surface);
-  --color-os-border: var(--os-border);
-  --color-os-indicator: var(--os-indicator);
-  --color-os-terminal-bg: var(--os-terminal-bg);
-  --color-os-terminal-fg: var(--os-terminal-fg);
+  /* OS semantic aliases — components use these */
+  --color-os-toolbar: var(--bg-surface);
+  --color-os-sidebar: var(--bg-surface);
+  --color-os-panel: var(--bg-surface);
+  --color-os-accent: var(--accent);
+  --color-os-accent-muted: var(--accent-muted);
+  --color-os-accent-foreground: var(--fg-on-accent);
+  --color-os-surface: var(--bg-subtle);
+  --color-os-border: var(--border-default);
+  --color-os-indicator: var(--status-success);
+  --color-os-terminal-bg: var(--bg-inset);
+  --color-os-terminal-fg: var(--terminal-fg);
 }
 
-/* ── Light Theme: Warm cream/graphite workspace ─── */
+/* ══════════════════════════════════════════════════
+   THEME: Linen (Default Theme)
+   Warm ivory light theme with copper accents
+   ══════════════════════════════════════════════════ */
 :root {
-  --background: oklch(0.965 0.005 80);
-  --foreground: oklch(0.22 0.01 45);
-  --card: oklch(0.975 0.004 80);
-  --card-foreground: oklch(0.22 0.01 45);
-  --popover: oklch(0.975 0.004 80);
-  --popover-foreground: oklch(0.22 0.01 45);
-  --primary: oklch(0.30 0.015 45);
-  --primary-foreground: oklch(0.965 0.005 80);
-  --secondary: oklch(0.935 0.008 80);
-  --secondary-foreground: oklch(0.30 0.015 45);
-  --muted: oklch(0.935 0.008 80);
-  --muted-foreground: oklch(0.50 0.015 45);
-  --accent: oklch(0.72 0.14 65);
-  --accent-foreground: oklch(0.22 0.01 45);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.88 0.012 75);
-  --input: oklch(0.90 0.010 75);
-  --ring: oklch(0.72 0.14 65);
-  --chart-1: oklch(0.72 0.14 65);
-  --chart-2: oklch(0.65 0.12 145);
-  --chart-3: oklch(0.55 0.08 45);
-  --chart-4: oklch(0.45 0.06 45);
-  --chart-5: oklch(0.35 0.04 45);
   --radius: 0.25rem;
-  --sidebar: oklch(0.95 0.006 80);
-  --sidebar-foreground: oklch(0.22 0.01 45);
-  --sidebar-primary: oklch(0.30 0.015 45);
-  --sidebar-primary-foreground: oklch(0.965 0.005 80);
-  --sidebar-accent: oklch(0.935 0.008 80);
-  --sidebar-accent-foreground: oklch(0.30 0.015 45);
-  --sidebar-border: oklch(0.88 0.012 75);
-  --sidebar-ring: oklch(0.72 0.14 65);
 
-  /* OS tokens */
-  --os-toolbar: oklch(0.94 0.006 80);
-  --os-sidebar: oklch(0.95 0.006 80);
-  --os-panel: oklch(0.975 0.004 80);
-  --os-accent: oklch(0.72 0.14 65);
-  --os-accent-muted: oklch(0.72 0.14 65 / 15%);
-  --os-surface: oklch(0.96 0.005 80);
-  --os-border: oklch(0.88 0.012 75);
-  --os-indicator: oklch(0.65 0.18 145);
-  --os-terminal-bg: oklch(0.22 0.01 45);
-  --os-terminal-fg: oklch(0.72 0.18 145);
+  /* Layer 1: Backgrounds */
+  --bg-base: #f8f6f1;
+  --bg-surface: #f0ece4;
+  --bg-overlay: #f0ece4;
+  --bg-inset: #1a1a1a;
+  --bg-subtle: #e8e4dc;
 
-  /* Shiki Tokens */
-  --shiki-foreground: var(--foreground);
-  --shiki-background: var(--os-terminal-bg);
-  --shiki-token-constant: oklch(0.65 0.18 145);
-  --shiki-token-string: oklch(0.65 0.18 145);
-  --shiki-token-comment: oklch(0.5 0.01 45 / 50%);
-  --shiki-token-keyword: oklch(0.72 0.14 65);
-  --shiki-token-parameter: oklch(0.4 0.01 45);
-  --shiki-token-function: oklch(0.65 0.18 145);
-  --shiki-token-string-expression: oklch(0.65 0.18 145);
-  --shiki-token-punctuation: oklch(0.4 0.01 45);
-  --shiki-token-link: oklch(0.72 0.14 65);
+  /* Layer 2: Text */
+  --fg-default: #2c2c2c;
+  --fg-muted: #7a756e;
+  --fg-subtle: #a09a92;
+  --fg-on-accent: #f8f6f1;
+
+  /* Terminal (Bright gray text on black background) */
+  --terminal-fg: #d4d0c8;
+
+  /* Layer 3: Border */
+  --border-default: #0000000f;
+  --border-muted: #00000008;
+  --border-strong: #0000001a;
+
+  /* Layer 4: Accent */
+  --accent: #b87333;
+  --accent-hover: #cc8040;
+  --accent-muted: #b873331a;
+  --accent-subtle: #b873330d;
+
+  /* Layer 5: Status */
+  --status-success: #3a9a6e;
+  --status-warning: #c48820;
+  --status-error: #c44040;
+  --status-info: #3a7ac4;
+
+  /* Layer 6: Shiki (Highly legible code block tokens on dark inset background) */
+  --shiki-foreground: #d4d0c8;
+  --shiki-background: #1a1a1a;
+  --shiki-token-keyword: #ff9e3b;           /* Bright Copper Orange */
+  --shiki-token-string: #76c796;            /* Pastel Emerald Green */
+  --shiki-token-comment: #a09a9280;          /* Subtle Gray Comment */
+  --shiki-token-function: #b08aff;          /* Electric Pastel Violet */
+  --shiki-token-constant: #64b5f6;          /* Polar Light Blue */
+  --shiki-token-punctuation: #a09a92;       /* Readable Gray punctuation */
+  --shiki-token-parameter: #d4d0c8;         /* Bright Parameter */
+  --shiki-token-string-expression: #76c796;
+  --shiki-token-link: #ff9e3b;
 }
 
-/* ── Dark Theme: Charcoal/graphite workspace ─────── */
-.dark {
-  --background: oklch(0.155 0.008 45);
-  --foreground: oklch(0.92 0.008 80);
-  --card: oklch(0.185 0.010 45);
-  --card-foreground: oklch(0.92 0.008 80);
-  --popover: oklch(0.185 0.010 45);
-  --popover-foreground: oklch(0.92 0.008 80);
-  --primary: oklch(0.92 0.008 80);
-  --primary-foreground: oklch(0.155 0.008 45);
-  --secondary: oklch(0.22 0.010 45);
-  --secondary-foreground: oklch(0.92 0.008 80);
-  --muted: oklch(0.22 0.010 45);
-  --muted-foreground: oklch(0.60 0.015 55);
-  --accent: oklch(0.74 0.15 65);
-  --accent-foreground: oklch(0.155 0.008 45);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.74 0.15 65);
-  --chart-1: oklch(0.74 0.15 65);
-  --chart-2: oklch(0.65 0.18 145);
-  --chart-3: oklch(0.55 0.08 45);
-  --chart-4: oklch(0.45 0.06 45);
-  --chart-5: oklch(0.35 0.04 45);
-  --sidebar: oklch(0.145 0.007 45);
-  --sidebar-foreground: oklch(0.92 0.008 80);
-  --sidebar-primary: oklch(0.74 0.15 65);
-  --sidebar-primary-foreground: oklch(0.155 0.008 45);
-  --sidebar-accent: oklch(0.22 0.010 45);
-  --sidebar-accent-foreground: oklch(0.92 0.008 80);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.74 0.15 65);
-
-  /* OS tokens */
-  --os-toolbar: oklch(0.135 0.007 45);
-  --os-sidebar: oklch(0.145 0.007 45);
-  --os-panel: oklch(0.165 0.008 45);
-  --os-accent: oklch(0.74 0.15 65);
-  --os-accent-muted: oklch(0.74 0.15 65 / 12%);
-  --os-surface: oklch(0.185 0.010 45);
-  --os-border: oklch(1 0 0 / 8%);
-  --os-indicator: oklch(0.65 0.18 145);
-  --os-terminal-bg: oklch(0.115 0.005 45);
-  --os-terminal-fg: oklch(0.65 0.18 145);
-
-  /* Shiki Tokens */
-  --shiki-foreground: var(--foreground);
-  --shiki-background: var(--os-terminal-bg);
-  --shiki-token-constant: oklch(0.85 0.15 200);
-  --shiki-token-string: oklch(0.85 0.15 145);
-  --shiki-token-comment: oklch(0.5 0.01 45 / 40%);
-  --shiki-token-keyword: oklch(0.74 0.15 65);
-  --shiki-token-parameter: oklch(0.7 0.02 45);
-  --shiki-token-function: oklch(0.85 0.15 145);
-  --shiki-token-string-expression: oklch(0.85 0.15 145);
-  --shiki-token-punctuation: oklch(0.6 0.01 45);
-  --shiki-token-link: oklch(0.74 0.15 65);
+html[data-theme="linen"] {
+  /* Inherits root styling automatically */
 }
 
-/* ── Theme Preset: Vesper (Shiki) ── */
+/* ══════════════════════════════════════════════════
+   THEME: Graphite
+   Industrial charcoal with cyan-green accents
+   ══════════════════════════════════════════════════ */
+html[data-theme="graphite"] {
+  /* Layer 1: Backgrounds */
+  --bg-base: #141414;
+  --bg-surface: #1c1c1c;
+  --bg-overlay: #1c1c1c;
+  --bg-inset: #0e0e0e;
+  --bg-subtle: #242424;
+
+  /* Layer 2: Text */
+  --fg-default: #e8e4df;
+  --fg-muted: #8a8580;
+  --fg-subtle: #5c5955;
+  --fg-on-accent: #0e0e0e;
+
+  /* Terminal */
+  --terminal-fg: #e8e4df;
+
+  /* Layer 3: Border */
+  --border-default: #ffffff14;
+  --border-muted: #ffffff0a;
+  --border-strong: #ffffff22;
+
+  /* Layer 4: Accent */
+  --accent: #63e2b7;
+  --accent-hover: #7aebca;
+  --accent-muted: #63e2b71a;
+  --accent-subtle: #63e2b70d;
+
+  /* Layer 5: Status */
+  --status-success: #63e2b7;
+  --status-warning: #e2a563;
+  --status-error: #e26363;
+  --status-info: #63b3e2;
+
+  /* Layer 6: Shiki */
+  --shiki-foreground: #e8e4df;
+  --shiki-background: #0e0e0e;
+  --shiki-token-keyword: #63e2b7;
+  --shiki-token-string: #a8d8c8;
+  --shiki-token-comment: #5c595580;
+  --shiki-token-function: #7aebca;
+  --shiki-token-constant: #89ddff;
+  --shiki-token-punctuation: #8a8580;
+  --shiki-token-parameter: #e8e4df;
+  --shiki-token-string-expression: #a8d8c8;
+  --shiki-token-link: #63e2b7;
+}
+
+
+/* ══════════════════════════════════════════════════
+   THEME: Vesper
+   Deep black with amber/orange accents (Shiki Vesper)
+   ══════════════════════════════════════════════════ */
 html[data-theme="vesper"] {
-  --background: oklch(0.12 0 0);
-  --foreground: oklch(0.92 0 0);
-  --card: oklch(0.14 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --os-toolbar: oklch(0.11 0 0);
-  --os-sidebar: oklch(0.11 0 0);
-  --os-panel: oklch(0.13 0 0);
-  --os-accent: oklch(0.72 0.16 45); /* Orange */
-  --os-accent-muted: oklch(0.72 0.16 45 / 15%);
-  --os-indicator: oklch(0.72 0.16 45);
-  --os-terminal-bg: oklch(0.08 0 0);
-  --os-terminal-fg: oklch(0.92 0 0);
-  --os-surface: oklch(0.14 0 0);
+  --bg-base: #101010;
+  --bg-surface: #181818;
+  --bg-overlay: #181818;
+  --bg-inset: #080808;
+  --bg-subtle: #202020;
 
-  /* Shiki Tokens */
-  --shiki-token-constant: oklch(0.85 0.05 45);
-  --shiki-token-string: oklch(0.88 0.12 90);
-  --shiki-token-comment: oklch(0.4 0 0);
-  --shiki-token-keyword: oklch(0.72 0.16 45);
-  --shiki-token-function: oklch(0.92 0 0);
+  --fg-default: #e0d8c8;
+  --fg-muted: #6b6561;
+  --fg-subtle: #4a4642;
+  --fg-on-accent: #101010;
+
+  /* Terminal */
+  --terminal-fg: #e0d8c8;
+
+  --border-default: #ffffff0d;
+  --border-muted: #ffffff08;
+  --border-strong: #ffffff1a;
+
+  --accent: #ffc799;
+  --accent-hover: #ffd4b0;
+  --accent-muted: #ffc7991a;
+  --accent-subtle: #ffc7990d;
+
+  --status-success: #a8d8a8;
+  --status-warning: #ffc799;
+  --status-error: #e06060;
+  --status-info: #88b8e0;
+
+  --shiki-foreground: #e0d8c8;
+  --shiki-background: #080808;
+  --shiki-token-keyword: #ffc799;
+  --shiki-token-string: #d4bc84;
+  --shiki-token-comment: #4a464280;
+  --shiki-token-function: #e0d8c8;
+  --shiki-token-constant: #e8b87a;
+  --shiki-token-punctuation: #6b6561;
 }
 
-/* ── Theme Preset: Nord ── */
+/* ══════════════════════════════════════════════════
+   THEME: Nord
+   Arctic frost palette
+   ══════════════════════════════════════════════════ */
 html[data-theme="nord"] {
-  --background: oklch(0.25 0.03 260);
-  --foreground: oklch(0.92 0.02 260);
-  --card: oklch(0.28 0.03 260);
-  --border: oklch(1 0 0 / 8%);
-  --os-toolbar: oklch(0.22 0.03 260);
-  --os-sidebar: oklch(0.23 0.03 260);
-  --os-panel: oklch(0.26 0.03 260);
-  --os-accent: oklch(0.78 0.08 210); /* Frost Blue */
-  --os-accent-muted: oklch(0.78 0.08 210 / 15%);
-  --os-indicator: oklch(0.82 0.12 180);
-  --os-terminal-bg: oklch(0.18 0.03 260);
-  --os-terminal-fg: oklch(0.88 0.10 180);
-  --os-surface: oklch(0.30 0.03 260);
+  --bg-base: #2e3440;
+  --bg-surface: #3b4252;
+  --bg-overlay: #3b4252;
+  --bg-inset: #242933;
+  --bg-subtle: #434c5e;
 
-  /* Shiki Tokens */
-  --shiki-token-constant: oklch(0.85 0.05 210);
-  --shiki-token-string: oklch(0.88 0.10 160);
-  --shiki-token-comment: oklch(0.5 0.03 260 / 40%);
-  --shiki-token-keyword: oklch(0.78 0.08 210);
-  --shiki-token-function: oklch(0.82 0.12 180);
+  --fg-default: #eceff4;
+  --fg-muted: #7b88a1;
+  --fg-subtle: #5c6780;
+  --fg-on-accent: #2e3440;
+
+  /* Terminal */
+  --terminal-fg: #d8dee9;
+
+  --border-default: #eceff414;
+  --border-muted: #eceff40a;
+  --border-strong: #eceff422;
+
+  --accent: #88c0d0;
+  --accent-hover: #8fbccd;
+  --accent-muted: #88c0d01a;
+  --accent-subtle: #88c0d00d;
+
+  --status-success: #a3be8c;
+  --status-warning: #ebcb8b;
+  --status-error: #bf616a;
+  --status-info: #5e81ac;
+
+  --shiki-foreground: #eceff4;
+  --shiki-background: #242933;
+  --shiki-token-keyword: #81a1c1;
+  --shiki-token-string: #a3be8c;
+  --shiki-token-comment: #616e8860;
+  --shiki-token-function: #88c0d0;
+  --shiki-token-constant: #b48ead;
+  --shiki-token-punctuation: #7b88a1;
 }
 
-/* ── Theme Preset: Catppuccin ── */
-html[data-theme="rose"] {
-  --background: oklch(0.18 0.02 280);
-  --foreground: oklch(0.95 0.02 280);
-  --card: oklch(0.22 0.03 280);
-  --border: oklch(1 0 0 / 6%);
-  --os-toolbar: oklch(0.16 0.02 280);
-  --os-sidebar: oklch(0.17 0.02 280);
-  --os-panel: oklch(0.20 0.03 280);
-  --os-accent: oklch(0.82 0.12 330); /* Flamingo */
-  --os-accent-muted: oklch(0.82 0.12 330 / 15%);
-  --os-indicator: oklch(0.88 0.15 110);
-  --os-terminal-bg: oklch(0.14 0.02 280);
-  --os-terminal-fg: oklch(0.90 0.10 330);
-  --os-surface: oklch(0.24 0.04 280);
+/* ══════════════════════════════════════════════════
+   THEME: Catppuccin Mocha
+   Soft pastel dark with pink accents
+   ══════════════════════════════════════════════════ */
+html[data-theme="catppuccin"] {
+  --bg-base: #1e1e2e;
+  --bg-surface: #313244;
+  --bg-overlay: #313244;
+  --bg-inset: #181825;
+  --bg-subtle: #45475a;
 
-  /* Shiki Tokens */
-  --shiki-token-constant: oklch(0.85 0.10 300);
-  --shiki-token-string: oklch(0.88 0.15 110);
-  --shiki-token-comment: oklch(0.5 0.02 280 / 40%);
-  --shiki-token-keyword: oklch(0.82 0.12 330);
-  --shiki-token-function: oklch(0.90 0.10 330);
+  --fg-default: #cdd6f4;
+  --fg-muted: #7f849c;
+  --fg-subtle: #585b70;
+  --fg-on-accent: #1e1e2e;
+
+  /* Terminal */
+  --terminal-fg: #cdd6f4;
+
+  --border-default: #cdd6f40a;
+  --border-muted: #cdd6f406;
+  --border-strong: #cdd6f414;
+
+  --accent: #f5c2e7;
+  --accent-hover: #f7d0ed;
+  --accent-muted: #f5c2e71a;
+  --accent-subtle: #f5c2e70d;
+
+  --status-success: #a6e3a1;
+  --status-warning: #f9e2af;
+  --status-error: #f38ba8;
+  --status-info: #89b4fa;
+
+  --shiki-foreground: #cdd6f4;
+  --shiki-background: #181825;
+  --shiki-token-keyword: #cba6f7;
+  --shiki-token-string: #a6e3a1;
+  --shiki-token-comment: #585b7060;
+  --shiki-token-function: #89b4fa;
+  --shiki-token-constant: #f38ba8;
+  --shiki-token-punctuation: #7f849c;
 }
 
-/* ── Theme Preset: Github Light ── */
-html[data-theme="cobalt"] {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.20 0.02 250);
-  --card: oklch(0.98 0.01 250);
-  --border: oklch(0.10 0.02 250 / 10%);
-  --os-toolbar: oklch(0.97 0.01 250);
-  --os-sidebar: oklch(0.96 0.01 250);
-  --os-panel: oklch(1 0 0);
-  --os-accent: oklch(0.55 0.20 250); /* GH Blue */
-  --os-accent-muted: oklch(0.55 0.20 250 / 12%);
-  --os-indicator: oklch(0.65 0.18 145);
-  --os-terminal-bg: oklch(0.15 0.02 250);
-  --os-terminal-fg: oklch(0.85 0.15 145);
-  --os-surface: oklch(0.98 0.01 250);
+/* ══════════════════════════════════════════════════
+   THEME: Tokyo Night
+   Deep blue with vibrant accents
+   ══════════════════════════════════════════════════ */
+html[data-theme="tokyo-night"] {
+  --bg-base: #1a1b26;
+  --bg-surface: #24283b;
+  --bg-overlay: #24283b;
+  --bg-inset: #16161e;
+  --bg-subtle: #292e42;
 
-  /* Shiki Tokens */
-  --shiki-token-constant: oklch(0.4 0.15 250);
-  --shiki-token-string: oklch(0.45 0.15 160);
-  --shiki-token-comment: oklch(0.5 0.02 250 / 60%);
-  --shiki-token-keyword: oklch(0.55 0.20 250);
-  --shiki-token-function: oklch(0.5 0.15 280);
+  --fg-default: #c0caf5;
+  --fg-muted: #565f89;
+  --fg-subtle: #414868;
+  --fg-on-accent: #1a1b26;
+
+  /* Terminal */
+  --terminal-fg: #a9b1d6;
+
+  --border-default: #c0caf50a;
+  --border-muted: #c0caf506;
+  --border-strong: #c0caf514;
+
+  --accent: #7aa2f7;
+  --accent-hover: #8db0f9;
+  --accent-muted: #7aa2f71a;
+  --accent-subtle: #7aa2f70d;
+
+  --status-success: #9ece6a;
+  --status-warning: #e0af68;
+  --status-error: #f7768e;
+  --status-info: #7dcfff;
+
+  --shiki-foreground: #c0caf5;
+  --shiki-background: #16161e;
+  --shiki-token-keyword: #9d7cd8;
+  --shiki-token-string: #9ece6a;
+  --shiki-token-comment: #41486860;
+  --shiki-token-function: #7aa2f7;
+  --shiki-token-constant: #ff9e64;
+  --shiki-token-punctuation: #565f89;
+}
+
+/* ══════════════════════════════════════════════════
+   THEME: Dracula
+   Classic purple-tinted dark theme
+   ══════════════════════════════════════════════════ */
+html[data-theme="dracula"] {
+  --bg-base: #282a36;
+  --bg-surface: #343746;
+  --bg-overlay: #343746;
+  --bg-inset: #21222c;
+  --bg-subtle: #3c3f58;
+
+  --fg-default: #f8f8f2;
+  --fg-muted: #6272a4;
+  --fg-subtle: #4a5580;
+  --fg-on-accent: #282a36;
+
+  /* Terminal */
+  --terminal-fg: #f8f8f2;
+
+  --border-default: #f8f8f20a;
+  --border-muted: #f8f8f206;
+  --border-strong: #f8f8f214;
+
+  --accent: #bd93f9;
+  --accent-hover: #caa4fb;
+  --accent-muted: #bd93f91a;
+  --accent-subtle: #bd93f90d;
+
+  --status-success: #50fa7b;
+  --status-warning: #f1fa8c;
+  --status-error: #ff5555;
+  --status-info: #8be9fd;
+
+  --shiki-foreground: #f8f8f2;
+  --shiki-background: #21222c;
+  --shiki-token-keyword: #ff79c6;
+  --shiki-token-string: #f1fa8c;
+  --shiki-token-comment: #6272a470;
+  --shiki-token-function: #50fa7b;
+  --shiki-token-constant: #bd93f9;
+  --shiki-token-punctuation: #6272a4;
+}
+
+/* ══════════════════════════════════════════════════
+   THEME: GitHub Dark
+   GitHub's official dark theme
+   ══════════════════════════════════════════════════ */
+html[data-theme="github-dark"] {
+  --bg-base: #0d1117;
+  --bg-surface: #161b22;
+  --bg-overlay: #161b22;
+  --bg-inset: #090c10;
+  --bg-subtle: #1c2128;
+
+  --fg-default: #e6edf3;
+  --fg-muted: #7d8590;
+  --fg-subtle: #484f58;
+  --fg-on-accent: #0d1117;
+
+  /* Terminal */
+  --terminal-fg: #c9d1d9;
+
+  --border-default: #30363d;
+  --border-muted: #21262d;
+  --border-strong: #484f58;
+
+  --accent: #58a6ff;
+  --accent-hover: #79b8ff;
+  --accent-muted: #58a6ff1a;
+  --accent-subtle: #58a6ff0d;
+
+  --status-success: #3fb950;
+  --status-warning: #d29922;
+  --status-error: #f85149;
+  --status-info: #58a6ff;
+
+  --shiki-foreground: #e6edf3;
+  --shiki-background: #090c10;
+  --shiki-token-keyword: #ff7b72;
+  --shiki-token-string: #a5d6ff;
+  --shiki-token-comment: #484f5870;
+  --shiki-token-function: #d2a8ff;
+  --shiki-token-constant: #79c0ff;
+  --shiki-token-punctuation: #7d8590;
 }
 
 @layer base {
+  :root, html {
+    --fd-card: var(--bg-inset) !important;
+    --fd-card-foreground: var(--shiki-foreground) !important;
+    --color-fd-card: var(--bg-inset) !important;
+    --color-fd-card-foreground: var(--shiki-foreground) !important;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -301,17 +468,16 @@ html[data-theme="cobalt"] {
     background: transparent;
   }
   .os-scrollbar::-webkit-scrollbar-thumb {
-    background: oklch(0.5 0 0 / 20%);
+    background: var(--fg-subtle);
     border-radius: 3px;
   }
   .os-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.5 0 0 / 35%);
+    background: var(--fg-muted);
   }
 }
 
 /* ── Mobile responsive adjustments ──────────────── */
 @media (max-width: 767px) {
-  /* Reduce panel padding on mobile */
   #workspace-content .os-scrollbar {
     padding: 1rem;
   }
