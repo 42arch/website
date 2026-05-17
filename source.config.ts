@@ -1,5 +1,7 @@
 import { rehypeCode } from 'fumadocs-core/mdx-plugins'
 import { defineConfig, defineDocs, frontmatterSchema } from 'fumadocs-mdx/config'
+import rehypeKatex from 'rehype-katex'
+import remarkMath from 'remark-math'
 import { z } from 'zod'
 
 export const writing = defineDocs({
@@ -45,16 +47,29 @@ const osTheme = {
 
 export default defineConfig({
   mdxOptions: {
-    rehypePlugins: [
-      [
-        rehypeCode,
-        {
-          themes: {
-            light: osTheme,
-            dark: osTheme,
+    remarkPlugins: [remarkMath],
+    rehypePlugins: (v) => {
+      // Filter out Fumadocs' built-in rehypeCode plugin to prevent duplicate/conflicting highlighters
+      const filtered = v.filter((plugin) => {
+        const pluginFunc = Array.isArray(plugin) ? plugin[0] : plugin
+        return pluginFunc !== rehypeCode
+      })
+
+      // Run rehypeKatex first to convert math formulas, then other default plugins, and finally our custom-themed code highlighter
+      return [
+        rehypeKatex,
+        ...filtered,
+        [
+          rehypeCode,
+          {
+            themes: {
+              light: osTheme,
+              dark: osTheme,
+            },
           },
-        },
-      ],
-    ],
+        ],
+      ]
+    },
   },
 })
+

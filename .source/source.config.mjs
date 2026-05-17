@@ -1,6 +1,8 @@
 // source.config.ts
 import { rehypeCode } from "fumadocs-core/mdx-plugins";
 import { defineConfig, defineDocs, frontmatterSchema } from "fumadocs-mdx/config";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
 import { z } from "zod";
 var writing = defineDocs({
   dir: "content/writing",
@@ -42,17 +44,26 @@ var osTheme = {
 };
 var source_config_default = defineConfig({
   mdxOptions: {
-    rehypePlugins: [
-      [
-        rehypeCode,
-        {
-          themes: {
-            light: osTheme,
-            dark: osTheme
+    remarkPlugins: [remarkMath],
+    rehypePlugins: (v) => {
+      const filtered = v.filter((plugin) => {
+        const pluginFunc = Array.isArray(plugin) ? plugin[0] : plugin;
+        return pluginFunc !== rehypeCode;
+      });
+      return [
+        rehypeKatex,
+        ...filtered,
+        [
+          rehypeCode,
+          {
+            themes: {
+              light: osTheme,
+              dark: osTheme
+            }
           }
-        }
-      ]
-    ]
+        ]
+      ];
+    }
   }
 });
 export {

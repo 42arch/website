@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
+@import "katex/dist/katex.min.css";
 
 /* ══════════════════════════════════════════════════
    FOLIO OS — Unified Theme System
@@ -445,6 +446,18 @@ html[data-theme="github-dark"] {
     --fd-card-foreground: var(--shiki-foreground) !important;
     --color-fd-card: var(--bg-inset) !important;
     --color-fd-card-foreground: var(--shiki-foreground) !important;
+  }
+
+  /* KaTeX Mathematical Formulas Styling */
+  .katex {
+    font-size: 1.05em;
+    color: var(--fg-default) !important;
+  }
+  .katex-display {
+    padding: 0.75rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
   }
 
   * {
