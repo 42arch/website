@@ -1,41 +1,16 @@
 'use client'
 
 import {
-  ClockIcon,
   ColumnsIcon,
   CommandIcon,
   ListIcon,
   SidebarIcon,
   TerminalIcon,
 } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
 
 import { useIsMobile } from '@/lib/use-mobile'
 import { useWorkspaceStore } from '@/store/workspace'
-
-function LiveClock() {
-  const [time, setTime] = useState('')
-  const [date, setDate] = useState('')
-
-  useEffect(() => {
-    function tick() {
-      const now = new Date()
-      setTime(now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }))
-      setDate(now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }))
-    }
-    tick()
-    const interval = setInterval(tick, 1000)
-    return () => clearInterval(interval)
-  }, [])
-
-  return (
-    <div className="flex items-center gap-2 font-mono text-[11px] text-muted-foreground">
-      <ClockIcon size={13} weight="bold" />
-      <span>{date}</span>
-      <span className="text-os-accent">{time}</span>
-    </div>
-  )
-}
+import { SystemStatusGroup } from './system-status'
 
 export function Toolbar() {
   const {
@@ -122,8 +97,8 @@ export function Toolbar() {
       </button>
 
       {/* Right Section */}
-      <div className="flex items-center gap-2">
-        <LiveClock />
+      <div className="flex items-center gap-3">
+        <SystemStatusGroup />
         <div className="mx-1 h-4 w-px bg-os-border" />
         <div className="flex items-center gap-1">
           <button

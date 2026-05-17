@@ -4,6 +4,7 @@ import { CheckCircleIcon, CodeIcon, GitBranchIcon } from '@phosphor-icons/react'
 import { usePathname } from 'next/navigation'
 import { useIsMobile } from '@/lib/use-mobile'
 import { PANEL_CONFIG } from '@/store/workspace'
+import pkg from '../../../package.json'
 
 export function StatusBar() {
   const pathname = usePathname()
@@ -22,7 +23,7 @@ export function StatusBar() {
           <div className="size-1.5 rounded-full bg-os-indicator animate-pulse" />
           {config.label}
         </span>
-        <span>folio-os v0.1.0</span>
+        <span>folio-os v{pkg.version}</span>
       </footer>
     )
   }
@@ -48,7 +49,7 @@ export function StatusBar() {
           {config.label}
         </span>
         <span>UTF-8</span>
-        <span>folio-os v0.1.0</span>
+        <span>folio-os v{pkg.version}</span>
       </div>
     </footer>
   )
