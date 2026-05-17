@@ -18,11 +18,18 @@ export async function generateMetadata({ params }: PageProps) {
   const page = notes.getPage(slug)
 
   if (!page)
-    return { title: 'Not Found | Folio OS' }
+    return { title: 'Not Found' }
 
   return {
-    title: `${page.data.title} | Folio OS`,
+    title: page.data.title,
     description: page.data.description,
+    openGraph: {
+      title: page.data.title,
+      description: page.data.description,
+      type: 'article',
+      publishedTime: (page.data as any).date ? new Date((page.data as any).date).toISOString() : undefined,
+      tags: (page.data as any).tags || [],
+    },
   }
 }
 

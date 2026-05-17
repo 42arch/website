@@ -1,7 +1,7 @@
 import { ActivityPanel } from '@/components/panels/activity-panel'
 
 export const metadata = {
-  title: 'Activity | Folio OS',
+  title: 'Activity',
   description: 'Development history — commits, deployments, and system events.',
 }
 

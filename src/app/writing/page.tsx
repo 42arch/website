@@ -2,7 +2,7 @@ import { WritingPanel } from '@/components/panels/writing-panel'
 import { writing } from '@/lib/source'
 
 export const metadata = {
-  title: 'Writing | Folio OS',
+  title: 'Writing',
   description: 'Technical notes, engineering logs, and design observations.',
 }
 

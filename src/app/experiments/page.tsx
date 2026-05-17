@@ -1,7 +1,7 @@
 import { ExperimentsPanel } from '@/components/panels/experiments-panel'
 
 export const metadata = {
-  title: 'Experiments | Folio OS',
+  title: 'Experiments',
   description: 'Technical explorations, prototypes, and research logs.',
 }
 

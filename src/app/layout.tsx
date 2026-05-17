@@ -65,9 +65,78 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Folio OS — Developer Workspace',
-  description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a digital operating system.',
-  keywords: ['developer', 'portfolio', 'workspace', 'interactive', 'experimental'],
+  metadataBase: new URL('https://folio-os.starllow.com'),
+  title: {
+    default: 'Folio OS — Developer Workspace',
+    template: '%s | Folio OS',
+  },
+  description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a high-fidelity digital developer operating system.',
+  keywords: [
+    'developer portfolio',
+    'workspace UI',
+    'developer workspace',
+    'digital operating system',
+    'web OS',
+    'Fumadocs portfolio',
+    'Next.js portfolio',
+    'creative developer',
+    'interactive cv',
+  ],
+  authors: [{ name: 'Dan', url: 'https://folio-os.starllow.com' }],
+  creator: 'Dan',
+  publisher: 'Dan',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      'index': true,
+      'follow': true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://folio-os.starllow.com',
+    title: 'Folio OS — Developer Workspace',
+    description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a high-fidelity digital developer operating system.',
+    siteName: 'Folio OS',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Folio OS — Developer Workspace',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Folio OS — Developer Workspace',
+    description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a high-fidelity digital developer operating system.',
+    images: ['/og-image.png'],
+    creator: '@dan_dev',
+  },
+  alternates: {
+    canonical: '/',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Folio OS',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 }
 
 export const viewport: Viewport = {
@@ -75,6 +144,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   viewportFit: 'cover',
+  themeColor: '#f5f2eb',
 }
 
 export default function RootLayout({

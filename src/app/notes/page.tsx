@@ -2,7 +2,7 @@ import { NotesPanel } from '@/components/panels/notes-panel'
 import { notes } from '@/lib/source'
 
 export const metadata = {
-  title: 'Notes | Folio OS',
+  title: 'Notes',
   description: 'Quick observations, decisions, and technical notes.',
 }
 

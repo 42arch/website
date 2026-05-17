@@ -1,16 +1,17 @@
+/* eslint-disable node/prefer-global/process */
 'use client'
 
 import { CheckCircleIcon, CodeIcon, GitBranchIcon } from '@phosphor-icons/react'
 import { usePathname } from 'next/navigation'
 import { useIsMobile } from '@/lib/use-mobile'
 import { PANEL_CONFIG } from '@/store/workspace'
-import pkg from '../../../package.json'
 
 export function StatusBar() {
   const pathname = usePathname()
   const activePanel = pathname.split('/')[1] || 'overview'
   const config = PANEL_CONFIG[activePanel as keyof typeof PANEL_CONFIG] || PANEL_CONFIG.overview
   const isMobile = useIsMobile()
+  const version = process.env.NEXT_PUBLIC_APP_VERSION || '0.1.0'
 
   if (isMobile) {
     return (
@@ -23,7 +24,10 @@ export function StatusBar() {
           <div className="size-1.5 rounded-full bg-os-indicator animate-pulse" />
           {config.label}
         </span>
-        <span>folio-os v{pkg.version}</span>
+        <span>
+          folio-os v
+          {version}
+        </span>
       </footer>
     )
   }
@@ -49,7 +53,10 @@ export function StatusBar() {
           {config.label}
         </span>
         <span>UTF-8</span>
-        <span>folio-os v{pkg.version}</span>
+        <span>
+          folio-os v
+          {version}
+        </span>
       </div>
     </footer>
   )

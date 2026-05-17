@@ -1,7 +1,7 @@
 import { SettingsPanel } from '@/components/panels/settings-panel'
 
 export const metadata = {
-  title: 'Settings | Folio OS',
+  title: 'Settings',
   description: 'Configure your workspace environment and preferences.',
 }
 

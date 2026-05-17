@@ -1,7 +1,7 @@
 import { ContactPanel } from '@/components/panels/contact-panel'
 
 export const metadata = {
-  title: 'Contact | Folio OS',
+  title: 'Contact',
   description: 'Get in touch for collaboration and conversations.',
 }
 

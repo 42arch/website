@@ -49,15 +49,17 @@ export function NetworkStatus() {
 
   return (
     <div className="flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground hover:text-foreground transition-colors cursor-default" title={isOnline ? 'Network Connected' : 'Network Disconnected'}>
-      {isOnline ? (
-        <span className="text-emerald-500">
-          <WifiHighIcon size={13} weight="bold" />
-        </span>
-      ) : (
-        <span className="text-red-500 animate-pulse">
-          <WifiNoneIcon size={13} weight="bold" />
-        </span>
-      )}
+      {isOnline
+        ? (
+            <span className="text-emerald-500">
+              <WifiHighIcon size={13} weight="bold" />
+            </span>
+          )
+        : (
+            <span className="text-red-500 animate-pulse">
+              <WifiNoneIcon size={13} weight="bold" />
+            </span>
+          )}
       <span>{isOnline ? (networkType || 'ONLINE') : 'OFFLINE'}</span>
     </div>
   )
@@ -121,16 +123,19 @@ export function BatteryStatus() {
           <LightningIcon size={12} weight="fill" />
         </span>
       )}
-      
+
       <div className="relative w-[18px] h-[9px] border border-muted-foreground/60 rounded-[2px] p-[1px] flex items-center">
-        <div 
+        <div
           className={`h-full rounded-[1px] transition-all duration-300 ${fillBg}`}
           style={{ width: `${level}%` }}
         />
         <div className="absolute -right-[2px] top-[2px] w-[1px] h-[3px] bg-muted-foreground/60 rounded-r-[1px]" />
       </div>
-      
-      <span>{level}%</span>
+
+      <span>
+        {level}
+        %
+      </span>
     </div>
   )
 }

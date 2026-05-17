@@ -1,7 +1,7 @@
 import { GalleryPanel } from '@/components/panels/gallery-panel'
 
 export const metadata = {
-  title: 'Gallery | Folio OS',
+  title: 'Gallery',
   description: 'Visual outputs, screenshots, and generative artifacts.',
 }
 
