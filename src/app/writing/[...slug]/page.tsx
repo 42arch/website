@@ -38,6 +38,7 @@ export default async function WritingDetailPage({ params }: PageProps) {
   const Content = page.data.body
 
   const readingTime = calculateReadingTime(page.data.structuredData.contents)
+  const toc = page.data.toc || (page.data as any).exports?.toc || []
 
   return (
     <WritingDetailPanel
@@ -47,6 +48,7 @@ export default async function WritingDetailPage({ params }: PageProps) {
       category={(page.data as any).category}
       readingTime={readingTime}
       description={page.data.description}
+      toc={toc}
     >
       <Content components={defaultMdxComponents} />
     </WritingDetailPanel>
