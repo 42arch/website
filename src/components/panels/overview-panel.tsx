@@ -46,33 +46,42 @@ function QuickAction({ icon: Icon, label, panelId }: {
   )
 }
 
-function FeaturedProject({ title, description, tags, status }: {
+interface RecentWritingProps {
   title: string
   description: string
+  url: string
+  date: string
   tags: string[]
-  status: string
-}) {
+}
+
+function RecentWriting({ title, description, url, date, tags }: RecentWritingProps) {
   const { openTab } = useWorkspaceStore()
   return (
     <Link
-      href="/projects"
-      onClick={() => openTab('projects')}
+      href={url}
+      onClick={() => openTab('writing')}
       className="group flex flex-col gap-2 rounded-sm border border-os-border bg-os-surface p-4 text-left transition-all hover:border-os-accent/30 hover:bg-os-accent-muted/30"
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-foreground">{title}</h3>
-        <span className="rounded-sm bg-os-accent-muted px-1.5 py-0.5 font-mono text-[9px] text-os-accent">{status}</span>
+        <h3 className="text-sm font-medium text-foreground group-hover:text-os-accent transition-colors">{title}</h3>
+        {date && <span className="font-mono text-[9px] text-muted-foreground">{date}</span>}
       </div>
-      <p className="text-xs leading-relaxed text-muted-foreground">{description}</p>
-      <div className="flex flex-wrap gap-1">
-        {tags.map(tag => (
-          <span key={tag} className="rounded-sm border border-os-border px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
-            {tag}
-          </span>
-        ))}
-      </div>
+      <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2">{description}</p>
+      {tags.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-1">
+          {tags.map(tag => (
+            <span key={tag} className="rounded-sm border border-os-border px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
     </Link>
   )
+}
+
+export interface OverviewPanelProps {
+  recentWritings?: RecentWritingProps[]
 }
 
 function HeroSection() {
@@ -152,7 +161,7 @@ function HeroSection() {
   )
 }
 
-export function OverviewPanel() {
+export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -168,7 +177,7 @@ export function OverviewPanel() {
             <h1 className="font-heading text-lg font-bold tracking-tight">workspace://overview</h1>
           </div>
           <p className="font-mono text-xs text-muted-foreground">
-            当前正在探索实验性交互系统与可视化工具。
+            An experimental, high-fidelity developer workspace and portfolio, designed as a digital operating system.
           </p>
         </div>
 
@@ -189,29 +198,29 @@ export function OverviewPanel() {
 
         {/* Two column layout */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-          {/* Left: Featured Projects */}
+          {/* Left: Recent Writings */}
           <div className="lg:col-span-3 space-y-3">
             <div className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-              FEATURED MODULES
+              RECENT WRITINGS
             </div>
-            <FeaturedProject
-              title="Fantasy Map Generator"
-              description="Procedural terrain generation engine with real-time elevation editing, river networks, and climate simulation."
-              tags={['TypeScript', 'WebGL', 'Zustand']}
-              status="ACTIVE"
-            />
-            <FeaturedProject
-              title="Folio OS"
-              description="Experimental workspace interface inspired by developer tools and operating systems. Interactive panel-based navigation."
-              tags={['Next.js', 'Motion', 'Tailwind']}
-              status="IN PROGRESS"
-            />
-            <FeaturedProject
-              title="Network Stats Monitor"
-              description="Retina-optimized macOS tray application for real-time network throughput monitoring with custom pixel-rendered indicators."
-              tags={['Swift', 'macOS', 'AppKit']}
-              status="SHIPPED"
-            />
+            {recentWritings.length > 0
+              ? (
+                  recentWritings.map(post => (
+                    <RecentWriting
+                      key={post.url}
+                      title={post.title}
+                      description={post.description}
+                      url={post.url}
+                      date={post.date}
+                      tags={post.tags}
+                    />
+                  ))
+                )
+              : (
+                  <div className="flex flex-col items-center justify-center rounded-sm border border-os-border bg-os-surface/40 p-8 text-center">
+                    <span className="font-mono text-[11px] text-muted-foreground">No recent writings found.</span>
+                  </div>
+                )}
           </div>
 
           {/* Right: Quick Actions & Current Focus */}
