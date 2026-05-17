@@ -4,11 +4,11 @@ import { ArticleIcon, BookmarkIcon, CalendarIcon, TagIcon } from '@phosphor-icon
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
-import { PanelHeader } from '@/components/ui/panel-header'
-import { SearchInput } from '@/components/ui/search-input'
 import { OsCard } from '@/components/ui/os-card'
 import { PanelBadge } from '@/components/ui/panel-badge'
+import { PanelHeader } from '@/components/ui/panel-header'
+import { SearchInput } from '@/components/ui/search-input'
+import { cn } from '@/lib/utils'
 
 interface Article {
   id: string
@@ -39,7 +39,7 @@ export function WritingPanel({ articles }: WritingPanelProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="os-scrollbar h-full overflow-y-auto p-6">
       <div className="mx-auto max-w-4xl space-y-4">
-        <PanelHeader 
+        <PanelHeader
           path="workspace://writing"
           description="Technical notes, engineering logs, and design observations."
           icon={<ArticleIcon size={14} />}
@@ -47,19 +47,19 @@ export function WritingPanel({ articles }: WritingPanelProps) {
 
         {/* Search & Filter */}
         <div className="flex items-center gap-3">
-          <SearchInput 
+          <SearchInput
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search articles..."
           />
           <div className="flex items-center gap-1">
             {CATEGORIES.map(c => (
-              <button 
-                key={c} 
-                onClick={() => setActiveCategory(c)} 
+              <button
+                key={c}
+                onClick={() => setActiveCategory(c)}
                 className={cn(
-                  'rounded-sm px-2 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors', 
-                  activeCategory === c ? 'bg-os-accent-muted text-os-accent font-semibold' : 'text-muted-foreground hover:text-foreground'
+                  'rounded-sm px-2 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors',
+                  activeCategory === c ? 'bg-os-accent-muted text-os-accent font-semibold' : 'text-muted-foreground hover:text-foreground',
                 )}
               >
                 {c}

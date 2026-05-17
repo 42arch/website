@@ -5,7 +5,6 @@ import {
   ColumnsIcon,
   CommandIcon,
   ListIcon,
-  MagnifyingGlassIcon,
   SidebarIcon,
   TerminalIcon,
 } from '@phosphor-icons/react'
@@ -40,13 +39,13 @@ function LiveClock() {
 }
 
 export function Toolbar() {
-  const { 
-    toggleSidebar, 
-    toggleBottomPanel, 
-    toggleCommandPalette, 
+  const {
+    toggleSidebar,
+    toggleBottomPanel,
+    toggleCommandPalette,
     toggleSidebarPosition,
-    sidebarOpen, 
-    bottomPanelOpen 
+    sidebarOpen,
+    bottomPanelOpen,
   } = useWorkspaceStore()
   const isMobile = useIsMobile()
 

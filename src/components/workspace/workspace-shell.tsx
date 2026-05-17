@@ -79,55 +79,55 @@ function DesktopLayout({ children }: { children: React.ReactNode }) {
         >
           {sidebarPosition === 'left'
             ? (
-            <>
-              {/* Sidebar Panel (Left) */}
-              {sidebarOpen && (
                 <>
-                  <Panel
-                    defaultSize={240}
-                    minSize={160}
-                    maxSize={600}
-                    onResize={size => setSidebarWidth(size.inPixels)}
-                  >
-                    <ExplorerSidebar />
-                  </Panel>
-                  <Separator className="relative flex w-[1px] items-center justify-center bg-os-border transition-colors hover:bg-os-accent/50 group cursor-col-resize">
-                    <div className="absolute h-8 w-1 rounded-full bg-os-border group-hover:bg-os-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Separator>
-                </>
-              )}
+                  {/* Sidebar Panel (Left) */}
+                  {sidebarOpen && (
+                    <>
+                      <Panel
+                        defaultSize={240}
+                        minSize={160}
+                        maxSize={600}
+                        onResize={size => setSidebarWidth(size.inPixels)}
+                      >
+                        <ExplorerSidebar />
+                      </Panel>
+                      <Separator className="relative flex w-[1px] items-center justify-center bg-os-border transition-colors hover:bg-os-accent/50 group cursor-col-resize">
+                        <div className="absolute h-8 w-1 rounded-full bg-os-border group-hover:bg-os-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Separator>
+                    </>
+                  )}
 
-              {/* Main Content Area */}
-              <Panel>
-                <MainContentGroup children={children} />
-              </Panel>
-            </>
-            )
+                  {/* Main Content Area */}
+                  <Panel>
+                    <MainContentGroup children={children} />
+                  </Panel>
+                </>
+              )
             : (
-            <>
-              {/* Main Content Area */}
-              <Panel>
-                <MainContentGroup children={children} />
-              </Panel>
-
-              {/* Sidebar Panel (Right) */}
-              {sidebarOpen && (
                 <>
-                  <Separator className="relative flex w-[1px] items-center justify-center bg-os-border transition-colors hover:bg-os-accent/50 group cursor-col-resize">
-                    <div className="absolute h-8 w-1 rounded-full bg-os-border group-hover:bg-os-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Separator>
-                  <Panel
-                    defaultSize={240}
-                    minSize={160}
-                    maxSize={600}
-                    onResize={size => setSidebarWidth(size.inPixels)}
-                  >
-                    <ExplorerSidebar />
+                  {/* Main Content Area */}
+                  <Panel>
+                    <MainContentGroup children={children} />
                   </Panel>
+
+                  {/* Sidebar Panel (Right) */}
+                  {sidebarOpen && (
+                    <>
+                      <Separator className="relative flex w-[1px] items-center justify-center bg-os-border transition-colors hover:bg-os-accent/50 group cursor-col-resize">
+                        <div className="absolute h-8 w-1 rounded-full bg-os-border group-hover:bg-os-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Separator>
+                      <Panel
+                        defaultSize={240}
+                        minSize={160}
+                        maxSize={600}
+                        onResize={size => setSidebarWidth(size.inPixels)}
+                      >
+                        <ExplorerSidebar />
+                      </Panel>
+                    </>
+                  )}
                 </>
               )}
-            </>
-          )}
         </Group>
       </div>
 

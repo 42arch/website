@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 interface PanelHeaderProps {
   path: string
@@ -11,7 +11,7 @@ interface PanelHeaderProps {
 
 export function PanelHeader({ path, description, icon, children, className }: PanelHeaderProps) {
   return (
-    <div className={cn("flex items-center justify-between", className)}>
+    <div className={cn('flex items-center justify-between', className)}>
       <div>
         <div className="flex items-center gap-2">
           {icon && <div className="text-os-accent">{icon}</div>}

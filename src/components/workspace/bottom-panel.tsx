@@ -1,78 +1,154 @@
 'use client'
 
-import { TerminalIcon } from '@phosphor-icons/react'
-import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import type { TerminalLine } from '@/lib/terminal'
+import { TerminalIcon, XIcon } from '@phosphor-icons/react'
+import { useTheme } from 'next-themes'
 
+import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  executeCommand,
+  getBootLines,
+
+} from '@/lib/terminal'
 import { useWorkspaceStore } from '@/store/workspace'
 
-interface ActivityEntry {
-  timestamp: string
-  type: 'commit' | 'deploy' | 'build' | 'note' | 'system'
-  message: string
-}
-
-const ACTIVITY_LOG: ActivityEntry[] = [
-  { timestamp: '2026-05-14 15:30:01', type: 'system', message: 'workspace initialized' },
-  { timestamp: '2026-05-14 14:22:17', type: 'commit', message: 'feat: implement folio-os workspace layout' },
-  { timestamp: '2026-05-14 12:45:33', type: 'build', message: 'build #142 completed successfully' },
-  { timestamp: '2026-05-13 23:10:05', type: 'deploy', message: 'deployed to production (v0.4.2)' },
-  { timestamp: '2026-05-13 21:30:44', type: 'commit', message: 'refactor: migrate to zustand store architecture' },
-  { timestamp: '2026-05-13 18:15:22', type: 'note', message: 'exploring experimental interaction patterns' },
-  { timestamp: '2026-05-13 15:08:19', type: 'build', message: 'build #141 completed with warnings' },
-  { timestamp: '2026-05-12 22:45:00', type: 'commit', message: 'chore: update design system color tokens' },
-  { timestamp: '2026-05-12 20:30:11', type: 'deploy', message: 'deployed to staging (v0.4.1-rc)' },
-  { timestamp: '2026-05-12 16:20:33', type: 'system', message: 'dependency audit: 0 vulnerabilities found' },
-  { timestamp: '2026-05-12 14:10:05', type: 'commit', message: 'fix: resolve hydration mismatch in theme provider' },
-  { timestamp: '2026-05-11 23:55:42', type: 'note', message: 'researching neo-brutalism layout patterns' },
-]
-
-const TYPE_COLORS: Record<ActivityEntry['type'], string> = {
-  commit: 'text-blue-400',
-  deploy: 'text-emerald-400',
-  build: 'text-amber-400',
-  note: 'text-purple-400',
-  system: 'text-os-terminal-fg',
-}
-
-const TYPE_PREFIX: Record<ActivityEntry['type'], string> = {
-  commit: '[GIT]',
-  deploy: '[DEPLOY]',
-  build: '[BUILD]',
-  note: '[NOTE]',
-  system: '[SYS]',
-}
-
 export function BottomPanel() {
-  const { bottomPanelOpen, bottomPanelHeight } = useWorkspaceStore()
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [visibleEntries, setVisibleEntries] = useState<ActivityEntry[]>([])
+  const { bottomPanelOpen, openTab, setThemePreset, setBottomPanelOpen } = useWorkspaceStore()
+  const { setTheme } = useTheme()
 
-  // Simulate entries appearing one by one
+  const [lines, setLines] = useState<TerminalLine[]>([])
+  const [input, setInput] = useState('')
+  const [commandHistory, setCommandHistory] = useState<string[]>([])
+  const [historyIndex, setHistoryIndex] = useState(-1)
+  const [booted, setBooted] = useState(false)
+
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Boot sequence
   useEffect(() => {
-    if (!bottomPanelOpen)
+    if (!bottomPanelOpen || booted)
       return
-    setVisibleEntries([])
+    const bootLines = getBootLines()
     let i = 0
     const interval = setInterval(() => {
-      if (i < ACTIVITY_LOG.length) {
+      if (i < bootLines.length) {
         const idx = i
-        setVisibleEntries(prev => [...prev, ACTIVITY_LOG[idx]])
+        setLines(prev => [...prev, bootLines[idx]])
         i++
       }
       else {
         clearInterval(interval)
+        setBooted(true)
       }
-    }, 120)
+    }, 80)
     return () => clearInterval(interval)
-  }, [bottomPanelOpen])
+  }, [bottomPanelOpen, booted])
 
   // Auto-scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [visibleEntries])
+  }, [lines])
+
+  // Focus input on click
+  const handleContainerClick = useCallback(() => {
+    inputRef.current?.focus()
+  }, [])
+
+  // Command context
+  const addLines = useCallback((newLines: TerminalLine[]) => {
+    setLines(prev => [...prev, ...newLines])
+  }, [])
+
+  const clearLines = useCallback(() => {
+    setLines([])
+  }, [])
+
+  // Submit command
+  const handleSubmit = useCallback(() => {
+    if (!input.trim())
+      return
+
+    // Push to history
+    setCommandHistory(prev => [input, ...prev].slice(0, 50))
+    setHistoryIndex(-1)
+
+    executeCommand(input, {
+      openTab,
+      setThemePreset,
+      setTheme,
+      addLines,
+      clearLines,
+    })
+
+    setInput('')
+  }, [input, openTab, setThemePreset, setTheme, addLines, clearLines])
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSubmit()
+    }
+    else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      if (commandHistory.length > 0) {
+        const newIndex = Math.min(historyIndex + 1, commandHistory.length - 1)
+        setHistoryIndex(newIndex)
+        setInput(commandHistory[newIndex])
+      }
+    }
+    else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1
+        setHistoryIndex(newIndex)
+        setInput(commandHistory[newIndex])
+      }
+      else {
+        setHistoryIndex(-1)
+        setInput('')
+      }
+    }
+    else if (e.key === 'l' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault()
+      clearLines()
+    }
+  }, [handleSubmit, commandHistory, historyIndex, clearLines])
+
+  // Render a single terminal line
+  const renderLine = (line: TerminalLine) => {
+    switch (line.type) {
+      case 'ascii':
+        return (
+          <pre className="text-os-accent text-[7px] leading-none sm:text-[9px] md:text-[10px] select-none">
+            {line.content}
+          </pre>
+        )
+      case 'input':
+        return (
+          <div className="flex gap-2">
+            <span className="shrink-0 text-os-accent">❯</span>
+            <span className="text-os-terminal-fg">{line.content}</span>
+          </div>
+        )
+      case 'output':
+        return <div className="text-os-terminal-fg whitespace-pre">{line.content}</div>
+      case 'error':
+        return (
+          <div className="text-red-400 whitespace-pre">
+            ✗
+            {line.content}
+          </div>
+        )
+      case 'system':
+        return <div className="text-os-terminal-fg/60 whitespace-pre">{line.content || '\u00A0'}</div>
+      default:
+        return <div className="text-os-terminal-fg">{line.content}</div>
+    }
+  }
 
   return (
     <div
@@ -84,42 +160,51 @@ export function BottomPanel() {
         <div className="flex items-center gap-2">
           <TerminalIcon size={12} className="text-os-terminal-fg" />
           <span className="font-mono text-[10px] font-semibold tracking-wider text-muted-foreground">
-            ACTIVITY
-          </span>
-          <span className="ml-1 rounded-sm bg-os-accent-muted px-1.5 py-0.5 font-mono text-[9px] text-os-accent">
-            {ACTIVITY_LOG.length}
+            TERMINAL
           </span>
         </div>
-        <div className="flex items-center gap-1 font-mono text-[9px] text-muted-foreground">
+        <div className="flex items-center gap-2 font-mono text-[9px] text-muted-foreground">
           <div className="size-1.5 rounded-full bg-os-indicator animate-pulse" />
-          live
+          folio-sh
+          <button
+            onClick={() => setBottomPanelOpen(false)}
+            className="ml-1 flex size-5 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-os-accent-muted hover:text-foreground"
+            title="Close Terminal"
+          >
+            <XIcon size={11} weight="bold" />
+          </button>
         </div>
       </div>
 
-      {/* Log content */}
+      {/* Terminal content */}
       <div
         ref={scrollRef}
-        className="os-scrollbar flex-1 overflow-y-auto bg-os-terminal-bg p-3 font-mono text-[11px] leading-relaxed"
+        onClick={handleContainerClick}
+        className="os-scrollbar flex-1 cursor-text overflow-y-auto bg-os-terminal-bg p-3 font-mono text-[11px] leading-relaxed"
       >
-        {visibleEntries.map((entry, i) => (
-          <motion.div
-            key={`${entry.timestamp}-${i}`}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.15 }}
-            className="flex gap-2"
-          >
-            <span className="shrink-0 text-os-terminal-fg/50">{entry.timestamp}</span>
-            <span className={`shrink-0 font-semibold ${TYPE_COLORS[entry.type]}`}>
-              {TYPE_PREFIX[entry.type]}
-            </span>
-            <span className="text-os-terminal-fg">{entry.message}</span>
-          </motion.div>
+        {/* Rendered lines */}
+        {lines.map(line => (
+          <div key={line.id}>
+            {renderLine(line)}
+          </div>
         ))}
-        {visibleEntries.length > 0 && (
-          <div className="mt-1 flex items-center gap-1">
-            <span className="text-os-terminal-fg/50">$</span>
-            <span className="inline-block h-3.5 w-1.5 animate-pulse bg-os-terminal-fg/70" />
+
+        {/* Active input line */}
+        {booted && (
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="shrink-0 text-os-accent">❯</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="flex-1 bg-transparent text-os-terminal-fg outline-none caret-os-accent placeholder:text-os-terminal-fg/20"
+              placeholder={lines.length <= 7 ? 'type a command...' : ''}
+              spellCheck={false}
+              autoComplete="off"
+              autoFocus
+            />
           </div>
         )}
       </div>

@@ -3,10 +3,10 @@
 import { CalendarIcon, NotepadIcon, PlusIcon } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
 import Link from 'next/link'
-import { useWorkspaceStore } from '@/store/workspace'
-import { PanelHeader } from '@/components/ui/panel-header'
 import { OsCard } from '@/components/ui/os-card'
 import { PanelBadge } from '@/components/ui/panel-badge'
+import { PanelHeader } from '@/components/ui/panel-header'
+import { useWorkspaceStore } from '@/store/workspace'
 
 interface Note {
   id: string
@@ -28,7 +28,7 @@ export function NotesPanel({ notes }: NotesPanelProps) {
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="os-scrollbar h-full overflow-y-auto p-6">
       <div className="mx-auto max-w-4xl space-y-4">
         <div className="flex items-center justify-between">
-          <PanelHeader 
+          <PanelHeader
             path="workspace://notes"
             description="Quick observations, decisions, and technical notes."
             icon={<NotepadIcon size={14} />}

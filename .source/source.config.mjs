@@ -1,6 +1,6 @@
 // source.config.ts
-import { defineConfig, defineDocs, frontmatterSchema } from "fumadocs-mdx/config";
 import { rehypeCode } from "fumadocs-core/mdx-plugins";
+import { defineConfig, defineDocs, frontmatterSchema } from "fumadocs-mdx/config";
 import { z } from "zod";
 var writing = defineDocs({
   dir: "content/writing",

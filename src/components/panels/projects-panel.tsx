@@ -10,10 +10,10 @@ import {
 } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
 import { OsCard } from '@/components/ui/os-card'
 import { PanelBadge } from '@/components/ui/panel-badge'
 import { PanelHeader } from '@/components/ui/panel-header'
+import { cn } from '@/lib/utils'
 
 interface Project {
   id: string
@@ -208,7 +208,7 @@ export function ProjectsPanel() {
       className="os-scrollbar h-full overflow-y-auto p-6"
     >
       <div className="mx-auto max-w-4xl space-y-4">
-        <PanelHeader 
+        <PanelHeader
           path="workspace://projects"
           description={`${PROJECTS.length} modules registered`}
         />

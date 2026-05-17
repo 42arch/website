@@ -63,13 +63,13 @@ function DirectoryItem({ id, config, isActive }: { id: string, config: any, isAc
   const [expanded, setExpanded] = useState(false)
   const { openTab } = useWorkspaceStore()
   const pathname = usePathname()
-  
+
   // Get real children from Fumadocs source
-  const children = id === 'writing' 
+  const children = id === 'writing'
     ? writing.getPages().map(p => ({ id: `writing/${p.slugs.join('/')}`, label: p.data.title }))
     : id === 'notes'
-    ? notes.getPages().map(p => ({ id: `notes/${p.slugs.join('/')}`, label: p.data.title }))
-    : []
+      ? notes.getPages().map(p => ({ id: `notes/${p.slugs.join('/')}`, label: p.data.title }))
+      : []
 
   const hasChildren = children.length > 0
   const Icon = ICON_MAP[config.icon]
@@ -97,7 +97,7 @@ function DirectoryItem({ id, config, isActive }: { id: string, config: any, isAc
           {isActive && !expanded && (
             <div className="absolute left-0 h-4 w-[2px] bg-os-accent" />
           )}
-          
+
           <div className="flex items-center gap-2 flex-1">
             {hasChildren && (
               <span className="absolute left-2.5">
@@ -174,7 +174,7 @@ function TreeSectionGroup({ section }: { section: TreeSection }) {
             {section.items.map((id) => {
               const config = PANEL_CONFIG[id as keyof typeof PANEL_CONFIG]
               const isActive = activePanel === id
-              
+
               // Custom Directory rendering for writing and notes
               if (id === 'writing' || id === 'notes') {
                 return <DirectoryItem key={id} id={id} config={config} isActive={isActive} />

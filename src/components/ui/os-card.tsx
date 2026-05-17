@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 interface OsCardProps {
   children: ReactNode
@@ -12,8 +12,9 @@ export function OsCard({ children, className, hoverable = true }: OsCardProps) {
     <div className={cn(
       'rounded-sm border border-os-border bg-os-surface transition-all',
       hoverable && 'hover:border-os-accent/30',
-      className
-    )}>
+      className,
+    )}
+    >
       {children}
     </div>
   )

@@ -1,5 +1,5 @@
-import { defineConfig, defineDocs, frontmatterSchema } from 'fumadocs-mdx/config'
 import { rehypeCode } from 'fumadocs-core/mdx-plugins'
+import { defineConfig, defineDocs, frontmatterSchema } from 'fumadocs-mdx/config'
 import { z } from 'zod'
 
 export const writing = defineDocs({

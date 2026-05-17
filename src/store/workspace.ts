@@ -36,6 +36,7 @@ interface WorkspaceState {
   toggleSidebarPosition: () => void
   setSidebarPosition: (pos: 'left' | 'right') => void
   toggleBottomPanel: () => void
+  setBottomPanelOpen: (open: boolean) => void
   setBottomPanelHeight: (h: number) => void
   toggleCommandPalette: () => void
   setCommandPaletteOpen: (open: boolean) => void
@@ -49,7 +50,9 @@ interface WorkspaceState {
 export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   openTabs: ['overview'],
   sidebarOpen: true,
-  bottomPanelOpen: true,
+  bottomPanelOpen: typeof window !== 'undefined'
+    ? localStorage.getItem('folio-os-terminal-open') !== 'false'
+    : true,
   bottomPanelHeight: 200,
   commandPaletteOpen: false,
   sidebarWidth: 220,
@@ -74,14 +77,24 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   toggleSidebar: () => set(s => ({ sidebarOpen: !s.sidebarOpen })),
   toggleSidebarPosition: () => set(s => ({ sidebarPosition: s.sidebarPosition === 'left' ? 'right' : 'left' })),
   setSidebarPosition: pos => set({ sidebarPosition: pos }),
-  toggleBottomPanel: () => set(s => ({ bottomPanelOpen: !s.bottomPanelOpen })),
+  toggleBottomPanel: () => set((s) => {
+    const next = !s.bottomPanelOpen
+    if (typeof window !== 'undefined')
+      localStorage.setItem('folio-os-terminal-open', String(next))
+    return { bottomPanelOpen: next }
+  }),
+  setBottomPanelOpen: (open) => {
+    if (typeof window !== 'undefined')
+      localStorage.setItem('folio-os-terminal-open', String(open))
+    set({ bottomPanelOpen: open })
+  },
   setBottomPanelHeight: h => set({ bottomPanelHeight: h }),
   toggleCommandPalette: () => set(s => ({ commandPaletteOpen: !s.commandPaletteOpen })),
   setCommandPaletteOpen: open => set({ commandPaletteOpen: open }),
   setSidebarWidth: w => set({ sidebarWidth: w }),
   setThemePreset: (preset, setTheme) => {
     set({ themePreset: preset })
-    
+
     // Sync with next-themes if provided
     if (setTheme) {
       const isLight = ['folio-light', 'cobalt'].includes(preset)
