@@ -1,4 +1,7 @@
 // ── Terminal Line Types ──
+const SPACES_REGEX = /\s+/
+const LEADING_SLASH_REGEX = /^\//
+
 export interface TerminalLine {
   id: string
   type: 'system' | 'input' | 'output' | 'error' | 'ascii'
@@ -363,8 +366,8 @@ export function executeCommand(
   ctx.addLines([createLine('input', trimmed)])
 
   // Parse command and args
-  const parts = trimmed.split(/\s+/)
-  const cmd = parts[0].toLowerCase().replace(/^\//, '') // strip leading /
+  const parts = trimmed.split(SPACES_REGEX)
+  const cmd = parts[0].toLowerCase().replace(LEADING_SLASH_REGEX, '') // strip leading /
   const args = parts.slice(1)
 
   const handler = commands[cmd]

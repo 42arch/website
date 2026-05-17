@@ -81,7 +81,7 @@ function DirectoryItem({ id, config, isActive }: { id: string, config: any, isAc
         <Link
           href={`/${id}`}
           id={`nav-${id}`}
-          onClick={(e) => {
+          onClick={() => {
             if (hasChildren) {
               setExpanded(!expanded)
             }

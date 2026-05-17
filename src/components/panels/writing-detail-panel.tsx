@@ -6,6 +6,9 @@ import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+const SLUG_CLEAN_REGEX = /[^a-z0-9]+/g
+const SLUG_TRIM_REGEX = /(^-|-$)+/g
+
 interface WritingDetailPanelProps {
   title: string
   date: Date
@@ -13,21 +16,22 @@ interface WritingDetailPanelProps {
   category?: string
   readingTime?: string
   description?: string
-  toc?: { title: string; url: string; depth: number }[]
+  toc?: { title: ReactNode, url: string, depth: number }[]
   children: ReactNode
 }
 
 export function WritingDetailPanel({ title, date, tags, category, readingTime, description, toc, children }: WritingDetailPanelProps) {
   const [isTocOpen, setIsTocOpen] = useState(false)
   const [activeId, setActiveId] = useState<string>('')
-  const [dynamicToc, setDynamicToc] = useState<{ title: string; url: string; depth: number }[]>([])
+  const [dynamicToc, setDynamicToc] = useState<{ title: ReactNode, url: string, depth: number }[]>([])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   // 动态扫描 DOM 并物理对齐 ID 链路 (增加 100ms 延迟以完全避开 React 异步子树时差，并在卸载时清理)
   useEffect(() => {
     const timer = setTimeout(() => {
       const container = document.querySelector('.prose')
-      if (!container) return
+      if (!container)
+        return
 
       const headings = Array.from(container.querySelectorAll('h1, h2, h3, h4'))
 
@@ -44,15 +48,15 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
       }
       else {
         // 兜底客户端扫描
-        const parsed: { title: string; url: string; depth: number }[] = []
+        const parsed: { title: string, url: string, depth: number }[] = []
         headings.forEach((heading, idx) => {
           let id = heading.id
           if (!id) {
             const text = heading.textContent || ''
             id = text
               .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')
-              .replace(/(^-|-$)+/g, '') || `heading-${idx}`
+              .replace(SLUG_CLEAN_REGEX, '-')
+              .replace(SLUG_TRIM_REGEX, '') || `heading-${idx}`
             heading.id = id
           }
           parsed.push({
@@ -71,15 +75,17 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
   // 监听滚动，自动高亮当前可视区域的目录项 (基于安全的 scrollContainerRef)
   useEffect(() => {
     const container = scrollContainerRef.current
-    if (!container) return
+    if (!container)
+      return
 
     const handleScroll = () => {
-      const headingElements = dynamicToc.map(item => {
+      const headingElements = dynamicToc.map((item) => {
         const id = item.url.startsWith('#') ? item.url.slice(1) : item.url
         return document.getElementById(id)
       }).filter(Boolean) as HTMLElement[]
 
-      if (headingElements.length === 0) return
+      if (headingElements.length === 0)
+        return
 
       let currentId = ''
       const containerRect = container.getBoundingClientRect()
@@ -109,7 +115,8 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
   const scrollToAnchor = useCallback((url: string, index: number) => {
     const id = url.startsWith('#') ? url.slice(1) : url
     const container = scrollContainerRef.current
-    if (!container) return
+    if (!container)
+      return
 
     // 1. 优先通过 ID 查找
     let element = document.getElementById(id)
@@ -118,11 +125,11 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
     const prose = container.querySelector('.prose')
     if (prose) {
       const headings = Array.from(prose.querySelectorAll('h1, h2, h3, h4'))
-      
+
       if (!element) {
         element = headings[index] as HTMLElement
       }
-      
+
       // 顺便自我修复，补齐 DOM 标题的 ID，让之后的 Scroll Spy 主动高亮无缝衔接
       headings.forEach((heading, idx) => {
         if (heading && idx === index) {
@@ -148,7 +155,7 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
       }, 1500)
 
       setActiveId(id)
-      
+
       if (window.innerWidth < 768) {
         setIsTocOpen(false)
       }
@@ -285,7 +292,8 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
                   >
                     <span className={`inline-block w-1 h-1 rounded-full mt-1.5 transition-transform duration-200 ${
                       isActive ? 'bg-os-accent scale-150' : 'bg-muted-foreground/30'
-                    }`} />
+                    }`}
+                    />
                     <span className="flex-1 truncate">{item.title}</span>
                   </button>
                 )
@@ -297,4 +305,3 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
     </motion.div>
   )
 }
-
