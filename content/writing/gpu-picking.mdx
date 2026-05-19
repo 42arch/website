@@ -1,0 +1,266 @@
+---
+title: 利用GPU Picking实现高性能物体拾取
+description: 在 WebGL 和 3D 可视化开发中，交互是连接用户与虚拟场景的核心方式。当用户点击屏幕时，能够准确判断鼠标下方的物体至关重要。
+date: 2025-12-30
+author: Ren Dan
+tags: [WebGL, GPU Picking]
+category: WebGL
+draft: false
+---
+
+在 WebGL 和 3D 可视化开发中，交互是连接用户与虚拟场景的核心方式。当用户点击屏幕时，能够准确判断鼠标下方的物体至关重要。
+
+面对不同规模的场景，实现“拾取”通常有以下几种主流方案：
+
+1. **CPU Raycasting（射线检测）**：如Three.js 默认的 `Raycaster`，原理是从相机发射一条射线，通过数学计算检测射线与场景中物体（包围盒或三角形）的交点。
+    - 优点：使用简单，精度高，无需额外显存。
+    - 缺点：对于复杂场景或大量 `InstancedMesh`，遍历计算会导致 CPU 瓶颈，帧率大幅下降。
+2. **CPU Spatial Indexing（空间索引优化）**：在 Raycasting 的基础上引入 BVH（层次包围盒）或 Octree（八叉树）算法。
+    - 优点：减少了射线检测需要遍历的物体数量，提升了 CPU 查询效率。
+    - 缺点：需要维护复杂的空间数据结构，构建索引需要时间，仍主要依赖 CPU。
+3. **GPU Picking（GPU 拾取）**：利用图形渲染管线的光栅化能力。
+    - 性能与场景几何复杂度无关，仅与屏幕分辨率（读取像素的区域）相关，速度极快。
+    - 缺点：实现相对复杂，需要额外的显存开销（离屏渲染）。
+
+本文将重点探讨 **GPU Picking** 技术，并以 Three.js 的 `InstancedMesh` 为例，解析如何实现高性能的物体拾取。
+
+### 核心原理
+
+GPU Picking 的核心思想是将“几何相交计算”转换为“颜色查找操作”。其流程如下：
+
+1. **编码**：为场景中的每个可交互物体（或实例）分配一个唯一的颜色 ID。
+2. **离屏渲染**：创建一个用户不可见的帧缓冲区（RenderTarget）。在此缓冲区中，不进行光照计算等操作，仅渲染物体的颜色 ID。
+3. **读取与解码**：当发生交互（如点击）时，根据鼠标坐标读取帧缓冲区对应位置的像素颜色，将其解码回物体 ID，从而锁定选中对象。
+
+注意：有些时候一些技术场景会将 GPU Picking 与 Color Picking 两个术语交替使用，实际上 Color Picking 是 GPU Picking 的最主流的实现手段。除了 Color Picking，CPU Picking 还可以通过读取深度纹理来计算坐标，或者用 G-Buffer 来存储物体索引等。
+
+### 代码实现
+
+```jsx
+import * as THREE from 'three'
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+// --- 0. 关键配置：关闭色彩管理 ---
+// 防止 ID 颜色被 Gamma 校正导致数值偏差
+THREE.ColorManagement.enabled = false
+
+// --- 1. 初始化场景 ---
+const width = window.innerWidth
+const height = window.innerHeight
+const canvas = document.createElement('canvas')
+document.body.appendChild(canvas)
+
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true })
+renderer.setSize(width, height)
+renderer.setPixelRatio(window.devicePixelRatio)
+
+// 创建两个场景：一个用于显示，一个用于拾取
+const scene = new THREE.Scene()
+scene.background = new THREE.Color(0x111111)
+
+const pickingScene = new THREE.Scene()
+pickingScene.background = new THREE.Color(0x000000) // 拾取场景背景必须是纯黑(ID:0)
+
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+camera.position.set(20, 20, 20)
+
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+
+// 灯光
+scene.add(new THREE.AmbientLight(0xffffff, 0.6))
+const sun = new THREE.PointLight(0xffffff, 1000)
+sun.position.set(20, 20, 20)
+scene.add(sun)
+
+// --- 2. 创建 InstancedMesh ---
+const count = 5000
+const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+
+// 视觉 Mesh
+const material = new THREE.MeshPhongMaterial()
+const mesh = new THREE.InstancedMesh(geometry, material, count)
+scene.add(mesh)
+
+// 拾取 Mesh (使用 BasicMaterial，无光照)
+const pickingMaterial = new THREE.MeshBasicMaterial()
+const pickingMesh = new THREE.InstancedMesh(geometry, pickingMaterial, count)
+pickingScene.add(pickingMesh)
+
+// 高亮 Mesh (Wireframe)
+const highlightMesh = new THREE.Mesh(
+		new THREE.BoxGeometry(0.55, 0.55, 0.55),
+		new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true })
+)
+highlightMesh.visible = false
+scene.add(highlightMesh)
+
+// --- 3. 填充数据 ---
+const matrix = new THREE.Matrix4()
+const color = new THREE.Color()
+const pickingColor = new THREE.Color()
+const matrices = [] // 保存矩阵用于高亮定位
+
+for (let i = 0; i < count; i++) {
+		// 随机变换矩阵
+		randomizeMatrix(matrix)
+		matrices.push(matrix.clone()) // 存起来
+
+		// 同时设置给 视觉Mesh 和 拾取Mesh
+		mesh.setMatrixAt(i, matrix)
+		pickingMesh.setMatrixAt(i, matrix)
+
+		// 设置视觉颜色
+		mesh.setColorAt(i, color.setHSL(Math.random(), 0.7, 0.5))
+
+		// 设置 ID 颜色 (ID = i + 1)
+		pickingMesh.setColorAt(i, pickingColor.setHex(i + 1))
+}
+
+function randomizeMatrix(matrix) {
+		const position = new THREE.Vector3(
+				(Math.random() - 0.5) * 30,
+				(Math.random() - 0.5) * 30,
+				(Math.random() - 0.5) * 30
+		)
+		const rotation = new THREE.Euler(
+				Math.random() * 2 * Math.PI,
+				Math.random() * 2 * Math.PI,
+				Math.random() * 2 * Math.PI
+		)
+		const quaternion = new THREE.Quaternion().setFromEuler(rotation)
+		const scale = new THREE.Vector3(1, 1, 1)
+		matrix.compose(position, quaternion, scale)
+}
+
+// --- 4. GPU Picking 核心逻辑 (参考 main.ts) ---
+
+// 创建 1x1 的 RenderTarget，用于读取单像素
+const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
+		minFilter: THREE.NearestFilter,
+		magFilter: THREE.NearestFilter,
+		format: THREE.RGBAFormat
+})
+const pixelBuffer = new Uint8Array(4)
+
+// 记录鼠标坐标
+const mouse = new THREE.Vector2(-1, -1)
+
+function pick() {
+		if (mouse.x <= 0 || mouse.y <= 0) return
+
+		// A. 设置相机视口偏移 (仅渲染鼠标下方的 1x1 像素)
+		// setViewOffset(fullWidth, fullHeight, x, y, width, height)
+		camera.setViewOffset(
+				renderer.domElement.width, 
+				renderer.domElement.height,
+				mouse.x * window.devicePixelRatio, 
+				mouse.y * window.devicePixelRatio,
+				1, 
+				1
+		)
+
+		// B. 渲染 PickingScene 到 RenderTarget
+		renderer.setRenderTarget(pickingRenderTarget)
+		renderer.render(pickingScene, camera)
+
+		// C. 读取像素
+		renderer.readRenderTargetPixels(
+				pickingRenderTarget,
+				0, 0, 1, 1,
+				pixelBuffer
+		)
+
+		// D. 恢复渲染状态
+		renderer.setRenderTarget(null)
+		camera.clearViewOffset() // 重要：清除偏移，否则主场景渲染会乱
+
+		// E. 解码 ID
+		const id = (pixelBuffer[0] << 16) | (pixelBuffer[1] << 8) | pixelBuffer[2]
+		const instanceId = id - 1
+
+		// F. 高亮逻辑
+		if (instanceId >= 0) {
+				const targetMatrix = matrices[instanceId]
+				// 分解矩阵应用到高亮 Mesh
+				targetMatrix.decompose(
+						highlightMesh.position,
+						highlightMesh.quaternion,
+						highlightMesh.scale
+				)
+				highlightMesh.visible = true
+				document.body.style.cursor = 'pointer'
+		} else {
+				highlightMesh.visible = false
+				document.body.style.cursor = 'default'
+		}
+}
+
+// --- 5. 事件监听 ---
+window.addEventListener('mousemove', (e) => {
+		const rect = canvas.getBoundingClientRect()
+		mouse.x = e.clientX - rect.left
+		mouse.y = e.clientY - rect.top
+})
+
+window.addEventListener('resize', () => {
+		const width = window.innerWidth
+		const height = window.innerHeight
+		camera.aspect = width / height
+		camera.updateProjectionMatrix()
+		renderer.setSize(width, height)
+})
+
+// --- 6. 动画循环 ---
+function animate() {
+	requestAnimationFrame(animate)
+	controls.update()
+
+	// 执行拾取
+	pick()
+
+	// 渲染主场景
+	renderer.render(scene, camera)
+}
+animate()
+```
+
+### 关键技术总结
+
+在上述代码中，核心流程和关键技术总结如下：
+
+1. **双场景策略**：
+    
+    为了彻底隔离“视觉渲染”和“拾取计算”，采用双场景。视觉场景（scene）负责负责正常的屏幕输出，包含了正常的光照和材质；拾取场景（pickingScene）包含了用于拾取的`InstancedMesh`，使用 `MeshBasicMaterial`（不受光照影响，纯色），背景纯黑，代表 ID 为 0（未选中）。
+    
+    拾取场景的 Mesh 与视觉 Mesh 共享完全相同的几何体 (Geometry**)** 和 变换矩阵 (Matrix)，确保位置完全重合。
+    
+2. **编码与解码：**
+    
+    GPU Picking 的本质是建立 ID 与颜色的一一映射。
+    
+    编码过程：
+    1. 遍历所有实例。
+    2. ID 偏移：将实例索引 `i` 加 1 (`id = i + 1`)，这是为了避开背景色 0。
+    3. 生成颜色：直接使用 `color.setHex(id)` 将整数 ID 转换为 RGB 颜色。例如 ID 255 变成 `rgb(0, 0, 255)` 。
+    4. 将颜色存入 Picking Mesh 的 `instanceColor` 属性中。
+    
+    解码过程：
+    1. 从 GPU 读取到的像素数据是 `Uint8Array` 格式的 `[R, G, B, A]。`
+    2. 通过位运算还原 ID：
+    `const id = (R << 16) | (G << 8) | B` 
+    3. 还原索引：`instanceIndex = id - 1`。如果结果为 -1，说明读到的是背景。
+
+3. **1 x 1 渲染**
+    
+    这是一个性能优化点，为了获取鼠标下的颜色，不需要渲染整个屏幕。
+    
+    通过创建一个极小的 `WebGLRenderTarget(1, 1)`，利用 `camera.setViewOffset` 方法，让相机只看鼠标下方的那一个像素，然后调用 `readRenderTargetPixels` 读取这唯一的像素。这使得 GPU 只需要光栅化极小区域，极大降低了拾取时的渲染开销。
+    
+4. 注意事项：
+
+    a. **色彩管理（ColorManagement）**：Three.js 新版本默认开启色彩管理，会将颜色进行 sRGB -> Linear 的转换（Gamma 校正）。这会导致编码的 ID 颜色数值发生变化，导致拾取错误。所以一般要关闭色彩管理，或者将拾取材质的 `colorWrite` 流程设为 Linear 空间。
+    
+    b. **抗锯齿与过滤**：拾取用的 RenderTarget 必须设置 `minFilter/magFilter` 为 `NearestFilter`，防止像素插值混合颜色。拾取渲染时，也不能开启抗锯齿，虽然 1x1 渲染通常不会触发这个问题，但在大尺寸 RenderTarget 下会比较致命。
+    
+    c. **同步更新**：如果场景中的物体会移动，注意要同时更新 **Visual Mesh** 和 **Picking Mesh** 的矩阵。
