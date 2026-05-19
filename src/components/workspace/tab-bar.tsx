@@ -101,7 +101,7 @@ export function TabBar() {
         id="tab-bar"
         className="flex h-9 shrink-0 items-center border-b border-os-border bg-os-toolbar"
       >
-        <div className="flex h-full flex-1 items-end overflow-x-auto os-scrollbar">
+        <div className="flex h-full flex-1 items-end overflow-x-auto no-scrollbar">
           <div className="flex h-full shrink-0">
             {tabItems}
           </div>
@@ -130,7 +130,7 @@ export function TabBar() {
       id="tab-bar"
       className="flex h-8 shrink-0 items-center border-b border-os-border bg-os-toolbar"
     >
-      <div className="flex h-full flex-1 items-end overflow-x-auto os-scrollbar">
+      <div className="flex h-full flex-1 items-end overflow-x-auto no-scrollbar">
         <Reorder.Group
           axis="x"
           values={openTabs}

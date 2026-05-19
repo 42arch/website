@@ -487,6 +487,14 @@ html[data-theme="github-dark"] {
   .os-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--fg-muted);
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* ── Mobile responsive adjustments ──────────────── */

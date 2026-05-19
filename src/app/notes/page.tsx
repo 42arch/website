@@ -9,7 +9,13 @@ export const metadata = {
 export default function NotesPage() {
   const allNotes = notes.getPages()
 
-  const mappedNotes = allNotes.map(note => ({
+  const sorted = [...allNotes].sort((a, b) => {
+    const dateA = new Date((a.data as any).date || 0).getTime()
+    const dateB = new Date((b.data as any).date || 0).getTime()
+    return dateB - dateA
+  })
+
+  const mappedNotes = sorted.map(note => ({
     id: note.slugs[0],
     url: note.url,
     title: note.data.title,

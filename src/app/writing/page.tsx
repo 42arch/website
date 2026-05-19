@@ -9,7 +9,13 @@ export const metadata = {
 export default function WritingPage() {
   const posts = writing.getPages()
 
-  const articles = posts.map(post => ({
+  const sorted = [...posts].sort((a, b) => {
+    const dateA = new Date((a.data as any).date || 0).getTime()
+    const dateB = new Date((b.data as any).date || 0).getTime()
+    return dateB - dateA
+  })
+
+  const articles = sorted.map(post => ({
     id: post.slugs[0],
     url: post.url,
     title: post.data.title,

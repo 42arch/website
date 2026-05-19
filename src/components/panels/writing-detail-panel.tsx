@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { ArrowLeftIcon, CalendarIcon, ClockIcon, FolderIcon, ListBulletsIcon, TagIcon, XIcon } from '@phosphor-icons/react'
+import { ArrowLeftIcon, ArrowUpIcon, CalendarIcon, ClockIcon, FolderIcon, ListBulletsIcon, TagIcon, XIcon } from '@phosphor-icons/react'
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -164,35 +164,53 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
 
   return (
     <motion.div
-      ref={scrollContainerRef}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="os-scrollbar relative h-full overflow-y-auto p-6"
+      className="relative h-full w-full"
     >
-      <div className="mx-auto max-w-3xl space-y-8">
-        {/* Header */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Link href="/writing" className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground hover:text-os-accent transition-colors">
-              <ArrowLeftIcon size={12} />
-              cd ../
-            </Link>
+      <div className="absolute top-6 right-6 z-40 flex flex-col gap-2">
+        {dynamicToc.length > 0 && (
+          <button
+            onClick={() => setIsTocOpen(!isTocOpen)}
+            className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-sm font-mono text-[11px] border transition-all duration-200 ${
+              isTocOpen
+                ? 'bg-os-accent/10 border-os-accent text-os-accent shadow-[0_0_8px_rgba(var(--accent),0.15)]'
+                : 'bg-os-surface/80 backdrop-blur-sm border-os-border text-muted-foreground hover:text-foreground hover:border-os-border-strong'
+            }`}
+          >
+            <ListBulletsIcon size={13} />
+            TOC
+          </button>
+        )}
 
-            {dynamicToc.length > 0 && (
-              <button
-                onClick={() => setIsTocOpen(!isTocOpen)}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm font-mono text-[11px] border transition-all duration-200 ${
-                  isTocOpen
-                    ? 'bg-os-accent/10 border-os-accent text-os-accent shadow-[0_0_8px_rgba(var(--accent),0.15)]'
-                    : 'bg-os-surface border-os-border text-muted-foreground hover:text-foreground hover:border-os-border-strong'
-                }`}
-              >
-                <ListBulletsIcon size={13} />
-                TOC
-              </button>
-            )}
-          </div>
+        <button
+          onClick={() => {
+            const container = scrollContainerRef.current
+            if (container) {
+              container.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+          }}
+          className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-sm font-mono text-[11px] border bg-os-surface/80 backdrop-blur-sm border-os-border text-muted-foreground hover:text-foreground hover:border-os-border-strong transition-all duration-200"
+        >
+          <ArrowUpIcon size={13} />
+          TOP
+        </button>
+      </div>
+
+      <div
+        ref={scrollContainerRef}
+        className="os-scrollbar h-full overflow-y-auto p-6"
+      >
+        <div className="mx-auto max-w-3xl space-y-8">
+          {/* Header */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Link href="/writing" className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground hover:text-os-accent transition-colors">
+                <ArrowLeftIcon size={12} />
+                cd ../
+              </Link>
+            </div>
 
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-4">
@@ -248,6 +266,7 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
           {children}
         </div>
       </div>
+    </div>
 
       {/* Futuristic Glassmorphic TOC Panel */}
       <AnimatePresence>
@@ -257,7 +276,7 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 15, scale: 0.98 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="fixed top-24 right-8 z-50 w-72 max-h-[calc(100vh-10rem)] overflow-y-auto bg-os-surface/85 backdrop-blur-md border border-os-border shadow-[0_8px_32px_rgba(0,0,0,0.25)] rounded-md p-4 os-scrollbar"
+            className="fixed top-24 right-6 z-50 w-72 max-h-[calc(100vh-10rem)] overflow-y-auto bg-os-surface/85 backdrop-blur-md border border-os-border shadow-[0_8px_32px_rgba(0,0,0,0.25)] rounded-md p-4 os-scrollbar"
           >
             <div className="flex items-center justify-between border-b border-os-border pb-2.5 mb-3">
               <span className="font-mono text-[11px] font-semibold text-foreground uppercase tracking-widest flex items-center gap-1.5">
