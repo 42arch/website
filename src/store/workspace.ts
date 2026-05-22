@@ -1,6 +1,7 @@
 import { create } from 'zustand'
+import { site } from '@/config'
 
-export type PanelId = 'overview' | 'projects' | 'experiments' | 'writing' | 'gallery' | 'notes' | 'activity' | 'contact' | 'settings'
+export type PanelId = 'overview' | 'projects' | 'experiments' | 'writing' | 'gallery' | 'notes' | 'about' | 'rss' | 'contact' | 'settings'
 
 export interface Tab {
   id: PanelId
@@ -15,7 +16,8 @@ export const PANEL_CONFIG: Record<PanelId, { label: string, icon: string }> = {
   writing: { label: 'Writing', icon: 'article' },
   gallery: { label: 'Gallery', icon: 'images' },
   notes: { label: 'Notes', icon: 'notepad' },
-  activity: { label: 'Activity', icon: 'activity' },
+  about: { label: 'About', icon: 'info' },
+  rss: { label: 'RSS Feed', icon: 'rss' },
   contact: { label: 'Contact', icon: 'envelope' },
   settings: { label: 'Settings', icon: 'gear' },
 }
@@ -59,7 +61,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   sidebarPosition: 'left',
   themePreset: (typeof window !== 'undefined'
     ? localStorage.getItem('folio-os-theme') as any
-    : null) || 'linen',
+    : null) || site.defaultTheme,
 
   openTab: (id) => {
     const { openTabs } = get()

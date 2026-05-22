@@ -1,8 +1,9 @@
 'use client'
 
-import { CopyIcon, EnvelopeIcon, GithubLogoIcon, LinkedinLogoIcon, XLogoIcon } from '@phosphor-icons/react'
+import { CopyIcon, EnvelopeIcon, GithubLogoIcon, GlobeIcon, LinkedinLogoIcon, XLogoIcon } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
 import { useState } from 'react'
+import { siteConfig } from '@/config'
 
 interface ContactLink {
   id: string
@@ -12,12 +13,44 @@ interface ContactLink {
   icon: typeof EnvelopeIcon
 }
 
-const CONTACT_LINKS: ContactLink[] = [
-  { id: 'email', label: 'Email', value: 'hello@example.dev', url: 'mailto:hello@example.dev', icon: EnvelopeIcon },
-  { id: 'github', label: 'GitHub', value: 'github.com/username', url: 'https://github.com', icon: GithubLogoIcon },
-  { id: 'x', label: 'X / Twitter', value: '@username', url: 'https://x.com', icon: XLogoIcon },
-  { id: 'linkedin', label: 'LinkedIn', value: 'linkedin.com/in/username', url: 'https://linkedin.com', icon: LinkedinLogoIcon },
-]
+const ICON_MAP: Record<string, typeof EnvelopeIcon> = {
+  email: EnvelopeIcon,
+  github: GithubLogoIcon,
+  x: XLogoIcon,
+  linkedin: LinkedinLogoIcon,
+  website: GlobeIcon,
+}
+
+const LABEL_MAP: Record<string, string> = {
+  email: 'Email',
+  github: 'GitHub',
+  x: 'X / Twitter',
+  linkedin: 'LinkedIn',
+  website: 'Website',
+}
+
+function buildContactLinks(): ContactLink[] {
+  const links: ContactLink[] = []
+  const { social } = siteConfig
+
+  for (const [key, value] of Object.entries(social)) {
+    if (!value) continue
+    const icon = ICON_MAP[key] || GlobeIcon
+    const label = LABEL_MAP[key] || key.charAt(0).toUpperCase() + key.slice(1)
+    const isEmail = key === 'email'
+    links.push({
+      id: key,
+      label,
+      value: isEmail ? value : value.replace(/^https?:\/\//, ''),
+      url: isEmail ? `mailto:${value}` : value,
+      icon,
+    })
+  }
+
+  return links
+}
+
+const CONTACT_LINKS = buildContactLinks()
 
 export function ContactPanel() {
   const [copied, setCopied] = useState<string | null>(null)
@@ -27,6 +60,8 @@ export function ContactPanel() {
     setCopied(id)
     setTimeout(setCopied, 2000, null)
   }
+
+  const emailAddr = siteConfig.social.email || 'hello@example.dev'
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="os-scrollbar h-full overflow-y-auto p-6">
@@ -71,7 +106,7 @@ export function ContactPanel() {
               <div className="mt-1">
                 <span className="text-os-accent">$</span>
                 {' '}
-                <span className="text-os-terminal-fg">echo &quot;Your message here&quot; | mail -s &quot;Subject&quot; hello@example.dev</span>
+                <span className="text-os-terminal-fg">echo &quot;Your message here&quot; | mail -s &quot;Subject&quot; {emailAddr}</span>
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground">Feel free to reach out via any channel above. I typically respond within 24 hours.</p>

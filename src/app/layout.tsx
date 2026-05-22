@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { WorkspaceShell } from '@/components/workspace/workspace-shell'
+import { author, site, social } from '@/config'
 import { cn } from '@/lib/utils'
 
 import './globals.css'
@@ -64,27 +65,19 @@ const geistMono = localFont({
   variable: '--font-geist-mono',
 })
 
+const titleText = `${site.name} — Developer Workspace`
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://folio-os.starllow.com'),
+  metadataBase: new URL(site.url),
   title: {
-    default: 'Folio OS — Developer Workspace',
-    template: '%s | Folio OS',
+    default: titleText,
+    template: `%s | ${site.name}`,
   },
-  description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a high-fidelity digital developer operating system.',
-  keywords: [
-    'developer portfolio',
-    'workspace UI',
-    'developer workspace',
-    'digital operating system',
-    'web OS',
-    'Fumadocs portfolio',
-    'Next.js portfolio',
-    'creative developer',
-    'interactive cv',
-  ],
-  authors: [{ name: 'Dan', url: 'https://folio-os.starllow.com' }],
-  creator: 'Dan',
-  publisher: 'Dan',
+  description: site.description,
+  keywords: site.keywords,
+  authors: [{ name: author.name, url: site.url }],
+  creator: author.name,
+  publisher: author.name,
   robots: {
     index: true,
     follow: true,
@@ -98,26 +91,26 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'en_US',
-    url: 'https://folio-os.starllow.com',
-    title: 'Folio OS — Developer Workspace',
-    description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a high-fidelity digital developer operating system.',
-    siteName: 'Folio OS',
+    locale: site.locale,
+    url: site.url,
+    title: titleText,
+    description: site.description,
+    siteName: site.name,
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Folio OS — Developer Workspace',
+        alt: titleText,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Folio OS — Developer Workspace',
-    description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a high-fidelity digital developer operating system.',
+    title: titleText,
+    description: site.description,
     images: ['/og-image.png'],
-    creator: '@dan_dev',
+    creator: social.x ? `@${social.x.split('/').pop()}` : undefined,
   },
   alternates: {
     canonical: '/',
@@ -125,7 +118,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Folio OS',
+    title: site.name,
   },
   icons: {
     icon: [
@@ -144,7 +137,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   viewportFit: 'cover',
-  themeColor: '#f5f2eb',
+  themeColor: site.themeColor,
 }
 
 export default function RootLayout({

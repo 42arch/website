@@ -2,6 +2,15 @@
   "name": "folio-os",
   "version": "0.2.0",
   "private": true,
+  "author": {
+    "name": "Ren Dan",
+    "email": "rend42@163.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/42arch/folio-os"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -29,6 +38,7 @@
     "react-resizable-panels": "^4.11.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
+    "rss": "^1.2.2",
     "shadcn": "^4.1.1",
     "shiki": "^4.0.2",
     "tailwind-merge": "^3.5.0",
@@ -44,6 +54,7 @@
     "@types/node": "^24.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/rss": "^0.0.32",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",

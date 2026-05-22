@@ -13,92 +13,11 @@ import { useState } from 'react'
 import { OsCard } from '@/components/ui/os-card'
 import { PanelBadge } from '@/components/ui/panel-badge'
 import { PanelHeader } from '@/components/ui/panel-header'
+import { siteConfig } from '@/config'
+import type { Project } from '@/config/types'
 import { cn } from '@/lib/utils'
 
-interface Project {
-  id: string
-  title: string
-  description: string
-  tags: string[]
-  status: 'active' | 'shipped' | 'archived' | 'in-progress'
-  stars?: number
-  lastUpdated: string
-  tech: string[]
-  commits?: number
-  url?: string
-}
-
-const PROJECTS: Project[] = [
-  {
-    id: 'fantasy-map',
-    title: 'Fantasy Map Generator',
-    description: 'A procedural terrain generation engine with real-time elevation editing, river network simulation, climate zones, and Voronoi-based landmass creation. Features GPU-accelerated rendering via custom shaders.',
-    tags: ['procedural', 'visualization', 'interactive'],
-    status: 'active',
-    stars: 128,
-    lastUpdated: '2026-05-14',
-    tech: ['TypeScript', 'WebGL', 'Zustand', 'Next.js'],
-    commits: 847,
-    url: '#',
-  },
-  {
-    id: 'folio-os',
-    title: 'Folio OS',
-    description: 'This website. An experimental workspace interface inspired by IDE, developer tools, and retro operating system aesthetics. Panel-based navigation with command palette, explorer tree, and activity monitoring.',
-    tags: ['experimental', 'interface', 'workspace'],
-    status: 'in-progress',
-    lastUpdated: '2026-05-14',
-    tech: ['Next.js', 'Motion', 'Tailwind', 'Zustand'],
-    commits: 142,
-    url: '#',
-  },
-  {
-    id: 'network-monitor',
-    title: 'Network Stats Monitor',
-    description: 'A Retina-optimized macOS menu bar application for real-time network throughput monitoring. Features custom pixel-rendered triangle indicators and 2x oversampling for crisp HiDPI rendering.',
-    tags: ['macOS', 'native', 'monitoring'],
-    status: 'shipped',
-    stars: 45,
-    lastUpdated: '2026-05-11',
-    tech: ['Swift', 'AppKit', 'IOKit'],
-    commits: 203,
-    url: '#',
-  },
-  {
-    id: 'shader-playground',
-    title: 'Shader Playground',
-    description: 'Real-time GLSL shader editor and preview tool with hot-reload, uniform inspection, and exportable snippets. Built for rapid prototyping of visual effects and generative art.',
-    tags: ['graphics', 'creative-tools', 'real-time'],
-    status: 'archived',
-    lastUpdated: '2025-12-20',
-    tech: ['WebGL', 'GLSL', 'React'],
-    commits: 89,
-    url: '#',
-  },
-  {
-    id: 'dev-dash',
-    title: 'Dev Dashboard',
-    description: 'A self-hosted developer dashboard aggregating GitHub activity, CI/CD status, deployment logs, and project metrics into a single modular interface. Configurable widget system.',
-    tags: ['dashboard', 'devops', 'monitoring'],
-    status: 'shipped',
-    stars: 72,
-    lastUpdated: '2026-03-15',
-    tech: ['Next.js', 'Prisma', 'PostgreSQL'],
-    commits: 324,
-    url: '#',
-  },
-  {
-    id: 'type-engine',
-    title: 'Type Engine',
-    description: 'A minimal, opinionated typographic design system for web. Provides fluid type scales, rhythm utilities, and a compact reading experience optimized for technical content.',
-    tags: ['design-system', 'typography', 'CSS'],
-    status: 'shipped',
-    lastUpdated: '2026-01-08',
-    tech: ['CSS', 'PostCSS', 'TypeScript'],
-    commits: 156,
-    url: '#',
-  },
-]
+const PROJECTS = siteConfig.projects
 
 const STATUS_STYLES: Record<Project['status'], { bg: string, text: string, label: string }> = {
   'active': { bg: 'bg-emerald-500/15', text: 'text-emerald-500', label: 'ACTIVE' },

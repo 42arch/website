@@ -9,8 +9,10 @@ import {
   GearIcon,
   HouseIcon,
   ImagesIcon,
+  InfoIcon,
   MagnifyingGlassIcon,
   NotepadIcon,
+  RssIcon,
   XIcon,
 } from '@phosphor-icons/react'
 import { AnimatePresence, motion } from 'motion/react'
@@ -29,6 +31,8 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number, weight?: 're
   images: ImagesIcon,
   notepad: NotepadIcon,
   activity: ActivityIcon,
+  info: InfoIcon,
+  rss: RssIcon,
   envelope: EnvelopeIcon,
   gear: GearIcon,
 }
@@ -48,7 +52,7 @@ export function CommandPalette() {
       icon: config.icon,
       action: () => {
         openTab(id)
-        router.push(`/${id}`)
+        router.push(id === 'overview' ? '/' : `/${id}`)
         setCommandPaletteOpen(false)
       },
     }))

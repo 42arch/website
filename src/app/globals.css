@@ -111,18 +111,18 @@
   --status-error: #c44040;
   --status-info: #3a7ac4;
 
-  /* Layer 6: Shiki (Highly legible code block tokens on dark inset background) */
-  --shiki-foreground: #d4d0c8;
-  --shiki-background: #1a1a1a;
-  --shiki-token-keyword: #ff9e3b;           /* Bright Copper Orange */
-  --shiki-token-string: #76c796;            /* Pastel Emerald Green */
-  --shiki-token-comment: #a09a9280;          /* Subtle Gray Comment */
-  --shiki-token-function: #b08aff;          /* Electric Pastel Violet */
-  --shiki-token-constant: #64b5f6;          /* Polar Light Blue */
-  --shiki-token-punctuation: #a09a92;       /* Readable Gray punctuation */
-  --shiki-token-parameter: #d4d0c8;         /* Bright Parameter */
-  --shiki-token-string-expression: #76c796;
-  --shiki-token-link: #ff9e3b;
+  /* Layer 6: Shiki (Light theme code block colors for warm ivory environment) */
+  --shiki-foreground: #2c2c2c;
+  --shiki-background: #fbfaf7;
+  --shiki-token-keyword: #b87333;           /* Copper Brown for keywords */
+  --shiki-token-string: #2b5b84;            /* Soft Slate Blue for strings */
+  --shiki-token-comment: #8c857b;            /* Warm Gray for comments */
+  --shiki-token-function: #704214;          /* Dark Sepia for functions */
+  --shiki-token-constant: #aa5c22;          /* Terracotta for constants */
+  --shiki-token-punctuation: #5a554e;       /* Soft Charcoal for punctuation */
+  --shiki-token-parameter: #b87333;         /* Copper for parameters */
+  --shiki-token-string-expression: #2b5b84;
+  --shiki-token-link: #b87333;
 }
 
 html[data-theme="linen"] {
@@ -502,4 +502,21 @@ html[data-theme="github-dark"] {
   #workspace-content .os-scrollbar {
     padding: 1rem;
   }
+}
+
+/* ── Code Blocks and Syntax Highlighting theme adaptation ── */
+.prose pre,
+.prose pre[class*="shiki"],
+pre[data-language],
+.shiki {
+  background-color: var(--shiki-background) !important;
+  color: var(--shiki-foreground) !important;
+  border-color: var(--border-default) !important;
+}
+
+.prose pre code,
+pre[data-language] code,
+.shiki code {
+  color: inherit !important;
+  background-color: transparent !important;
 }

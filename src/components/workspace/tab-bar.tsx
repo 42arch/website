@@ -46,10 +46,11 @@ export function TabBar() {
     if (isActive) {
       const remaining = openTabs.filter(t => t !== id)
       if (remaining.length > 0) {
-        router.push(`/${remaining.at(-1)}`)
+        const last = remaining.at(-1)
+        router.push(last === 'overview' ? '/' : `/${last}`)
       }
       else {
-        router.push('/overview')
+        router.push('/')
       }
     }
   }
@@ -70,10 +71,10 @@ export function TabBar() {
             ? 'bg-os-panel text-foreground border-b-2 border-b-os-accent'
             : 'bg-os-toolbar text-muted-foreground hover:bg-os-surface hover:text-foreground border-b-2 border-b-transparent',
         )}
-        onClick={() => router.push(`/${id}`)}
+        onClick={() => router.push(id === 'overview' ? '/' : `/${id}`)}
       >
         <span className={cn('max-w-[100px] truncate md:max-w-[250px]', isActive && 'font-medium')}>{config.label}</span>
-        {openTabs.length > 1 && (
+        {openTabs.length > 1 && id !== 'overview' && (
           <button
             onPointerDown={e => e.stopPropagation()}
             onClick={e => handleClose(e, id, isActive)}
@@ -117,7 +118,7 @@ export function TabBar() {
 
   function handleCloseAll() {
     closeAllTabs()
-    router.push('/overview')
+    router.push('/')
   }
 
   function handleCloseOthers() {
@@ -153,10 +154,10 @@ export function TabBar() {
                     ? 'bg-os-panel text-foreground border-b-2 border-b-os-accent'
                     : 'bg-os-toolbar text-muted-foreground hover:bg-os-surface hover:text-foreground border-b-2 border-b-transparent',
                 )}
-                onClick={() => router.push(`/${id}`)}
+                onClick={() => router.push(id === 'overview' ? '/' : `/${id}`)}
               >
                 <span className={cn('max-w-[150px] truncate md:max-w-[250px]', isActive && 'font-medium')}>{config.label}</span>
-                {openTabs.length > 1 && (
+                {openTabs.length > 1 && id !== 'overview' && (
                   <button
                     onPointerDown={e => e.stopPropagation()}
                     onClick={e => handleClose(e, id, isActive)}

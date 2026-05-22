@@ -8,9 +8,12 @@ import {
   TerminalIcon,
 } from '@phosphor-icons/react'
 
+import { site } from '@/config'
 import { useIsMobile } from '@/lib/use-mobile'
 import { useWorkspaceStore } from '@/store/workspace'
 import { SystemStatusGroup } from './system-status'
+
+const brandName = site.name.toUpperCase().replace(/\s+/g, '-')
 
 export function Toolbar() {
   const {
@@ -31,7 +34,7 @@ export function Toolbar() {
       >
         {/* Left: Brand */}
         <div className="flex items-center gap-1.5 font-mono text-[11px]">
-          <span className="font-semibold tracking-wider text-foreground">FOLIO-OS</span>
+          <span className="font-semibold tracking-wider text-foreground">{brandName}</span>
           <span className="text-muted-foreground">/</span>
           <span className="text-muted-foreground">workspace</span>
         </div>
@@ -79,7 +82,7 @@ export function Toolbar() {
 
         {/* Breadcrumb-style title */}
         <div className="flex items-center gap-1.5 font-mono text-[11px]">
-          <span className="font-semibold tracking-wider text-foreground">FOLIO-OS</span>
+          <span className="font-semibold tracking-wider text-foreground">{brandName}</span>
           <span className="text-muted-foreground">/</span>
           <span className="text-muted-foreground">workspace</span>
         </div>

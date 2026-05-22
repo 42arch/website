@@ -15,7 +15,10 @@ import {
 import { motion } from 'motion/react'
 import Link from 'next/link'
 
+import { siteConfig } from '@/config'
 import { useWorkspaceStore } from '@/store/workspace'
+
+const { overview, author, site } = siteConfig
 
 function StatusBadge({ label, value, color }: { label: string, value: string, color: string }) {
   return (
@@ -85,14 +88,7 @@ export interface OverviewPanelProps {
 }
 
 function HeroSection() {
-  const asciiArt = `
-███████╗ ██████╗ ██╗     ██╗ ██████╗      ██████╗ ███████╗
-██╔════╝██╔═══██╗██║     ██║██╔═══██╗    ██╔═══██╗██╔════╝
-█████╗  ██║   ██║██║     ██║██║   ██║    ██║   ██║███████╗
-██╔══╝  ██║   ██║██║     ██║██║   ██║    ██║   ██║╚════██║
-██║     ╚██████╔╝███████╗██║╚██████╔╝    ╚██████╔╝███████║
-╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝      ╚═════╝ ╚══════╝
-  `.trim()
+  const asciiArt = overview.asciiArt || site.name
 
   return (
     <motion.div
@@ -136,12 +132,12 @@ function HeroSection() {
         <div className="flex items-center gap-3">
           <div className="h-px w-12 bg-gradient-to-r from-transparent via-os-border to-transparent" />
           <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-muted-foreground/60">
-            System Executive Environment
+            {overview.subtitle}
           </span>
           <div className="h-px w-12 bg-gradient-to-r from-transparent via-os-border to-transparent" />
         </div>
         <div className="font-mono text-[8px] uppercase tracking-widest text-os-accent/40">
-          Build 0x4F53_2026 // Status: Optimal
+          {overview.buildTag}
         </div>
       </div>
 
@@ -177,7 +173,7 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
             <h1 className="font-heading text-lg font-bold tracking-tight">workspace://overview</h1>
           </div>
           <p className="font-mono text-xs text-muted-foreground">
-            An experimental, high-fidelity developer workspace and portfolio, designed as a digital operating system.
+            {site.description}
           </p>
         </div>
 
@@ -189,10 +185,9 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
             SYSTEM STATUS
           </div>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <StatusBadge label="uptime" value="99.9%" color="bg-emerald-400" />
-            <StatusBadge label="projects" value="8" color="bg-blue-400" />
-            <StatusBadge label="commits" value="1,247" color="bg-amber-400" />
-            <StatusBadge label="deployments" value="42" color="bg-purple-400" />
+            {overview.stats.map(s => (
+              <StatusBadge key={s.label} label={s.label} value={s.value} color={s.color} />
+            ))}
           </div>
         </div>
 
@@ -233,7 +228,6 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
                 <QuickAction icon={FolderIcon} label="Browse projects" panelId="projects" />
                 <QuickAction icon={FlaskIcon} label="View experiments" panelId="experiments" />
                 <QuickAction icon={CodeIcon} label="Read writing" panelId="writing" />
-                <QuickAction icon={RocketLaunchIcon} label="Activity log" panelId="activity" />
               </div>
             </div>
 
@@ -245,23 +239,23 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
               <div className="rounded-sm border border-os-border bg-os-surface p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <LightningIcon size={14} className="text-os-accent" weight="fill" />
-                  <span className="text-xs font-medium text-foreground">Workspace Interface</span>
+                  <span className="text-xs font-medium text-foreground">{overview.currentFocus.title}</span>
                 </div>
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
-                  Building a developer workspace inspired by IDE and operating system aesthetics. Focusing on panel-based navigation, high information density, and experimental interactions.
+                  {overview.currentFocus.description}
                 </p>
                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-mono">
                   <span className="flex items-center gap-1">
                     <GitBranchIcon size={11} />
-                    main
+                    {overview.currentFocus.branch}
                   </span>
                   <span className="flex items-center gap-1">
                     <CalendarIcon size={11} />
-                    Week 20, 2026
+                    {overview.currentFocus.date}
                   </span>
                   <span className="flex items-center gap-1">
                     <TrendUpIcon size={11} />
-                    +34 commits
+                    {overview.currentFocus.commits}
                   </span>
                 </div>
               </div>
@@ -274,10 +268,10 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
               </div>
               <div className="space-y-1">
                 {[
-                  ['location', 'Shanghai, CN'],
-                  ['stack', 'TypeScript / React / Swift'],
-                  ['focus', 'Interactive Systems'],
-                  ['status', 'Open to collaboration'],
+                  ['location', author.location],
+                  ['stack', author.stack],
+                  ['focus', author.focus],
+                  ['status', author.status],
                 ].map(([key, value]) => (
                   <div key={key} className="flex items-center justify-between rounded-sm border border-os-border bg-os-surface px-3 py-1.5">
                     <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{key}</span>

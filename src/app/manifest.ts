@@ -1,14 +1,15 @@
 import type { MetadataRoute } from 'next'
+import { site } from '@/config'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Folio OS — Developer Workspace',
-    short_name: 'Folio OS',
-    description: 'An experimental workspace interface for exploring projects, experiments, and technical writing. Built as a digital operating system.',
+    name: `${site.name} — Developer Workspace`,
+    short_name: site.name,
+    description: site.description,
     start_url: '/',
     display: 'standalone',
-    background_color: '#f5f2eb',
-    theme_color: '#f5f2eb',
+    background_color: site.backgroundColor,
+    theme_color: site.themeColor,
     icons: [
       {
         src: '/web-app-manifest-192x192.png',

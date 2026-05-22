@@ -3,25 +3,10 @@
 import { ImagesIcon } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
 import { useState } from 'react'
+import { siteConfig } from '@/config'
 import { cn } from '@/lib/utils'
 
-interface GalleryItem {
-  id: string
-  title: string
-  description: string
-  category: string
-  color: string
-  aspect: 'landscape' | 'portrait' | 'square'
-}
-
-const GALLERY_ITEMS: GalleryItem[] = [
-  { id: 'g1', title: 'Terrain Heightmap', description: 'Procedurally generated elevation data visualization', category: 'Visualization', color: 'from-emerald-900/80 to-emerald-600/40', aspect: 'landscape' },
-  { id: 'g2', title: 'River Network Graph', description: 'Voronoi-based hydrological simulation output', category: 'Algorithms', color: 'from-blue-900/80 to-cyan-600/40', aspect: 'square' },
-  { id: 'g3', title: 'Shader Experiment #12', description: 'Fractal noise distortion with color remapping', category: 'Shaders', color: 'from-purple-900/80 to-pink-600/40', aspect: 'portrait' },
-  { id: 'g4', title: 'UI Component System', description: 'Design token reference sheet for workspace UI', category: 'Design', color: 'from-amber-900/80 to-orange-600/40', aspect: 'landscape' },
-  { id: 'g5', title: 'Climate Zones Map', description: 'Temperature and precipitation distribution', category: 'Visualization', color: 'from-red-900/80 to-yellow-600/40', aspect: 'square' },
-  { id: 'g6', title: 'Network Monitor UI', description: 'Retina-optimized tray icon rendering at 2x', category: 'Native', color: 'from-zinc-900/80 to-zinc-600/40', aspect: 'landscape' },
-]
+const GALLERY_ITEMS = siteConfig.gallery
 
 export function GalleryPanel() {
   const [selected, setSelected] = useState<string | null>(null)

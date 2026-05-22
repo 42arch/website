@@ -1,6 +1,10 @@
 // ── Terminal Line Types ──
+import { siteConfig } from '@/config'
+
 const SPACES_REGEX = /\s+/
 const LEADING_SLASH_REGEX = /^\//
+
+const { terminal: termCfg, author, site } = siteConfig
 
 export interface TerminalLine {
   id: string
@@ -18,14 +22,7 @@ interface CommandContext {
 
 type CommandHandler = (args: string[], ctx: CommandContext) => void
 
-const BOOT_ASCII = `
-███████╗ ██████╗ ██╗     ██╗ ██████╗      ██████╗ ███████╗
-██╔════╝██╔═══██╗██║     ██║██╔═══██╗    ██╔═══██╗██╔════╝
-█████╗  ██║   ██║██║     ██║██║   ██║    ██║   ██║███████╗
-██╔══╝  ██║   ██║██║     ██║██║   ██║    ██║   ██║╚════██║
-██║     ╚██████╔╝███████╗██║╚██████╔╝    ╚██████╔╝███████║
-╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝      ╚═════╝ ╚══════╝
-`.trim()
+const BOOT_ASCII = siteConfig.overview.asciiArt || site.name
 
 let lineId = 0
 export function createLine(type: TerminalLine['type'], content: string): TerminalLine {
@@ -36,7 +33,7 @@ export function getBootLines(): TerminalLine[] {
   return [
     createLine('ascii', BOOT_ASCII),
     createLine('system', ''),
-    createLine('system', 'Folio OS Kernel v0.1.0 loaded.'),
+    createLine('system', termCfg.bootMessage),
     createLine('system', 'System initialized successfully.'),
     createLine('system', ''),
     createLine('system', 'Type "help" to see available commands.'),
@@ -52,7 +49,8 @@ const PANELS: { id: string, label: string }[] = [
   { id: 'writing', label: 'Writing' },
   { id: 'gallery', label: 'Gallery' },
   { id: 'notes', label: 'Notes' },
-  { id: 'activity', label: 'Activity' },
+  { id: 'about', label: 'About' },
+  { id: 'rss', label: 'RSS Feed' },
   { id: 'contact', label: 'Contact' },
   { id: 'settings', label: 'Settings' },
 ]
@@ -61,7 +59,7 @@ const THEMES = ['graphite', 'linen', 'vesper', 'nord', 'catppuccin', 'tokyo-nigh
 
 // ── Pet State ──
 const petState = {
-  name: 'Pixel',
+  name: termCfg.petName,
   hunger: 80,
   happiness: 70,
   energy: 90,
@@ -127,7 +125,7 @@ const commands: Record<string, CommandHandler> = {
   help: (_args, ctx) => {
     ctx.addLines([
       createLine('output', '┌──────────────────────────────────────────────┐'),
-      createLine('output', '│  FOLIO OS — Command Reference                │'),
+      createLine('output', `│  ${site.name.toUpperCase()} — Command Reference`.padEnd(47) + '│'),
       createLine('output', '├──────────────┬───────────────────────────────┤'),
       createLine('output', '│  help        │  Show this help message       │'),
       createLine('output', '│  ls          │  List available panels        │'),
@@ -200,25 +198,27 @@ const commands: Record<string, CommandHandler> = {
   whoami: (_args, ctx) => {
     ctx.addLines([
       createLine('output', '  user:     root'),
-      createLine('output', '  role:     Developer'),
-      createLine('output', '  location: Shanghai, CN'),
-      createLine('output', '  stack:    TypeScript / React / Swift'),
-      createLine('output', '  focus:    Interactive Systems'),
-      createLine('output', '  status:   Open to collaboration'),
+      createLine('output', `  role:     ${author.role}`),
+      createLine('output', `  location: ${author.location}`),
+      createLine('output', `  stack:    ${author.stack}`),
+      createLine('output', `  focus:    ${author.focus}`),
+      createLine('output', `  status:   ${author.status}`),
     ])
   },
 
   neofetch: (_args, ctx) => {
+    const nf = termCfg.neofetch
+    const brandSlug = site.name.toLowerCase().replace(/\s+/g, '-')
     ctx.addLines([
       createLine('output', ''),
-      createLine('output', '  ███████╗╔═══╗   root@folio-os'),
+      createLine('output', `  ███████╗╔═══╗   root@${brandSlug}`),
       createLine('output', '  ██╔════╝║   ║   ─────────────────'),
-      createLine('output', '  █████╗  ║   ║   OS:      Folio OS v0.1.0'),
-      createLine('output', '  ██╔══╝  ║   ║   Kernel:  Next.js 16.2.4'),
-      createLine('output', '  ██║     ╚═══╝   Shell:   folio-sh 1.0'),
-      createLine('output', '  ╚═╝             Runtime: React 19.2.5'),
-      createLine('output', '                  UI:      Tailwind CSS 4'),
-      createLine('output', '                  State:   Zustand 5'),
+      createLine('output', `  █████╗  ║   ║   OS:      ${nf.osName}`),
+      createLine('output', `  ██╔══╝  ║   ║   Kernel:  ${nf.kernel}`),
+      createLine('output', `  ██║     ╚═══╝   Shell:   ${nf.shell}`),
+      createLine('output', `  ╚═╝             Runtime: ${nf.runtime}`),
+      createLine('output', `                  UI:      ${nf.ui}`),
+      createLine('output', `                  State:   ${nf.stateManager}`),
       createLine('output', '                  Uptime:  99.9%'),
       createLine('output', ''),
     ])
@@ -249,14 +249,11 @@ const commands: Record<string, CommandHandler> = {
   about: (_args, ctx) => {
     ctx.addLines([
       createLine('output', ''),
-      createLine('output', '  Folio OS — Developer Workspace'),
+      createLine('output', `  ${site.name} — Developer Workspace`),
       createLine('output', '  ────────────────────────────────'),
-      createLine('output', '  An experimental workspace interface for'),
-      createLine('output', '  exploring projects, experiments, and'),
-      createLine('output', '  technical writing. Built as a digital'),
-      createLine('output', '  operating system.'),
+      createLine('output', `  ${site.description}`),
       createLine('output', ''),
-      createLine('output', '  Stack: Next.js • React • Tailwind • Zustand'),
+      createLine('output', `  Stack: ${termCfg.neofetch.kernel} • ${termCfg.neofetch.runtime} • ${termCfg.neofetch.ui} • ${termCfg.neofetch.stateManager}`),
       createLine('output', '  License: MIT'),
       createLine('output', ''),
     ])

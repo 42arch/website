@@ -12,7 +12,9 @@ import {
   GearIcon,
   HouseIcon,
   ImagesIcon,
+  InfoIcon,
   NotepadIcon,
+  RssIcon,
 } from '@phosphor-icons/react'
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
@@ -31,6 +33,8 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number, weight?: 're
   images: ImagesIcon,
   notepad: NotepadIcon,
   activity: ActivityIcon,
+  info: InfoIcon,
+  rss: RssIcon,
   envelope: EnvelopeIcon,
   gear: GearIcon,
 }
@@ -54,7 +58,7 @@ const TREE_SECTIONS: TreeSection[] = [
   },
   {
     label: 'SYSTEM',
-    items: ['activity', 'contact', 'settings'],
+    items: ['about', 'rss', 'contact', 'settings'],
     defaultOpen: true,
   },
 ]
@@ -183,7 +187,7 @@ function TreeSectionGroup({ section }: { section: TreeSection }) {
               const Icon = ICON_MAP[config.icon]
               return (
                 <Link
-                  href={`/${id}`}
+                  href={id === 'overview' ? '/' : `/${id}`}
                   key={id}
                   id={`nav-${id}`}
                   onClick={() => useWorkspaceStore.getState().openTab(id)}

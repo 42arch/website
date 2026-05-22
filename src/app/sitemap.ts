@@ -1,19 +1,20 @@
 import type { MetadataRoute } from 'next'
+import { site } from '@/config'
 import { notes, writing } from '@/lib/source'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://folio-os.starllow.com'
+  const baseUrl = site.url
 
   // 1. 静态主路由
   const staticRoutes = [
     '',
-    '/overview',
     '/projects',
     '/writing',
     '/notes',
     '/gallery',
     '/experiments',
-    '/activity',
+    '/about',
+    '/rss',
     '/contact',
   ].map(route => ({
     url: `${baseUrl}${route}`,

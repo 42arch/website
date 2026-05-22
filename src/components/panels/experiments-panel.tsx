@@ -2,26 +2,11 @@
 
 import { CalendarIcon, FlaskIcon, LightningIcon } from '@phosphor-icons/react'
 import { motion } from 'motion/react'
+import { siteConfig } from '@/config'
+import type { Experiment } from '@/config/types'
 import { cn } from '@/lib/utils'
 
-interface Experiment {
-  id: string
-  title: string
-  description: string
-  status: 'running' | 'completed' | 'paused' | 'planned'
-  date: string
-  category: string
-  findings?: string
-}
-
-const EXPERIMENTS: Experiment[] = [
-  { id: 'exp-001', title: 'Panel-based Navigation System', description: 'Exploring IDE-inspired navigation patterns for personal websites.', status: 'running', date: '2026-05-14', category: 'UI/UX', findings: 'Panel-based layouts show 40% higher engagement time compared to traditional scroll layouts.' },
-  { id: 'exp-002', title: 'GPU-Accelerated Terrain Editing', description: 'Migrating CPU-bound terrain modification to WebGL shaders for real-time brush-based editing at 60fps.', status: 'completed', date: '2026-04-22', category: 'Graphics', findings: 'Achieved 60fps stable with brush radii up to 200px.' },
-  { id: 'exp-003', title: 'Voronoi-based River Networks', description: 'Implementing hydrologically accurate river generation using Voronoi diagrams.', status: 'completed', date: '2026-04-21', category: 'Algorithms', findings: 'Flux-based width scaling produces natural-looking rivers.' },
-  { id: 'exp-004', title: 'Retina Pixel Rendering', description: 'Custom 2x oversampling for crisp tray icon rendering on macOS HiDPI displays.', status: 'completed', date: '2026-05-11', category: 'Native', findings: 'Manual pixel drawing at 2x eliminates all blurriness on Retina displays.' },
-  { id: 'exp-005', title: 'Warm Industrial Color System', description: 'Designing a color token system using warm gray/cream backgrounds with amber accents.', status: 'running', date: '2026-05-14', category: 'Design' },
-  { id: 'exp-006', title: 'Command Palette with Fuzzy Search', description: 'Implementing Raycast/Linear-style command palette for keyboard-first navigation.', status: 'planned', date: '2026-05-15', category: 'UI/UX' },
-]
+const EXPERIMENTS = siteConfig.experiments
 
 const STATUS_MAP: Record<Experiment['status'], { color: string, label: string, pulse: boolean }> = {
   running: { color: 'bg-emerald-400', label: 'RUNNING', pulse: true },
