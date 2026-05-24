@@ -2,9 +2,9 @@
 
 import {
   ArrowSquareOutIcon,
-  CalendarIcon,
   CaretRightIcon,
   GitBranchIcon,
+  GithubLogoIcon,
   StarIcon,
   TagIcon,
 } from '@phosphor-icons/react'
@@ -36,7 +36,7 @@ function ProjectCard({ project, index }: { project: Project, index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: index * 0.05 }}
     >
-      <OsCard className="p-0">
+      <OsCard className="p-0 group">
         {/* Header */}
         <div className="flex items-start justify-between p-4 pb-2">
           <div className="space-y-1 flex-1">
@@ -48,11 +48,30 @@ function ProjectCard({ project, index }: { project: Project, index: number }) {
             </div>
             <p className="text-xs leading-relaxed text-muted-foreground pr-4">{project.description}</p>
           </div>
-          {project.url && (
-            <button className="shrink-0 p-1 text-muted-foreground opacity-0 transition-opacity hover:text-os-accent group-hover:opacity-100">
-              <ArrowSquareOutIcon size={14} />
-            </button>
-          )}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {project.url && (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1 text-muted-foreground transition-all hover:text-os-accent opacity-50 sm:opacity-0 sm:group-hover:opacity-100 hover:opacity-100"
+                title="Visit Website"
+              >
+                <ArrowSquareOutIcon size={14} />
+              </a>
+            )}
+            {project.sourceUrl && (
+              <a
+                href={project.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1 text-muted-foreground transition-all hover:text-os-accent opacity-50 sm:opacity-0 sm:group-hover:opacity-100 hover:opacity-100"
+                title="View Source Code"
+              >
+                <GithubLogoIcon size={14} />
+              </a>
+            )}
+          </div>
         </div>
 
         {/* Tags */}
@@ -103,10 +122,28 @@ function ProjectCard({ project, index }: { project: Project, index: number }) {
                   {project.stars}
                 </span>
               )}
-              <span className="flex items-center gap-1">
-                <CalendarIcon size={10} />
-                {project.lastUpdated}
-              </span>
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 transition-colors hover:text-os-accent"
+                >
+                  <ArrowSquareOutIcon size={10} />
+                  demo
+                </a>
+              )}
+              {project.sourceUrl && (
+                <a
+                  href={project.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 transition-colors hover:text-os-accent"
+                >
+                  <GithubLogoIcon size={10} />
+                  source
+                </a>
+              )}
             </div>
           </motion.div>
         )}

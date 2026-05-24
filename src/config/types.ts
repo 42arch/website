@@ -43,7 +43,7 @@ export interface Project {
   tags: string[]
   status: 'active' | 'shipped' | 'archived' | 'in-progress'
   stars?: number
-  lastUpdated: string
+  sourceUrl?: string
   tech: string[]
   commits?: number
   url?: string
