@@ -1,5 +1,5 @@
 import { OverviewPanel } from '@/components/panels/overview-panel'
-import { writing } from '@/lib/source'
+import { posts as postsSource } from '@/lib/source'
 
 export const metadata = {
   title: 'Overview',
@@ -7,7 +7,7 @@ export const metadata = {
 }
 
 export default function OverviewPage() {
-  const posts = writing.getPages()
+  const posts = postsSource.getPages()
 
   const sorted = [...posts].sort((a, b) => {
     const dateA = new Date((a.data as any).date || 0).getTime()
@@ -15,7 +15,7 @@ export default function OverviewPage() {
     return dateB - dateA
   })
 
-  const recentWritings = sorted.slice(0, 3).map(post => ({
+  const recentPosts = sorted.slice(0, 3).map(post => ({
     title: post.data.title,
     description: post.data.description || '',
     url: post.url,
@@ -25,5 +25,5 @@ export default function OverviewPage() {
     tags: (post.data as any).tags || [],
   }))
 
-  return <OverviewPanel recentWritings={recentWritings} />
+  return <OverviewPanel recentPosts={recentPosts} />
 }

@@ -49,7 +49,7 @@ function QuickAction({ icon: Icon, label, panelId }: {
   )
 }
 
-interface RecentWritingProps {
+interface RecentPostProps {
   title: string
   description: string
   url: string
@@ -57,12 +57,12 @@ interface RecentWritingProps {
   tags: string[]
 }
 
-function RecentWriting({ title, description, url, date, tags }: RecentWritingProps) {
+function RecentPost({ title, description, url, date, tags }: RecentPostProps) {
   const { openTab } = useWorkspaceStore()
   return (
     <Link
       href={url}
-      onClick={() => openTab('writing')}
+      onClick={() => openTab('posts')}
       className="group flex flex-col gap-2 rounded-sm border border-os-border bg-os-surface p-4 text-left transition-all hover:border-os-accent/30 hover:bg-os-accent-muted/30"
     >
       <div className="flex items-center justify-between">
@@ -84,7 +84,7 @@ function RecentWriting({ title, description, url, date, tags }: RecentWritingPro
 }
 
 export interface OverviewPanelProps {
-  recentWritings?: RecentWritingProps[]
+  recentPosts?: RecentPostProps[]
 }
 
 function HeroSection() {
@@ -157,7 +157,7 @@ function HeroSection() {
   )
 }
 
-export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
+export function OverviewPanel({ recentPosts = [] }: OverviewPanelProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -193,15 +193,15 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
 
         {/* Two column layout */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-          {/* Left: Recent Writings */}
+          {/* Left: Recent Posts */}
           <div className="lg:col-span-3 space-y-3">
             <div className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-              RECENT WRITINGS
+              RECENT POSTS
             </div>
-            {recentWritings.length > 0
+            {recentPosts.length > 0
               ? (
-                  recentWritings.map(post => (
-                    <RecentWriting
+                  recentPosts.map(post => (
+                    <RecentPost
                       key={post.url}
                       title={post.title}
                       description={post.description}
@@ -213,7 +213,7 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
                 )
               : (
                   <div className="flex flex-col items-center justify-center rounded-sm border border-os-border bg-os-surface/40 p-8 text-center">
-                    <span className="font-mono text-[11px] text-muted-foreground">No recent writings found.</span>
+                    <span className="font-mono text-[11px] text-muted-foreground">No recent posts found.</span>
                   </div>
                 )}
           </div>
@@ -227,7 +227,7 @@ export function OverviewPanel({ recentWritings = [] }: OverviewPanelProps) {
               <div className="space-y-1">
                 <QuickAction icon={FolderIcon} label="Browse projects" panelId="projects" />
                 <QuickAction icon={FlaskIcon} label="View experiments" panelId="experiments" />
-                <QuickAction icon={CodeIcon} label="Read writing" panelId="writing" />
+                <QuickAction icon={CodeIcon} label="Read posts" panelId="posts" />
               </div>
             </div>
 

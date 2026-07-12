@@ -5,7 +5,7 @@ import { AnimatePresence, motion, Reorder } from 'motion/react'
 
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { notes, writing } from '@/lib/source'
+import { notes, posts } from '@/lib/source'
 import { useIsMobile } from '@/lib/use-mobile'
 import { cn } from '@/lib/utils'
 import { PANEL_CONFIG, useWorkspaceStore } from '@/store/workspace'
@@ -23,10 +23,10 @@ export function TabBar() {
   }, [activePanel, openTab])
 
   function getTabConfig(id: string) {
-    // Handle dynamic writing pages from Fumadocs
-    if (id.startsWith('writing/')) {
+    // Handle dynamic posts pages from Fumadocs
+    if (id.startsWith('posts/')) {
       const slug = id.split('/').slice(1)
-      const page = writing.getPage(slug)
+      const page = posts.getPage(slug)
       return { label: page?.data.title || slug.at(-1) || id }
     }
 

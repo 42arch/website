@@ -20,13 +20,13 @@ interface Article {
   category?: string
 }
 
-interface WritingPanelProps {
+interface PostsPanelProps {
   articles: Article[]
 }
 
 const CATEGORIES = ['All', 'Engineering', 'Technical', 'Design']
 
-export function WritingPanel({ articles }: WritingPanelProps) {
+export function PostsPanel({ articles }: PostsPanelProps) {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
 
@@ -40,7 +40,7 @@ export function WritingPanel({ articles }: WritingPanelProps) {
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="os-scrollbar h-full overflow-y-auto p-6">
       <div className="mx-auto max-w-4xl space-y-4">
         <PanelHeader
-          path="workspace://writing"
+          path="workspace://posts"
           description="Technical notes, engineering logs, and design observations."
           icon={<ArticleIcon size={14} />}
         />

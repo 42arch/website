@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { site } from '@/config'
+import type { ThemePreset } from '@/config/types'
 
-export type PanelId = 'overview' | 'projects' | 'experiments' | 'writing' | 'gallery' | 'notes' | 'about' | 'rss' | 'contact' | 'settings'
+export type PanelId = 'overview' | 'projects' | 'experiments' | 'posts' | 'gallery' | 'notes' | 'about' | 'rss' | 'contact' | 'settings'
 
 export interface Tab {
   id: PanelId
@@ -13,7 +14,7 @@ export const PANEL_CONFIG: Record<PanelId, { label: string, icon: string }> = {
   overview: { label: 'Overview', icon: 'house' },
   projects: { label: 'Projects', icon: 'folder' },
   experiments: { label: 'Experiments', icon: 'flask' },
-  writing: { label: 'Writing', icon: 'article' },
+  posts: { label: 'Posts', icon: 'article' },
   gallery: { label: 'Gallery', icon: 'images' },
   notes: { label: 'Notes', icon: 'notepad' },
   about: { label: 'About', icon: 'info' },
@@ -30,7 +31,7 @@ interface WorkspaceState {
   commandPaletteOpen: boolean
   sidebarWidth: number
   sidebarPosition: 'left' | 'right'
-  themePreset: 'graphite' | 'linen' | 'vesper' | 'nord' | 'catppuccin' | 'tokyo-night' | 'dracula' | 'github-dark'
+  themePreset: ThemePreset
 
   openTab: (id: string) => void
   closeTab: (id: string) => void
@@ -43,7 +44,7 @@ interface WorkspaceState {
   toggleCommandPalette: () => void
   setCommandPaletteOpen: (open: boolean) => void
   setSidebarWidth: (w: number) => void
-  setThemePreset: (preset: 'graphite' | 'linen' | 'vesper' | 'nord' | 'catppuccin' | 'tokyo-night' | 'dracula' | 'github-dark') => void
+  setThemePreset: (preset: ThemePreset) => void
   setOpenTabs: (tabs: string[]) => void
   closeAllTabs: () => void
   closeOtherTabs: (id: string) => void

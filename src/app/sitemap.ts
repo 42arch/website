@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { site } from '@/config'
-import { notes, writing } from '@/lib/source'
+import { notes, posts } from '@/lib/source'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = site.url
@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     '',
     '/projects',
-    '/writing',
+    '/posts',
     '/notes',
     '/gallery',
     '/experiments',
@@ -24,13 +24,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }))
 
   // 2. 动态 MDX 技术文章路由
-  const writingRoutes = writing.getPages().map((page) => {
+  const postsRoutes = posts.getPages().map((page) => {
     const lastMod = (page.data as any).date
       ? new Date((page.data as any).date)
       : new Date()
 
     return {
-      url: `${baseUrl}/writing/${page.slugs.join('/')}`,
+      url: `${baseUrl}/posts/${page.slugs.join('/')}`,
       lastModified: lastMod,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
@@ -51,5 +51,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   })
 
-  return [...staticRoutes, ...writingRoutes, ...notesRoutes]
+  return [...staticRoutes, ...postsRoutes, ...notesRoutes]
 }

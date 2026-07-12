@@ -21,7 +21,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import { notes, writing } from '@/lib/source'
+import { notes, posts } from '@/lib/source'
 import { cn } from '@/lib/utils'
 import { PANEL_CONFIG, useWorkspaceStore } from '@/store/workspace'
 
@@ -53,7 +53,7 @@ const TREE_SECTIONS: TreeSection[] = [
   },
   {
     label: 'CONTENT',
-    items: ['projects', 'experiments', 'writing', 'notes', 'gallery'],
+    items: ['projects', 'experiments', 'posts', 'notes', 'gallery'],
     defaultOpen: true,
   },
   {
@@ -69,10 +69,14 @@ function DirectoryItem({ id, config, isActive }: { id: string, config: any, isAc
   const pathname = usePathname()
 
   // Get real children from Fumadocs source
-  const children = id === 'writing'
-    ? writing.getPages().map(p => ({ id: `writing/${p.slugs.join('/')}`, label: p.data.title }))
+  const children = id === 'posts'
+    ? [...posts.getPages()]
+        .sort((a, b) => new Date((b.data as any).date || 0).getTime() - new Date((a.data as any).date || 0).getTime())
+        .map(p => ({ id: `posts/${p.slugs.join('/')}`, label: p.data.title }))
     : id === 'notes'
-      ? notes.getPages().map(p => ({ id: `notes/${p.slugs.join('/')}`, label: p.data.title }))
+      ? [...notes.getPages()]
+          .sort((a, b) => new Date((b.data as any).date || 0).getTime() - new Date((a.data as any).date || 0).getTime())
+          .map(p => ({ id: `notes/${p.slugs.join('/')}`, label: p.data.title }))
       : []
 
   const hasChildren = children.length > 0
@@ -179,8 +183,8 @@ function TreeSectionGroup({ section }: { section: TreeSection }) {
               const config = PANEL_CONFIG[id as keyof typeof PANEL_CONFIG]
               const isActive = activePanel === id
 
-              // Custom Directory rendering for writing and notes
-              if (id === 'writing' || id === 'notes') {
+              // Custom Directory rendering for posts and notes
+              if (id === 'posts' || id === 'notes') {
                 return <DirectoryItem key={id} id={id} config={config} isActive={isActive} />
               }
 

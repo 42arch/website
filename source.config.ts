@@ -4,8 +4,8 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import { z } from 'zod'
 
-export const writing = defineDocs({
-  dir: 'content/writing',
+export const posts = defineDocs({
+  dir: 'content/posts',
   docs: {
     schema: frontmatterSchema.extend({
       date: z.string().or(z.date()).optional(),

@@ -1,9 +1,9 @@
-import { notes as notesCollection, writing as writingCollection } from 'collections/server'
+import { notes as notesCollection, posts as postsCollection } from 'collections/server'
 import { loader } from 'fumadocs-core/source'
 
-export const writing = loader({
-  baseUrl: '/writing',
-  source: writingCollection.toFumadocsSource(),
+export const posts = loader({
+  baseUrl: '/posts',
+  source: postsCollection.toFumadocsSource(),
 })
 
 export const notes = loader({

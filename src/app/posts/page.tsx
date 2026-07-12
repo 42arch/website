@@ -1,13 +1,13 @@
-import { WritingPanel } from '@/components/panels/writing-panel'
-import { writing } from '@/lib/source'
+import { PostsPanel } from '@/components/panels/posts-panel'
+import { posts as postsSource } from '@/lib/source'
 
 export const metadata = {
-  title: 'Writing',
+  title: 'Posts',
   description: 'Technical notes, engineering logs, and design observations.',
 }
 
-export default function WritingPage() {
-  const posts = writing.getPages()
+export default function PostsPage() {
+  const posts = postsSource.getPages()
 
   const sorted = [...posts].sort((a, b) => {
     const dateA = new Date((a.data as any).date || 0).getTime()
@@ -25,5 +25,5 @@ export default function WritingPage() {
     category: (post.data as any).category,
   }))
 
-  return <WritingPanel articles={articles} />
+  return <PostsPanel articles={articles} />
 }

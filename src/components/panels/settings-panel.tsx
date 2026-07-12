@@ -3,7 +3,6 @@
 import {
   CheckIcon,
   GearIcon,
-  MonitorIcon,
   PaletteIcon,
   UserCircleIcon,
 } from '@phosphor-icons/react'
@@ -92,6 +91,9 @@ export function SettingsPanel() {
               {(() => {
                 const lightPresets = [
                   { id: 'linen', label: 'Linen', color: 'bg-[#f8f6f1]', accent: 'bg-[#b87333]', desc: 'Warm Ivory' },
+                  { id: 'github-light', label: 'GitHub Light', color: 'bg-[#ffffff]', accent: 'bg-[#0969da]', desc: 'Official Light' },
+                  { id: 'solarized-light', label: 'Solarized Light', color: 'bg-[#fdf6e3]', accent: 'bg-[#268bd2]', desc: 'Retro Solar' },
+                  { id: 'nord-light', label: 'Nord Light', color: 'bg-[#eceff4]', accent: 'bg-[#5e81ac]', desc: 'Arctic Light' },
                 ]
 
                 const darkPresets = [
@@ -151,35 +153,6 @@ export function SettingsPanel() {
               })()}
             </OsCard>
           </div>
-        </section>
-
-        {/* System Section */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2 border-b border-os-border pb-2">
-            <MonitorIcon size={14} className="text-os-accent" />
-            <h2 className="font-heading text-xs font-bold uppercase tracking-widest text-foreground">System Engine</h2>
-          </div>
-
-          <OsCard className="divide-y divide-os-border p-0">
-            <div className="flex items-center justify-between p-4">
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-foreground">Motion Graphics</h3>
-                <p className="text-[11px] text-muted-foreground">Enable interface transitions and micro-animations.</p>
-              </div>
-              <div className="h-5 w-9 rounded-full bg-os-accent p-1">
-                <div className="size-3 rounded-full bg-background ml-auto" />
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-4">
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-foreground">High Precision Rendering</h3>
-                <p className="text-[11px] text-muted-foreground">Use 2x oversampling for sharp typographic textures.</p>
-              </div>
-              <div className="h-5 w-9 rounded-full bg-os-accent p-1">
-                <div className="size-3 rounded-full bg-background ml-auto" />
-              </div>
-            </div>
-          </OsCard>
         </section>
 
         {/* User Info Section */}

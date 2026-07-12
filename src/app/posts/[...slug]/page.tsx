@@ -1,9 +1,9 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { notFound } from 'next/navigation'
 import { Mermaid } from '@/components/mermaid'
-import { WritingDetailPanel } from '@/components/panels/writing-detail-panel'
+import { PostsDetailPanel } from '@/components/panels/posts-detail-panel'
 import { calculateReadingTime } from '@/lib/content'
-import { writing } from '@/lib/source'
+import { posts } from '@/lib/source'
 
 const mdxComponents = {
   ...defaultMdxComponents,
@@ -15,14 +15,14 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return writing.getPages().map(page => ({
+  return posts.getPages().map(page => ({
     slug: page.slugs,
   }))
 }
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
-  const page = writing.getPage(slug)
+  const page = posts.getPage(slug)
 
   if (!page)
     return { title: 'Not Found' }
@@ -40,9 +40,9 @@ export async function generateMetadata({ params }: PageProps) {
   }
 }
 
-export default async function WritingDetailPage({ params }: PageProps) {
+export default async function PostsDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const page = writing.getPage(slug)
+  const page = posts.getPage(slug)
 
   if (!page) {
     notFound()
@@ -54,8 +54,8 @@ export default async function WritingDetailPage({ params }: PageProps) {
   const toc = page.data.toc || (page.data as any).exports?.toc || []
 
   // Resolve previous and next articles
-  const posts = writing.getPages()
-  const sorted = [...posts].sort((a, b) => {
+  const allPosts = posts.getPages()
+  const sorted = [...allPosts].sort((a, b) => {
     const dateA = new Date((a.data as any).date || 0).getTime()
     const dateB = new Date((b.data as any).date || 0).getTime()
     return dateB - dateA
@@ -72,7 +72,7 @@ export default async function WritingDetailPage({ params }: PageProps) {
   const nextPost = nextPostPage ? { title: nextPostPage.data.title, url: nextPostPage.url } : undefined
 
   return (
-    <WritingDetailPanel
+    <PostsDetailPanel
       title={page.data.title}
       date={(page.data as any).date || new Date()}
       tags={(page.data as any).tags || []}
@@ -84,6 +84,6 @@ export default async function WritingDetailPage({ params }: PageProps) {
       nextPost={nextPost}
     >
       <Content components={mdxComponents} />
-    </WritingDetailPanel>
+    </PostsDetailPanel>
   )
 }

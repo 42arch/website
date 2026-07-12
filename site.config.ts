@@ -15,7 +15,7 @@ const config: SiteConfig = {
     url: 'https://starllow.com',
     githubRepo: 'https://github.com/42arch/website',
     locale: 'zh-CN',
-    description: '欢迎来到 Starllow Lab，这是一个探索前沿技术和创意表达的实验空间。',
+    description: '欢迎来到 Starllow Lab！',
     keywords: [
       'developer portfolio',
       'starllow',
@@ -29,9 +29,9 @@ const config: SiteConfig = {
       'creative developer',
       'interactive cv',
     ],
-    themeColor: '#f5f2eb',
-    backgroundColor: '#f5f2eb',
-    defaultTheme: 'linen',
+    themeColor: '#0d1117',
+    backgroundColor: '#0d1117',
+    defaultTheme: 'github-dark',
   },
 
   // ─── 👤 Author ──────────────────────────────────────────
@@ -50,7 +50,7 @@ const config: SiteConfig = {
     github: 'https://github.com/42arch',
     x: 'https://x.com/42archy',
     bilibili: 'https://space.bilibili.com/22589532',
-    stackblitz: 'https://stackblitz.com/@42arch'
+    stackblitz: 'https://stackblitz.com/@42arch',
   },
 
   // ─── 🗂️ Projects ────────────────────────────────────────
@@ -132,7 +132,7 @@ const config: SiteConfig = {
       date: '2026-05-14',
       category: 'UI/UX',
       findings: 'Panel-based layouts show 40% higher engagement time compared to traditional scroll layouts.',
-    }
+    },
   ],
 
   // ─── 🖼️ Gallery ──────────────────────────────────────────
@@ -144,7 +144,7 @@ const config: SiteConfig = {
       category: 'Shaders',
       color: 'from-purple-900/80 to-pink-600/40',
       aspect: 'portrait',
-    }
+    },
   ],
 
   // ─── ℹ️ About Section ───────────────────────────────────

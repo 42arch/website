@@ -14,7 +14,7 @@ interface NavPost {
   url: string
 }
 
-interface WritingDetailPanelProps {
+interface PostsDetailPanelProps {
   title: string
   date: Date
   tags: string[]
@@ -27,7 +27,7 @@ interface WritingDetailPanelProps {
   nextPost?: NavPost
 }
 
-export function WritingDetailPanel({
+export function PostsDetailPanel({
   title,
   date,
   tags,
@@ -38,7 +38,7 @@ export function WritingDetailPanel({
   children,
   prevPost,
   nextPost,
-}: WritingDetailPanelProps) {
+}: PostsDetailPanelProps) {
   const [isTocOpen, setIsTocOpen] = useState(false)
   const [activeId, setActiveId] = useState<string>('')
   const [dynamicToc, setDynamicToc] = useState<{ title: ReactNode, url: string, depth: number }[]>([])
@@ -224,7 +224,7 @@ export function WritingDetailPanel({
           {/* Header */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Link href="/writing" className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground hover:text-os-accent transition-colors">
+              <Link href="/posts" className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground hover:text-os-accent transition-colors">
                 <ArrowLeftIcon size={12} />
                 cd ../
               </Link>

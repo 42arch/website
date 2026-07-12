@@ -147,7 +147,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   // Sync theme preset with DOM
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', themePreset)
-    const mode = themePreset === 'linen' ? 'light' : 'dark'
+    const mode = ['linen', 'github-light', 'solarized-light', 'nord-light'].includes(themePreset) ? 'light' : 'dark'
     document.documentElement.setAttribute('data-theme-mode', mode)
     if (mode === 'dark') {
       document.documentElement.classList.add('dark')

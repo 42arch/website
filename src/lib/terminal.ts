@@ -1,5 +1,6 @@
 // ── Terminal Line Types ──
 import { siteConfig } from '@/config'
+import type { ThemePreset } from '@/config/types'
 
 const SPACES_REGEX = /\s+/
 const LEADING_SLASH_REGEX = /^\//
@@ -15,7 +16,7 @@ export interface TerminalLine {
 // ── Command Registry ──
 interface CommandContext {
   openTab: (id: string) => void
-  setThemePreset: (preset: 'graphite' | 'linen' | 'vesper' | 'nord' | 'catppuccin' | 'tokyo-night' | 'dracula' | 'github-dark') => void
+  setThemePreset: (preset: ThemePreset) => void
   addLines: (lines: TerminalLine[]) => void
   clearLines: () => void
 }
@@ -46,7 +47,7 @@ const PANELS: { id: string, label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'projects', label: 'Projects' },
   { id: 'experiments', label: 'Experiments' },
-  { id: 'writing', label: 'Writing' },
+  { id: 'posts', label: 'Posts' },
   { id: 'gallery', label: 'Gallery' },
   { id: 'notes', label: 'Notes' },
   { id: 'about', label: 'About' },
@@ -55,7 +56,7 @@ const PANELS: { id: string, label: string }[] = [
   { id: 'settings', label: 'Settings' },
 ]
 
-const THEMES = ['graphite', 'linen', 'vesper', 'nord', 'catppuccin', 'tokyo-night', 'dracula', 'github-dark'] as const
+const THEMES = ['graphite', 'linen', 'vesper', 'nord', 'catppuccin', 'tokyo-night', 'dracula', 'github-dark', 'github-light', 'solarized-light', 'nord-light'] as const
 
 // ── Pet State ──
 const petState = {

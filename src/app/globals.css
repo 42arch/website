@@ -440,6 +440,168 @@ html[data-theme="github-dark"] {
   --shiki-token-punctuation: #7d8590;
 }
 
+/* ══════════════════════════════════════════════════
+   THEME: GitHub Light
+   GitHub's official light theme
+   ══════════════════════════════════════════════════ */
+html[data-theme="github-light"] {
+  --radius: 0.25rem;
+
+  /* Layer 1: Backgrounds */
+  --bg-base: #ffffff;
+  --bg-surface: #f6f8fa;
+  --bg-overlay: #f6f8fa;
+  --bg-inset: #ffffff;
+  --bg-subtle: #eaeef2;
+
+  /* Layer 2: Text */
+  --fg-default: #1f2328;
+  --fg-muted: #656d76;
+  --fg-subtle: #8c959f;
+  --fg-on-accent: #ffffff;
+
+  /* Terminal */
+  --terminal-fg: #1f2328;
+
+  /* Layer 3: Border */
+  --border-default: #d0d7de;
+  --border-muted: #ebf0f4;
+  --border-strong: #8c959f;
+
+  /* Layer 4: Accent */
+  --accent: #0969da;
+  --accent-hover: #1a7fec;
+  --accent-muted: #0969da1a;
+  --accent-subtle: #0969da0d;
+
+  /* Layer 5: Status */
+  --status-success: #1a7f37;
+  --status-warning: #9a6700;
+  --status-error: #cf222e;
+  --status-info: #0969da;
+
+  /* Layer 6: Shiki */
+  --shiki-foreground: #1f2328;
+  --shiki-background: #ffffff;
+  --shiki-token-keyword: #cf222e;
+  --shiki-token-string: #0a3069;
+  --shiki-token-comment: #6e7781;
+  --shiki-token-function: #8250df;
+  --shiki-token-constant: #0550ae;
+  --shiki-token-punctuation: #24292f;
+  --shiki-token-parameter: #24292f;
+  --shiki-token-string-expression: #0a3069;
+  --shiki-token-link: #0969da;
+}
+
+/* ══════════════════════════════════════════════════
+   THEME: Solarized Light
+   Warm retro theme
+   ══════════════════════════════════════════════════ */
+html[data-theme="solarized-light"] {
+  --radius: 0.25rem;
+
+  /* Layer 1: Backgrounds */
+  --bg-base: #fdf6e3;
+  --bg-surface: #eee8d5;
+  --bg-overlay: #eee8d5;
+  --bg-inset: #fdf6e3;
+  --bg-subtle: #e4ddcc;
+
+  /* Layer 2: Text */
+  --fg-default: #586e75;
+  --fg-muted: #657b83;
+  --fg-subtle: #93a1a1;
+  --fg-on-accent: #fdf6e3;
+
+  /* Terminal */
+  --terminal-fg: #586e75;
+
+  /* Layer 3: Border */
+  --border-default: #0000000f;
+  --border-muted: #00000008;
+  --border-strong: #0000001a;
+
+  /* Layer 4: Accent */
+  --accent: #268bd2;
+  --accent-hover: #2aa198;
+  --accent-muted: #268bd21a;
+  --accent-subtle: #268bd20d;
+
+  /* Layer 5: Status */
+  --status-success: #859900;
+  --status-warning: #b58900;
+  --status-error: #dc322f;
+  --status-info: #2aa198;
+
+  /* Layer 6: Shiki */
+  --shiki-foreground: #586e75;
+  --shiki-background: #fdf6e3;
+  --shiki-token-keyword: #859900;
+  --shiki-token-string: #2aa198;
+  --shiki-token-comment: #93a1a1;
+  --shiki-token-function: #268bd2;
+  --shiki-token-constant: #cb4b16;
+  --shiki-token-punctuation: #586e75;
+  --shiki-token-parameter: #657b83;
+  --shiki-token-string-expression: #2aa198;
+  --shiki-token-link: #268bd2;
+}
+
+/* ══════════════════════════════════════════════════
+   THEME: Nord Light
+   Nordic clean light theme
+   ══════════════════════════════════════════════════ */
+html[data-theme="nord-light"] {
+  --radius: 0.25rem;
+
+  /* Layer 1: Backgrounds */
+  --bg-base: #eceff4;
+  --bg-surface: #e5e9f0;
+  --bg-overlay: #e5e9f0;
+  --bg-inset: #d8dee9;
+  --bg-subtle: #d8dee9;
+
+  /* Layer 2: Text */
+  --fg-default: #2e3440;
+  --fg-muted: #4c566a;
+  --fg-subtle: #434c5e;
+  --fg-on-accent: #eceff4;
+
+  /* Terminal */
+  --terminal-fg: #2e3440;
+
+  /* Layer 3: Border */
+  --border-default: #0000000f;
+  --border-muted: #00000008;
+  --border-strong: #0000001a;
+
+  /* Layer 4: Accent */
+  --accent: #5e81ac;
+  --accent-hover: #81a1c1;
+  --accent-muted: #5e81ac1a;
+  --accent-subtle: #5e81ac0d;
+
+  /* Layer 5: Status */
+  --status-success: #a3be8c;
+  --status-warning: #ebcb8b;
+  --status-error: #bf616a;
+  --status-info: #88c0d0;
+
+  /* Layer 6: Shiki */
+  --shiki-foreground: #2e3440;
+  --shiki-background: #eceff4;
+  --shiki-token-keyword: #81a1c1;
+  --shiki-token-string: #a3be8c;
+  --shiki-token-comment: #4c566a;
+  --shiki-token-function: #88c0d0;
+  --shiki-token-constant: #b48ead;
+  --shiki-token-punctuation: #4c566a;
+  --shiki-token-parameter: #2e3440;
+  --shiki-token-string-expression: #a3be8c;
+  --shiki-token-link: #5e81ac;
+}
+
 @layer base {
   :root, html {
     --fd-card: var(--bg-inset) !important;

@@ -3,6 +3,7 @@
 export type ThemePreset =
   | 'graphite' | 'linen' | 'vesper' | 'nord'
   | 'catppuccin' | 'tokyo-night' | 'dracula' | 'github-dark'
+  | 'github-light' | 'solarized-light' | 'nord-light'
 
 export interface SiteInfo {
   name: string
