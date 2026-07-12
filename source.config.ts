@@ -45,9 +45,39 @@ const osTheme = {
   ],
 }
 
+const remarkMermaid = () => {
+  return (tree: any) => {
+    const walk = (node: any) => {
+      if (!node) return
+      if (node.children && Array.isArray(node.children)) {
+        for (let i = 0; i < node.children.length; i++) {
+          const child = node.children[i]
+          if (child && child.type === 'code' && child.lang === 'mermaid') {
+            node.children[i] = {
+              type: 'mdxJsxFlowElement',
+              name: 'Mermaid',
+              attributes: [
+                {
+                  type: 'mdxJsxAttribute',
+                  name: 'chart',
+                  value: child.value,
+                },
+              ],
+              children: [],
+            }
+          } else {
+            walk(child)
+          }
+        }
+      }
+    }
+    walk(tree)
+  }
+}
+
 export default defineConfig({
   mdxOptions: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkMermaid],
     rehypePlugins: (v) => {
       // Filter out Fumadocs' built-in rehypeCode plugin to prevent duplicate/conflicting highlighters
       const filtered = v.filter((plugin) => {

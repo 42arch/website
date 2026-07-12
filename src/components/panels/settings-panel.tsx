@@ -89,22 +89,27 @@ export function SettingsPanel() {
                 <p className="text-[11px] text-muted-foreground">Select a complete visual environment for your workstation.</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {[
-                  { id: 'graphite', label: 'Graphite', color: 'bg-[#141414]', accent: 'bg-[#63e2b7]', desc: 'Industrial Cyan' },
+              {(() => {
+                const lightPresets = [
                   { id: 'linen', label: 'Linen', color: 'bg-[#f8f6f1]', accent: 'bg-[#b87333]', desc: 'Warm Ivory' },
+                ]
+
+                const darkPresets = [
+                  { id: 'graphite', label: 'Graphite', color: 'bg-[#141414]', accent: 'bg-[#63e2b7]', desc: 'Industrial Cyan' },
                   { id: 'vesper', label: 'Vesper', color: 'bg-[#101010]', accent: 'bg-[#ffc799]', desc: 'Deep Amber' },
                   { id: 'nord', label: 'Nord', color: 'bg-[#2e3440]', accent: 'bg-[#88c0d0]', desc: 'Arctic Frost' },
                   { id: 'catppuccin', label: 'Catppuccin', color: 'bg-[#1e1e2e]', accent: 'bg-[#f5c2e7]', desc: 'Soft Pastel' },
                   { id: 'tokyo-night', label: 'Tokyo Night', color: 'bg-[#1a1b26]', accent: 'bg-[#7aa2f7]', desc: 'Neon Blue' },
                   { id: 'dracula', label: 'Dracula', color: 'bg-[#282a36]', accent: 'bg-[#bd93f9]', desc: 'Classic Purple' },
                   { id: 'github-dark', label: 'GitHub Dark', color: 'bg-[#0d1117]', accent: 'bg-[#58a6ff]', desc: 'Official Dark' },
-                ].map(p => (
+                ]
+
+                const renderPresetButton = (p: { id: string, label: string, color: string, accent: string, desc: string }) => (
                   <button
                     key={p.id}
                     onClick={() => setThemePreset(p.id as any)}
                     className={cn(
-                      'group relative flex flex-col items-start gap-3 rounded-sm border p-3 text-left transition-all',
+                      'group relative flex flex-col items-start gap-3 rounded-sm border p-3 text-left transition-all w-full',
                       themePreset === p.id
                         ? 'border-os-accent bg-os-accent-muted/10 ring-1 ring-os-accent/20'
                         : 'border-os-border bg-os-surface hover:border-os-accent/30',
@@ -124,8 +129,26 @@ export function SettingsPanel() {
                       </div>
                     )}
                   </button>
-                ))}
-              </div>
+                )
+
+                return (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <h4 className="font-mono text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Light Themes</h4>
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                        {lightPresets.map(renderPresetButton)}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="font-mono text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Dark Themes</h4>
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                        {darkPresets.map(renderPresetButton)}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
             </OsCard>
           </div>
         </section>

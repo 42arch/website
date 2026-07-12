@@ -9,6 +9,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 const SLUG_CLEAN_REGEX = /[^a-z0-9]+/g
 const SLUG_TRIM_REGEX = /(^-|-$)+/g
 
+interface NavPost {
+  title: string
+  url: string
+}
+
 interface WritingDetailPanelProps {
   title: string
   date: Date
@@ -18,9 +23,22 @@ interface WritingDetailPanelProps {
   description?: string
   toc?: { title: ReactNode, url: string, depth: number }[]
   children: ReactNode
+  prevPost?: NavPost
+  nextPost?: NavPost
 }
 
-export function WritingDetailPanel({ title, date, tags, category, readingTime, description, toc, children }: WritingDetailPanelProps) {
+export function WritingDetailPanel({
+  title,
+  date,
+  tags,
+  category,
+  readingTime,
+  description,
+  toc,
+  children,
+  prevPost,
+  nextPost,
+}: WritingDetailPanelProps) {
   const [isTocOpen, setIsTocOpen] = useState(false)
   const [activeId, setActiveId] = useState<string>('')
   const [dynamicToc, setDynamicToc] = useState<{ title: ReactNode, url: string, depth: number }[]>([])
@@ -258,13 +276,48 @@ export function WritingDetailPanel({ title, date, tags, category, readingTime, d
           prose-strong:text-foreground
           prose-a:text-os-accent prose-a:no-underline hover:prose-a:underline
           prose-blockquote:border-l-os-accent prose-blockquote:bg-os-accent-muted/5 prose-blockquote:py-1 prose-blockquote:text-foreground/80
-          prose-code:font-mono prose-code:text-os-accent prose-code:bg-os-accent-muted/20 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:before:content-none prose-code:after:content-none
-          prose-pre:font-mono prose-pre:bg-[var(--shiki-background)] prose-pre:text-[var(--shiki-foreground)] prose-pre:border prose-pre:border-os-border prose-pre:rounded-sm
           prose-ol:marker:text-os-accent prose-ul:marker:text-os-accent
           prose-hr:border-os-border"
         >
           {children}
         </div>
+
+        {/* Previous and Next Navigation */}
+        {(prevPost || nextPost) && (
+          <div className="mt-12 pt-6 border-t border-os-border flex flex-col sm:flex-row items-stretch justify-between gap-4 font-mono text-[11px]">
+            {prevPost ? (
+              <Link
+                href={prevPost.url}
+                className="flex-1 flex flex-col gap-1 p-4 rounded-sm border border-os-border bg-os-surface/40 hover:bg-os-surface hover:border-os-accent/30 transition-all text-left group"
+              >
+                <span className="text-[10px] text-muted-foreground group-hover:text-os-accent transition-colors flex items-center gap-1">
+                  ← PREV POST
+                </span>
+                <span className="text-foreground font-semibold line-clamp-1">
+                  {prevPost.title}
+                </span>
+              </Link>
+            ) : (
+              <div className="flex-1" />
+            )}
+
+            {nextPost ? (
+              <Link
+                href={nextPost.url}
+                className="flex-1 flex flex-col gap-1 p-4 rounded-sm border border-os-border bg-os-surface/40 hover:bg-os-surface hover:border-os-accent/30 transition-all text-right group"
+              >
+                <span className="text-[10px] text-muted-foreground group-hover:text-os-accent transition-colors flex items-center justify-end gap-1">
+                  NEXT POST →
+                </span>
+                <span className="text-foreground font-semibold line-clamp-1">
+                  {nextPost.title}
+                </span>
+              </Link>
+            ) : (
+              <div className="flex-1" />
+            )}
+          </div>
+        )}
       </div>
     </div>
 

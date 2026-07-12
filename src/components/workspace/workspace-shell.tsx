@@ -147,6 +147,16 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   // Sync theme preset with DOM
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', themePreset)
+    const mode = themePreset === 'linen' ? 'light' : 'dark'
+    document.documentElement.setAttribute('data-theme-mode', mode)
+    if (mode === 'dark') {
+      document.documentElement.classList.add('dark')
+      document.documentElement.classList.remove('light')
+    }
+    else {
+      document.documentElement.classList.add('light')
+      document.documentElement.classList.remove('dark')
+    }
   }, [themePreset])
 
   // Pre-hydration: viewport not yet determined — show matching background to avoid flash

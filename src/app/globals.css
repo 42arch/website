@@ -504,14 +504,111 @@ html[data-theme="github-dark"] {
   }
 }
 
-/* ── Code Blocks and Syntax Highlighting theme adaptation ── */
+/* ── Code Blocks, Tables and Syntax Highlighting theme adaptation ── */
+
+/* Global variables for Tables & Code Blocks */
+html[data-theme-mode="light"] {
+  --prose-table-bg: var(--bg-base);
+  --prose-table-header-bg: var(--bg-surface);
+  --prose-table-header-fg: var(--fg-default);
+  --prose-table-cell-fg: var(--fg-muted);
+  --prose-table-border-header: var(--border-strong);
+  --prose-table-border-row: var(--border-default);
+  --prose-table-row-stripe: rgba(0, 0, 0, 0.015);
+  --prose-table-row-hover: rgba(0, 0, 0, 0.03);
+
+  --prose-pre-bg: #fdfdfc;
+  --prose-pre-border: var(--border-default);
+  --prose-inline-code-bg: rgba(184, 115, 51, 0.08); /* 8% of copper accent */
+  --prose-inline-code-fg: var(--accent);
+}
+
+html[data-theme-mode="dark"] {
+  --prose-table-bg: var(--bg-base);
+  --prose-table-header-bg: var(--bg-surface);
+  --prose-table-header-fg: var(--fg-default);
+  --prose-table-cell-fg: var(--fg-muted);
+  --prose-table-border-header: var(--border-strong);
+  --prose-table-border-row: var(--border-default);
+  --prose-table-row-stripe: rgba(255, 255, 255, 0.015);
+  --prose-table-row-hover: rgba(255, 255, 255, 0.03);
+
+  --prose-pre-bg: var(--bg-inset);
+  --prose-pre-border: var(--border-default);
+  --prose-inline-code-bg: var(--accent-muted);
+  --prose-inline-code-fg: var(--accent);
+}
+
+/* Table Styles */
+.prose table {
+  width: 100%;
+  border-collapse: collapse !important;
+  margin: 1.75rem 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: left;
+  overflow-x: auto;
+  display: block;
+  background-color: var(--prose-table-bg) !important;
+  border: 1px solid var(--prose-table-border-row) !important;
+}
+
+@media (min-width: 640px) {
+  .prose table {
+    display: table;
+  }
+}
+
+.prose thead {
+  border-bottom: 2px solid var(--prose-table-border-header) !important;
+}
+
+.prose th {
+  font-family: var(--font-heading), sans-serif;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  background-color: var(--prose-table-header-bg) !important;
+  color: var(--prose-table-header-fg) !important;
+  letter-spacing: 0.025em;
+  border-bottom: 2px solid var(--prose-table-border-header) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-inline-start: none !important;
+  border-inline-end: none !important;
+}
+
+.prose td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--prose-table-border-row) !important;
+  color: var(--prose-table-cell-fg) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-inline-start: none !important;
+  border-inline-end: none !important;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.prose tr:nth-child(even) {
+  background-color: var(--prose-table-row-stripe) !important;
+}
+
+.prose tr:hover td {
+  background-color: var(--prose-table-row-hover) !important;
+  color: var(--fg-default) !important;
+}
+
+/* Code block styles */
 .prose pre,
 .prose pre[class*="shiki"],
 pre[data-language],
 .shiki {
-  background-color: var(--shiki-background) !important;
+  background-color: var(--prose-pre-bg) !important;
   color: var(--shiki-foreground) !important;
-  border-color: var(--border-default) !important;
+  border: 1px solid var(--prose-pre-border) !important;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .prose pre code,
@@ -519,4 +616,17 @@ pre[data-language] code,
 .shiki code {
   color: inherit !important;
   background-color: transparent !important;
+}
+
+/* Inline code styles */
+.prose code:not(pre code) {
+  font-family: var(--font-geist-mono), monospace;
+  color: var(--prose-inline-code-fg) !important;
+  background-color: var(--prose-inline-code-bg) !important;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius);
+  font-size: 0.85em;
+  font-weight: 500;
+  border: 1px solid var(--border-muted);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

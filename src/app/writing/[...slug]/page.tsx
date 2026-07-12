@@ -1,8 +1,14 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { notFound } from 'next/navigation'
+import { Mermaid } from '@/components/mermaid'
 import { WritingDetailPanel } from '@/components/panels/writing-detail-panel'
 import { calculateReadingTime } from '@/lib/content'
 import { writing } from '@/lib/source'
+
+const mdxComponents = {
+  ...defaultMdxComponents,
+  Mermaid,
+}
 
 interface PageProps {
   params: Promise<{ slug: string[] }>
@@ -47,6 +53,24 @@ export default async function WritingDetailPage({ params }: PageProps) {
   const readingTime = calculateReadingTime(page.data.structuredData.contents)
   const toc = page.data.toc || (page.data as any).exports?.toc || []
 
+  // Resolve previous and next articles
+  const posts = writing.getPages()
+  const sorted = [...posts].sort((a, b) => {
+    const dateA = new Date((a.data as any).date || 0).getTime()
+    const dateB = new Date((b.data as any).date || 0).getTime()
+    return dateB - dateA
+  })
+
+  const currentIndex = sorted.findIndex(p => p.url === page.url)
+  
+  // Previous post (older, next in the list sorted newest-first)
+  const prevPostPage = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null
+  const prevPost = prevPostPage ? { title: prevPostPage.data.title, url: prevPostPage.url } : undefined
+
+  // Next post (newer, previous in the list sorted newest-first)
+  const nextPostPage = currentIndex > 0 ? sorted[currentIndex - 1] : null
+  const nextPost = nextPostPage ? { title: nextPostPage.data.title, url: nextPostPage.url } : undefined
+
   return (
     <WritingDetailPanel
       title={page.data.title}
@@ -56,8 +80,10 @@ export default async function WritingDetailPage({ params }: PageProps) {
       readingTime={readingTime}
       description={page.data.description}
       toc={toc}
+      prevPost={prevPost}
+      nextPost={nextPost}
     >
-      <Content components={defaultMdxComponents} />
+      <Content components={mdxComponents} />
     </WritingDetailPanel>
   )
 }
