@@ -3,6 +3,8 @@ import RSS from 'rss'
 import { site } from '@/config'
 import { posts } from '@/lib/source'
 
+export const dynamic = 'force-static'
+
 export async function GET() {
   const allPosts = posts.getPages()
   const sorted = [...allPosts].sort((a, b) => {
@@ -22,7 +24,7 @@ export async function GET() {
     pubDate: new Date(),
   })
 
-  sorted.forEach(post => {
+  sorted.forEach((post) => {
     feed.item({
       title: post.data.title,
       description: post.data.description || '',

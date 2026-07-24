@@ -1,4 +1,28 @@
-import { rehypeCode } from 'fumadocs-core/mdx-plugins'
+import { createHighlighterCore } from '@shikijs/core'
+import { createJavaScriptRegexEngine } from '@shikijs/engine-javascript'
+import bash from '@shikijs/langs/bash'
+import c from '@shikijs/langs/c'
+import cpp from '@shikijs/langs/cpp'
+import csharp from '@shikijs/langs/csharp'
+import css from '@shikijs/langs/css'
+import glsl from '@shikijs/langs/glsl'
+import go from '@shikijs/langs/go'
+import html from '@shikijs/langs/html'
+import javascript from '@shikijs/langs/javascript'
+import json from '@shikijs/langs/json'
+import jsx from '@shikijs/langs/jsx'
+import markdown from '@shikijs/langs/markdown'
+import python from '@shikijs/langs/python'
+import rust from '@shikijs/langs/rust'
+import shellscript from '@shikijs/langs/shellscript'
+import sql from '@shikijs/langs/sql'
+import toml from '@shikijs/langs/toml'
+import tsx from '@shikijs/langs/tsx'
+import typescript from '@shikijs/langs/typescript'
+import wgsl from '@shikijs/langs/wgsl'
+import xml from '@shikijs/langs/xml'
+import yaml from '@shikijs/langs/yaml'
+import { createRehypeCode } from 'fumadocs-core/mdx-plugins/rehype-code.core'
 import { defineConfig, defineDocs, frontmatterSchema } from 'fumadocs-mdx/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
@@ -28,7 +52,7 @@ export const notes = defineDocs({
 
 const osTheme = {
   name: 'os-theme',
-  type: 'dark',
+  type: 'dark' as const,
   colors: {
     'editor.foreground': 'var(--shiki-foreground)',
     'editor.background': 'var(--shiki-background)',
@@ -45,10 +69,11 @@ const osTheme = {
   ],
 }
 
-const remarkMermaid = () => {
+function remarkMermaid() {
   return (tree: any) => {
     const walk = (node: any) => {
-      if (!node) return
+      if (!node)
+        return
       if (node.children && Array.isArray(node.children)) {
         for (let i = 0; i < node.children.length; i++) {
           const child = node.children[i]
@@ -65,7 +90,8 @@ const remarkMermaid = () => {
               ],
               children: [],
             }
-          } else {
+          }
+          else {
             walk(child)
           }
         }
@@ -74,6 +100,46 @@ const remarkMermaid = () => {
     walk(tree)
   }
 }
+
+const rehypeCode = createRehypeCode(async () => {
+  const highlighter = await createHighlighterCore({
+    langs: [
+      javascript,
+      typescript,
+      jsx,
+      tsx,
+      html,
+      css,
+      json,
+      markdown,
+      python,
+      c,
+      cpp,
+      csharp,
+      rust,
+      go,
+      sql,
+      toml,
+      yaml,
+      xml,
+      bash,
+      shellscript,
+      glsl,
+      wgsl,
+    ],
+    themes: [osTheme],
+    engine: createJavaScriptRegexEngine(),
+  })
+  return {
+    highlighter,
+    options: {
+      themes: {
+        light: osTheme,
+        dark: osTheme,
+      },
+    },
+  }
+})
 
 export default defineConfig({
   mdxOptions: {
@@ -85,19 +151,10 @@ export default defineConfig({
         return pluginFunc !== rehypeCode
       })
 
-      // Run rehypeKatex first to convert math formulas, then other default plugins, and finally our custom-themed code highlighter
       return [
         rehypeKatex,
         ...filtered,
-        [
-          rehypeCode,
-          {
-            themes: {
-              light: osTheme,
-              dark: osTheme,
-            },
-          },
-        ],
+        rehypeCode,
       ]
     },
   },

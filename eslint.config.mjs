@@ -5,5 +5,6 @@ export default antfu({
   ignores: [
     './.source/**',
     './docs/**',
+    './scripts/**',
   ],
 })

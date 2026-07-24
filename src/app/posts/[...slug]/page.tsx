@@ -1,6 +1,6 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { notFound } from 'next/navigation'
-import { Mermaid } from '@/components/mermaid'
+import { Mermaid } from '@/components/mdx-mermaid'
 import { PostsDetailPanel } from '@/components/panels/posts-detail-panel'
 import { calculateReadingTime } from '@/lib/content'
 import { posts } from '@/lib/source'
@@ -62,7 +62,7 @@ export default async function PostsDetailPage({ params }: PageProps) {
   })
 
   const currentIndex = sorted.findIndex(p => p.url === page.url)
-  
+
   // Previous post (older, next in the list sorted newest-first)
   const prevPostPage = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null
   const prevPost = prevPostPage ? { title: prevPostPage.data.title, url: prevPostPage.url } : undefined

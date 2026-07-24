@@ -1,5 +1,7 @@
 import RSS from 'rss'
-import { codeToHtml } from 'shiki'
+import { createHighlighterCore } from '@shikijs/core'
+import { createJavaScriptRegexEngine } from '@shikijs/engine-javascript'
+import xmlLang from '@shikijs/langs/xml'
 import { RssPanel } from '@/components/panels/rss-panel'
 import { siteConfig } from '@/config'
 import { posts as postsSource } from '@/lib/source'
@@ -61,10 +63,16 @@ export default async function RssPage() {
     ],
   }
 
-  // Highlight the generated XML using Shiki with our dynamic variable theme
-  const highlightedHtml = await codeToHtml(rawXml, {
+  // Highlight the generated XML using Shiki core with XML language only
+  const highlighter = await createHighlighterCore({
+    langs: [xmlLang],
+    themes: [osTheme],
+    engine: createJavaScriptRegexEngine(),
+  })
+
+  const highlightedHtml = highlighter.codeToHtml(rawXml, {
     lang: 'xml',
-    theme: osTheme,
+    theme: 'os-theme',
   })
 
   return (
