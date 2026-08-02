@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import localFont from 'next/font/local'
 import { WorkspaceShell } from '@/components/workspace/workspace-shell'
 import { author, site, social } from '@/config'
@@ -141,6 +142,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const gaId = site.googleAnalyticsId || process.env.NEXT_PUBLIC_GA_ID
+
   return (
     <html
       lang="en"
@@ -150,6 +153,7 @@ export default function RootLayout({
       <body className="h-full overflow-hidden">
         <WorkspaceShell>{children}</WorkspaceShell>
       </body>
+      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   )
 }

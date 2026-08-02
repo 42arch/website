@@ -20,6 +20,7 @@
     "lint:fix": "eslint --fix"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.12",
     "@phosphor-icons/react": "^2.1.10",
     "@shikijs/core": "^4.0.2",
     "@shikijs/engine-javascript": "^4.0.2",

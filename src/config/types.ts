@@ -15,6 +15,7 @@ export interface SiteInfo {
   themeColor: string
   backgroundColor: string
   defaultTheme: ThemePreset
+  googleAnalyticsId?: string
 }
 
 export interface AuthorInfo {

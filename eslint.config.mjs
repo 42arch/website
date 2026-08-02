@@ -7,4 +7,7 @@ export default antfu({
     './docs/**',
     './scripts/**',
   ],
+  rules: {
+    'node/prefer-global/process': 'off',
+  },
 })

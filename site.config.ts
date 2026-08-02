@@ -32,6 +32,7 @@ const config: SiteConfig = {
     themeColor: '#0d1117',
     backgroundColor: '#0d1117',
     defaultTheme: 'github-dark',
+    googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID || '',
   },
 
   // ─── 👤 Author ──────────────────────────────────────────
