@@ -1,13 +1,6 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
+  typescript: true,
   nextjs: true,
-  ignores: [
-    './.source/**',
-    './docs/**',
-    './scripts/**',
-  ],
-  rules: {
-    'node/prefer-global/process': 'off',
-  },
 })

@@ -1,29 +1,5 @@
-import { OverviewPanel } from '@/components/panels/overview-panel'
-import { posts as postsSource } from '@/lib/source'
+import { Desktop } from '@/components/desktop/desktop'
 
-export const metadata = {
-  title: 'Overview',
-  description: 'System dashboard and high-level overview of projects and experiments.',
-}
-
-export default function OverviewPage() {
-  const posts = postsSource.getPages()
-
-  const sorted = [...posts].sort((a, b) => {
-    const dateA = new Date((a.data as any).date || 0).getTime()
-    const dateB = new Date((b.data as any).date || 0).getTime()
-    return dateB - dateA
-  })
-
-  const recentPosts = sorted.slice(0, 3).map(post => ({
-    title: post.data.title,
-    description: post.data.description || '',
-    url: post.url,
-    date: (post.data as any).date
-      ? new Date((post.data as any).date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-      : '',
-    tags: (post.data as any).tags || [],
-  }))
-
-  return <OverviewPanel recentPosts={recentPosts} />
+export default function Home() {
+  return <Desktop />
 }

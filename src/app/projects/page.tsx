@@ -1,10 +1,5 @@
-import { ProjectsPanel } from '@/components/panels/projects-panel'
-
-export const metadata = {
-  title: 'Projects',
-  description: 'Featured engineering modules and shipped applications.',
-}
+import { Desktop } from '@/components/desktop/desktop'
 
 export default function ProjectsPage() {
-  return <ProjectsPanel />
+  return <Desktop />
 }

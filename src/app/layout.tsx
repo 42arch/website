@@ -1,159 +1,58 @@
-import type { Metadata, Viewport } from 'next'
-import { GoogleAnalytics } from '@next/third-parties/google'
+import type { Metadata } from 'next'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import localFont from 'next/font/local'
-import { WorkspaceShell } from '@/components/workspace/workspace-shell'
-import { author, site, social } from '@/config'
+import { DesktopStateProvider } from '@/components/desktop/desktop-state-provider'
+import { ThemeProvider } from '@/components/theme-provider'
 import { cn } from '@/lib/utils'
-
 import './globals.css'
 
-const geistHeading = localFont({
-  src: [
-    {
-      path: '../../public/fonts/geist-regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/geist-bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-heading',
-})
-
-const inter = localFont({
-  src: [
-    {
-      path: '../../public/fonts/inter-latin-400.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/inter-latin-700.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
+const geistSans = localFont({
+  src: '../../public/fonts/Geist-Variable.woff2',
   variable: '--font-sans',
 })
 
-const geistSans = localFont({
-  src: [
-    {
-      path: '../../public/fonts/geist-regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/geist-bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-geist-sans',
-})
-
 const geistMono = localFont({
-  src: [
-    {
-      path: '../../public/fonts/geist-mono-regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-  ],
+  src: '../../public/fonts/GeistMono-Variable.woff2',
   variable: '--font-geist-mono',
 })
 
-const titleText = `${site.name} — Developer Workspace`
+const geistHeading = localFont({
+  src: '../../public/fonts/Geist-Variable.woff2',
+  variable: '--font-heading',
+})
 
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: titleText,
-    template: `%s | ${site.name}`,
-  },
-  description: site.description,
-  keywords: site.keywords,
-  authors: [{ name: author.name, url: site.url }],
-  creator: author.name,
-  publisher: author.name,
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      'index': true,
-      'follow': true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
-    type: 'website',
-    locale: site.locale,
-    url: site.url,
-    title: titleText,
-    description: site.description,
-    siteName: site.name,
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: titleText,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: titleText,
-    description: site.description,
-    images: ['/og-image.png'],
-    creator: social.x ? `@${social.x.split('/').pop()}` : undefined,
-  },
-  alternates: {
-    canonical: '/',
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: site.name,
-  },
-  icons: {
-    icon: '/favicon.ico',
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-  },
+  title: 'Starllow — Dan 的数字自留地',
+  description: '欢迎来到 Dan 的个人桌面。探索 Web3D、地图可视化、开源项目与学习笔记。',
 }
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  viewportFit: 'cover',
-  themeColor: site.themeColor,
-}
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const gaId = site.googleAnalyticsId || process.env.NEXT_PUBLIC_GA_ID
+  const locale = await getLocale()
+  const messages = await getMessages()
 
   return (
     <html
-      lang="en"
-      className={cn('h-full', 'antialiased', geistSans.variable, geistMono.variable, 'font-sans', inter.variable, geistHeading.variable)}
+      lang={locale}
+      className={cn('h-full', 'antialiased', geistSans.variable, geistMono.variable, geistHeading.variable, 'font-sans')}
       suppressHydrationWarning
     >
-      <body className="h-full overflow-hidden">
-        <WorkspaceShell>{children}</WorkspaceShell>
+      <body className="min-h-full flex flex-col">
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <DesktopStateProvider>{children}</DesktopStateProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
-      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   )
 }

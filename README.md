@@ -1,64 +1,26 @@
-<div align="center">
-  <h1>Personal Website</h1>
+# Starllow
 
-  <p>
-    <strong>A high-density, IDE-inspired personal website and portfolio.</strong>
-  </p>
+Dan 的个人桌面：以操作系统为灵感的个人网站，包含可拖动窗口、应用 Dock、作品集、文章节选与壁纸设置。
 
-  <p>
-    <a href="https://starllow.com">starllow.com</a>
-  </p>
+## 开发
 
-  <p>
-    <img src="https://img.shields.io/github/stars/42arch/website?style=flat-square" alt="stars" />
-    <img src="https://img.shields.io/github/license/42arch/website?style=flat-square" alt="license" />
-  </p>
-</div>
+```bash
+pnpm install
+pnpm dev
+```
 
+打开 http://localhost:3000。
 
-## 🛠️ Tech Stack
+```bash
+pnpm build  # 生产构建
+pnpm start  # 运行生产服务
+pnpm lint   # 代码检查
+```
 
-- **Core Framework**: [Next.js 16](https://nextjs.org/) (App Router) + [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **Document Engine**: [Fumadocs](https://fumadocs.vercel.app/)
-- **Styling & UI**: [Tailwind CSS 4.0](https://tailwindcss.com/) + [Motion](https://motion.dev/) + [shadcn/ui](https://ui.shadcn.com/)
-- **State Manager**: [Zustand 5](https://zustand-demo.pmnd.rs/)
+基于 Next.js App Router、React、TypeScript、Tailwind CSS v4、Radix UI 和 Phosphor Icons。使用本地字体与原创 SVG，无需图片服务或 API 密钥。
 
----
+## 修改内容
 
-## ⚙️ Configuration
+编辑 `src/lib/desktop-content.ts` 更新个人信息、项目和文章节选。查看 [DESIGN.md](./DESIGN.md) 了解视觉方向、交互约定与文件位置。
 
-All personal information, project lists, terminal settings, and website metadata are centralized in one file.
-
-To customize the website for yourself, simply edit:
-👉 [site.config.ts](file:///Users/dan/Documents/github/website/site.config.ts)
-
----
-
-## 🚀 Development
-
-### Prerequisites
-
-Ensure you have [pnpm](https://pnpm.io/) installed.
-
-### Setup & Run
-
-1. **Install dependencies**:
-   ```bash
-   pnpm install
-   ```
-
-2. **Start the development server**:
-   ```bash
-   pnpm dev
-   ```
-
-3. **Build for production**:
-   ```bash
-   pnpm build
-   ```
-
-4. **Run lint checks**:
-   ```bash
-   pnpm lint
-   ```
-
+窗口状态保存在当前会话中；壁纸偏好存储在浏览器本地。没有后台服务或账号系统。项目与联系方式来自原仓库配置，文章为原站文章的整理节选。

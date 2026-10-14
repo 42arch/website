@@ -1,627 +1,123 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "fumadocs-ui/css/neutral.css";
-@import "fumadocs-ui/css/preset.css";
-@import "katex/dist/katex.min.css";
 
-/* ══════════════════════════════════════════════════
-   FOLIO OS — Unified Theme System
-   All visual tokens are defined per-theme.
-   No light/dark toggle — each preset is complete.
-   ══════════════════════════════════════════════════ */
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--bg-base);
-  --color-foreground: var(--fg-default);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-heading);
-
-  /* Shadcn compat mappings */
-  --color-card: var(--bg-surface);
-  --color-card-foreground: var(--fg-default);
-  --color-popover: var(--bg-overlay);
-  --color-popover-foreground: var(--fg-default);
-  --color-primary: var(--fg-default);
-  --color-primary-foreground: var(--bg-base);
-  --color-secondary: var(--bg-subtle);
-  --color-secondary-foreground: var(--fg-default);
-  --color-muted: var(--bg-subtle);
-  --color-muted-foreground: var(--fg-muted);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--fg-on-accent);
-  --color-destructive: var(--status-error);
-  --color-border: var(--border-default);
-  --color-input: var(--border-default);
-  --color-ring: var(--accent);
-
-  --color-sidebar: var(--bg-surface);
-  --color-sidebar-foreground: var(--fg-default);
-  --color-sidebar-primary: var(--accent);
-  --color-sidebar-primary-foreground: var(--fg-on-accent);
-  --color-sidebar-accent: var(--bg-subtle);
-  --color-sidebar-accent-foreground: var(--fg-default);
-  --color-sidebar-border: var(--border-default);
-  --color-sidebar-ring: var(--accent);
-
-  --color-chart-1: var(--accent);
-  --color-chart-2: var(--status-info);
-  --color-chart-3: var(--status-success);
-  --color-chart-4: var(--status-warning);
-  --color-chart-5: var(--fg-muted);
-
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
-
-  /* OS semantic aliases — components use these */
-  --color-os-toolbar: var(--bg-surface);
-  --color-os-sidebar: var(--bg-surface);
-  --color-os-panel: var(--bg-surface);
-  --color-os-accent: var(--accent);
-  --color-os-accent-muted: var(--accent-muted);
-  --color-os-accent-foreground: var(--fg-on-accent);
-  --color-os-surface: var(--bg-subtle);
-  --color-os-border: var(--border-default);
-  --color-os-indicator: var(--status-success);
-  --color-os-terminal-bg: var(--bg-inset);
-  --color-os-terminal-fg: var(--terminal-fg);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ══════════════════════════════════════════════════
-   THEME: Linen (Default Theme)
-   Warm ivory light theme with copper accents
-   ══════════════════════════════════════════════════ */
 :root {
-  --radius: 0.25rem;
-
-  /* Layer 1: Backgrounds */
-  --bg-base: #f8f6f1;
-  --bg-surface: #f0ece4;
-  --bg-overlay: #f0ece4;
-  --bg-inset: #1a1a1a;
-  --bg-subtle: #e8e4dc;
-
-  /* Layer 2: Text */
-  --fg-default: #2c2c2c;
-  --fg-muted: #7a756e;
-  --fg-subtle: #a09a92;
-  --fg-on-accent: #f8f6f1;
-
-  /* Terminal (Bright gray text on black background) */
-  --terminal-fg: #d4d0c8;
-
-  /* Layer 3: Border */
-  --border-default: #0000000f;
-  --border-muted: #00000008;
-  --border-strong: #0000001a;
-
-  /* Layer 4: Accent */
-  --accent: #b87333;
-  --accent-hover: #cc8040;
-  --accent-muted: #b873331a;
-  --accent-subtle: #b873330d;
-
-  /* Layer 5: Status */
-  --status-success: #3a9a6e;
-  --status-warning: #c48820;
-  --status-error: #c44040;
-  --status-info: #3a7ac4;
-
-  /* Layer 6: Shiki (Light theme code block colors for warm ivory environment) */
-  --shiki-foreground: #2c2c2c;
-  --shiki-background: #fbfaf7;
-  --shiki-token-keyword: #b87333;           /* Copper Brown for keywords */
-  --shiki-token-string: #2b5b84;            /* Soft Slate Blue for strings */
-  --shiki-token-comment: #8c857b;            /* Warm Gray for comments */
-  --shiki-token-function: #704214;          /* Dark Sepia for functions */
-  --shiki-token-constant: #aa5c22;          /* Terracotta for constants */
-  --shiki-token-punctuation: #5a554e;       /* Soft Charcoal for punctuation */
-  --shiki-token-parameter: #b87333;         /* Copper for parameters */
-  --shiki-token-string-expression: #2b5b84;
-  --shiki-token-link: #b87333;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.21 0.006 285.885);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.705 0.015 286.067);
+  --chart-1: oklch(0.871 0.006 286.286);
+  --chart-2: oklch(0.552 0.016 285.938);
+  --chart-3: oklch(0.442 0.017 285.786);
+  --chart-4: oklch(0.37 0.013 285.805);
+  --chart-5: oklch(0.274 0.006 286.033);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.21 0.006 285.885);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.705 0.015 286.067);
 }
 
-html[data-theme="linen"] {
-  /* Inherits root styling automatically */
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: Graphite
-   Industrial charcoal with cyan-green accents
-   ══════════════════════════════════════════════════ */
-html[data-theme="graphite"] {
-  /* Layer 1: Backgrounds */
-  --bg-base: #141414;
-  --bg-surface: #1c1c1c;
-  --bg-overlay: #1c1c1c;
-  --bg-inset: #0e0e0e;
-  --bg-subtle: #242424;
-
-  /* Layer 2: Text */
-  --fg-default: #e8e4df;
-  --fg-muted: #8a8580;
-  --fg-subtle: #5c5955;
-  --fg-on-accent: #0e0e0e;
-
-  /* Terminal */
-  --terminal-fg: #e8e4df;
-
-  /* Layer 3: Border */
-  --border-default: #ffffff14;
-  --border-muted: #ffffff0a;
-  --border-strong: #ffffff22;
-
-  /* Layer 4: Accent */
-  --accent: #63e2b7;
-  --accent-hover: #7aebca;
-  --accent-muted: #63e2b71a;
-  --accent-subtle: #63e2b70d;
-
-  /* Layer 5: Status */
-  --status-success: #63e2b7;
-  --status-warning: #e2a563;
-  --status-error: #e26363;
-  --status-info: #63b3e2;
-
-  /* Layer 6: Shiki */
-  --shiki-foreground: #e8e4df;
-  --shiki-background: #0e0e0e;
-  --shiki-token-keyword: #63e2b7;
-  --shiki-token-string: #a8d8c8;
-  --shiki-token-comment: #5c595580;
-  --shiki-token-function: #7aebca;
-  --shiki-token-constant: #89ddff;
-  --shiki-token-punctuation: #8a8580;
-  --shiki-token-parameter: #e8e4df;
-  --shiki-token-string-expression: #a8d8c8;
-  --shiki-token-link: #63e2b7;
-}
-
-
-/* ══════════════════════════════════════════════════
-   THEME: Vesper
-   Deep black with amber/orange accents (Shiki Vesper)
-   ══════════════════════════════════════════════════ */
-html[data-theme="vesper"] {
-  --bg-base: #101010;
-  --bg-surface: #181818;
-  --bg-overlay: #181818;
-  --bg-inset: #080808;
-  --bg-subtle: #202020;
-
-  --fg-default: #e0d8c8;
-  --fg-muted: #6b6561;
-  --fg-subtle: #4a4642;
-  --fg-on-accent: #101010;
-
-  /* Terminal */
-  --terminal-fg: #e0d8c8;
-
-  --border-default: #ffffff0d;
-  --border-muted: #ffffff08;
-  --border-strong: #ffffff1a;
-
-  --accent: #ffc799;
-  --accent-hover: #ffd4b0;
-  --accent-muted: #ffc7991a;
-  --accent-subtle: #ffc7990d;
-
-  --status-success: #a8d8a8;
-  --status-warning: #ffc799;
-  --status-error: #e06060;
-  --status-info: #88b8e0;
-
-  --shiki-foreground: #e0d8c8;
-  --shiki-background: #080808;
-  --shiki-token-keyword: #ffc799;
-  --shiki-token-string: #d4bc84;
-  --shiki-token-comment: #4a464280;
-  --shiki-token-function: #e0d8c8;
-  --shiki-token-constant: #e8b87a;
-  --shiki-token-punctuation: #6b6561;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: Nord
-   Arctic frost palette
-   ══════════════════════════════════════════════════ */
-html[data-theme="nord"] {
-  --bg-base: #2e3440;
-  --bg-surface: #3b4252;
-  --bg-overlay: #3b4252;
-  --bg-inset: #242933;
-  --bg-subtle: #434c5e;
-
-  --fg-default: #eceff4;
-  --fg-muted: #7b88a1;
-  --fg-subtle: #5c6780;
-  --fg-on-accent: #2e3440;
-
-  /* Terminal */
-  --terminal-fg: #d8dee9;
-
-  --border-default: #eceff414;
-  --border-muted: #eceff40a;
-  --border-strong: #eceff422;
-
-  --accent: #88c0d0;
-  --accent-hover: #8fbccd;
-  --accent-muted: #88c0d01a;
-  --accent-subtle: #88c0d00d;
-
-  --status-success: #a3be8c;
-  --status-warning: #ebcb8b;
-  --status-error: #bf616a;
-  --status-info: #5e81ac;
-
-  --shiki-foreground: #eceff4;
-  --shiki-background: #242933;
-  --shiki-token-keyword: #81a1c1;
-  --shiki-token-string: #a3be8c;
-  --shiki-token-comment: #616e8860;
-  --shiki-token-function: #88c0d0;
-  --shiki-token-constant: #b48ead;
-  --shiki-token-punctuation: #7b88a1;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: Catppuccin Mocha
-   Soft pastel dark with pink accents
-   ══════════════════════════════════════════════════ */
-html[data-theme="catppuccin"] {
-  --bg-base: #1e1e2e;
-  --bg-surface: #313244;
-  --bg-overlay: #313244;
-  --bg-inset: #181825;
-  --bg-subtle: #45475a;
-
-  --fg-default: #cdd6f4;
-  --fg-muted: #7f849c;
-  --fg-subtle: #585b70;
-  --fg-on-accent: #1e1e2e;
-
-  /* Terminal */
-  --terminal-fg: #cdd6f4;
-
-  --border-default: #cdd6f40a;
-  --border-muted: #cdd6f406;
-  --border-strong: #cdd6f414;
-
-  --accent: #f5c2e7;
-  --accent-hover: #f7d0ed;
-  --accent-muted: #f5c2e71a;
-  --accent-subtle: #f5c2e70d;
-
-  --status-success: #a6e3a1;
-  --status-warning: #f9e2af;
-  --status-error: #f38ba8;
-  --status-info: #89b4fa;
-
-  --shiki-foreground: #cdd6f4;
-  --shiki-background: #181825;
-  --shiki-token-keyword: #cba6f7;
-  --shiki-token-string: #a6e3a1;
-  --shiki-token-comment: #585b7060;
-  --shiki-token-function: #89b4fa;
-  --shiki-token-constant: #f38ba8;
-  --shiki-token-punctuation: #7f849c;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: Tokyo Night
-   Deep blue with vibrant accents
-   ══════════════════════════════════════════════════ */
-html[data-theme="tokyo-night"] {
-  --bg-base: #1a1b26;
-  --bg-surface: #24283b;
-  --bg-overlay: #24283b;
-  --bg-inset: #16161e;
-  --bg-subtle: #292e42;
-
-  --fg-default: #c0caf5;
-  --fg-muted: #565f89;
-  --fg-subtle: #414868;
-  --fg-on-accent: #1a1b26;
-
-  /* Terminal */
-  --terminal-fg: #a9b1d6;
-
-  --border-default: #c0caf50a;
-  --border-muted: #c0caf506;
-  --border-strong: #c0caf514;
-
-  --accent: #7aa2f7;
-  --accent-hover: #8db0f9;
-  --accent-muted: #7aa2f71a;
-  --accent-subtle: #7aa2f70d;
-
-  --status-success: #9ece6a;
-  --status-warning: #e0af68;
-  --status-error: #f7768e;
-  --status-info: #7dcfff;
-
-  --shiki-foreground: #c0caf5;
-  --shiki-background: #16161e;
-  --shiki-token-keyword: #9d7cd8;
-  --shiki-token-string: #9ece6a;
-  --shiki-token-comment: #41486860;
-  --shiki-token-function: #7aa2f7;
-  --shiki-token-constant: #ff9e64;
-  --shiki-token-punctuation: #565f89;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: Dracula
-   Classic purple-tinted dark theme
-   ══════════════════════════════════════════════════ */
-html[data-theme="dracula"] {
-  --bg-base: #282a36;
-  --bg-surface: #343746;
-  --bg-overlay: #343746;
-  --bg-inset: #21222c;
-  --bg-subtle: #3c3f58;
-
-  --fg-default: #f8f8f2;
-  --fg-muted: #6272a4;
-  --fg-subtle: #4a5580;
-  --fg-on-accent: #282a36;
-
-  /* Terminal */
-  --terminal-fg: #f8f8f2;
-
-  --border-default: #f8f8f20a;
-  --border-muted: #f8f8f206;
-  --border-strong: #f8f8f214;
-
-  --accent: #bd93f9;
-  --accent-hover: #caa4fb;
-  --accent-muted: #bd93f91a;
-  --accent-subtle: #bd93f90d;
-
-  --status-success: #50fa7b;
-  --status-warning: #f1fa8c;
-  --status-error: #ff5555;
-  --status-info: #8be9fd;
-
-  --shiki-foreground: #f8f8f2;
-  --shiki-background: #21222c;
-  --shiki-token-keyword: #ff79c6;
-  --shiki-token-string: #f1fa8c;
-  --shiki-token-comment: #6272a470;
-  --shiki-token-function: #50fa7b;
-  --shiki-token-constant: #bd93f9;
-  --shiki-token-punctuation: #6272a4;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: GitHub Dark
-   GitHub's official dark theme
-   ══════════════════════════════════════════════════ */
-html[data-theme="github-dark"] {
-  --bg-base: #0d1117;
-  --bg-surface: #161b22;
-  --bg-overlay: #161b22;
-  --bg-inset: #090c10;
-  --bg-subtle: #1c2128;
-
-  --fg-default: #e6edf3;
-  --fg-muted: #7d8590;
-  --fg-subtle: #484f58;
-  --fg-on-accent: #0d1117;
-
-  /* Terminal */
-  --terminal-fg: #c9d1d9;
-
-  --border-default: #30363d;
-  --border-muted: #21262d;
-  --border-strong: #484f58;
-
-  --accent: #58a6ff;
-  --accent-hover: #79b8ff;
-  --accent-muted: #58a6ff1a;
-  --accent-subtle: #58a6ff0d;
-
-  --status-success: #3fb950;
-  --status-warning: #d29922;
-  --status-error: #f85149;
-  --status-info: #58a6ff;
-
-  --shiki-foreground: #e6edf3;
-  --shiki-background: #090c10;
-  --shiki-token-keyword: #ff7b72;
-  --shiki-token-string: #a5d6ff;
-  --shiki-token-comment: #484f5870;
-  --shiki-token-function: #d2a8ff;
-  --shiki-token-constant: #79c0ff;
-  --shiki-token-punctuation: #7d8590;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: GitHub Light
-   GitHub's official light theme
-   ══════════════════════════════════════════════════ */
-html[data-theme="github-light"] {
-  --radius: 0.25rem;
-
-  /* Layer 1: Backgrounds */
-  --bg-base: #ffffff;
-  --bg-surface: #f6f8fa;
-  --bg-overlay: #f6f8fa;
-  --bg-inset: #ffffff;
-  --bg-subtle: #eaeef2;
-
-  /* Layer 2: Text */
-  --fg-default: #1f2328;
-  --fg-muted: #656d76;
-  --fg-subtle: #8c959f;
-  --fg-on-accent: #ffffff;
-
-  /* Terminal */
-  --terminal-fg: #1f2328;
-
-  /* Layer 3: Border */
-  --border-default: #d0d7de;
-  --border-muted: #ebf0f4;
-  --border-strong: #8c959f;
-
-  /* Layer 4: Accent */
-  --accent: #0969da;
-  --accent-hover: #1a7fec;
-  --accent-muted: #0969da1a;
-  --accent-subtle: #0969da0d;
-
-  /* Layer 5: Status */
-  --status-success: #1a7f37;
-  --status-warning: #9a6700;
-  --status-error: #cf222e;
-  --status-info: #0969da;
-
-  /* Layer 6: Shiki */
-  --shiki-foreground: #1f2328;
-  --shiki-background: #ffffff;
-  --shiki-token-keyword: #cf222e;
-  --shiki-token-string: #0a3069;
-  --shiki-token-comment: #6e7781;
-  --shiki-token-function: #8250df;
-  --shiki-token-constant: #0550ae;
-  --shiki-token-punctuation: #24292f;
-  --shiki-token-parameter: #24292f;
-  --shiki-token-string-expression: #0a3069;
-  --shiki-token-link: #0969da;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: Solarized Light
-   Warm retro theme
-   ══════════════════════════════════════════════════ */
-html[data-theme="solarized-light"] {
-  --radius: 0.25rem;
-
-  /* Layer 1: Backgrounds */
-  --bg-base: #fdf6e3;
-  --bg-surface: #eee8d5;
-  --bg-overlay: #eee8d5;
-  --bg-inset: #fdf6e3;
-  --bg-subtle: #e4ddcc;
-
-  /* Layer 2: Text */
-  --fg-default: #586e75;
-  --fg-muted: #657b83;
-  --fg-subtle: #93a1a1;
-  --fg-on-accent: #fdf6e3;
-
-  /* Terminal */
-  --terminal-fg: #586e75;
-
-  /* Layer 3: Border */
-  --border-default: #0000000f;
-  --border-muted: #00000008;
-  --border-strong: #0000001a;
-
-  /* Layer 4: Accent */
-  --accent: #268bd2;
-  --accent-hover: #2aa198;
-  --accent-muted: #268bd21a;
-  --accent-subtle: #268bd20d;
-
-  /* Layer 5: Status */
-  --status-success: #859900;
-  --status-warning: #b58900;
-  --status-error: #dc322f;
-  --status-info: #2aa198;
-
-  /* Layer 6: Shiki */
-  --shiki-foreground: #586e75;
-  --shiki-background: #fdf6e3;
-  --shiki-token-keyword: #859900;
-  --shiki-token-string: #2aa198;
-  --shiki-token-comment: #93a1a1;
-  --shiki-token-function: #268bd2;
-  --shiki-token-constant: #cb4b16;
-  --shiki-token-punctuation: #586e75;
-  --shiki-token-parameter: #657b83;
-  --shiki-token-string-expression: #2aa198;
-  --shiki-token-link: #268bd2;
-}
-
-/* ══════════════════════════════════════════════════
-   THEME: Nord Light
-   Nordic clean light theme
-   ══════════════════════════════════════════════════ */
-html[data-theme="nord-light"] {
-  --radius: 0.25rem;
-
-  /* Layer 1: Backgrounds */
-  --bg-base: #eceff4;
-  --bg-surface: #e5e9f0;
-  --bg-overlay: #e5e9f0;
-  --bg-inset: #d8dee9;
-  --bg-subtle: #d8dee9;
-
-  /* Layer 2: Text */
-  --fg-default: #2e3440;
-  --fg-muted: #4c566a;
-  --fg-subtle: #434c5e;
-  --fg-on-accent: #eceff4;
-
-  /* Terminal */
-  --terminal-fg: #2e3440;
-
-  /* Layer 3: Border */
-  --border-default: #0000000f;
-  --border-muted: #00000008;
-  --border-strong: #0000001a;
-
-  /* Layer 4: Accent */
-  --accent: #5e81ac;
-  --accent-hover: #81a1c1;
-  --accent-muted: #5e81ac1a;
-  --accent-subtle: #5e81ac0d;
-
-  /* Layer 5: Status */
-  --status-success: #a3be8c;
-  --status-warning: #ebcb8b;
-  --status-error: #bf616a;
-  --status-info: #88c0d0;
-
-  /* Layer 6: Shiki */
-  --shiki-foreground: #2e3440;
-  --shiki-background: #eceff4;
-  --shiki-token-keyword: #81a1c1;
-  --shiki-token-string: #a3be8c;
-  --shiki-token-comment: #4c566a;
-  --shiki-token-function: #88c0d0;
-  --shiki-token-constant: #b48ead;
-  --shiki-token-punctuation: #4c566a;
-  --shiki-token-parameter: #2e3440;
-  --shiki-token-string-expression: #a3be8c;
-  --shiki-token-link: #5e81ac;
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.92 0.004 286.32);
+  --primary-foreground: oklch(0.21 0.006 285.885);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.552 0.016 285.938);
+  --chart-1: oklch(0.871 0.006 286.286);
+  --chart-2: oklch(0.552 0.016 285.938);
+  --chart-3: oklch(0.442 0.017 285.786);
+  --chart-4: oklch(0.37 0.013 285.805);
+  --chart-5: oklch(0.274 0.006 286.033);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
 @layer base {
-  :root, html {
-    --fd-card: var(--bg-inset) !important;
-    --fd-card-foreground: var(--shiki-foreground) !important;
-    --color-fd-card: var(--bg-inset) !important;
-    --color-fd-card-foreground: var(--shiki-foreground) !important;
-  }
-
-  /* KaTeX Mathematical Formulas Styling */
-  .katex {
-    font-size: 1.05em;
-    color: var(--fg-default) !important;
-  }
-  .katex-display {
-    padding: 0.75rem 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: thin;
-  }
-
   * {
     @apply border-border outline-ring/50;
   }
@@ -632,163 +128,39 @@ html[data-theme="nord-light"] {
     @apply font-sans;
   }
 }
-
-/* ── OS-specific utility classes ────────────────── */
-@layer components {
-  .os-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .os-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .os-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--fg-subtle);
-    border-radius: 3px;
-  }
-  .os-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--fg-muted);
-  }
-
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+/* Starllow — a personal desktop, in ink, paper and sky. */
+.personal-os {
+  --desk: #aabfcf;
+  --desk-deep: #718fa9;
+  --ink: #293b4b;
+  --subtle: #68777e;
+  --paper: #f8f8f2;
+  --paper-muted: #eff0e9;
+  --line: #dce0d9;
+  --blue: #345c87;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --primary: var(--blue);
+  --primary-foreground: #fff;
+  --muted: #e8ece6;
+  --muted-foreground: var(--subtle);
+  --border: var(--line);
+  --ring: var(--blue);
+  --input: var(--line);
+  --secondary: var(--paper-muted);
+  --secondary-foreground: var(--ink);
 }
-
-/* ── Mobile responsive adjustments ──────────────── */
-@media (max-width: 767px) {
-  #workspace-content .os-scrollbar {
-    padding: 1rem;
-  }
-}
-
-/* ── Code Blocks, Tables and Syntax Highlighting theme adaptation ── */
-
-/* Global variables for Tables & Code Blocks */
-html[data-theme-mode="light"] {
-  --prose-table-bg: var(--bg-base);
-  --prose-table-header-bg: var(--bg-surface);
-  --prose-table-header-fg: var(--fg-default);
-  --prose-table-cell-fg: var(--fg-muted);
-  --prose-table-border-header: var(--border-strong);
-  --prose-table-border-row: var(--border-default);
-  --prose-table-row-stripe: rgba(0, 0, 0, 0.015);
-  --prose-table-row-hover: rgba(0, 0, 0, 0.03);
-
-  --prose-pre-bg: #fdfdfc;
-  --prose-pre-border: var(--border-default);
-  --prose-inline-code-bg: rgba(184, 115, 51, 0.08); /* 8% of copper accent */
-  --prose-inline-code-fg: var(--accent);
-}
-
-html[data-theme-mode="dark"] {
-  --prose-table-bg: var(--bg-base);
-  --prose-table-header-bg: var(--bg-surface);
-  --prose-table-header-fg: var(--fg-default);
-  --prose-table-cell-fg: var(--fg-muted);
-  --prose-table-border-header: var(--border-strong);
-  --prose-table-border-row: var(--border-default);
-  --prose-table-row-stripe: rgba(255, 255, 255, 0.015);
-  --prose-table-row-hover: rgba(255, 255, 255, 0.03);
-
-  --prose-pre-bg: var(--bg-inset);
-  --prose-pre-border: var(--border-default);
-  --prose-inline-code-bg: var(--accent-muted);
-  --prose-inline-code-fg: var(--accent);
-}
-
-/* Table Styles */
-.prose table {
-  width: 100%;
-  border-collapse: collapse !important;
-  margin: 1.75rem 0;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  text-align: left;
-  overflow-x: auto;
-  display: block;
-  background-color: var(--prose-table-bg) !important;
-  border: 1px solid var(--prose-table-border-row) !important;
-}
-
-@media (min-width: 640px) {
-  .prose table {
-    display: table;
-  }
-}
-
-.prose thead {
-  border-bottom: 2px solid var(--prose-table-border-header) !important;
-}
-
-.prose th {
-  font-family: var(--font-heading), sans-serif;
-  font-weight: 700;
-  padding: 0.75rem 1rem;
-  background-color: var(--prose-table-header-bg) !important;
-  color: var(--prose-table-header-fg) !important;
-  letter-spacing: 0.025em;
-  border-bottom: 2px solid var(--prose-table-border-header) !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-inline-start: none !important;
-  border-inline-end: none !important;
-}
-
-.prose td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--prose-table-border-row) !important;
-  color: var(--prose-table-cell-fg) !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-inline-start: none !important;
-  border-inline-end: none !important;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.prose tr:nth-child(even) {
-  background-color: var(--prose-table-row-stripe) !important;
-}
-
-.prose tr:hover td {
-  background-color: var(--prose-table-row-hover) !important;
-  color: var(--fg-default) !important;
-}
-
-/* Code block styles */
-.prose pre,
-.prose pre[class*="shiki"],
-pre[data-language],
-.shiki {
-  background-color: var(--prose-pre-bg) !important;
-  color: var(--shiki-foreground) !important;
-  border: 1px solid var(--prose-pre-border) !important;
-  border-radius: var(--radius);
-  padding: 1.25rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.prose pre code,
-pre[data-language] code,
-.shiki code {
-  color: inherit !important;
-  background-color: transparent !important;
-}
-
-/* Inline code styles */
-.prose code:not(pre code) {
-  font-family: var(--font-geist-mono), monospace;
-  color: var(--prose-inline-code-fg) !important;
-  background-color: var(--prose-inline-code-bg) !important;
-  padding: 0.2rem 0.4rem;
-  border-radius: var(--radius);
-  font-size: 0.85em;
-  font-weight: 500;
-  border: 1px solid var(--border-muted);
-  transition: background-color 0.3s ease, color 0.3s ease;
+.personal-os[data-wallpaper="sage"] { --desk: #b7c4b2; --desk-deep: #80967d; --blue: #496b58; }
+.personal-os[data-wallpaper="dusk"] { --desk: #b9b3cd; --desk-deep: #8c85a9; --blue: #645385; }
+.wallpaper-grain { position: absolute; inset: 0; z-index: 2; opacity: .19; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.45' d='M0 0h180v180H0z'/%3E%3C/svg%3E"); }
+.personal-os button, .personal-os a { -webkit-tap-highlight-color: transparent; }
+.personal-os button { cursor: pointer; }
+.personal-os :is(button, a, input):focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+.personal-os button:disabled { cursor: default; }
+.dark .personal-os { --desk: #2c3b46; --desk-deep: #1b2832; --ink: #e5e9e7; --subtle: #a8b4b5; --paper: #202c34; --paper-muted: #293840; --line: #43525a; --blue: #a6c5df; --background: var(--paper); --foreground: var(--ink); --primary: #547b9b; --primary-foreground: #fff; --muted: #34434b; --muted-foreground: #a8b4b5; --border: var(--line); --ring: var(--blue); --input: var(--line); --secondary: var(--paper-muted); --secondary-foreground: var(--ink); }
+.dark .personal-os[data-wallpaper="sage"] { --desk: #34463d; --desk-deep: #202d26; --blue: #a6c5a9; }
+.dark .personal-os[data-wallpaper="dusk"] { --desk: #3d394e; --desk-deep: #252238; --blue: #c0b4df; }
+@keyframes window-appear { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .personal-os *, .personal-os *::before, .personal-os *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

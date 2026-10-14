@@ -1,10 +1,5 @@
-import { SettingsPanel } from '@/components/panels/settings-panel'
-
-export const metadata = {
-  title: 'Settings',
-  description: 'Configure your workspace environment and preferences.',
-}
+import { Desktop } from '@/components/desktop/desktop'
 
 export default function SettingsPage() {
-  return <SettingsPanel />
+  return <Desktop />
 }

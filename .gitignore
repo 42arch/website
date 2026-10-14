@@ -14,8 +14,7 @@
 /coverage
 
 # next.js
-/.next
-/.open-next/
+/.next/
 /out/
 
 # production
@@ -40,5 +39,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-/.source/
+.pnpm-store

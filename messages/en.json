@@ -1,0 +1,35 @@
+{
+  "Home": {
+    "title": "Next.js 16 + Tailwind v4",
+    "description": "A high-performance web starter template featuring shadcn-ui (v4), Phosphor Icons, and strict ESLint configuration.",
+    "cards": {
+      "nextjs": {
+        "title": "Next.js 16",
+        "description": "Powered by App Router and Server Components.",
+        "content": "Leverage the latest framework features for optimized performance and developer experience."
+      },
+      "tailwind": {
+        "title": "Tailwind v4",
+        "description": "Modern styling with zero-config engine.",
+        "content": "Experience the lightning-fast CSS processing of Tailwind's next-generation compiler."
+      },
+      "typesafety": {
+        "title": "Type Safety",
+        "description": "Strict TypeScript & ESLint.",
+        "content": "Maintain high code quality with @antfu/eslint-config and full TypeScript integration."
+      }
+    },
+    "cta": {
+      "getStarted": "Get Started",
+      "viewComponents": "View Components"
+    },
+    "footer": {
+      "text": "Ready to build something amazing? Start with <code>pnpm dev</code>."
+    }
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "zh": "简体中文"
+  }
+}

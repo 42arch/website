@@ -1,10 +1,5 @@
-import { ContactPanel } from '@/components/panels/contact-panel'
-
-export const metadata = {
-  title: 'Contact',
-  description: 'Get in touch for collaboration and conversations.',
-}
+import { Desktop } from '@/components/desktop/desktop'
 
 export default function ContactPage() {
-  return <ContactPanel />
+  return <Desktop />
 }
