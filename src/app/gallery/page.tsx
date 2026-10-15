@@ -1,5 +1,5 @@
-import { Desktop } from '@/components/desktop/desktop'
+import { GalleryApp } from '@/components/apps/gallery-app'
 
 export default function GalleryPage() {
-  return <Desktop />
+  return <GalleryApp />
 }

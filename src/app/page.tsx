@@ -1,5 +1,3 @@
-import { Desktop } from '@/components/desktop/desktop'
-
-export default function Home() {
-  return <Desktop />
+export default function HomePage() {
+  return null
 }

@@ -1,30 +1,161 @@
 {
-  "Home": {
-    "title": "Next.js 16 + Tailwind v4",
-    "description": "A high-performance web starter template featuring shadcn-ui (v4), Phosphor Icons, and strict ESLint configuration.",
-    "cards": {
-      "nextjs": {
-        "title": "Next.js 16",
-        "description": "Powered by App Router and Server Components.",
-        "content": "Leverage the latest framework features for optimized performance and developer experience."
-      },
-      "tailwind": {
-        "title": "Tailwind v4",
-        "description": "Modern styling with zero-config engine.",
-        "content": "Experience the lightning-fast CSS processing of Tailwind's next-generation compiler."
-      },
-      "typesafety": {
-        "title": "Type Safety",
-        "description": "Strict TypeScript & ESLint.",
-        "content": "Maintain high code quality with @antfu/eslint-config and full TypeScript integration."
-      }
+  "common": {
+    "close": "Close Window",
+    "minimize": "Minimize to Dock",
+    "maximize": "Zoom / Maximize",
+    "restore": "Restore Window",
+    "search": "Spotlight Global Search",
+    "settings": "System Settings",
+    "copy": "Copy",
+    "copied": "Copied",
+    "live": "LIVE",
+    "events": "Events"
+  },
+  "menubar": {
+    "systemTitle": "Starllow.OS Workspace",
+    "systemVersion": "Frosted Matte v3.9",
+    "file": "File",
+    "window": "Window",
+    "handbook": "Handbook",
+    "settings": "Settings",
+    "openReadme": "Open README.mdx",
+    "openProjects": "Explore Projects.app",
+    "openNotes": "Open Notes.app",
+    "openGallery": "Explore Gallery.app",
+    "copyEmail": "Copy Email Address",
+    "tileWindows": "Tile / Organize Windows",
+    "showAllWindows": "Show All Windows",
+    "minimizeAllWindows": "Minimize All (View Wallpaper)",
+    "showDesktop": "Show Desktop (View Mascot)",
+    "aboutMe": "About Me (README)",
+    "network": "Network Signal",
+    "battery": "Battery Level"
+  },
+  "dock": {
+    "readme": "README.mdx",
+    "projects": "Portfolio (Projects)",
+    "notes": "Technical Notes (Notes.app)",
+    "gallery": "Visual Gallery (Gallery.app)",
+    "handbook": "Handbook (Wiki)",
+    "contact": "Contact & Mail",
+    "terminal": "Terminal.sh",
+    "settings": "Settings.app"
+  },
+  "search": {
+    "placeholder": "Type a command or search apps (e.g. 'settings', 'projects', 'readme', 'gallery')...",
+    "esc": "ESC to Exit",
+    "navigate": "↑↓ Navigate",
+    "enter": "Enter to Run",
+    "noResults": "No matching commands or apps found"
+  },
+  "wallpaper": {
+    "max": "Max the Hedgehog Engineer",
+    "shiba": "Astro Shiba Inu",
+    "cat": "Lo-Fi Cat Coder",
+    "cycleQuote": "Cycle Quote ↻",
+    "online": "System Online"
+  },
+  "apps": {
+    "readme": {
+      "title": "README.mdx",
+      "badge": "v3.7",
+      "contactMe": "Contact Me",
+      "outline": "OUTLINE",
+      "aboutMe": "About Me",
+      "techStack": "Tech Stack Matrix",
+      "milestones": "Milestones",
+      "viewProjects": "View Projects",
+      "viewGallery": "Visual Gallery",
+      "philosophyTitle": "Philosophy:",
+      "starsLabel": "GITHUB STARS",
+      "techTitle": "CORE TECH STACK",
+      "careerTitle": "CAREER CHANGELOG"
     },
-    "cta": {
-      "getStarted": "Get Started",
-      "viewComponents": "View Components"
+    "gallery": {
+      "title": "Gallery.app — Visual Playground",
+      "subtitle": "Vector Artworks, Geometry Experiments & Color Palettes",
+      "category": "VISUAL PLAYGROUND",
+      "pieces": "Curated Pieces",
+      "format": "Pure Vector SVG",
+      "copyColor": "Click color swatch to copy HEX value"
     },
-    "footer": {
-      "text": "Ready to build something amazing? Start with <code>pnpm dev</code>."
+    "projects": {
+      "title": "Projects.app",
+      "all": "All (6)",
+      "ai": "AI & Agent",
+      "oss": "Open Source",
+      "saas": "Indie SaaS",
+      "viewDetail": "Inspect"
+    },
+    "notes": {
+      "title": "Notes.app — Technical Notes",
+      "all": "All",
+      "searchPlaceholder": "Search notes, intro, or tags...",
+      "copyLink": "Copy Link",
+      "copiedLink": "Note direct link copied to clipboard",
+      "empty": "No matching technical notes found",
+      "backToList": "Back to Notes",
+      "readArticle": "Read Article",
+      "prevArticle": "Previous",
+      "nextArticle": "Next",
+      "articlesCount": "{count} Notes"
+    },
+    "terminal": {
+      "title": "Terminal.sh — Interactive Shell",
+      "lastLogin": "Last login: Thu Oct 15 on ttys001 (Starllow.OS Matte Edition)",
+      "hint": "Type 'help' or click buttons above to run commands.",
+      "quickCmds": "Quick Commands:",
+      "inputPlaceholder": "Type command..."
+    },
+    "handbook": {
+      "title": "Handbook.wiki — Engineering Handbook",
+      "tabPrinciples": "Core Principles",
+      "tabArticles": "Technical Notes (Fumadocs)",
+      "howIWork": "HOW I WORK",
+      "heading": "Engineering Principles & Playbook",
+      "subtitle": "Inspired by PostHog open-source culture, outlining core tenets of craft, simplicity, and shipping.",
+      "notesHeading": "Long-form Notes & Articles",
+      "notesDesc": "WebGL, 3D rendering algorithms, and data structure walkthroughs based on content/notes.",
+      "backToList": "Back to list",
+      "readMore": "Read Note"
+    },
+    "contact": {
+      "title": "Mail.msg — Contact & Guestbook",
+      "copyEmail": "Copy Email",
+      "recipient": "To:",
+      "yourName": "Your Name:",
+      "namePlaceholder": "e.g. Alex / Sarah",
+      "topic": "Topic:",
+      "topicCollab": "[Collab] Product Consulting & Fullstack",
+      "topicRole": "[Role] Team Core Role Opportunity",
+      "topicChat": "[Chat] Open Source / Coffee Chat",
+      "message": "Message:",
+      "messagePlaceholder": "Share your thoughts, suggestions, or collaboration opportunities...",
+      "submit": "Send Message & Sync Guestbook",
+      "guestbook": "Live Guestbook (Instant front-end sync):",
+      "justNow": "Just now",
+      "sentToast": "Message sent and synced to guestbook below"
+    },
+    "settings": {
+      "title": "Settings.app — System Preferences",
+      "preferences": "PREFERENCES",
+      "wallpaper": "Cartoon Wallpaper",
+      "appearance": "Appearance",
+      "soundAndWidgets": "Sound & Widgets",
+      "language": "Language & Region",
+      "wallpaperHeading": "Desktop Cartoon Character Wallpaper",
+      "wallpaperDesc": "Choose clean, crisp vector character backgrounds",
+      "appearanceHeading": "Color Appearance Mode",
+      "appearanceDesc": "Warm Stone parchment frosted matte or geek night dark mode",
+      "light": "Warm Stone (Light)",
+      "dark": "Dark Night (Dark)",
+      "soundHeading": "Tactile Mechanical Sound",
+      "soundDesc": "Synthesized via Web Audio API with zero asset downloads",
+      "soundToggle": "Mechanical key tactile micro-audio",
+      "mascotToggle": "Show mascot quote speech bubble",
+      "widgetsToggle": "Show desktop status widgets",
+      "languageHeading": "Language Preferences",
+      "languageDesc": "Switch workspace interface language (English / 简体中文)"
     }
   },
   "LanguageSwitcher": {

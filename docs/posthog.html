@@ -1,0 +1,2394 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex.OS — macOS × PostHog 磨砂质感个人数字工作台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Plus Jakarta Sans"', '"PingFang SC"', 'sans-serif'],
+                        display: ['"Space Grotesk"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+                    },
+                    colors: {
+                        ph: {
+                            bg: '#E4E5DF',
+                            surface: '#FAFBF8',
+                            orange: '#F54E00',
+                            blue: '#007AFF',
+                            green: '#28C840',
+                            yellow: '#FEBC2E',
+                            red: '#FF5F57'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-desktop: #EAE6DA;
+            --bg-window: rgba(244, 242, 235, 0.78);
+            --bg-window-body: rgba(248, 246, 240, 0.65);
+            --bg-sidebar: rgba(233, 230, 220, 0.55);
+            --bg-header: rgba(238, 235, 226, 0.72);
+            --border-subtle: rgba(29, 31, 39, 0.06);
+            --border-glass: rgba(29, 31, 39, 0.08);
+            --text-main: #1D1F27;
+            --text-secondary: #5A5E6B;
+            --accent: #F54E00;
+            --mac-shadow: 
+                0 12px 32px -8px rgba(24, 24, 20, 0.08),
+                0 2px 6px -1px rgba(24, 24, 20, 0.04),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+            --mac-shadow-active: 
+                0 18px 42px -10px rgba(24, 24, 20, 0.12),
+                0 4px 12px -2px rgba(24, 24, 20, 0.05),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.75);
+        }
+
+        html.dark {
+            --bg-desktop: #12151E;
+            --bg-window: rgba(26, 29, 40, 0.76);
+            --bg-window-body: rgba(22, 25, 34, 0.68);
+            --bg-sidebar: rgba(18, 21, 30, 0.55);
+            --bg-header: rgba(30, 34, 46, 0.75);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-main: #F3F4F6;
+            --text-secondary: #9CA3AF;
+            --accent: #FF641A;
+            --mac-shadow: 
+                0 14px 36px -8px rgba(0, 0, 0, 0.38),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
+            --mac-shadow-active: 
+                0 20px 48px -10px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .selectable-text, .selectable-text * {
+            user-select: text;
+        }
+
+        body {
+            background-color: var(--bg-desktop);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .desktop-wallpaper {
+            position: relative;
+            background-color: var(--bg-desktop);
+        }
+
+        /* Subtle Matte Grain Overlay */
+        .matte-grain {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
+        }
+
+        /* Top Menu Bar: Light Translucent Frosted Glass */
+        .mac-menubar {
+            background: rgba(236, 233, 222, 0.68);
+            backdrop-filter: blur(16px) saturate(140%);
+            -webkit-backdrop-filter: blur(16px) saturate(140%);
+            border-bottom: 1px solid rgba(29, 31, 39, 0.06);
+        }
+        html.dark .mac-menubar {
+            background: rgba(20, 23, 32, 0.68);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Airy Frosted Dock Tray (No heavy borders or 3D lips) */
+        .mac-dock-tray {
+            background: #EAE6DA;
+            border: 1px solid rgba(29, 31, 39, 0.12);
+            box-shadow: 
+                0 10px 28px -6px rgba(20, 20, 16, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+        html.dark .mac-dock-tray {
+            background: #1A1D26;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 12px 32px -6px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        /* Translucent Frosted Windows */
+        .mac-window {
+            background-color: var(--bg-window);
+            backdrop-filter: blur(22px) saturate(145%);
+            -webkit-backdrop-filter: blur(22px) saturate(145%);
+            box-shadow: var(--mac-shadow);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            transition: box-shadow 0.25s ease, transform 0.2s ease;
+        }
+        .mac-window.active-window {
+            box-shadow: var(--mac-shadow-active);
+        }
+
+        .mac-titlebar {
+            background: var(--bg-header);
+        }
+
+        .mac-sidebar {
+            background-color: var(--bg-sidebar);
+        }
+
+        .mac-body {
+            background-color: var(--bg-window-body);
+        }
+
+        /* Flat Translucent Segmented Track */
+        .segmented-track {
+            background: rgba(29, 31, 39, 0.05);
+            border: 1px solid rgba(29, 31, 39, 0.04);
+        }
+        html.dark .segmented-track {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .segmented-pill-active {
+            background: rgba(255, 255, 255, 0.72);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+        html.dark .segmented-pill-active {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* macOS Traffic Light Buttons */
+        .traffic-group:hover .traffic-symbol {
+            opacity: 1;
+        }
+        .traffic-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0, 0, 0, 0.55);
+            border: 0.5px solid rgba(0, 0, 0, 0.12);
+            transition: transform 0.1s ease, filter 0.1s ease;
+        }
+        .traffic-dot:active {
+            filter: brightness(0.9);
+            transform: scale(0.95);
+        }
+        .traffic-symbol {
+            opacity: 0;
+            transition: opacity 0.12s ease;
+        }
+
+        /* Flat Matte Translucent Buttons (No 2px bottom lip) */
+        .ph-btn {
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(29, 31, 39, 0.08);
+            border-radius: 5px;
+            transition: all 0.15s ease;
+        }
+        html.dark .ph-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        .ph-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(29, 31, 39, 0.14);
+        }
+        html.dark .ph-btn:hover {
+            background: rgba(255, 255, 255, 0.11);
+            border-color: rgba(255, 255, 255, 0.14);
+        }
+        .ph-btn:active {
+            transform: scale(0.98);
+        }
+
+        .ph-btn-primary {
+            background: #F54E00;
+            color: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 5px;
+            transition: all 0.15s ease;
+        }
+        .ph-btn-primary:hover {
+            background: #FF5B0F;
+        }
+        .ph-btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* Clean Translucent Matte Bento Cards (No thick bottom lip or heavy shadow) */
+        .bento-card {
+            background: rgba(255, 255, 255, 0.46);
+            border: 1px solid rgba(29, 31, 39, 0.06);
+            border-radius: 6px;
+            transition: background-color 0.15s ease, border-color 0.15s ease;
+        }
+        html.dark .bento-card {
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .bento-card:hover {
+            background: rgba(255, 255, 255, 0.68);
+            border-color: rgba(29, 31, 39, 0.11);
+        }
+        html.dark .bento-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.11);
+        }
+
+        /* Soft Frosted Squircle Icons (Flat, translucent, subtle inner highlight) */
+        .frosted-icon {
+            background: rgba(255, 255, 255, 0.52);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(29, 31, 39, 0.07);
+            border-radius: 8px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+        }
+        html.dark .frosted-icon {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Cartoon Character Animations */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes float-delayed {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        @keyframes steam-rise {
+            0% { opacity: 0; transform: translateY(4px) scale(0.9); }
+            50% { opacity: 0.75; }
+            100% { opacity: 0; transform: translateY(-10px) scale(1.1); }
+        }
+        .anim-float {
+            animation: float-slow 4.5s ease-in-out infinite;
+        }
+        .anim-float-delayed {
+            animation: float-delayed 5.5s ease-in-out infinite;
+        }
+        .anim-steam {
+            animation: steam-rise 2.8s ease-out infinite;
+        }
+        .anim-steam-2 {
+            animation: steam-rise 2.8s ease-out 1.4s infinite;
+        }
+
+        .dock-item {
+            position: relative;
+            transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .dock-item:hover {
+            transform: translateY(-7px) scale(1.14);
+        }
+        .dock-item:active {
+            transform: translateY(-2px) scale(0.96);
+        }
+        .dock-tooltip {
+            opacity: 0;
+            transform: translate(-50%, 4px);
+            transition: all 0.15s ease;
+            pointer-events: none;
+        }
+        .dock-item:hover .dock-tooltip {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(133, 137, 150, 0.28);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(133, 137, 150, 0.5);
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.92); }
+        }
+        .live-dot {
+            animation: pulse-dot 2.4s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col justify-between font-sans selection:bg-[#F54E00]/15 selection:text-[#F54E00] matte-grain">
+
+    <!-- ================= TOP macOS MATTE MENU BAR (28px Height, Warm Brushed Stone) ================= -->
+    <header class="mac-menubar h-7 w-full px-3.5 flex items-center justify-between z-50 shrink-0 text-[12px]">
+        <!-- Left: Custom Vector Brand Logo + Active App Name + Standard macOS Menus -->
+        <div class="flex items-center space-x-1">
+            <!-- System Brand Menu Button (Vector Geometric Emblem) -->
+            <button onclick="toggleStartMenu()" aria-label="System Menu" class="px-2 py-1 rounded hover:bg-black/5 dark:hover:bg-white/10 flex items-center gap-1.5 transition text-gray-900 dark:text-white">
+                <svg class="w-3.5 h-3.5 text-[#F54E00]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+            </button>
+
+            <!-- Active Focused Application Title -->
+            <button onclick="focusWindow(activeWindowId)" id="menubar-active-app" class="px-2 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 font-bold tracking-tight text-gray-900 dark:text-white transition">
+                README.mdx
+            </button>
+
+            <!-- macOS Standard Menu Items -->
+            <div class="hidden md:flex items-center text-gray-700 dark:text-gray-300 font-medium space-x-0.5">
+                <div class="relative group">
+                    <button class="px-2.5 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 transition">文件</button>
+                    <div class="hidden group-hover:block absolute left-0 top-full pt-1 w-52 z-50">
+                        <div class="bg-[#ECEAE0] dark:bg-[#1E2028] border border-black/15 dark:border-white/10 shadow-xl rounded-md p-1 text-xs">
+                            <button onclick="openWindow('readme')" class="w-full text-left px-2.5 py-1.5 hover:bg-[#F54E00] hover:text-white rounded flex justify-between items-center transition">
+                                <span>打开 README.mdx</span><span class="font-mono text-[10px] opacity-70">⌘1</span>
+                            </button>
+                            <button onclick="openWindow('projects')" class="w-full text-left px-2.5 py-1.5 hover:bg-[#F54E00] hover:text-white rounded flex justify-between items-center transition">
+                                <span>浏览作品集 (Projects)</span><span class="font-mono text-[10px] opacity-70">⌘2</span>
+                            </button>
+                            <button onclick="openWindow('design')" class="w-full text-left px-2.5 py-1.5 hover:bg-[#F54E00] hover:text-white rounded flex justify-between items-center transition">
+                                <span>设计系统规范</span><span class="font-mono text-[10px] opacity-70">⌘3</span>
+                            </button>
+                            <div class="my-1 border-t border-black/10 dark:border-white/10"></div>
+                            <button onclick="copyEmail()" class="w-full text-left px-2.5 py-1.5 hover:bg-[#F54E00] hover:text-white rounded flex justify-between items-center transition">
+                                <span>拷贝个人邮箱</span><span class="font-mono text-[10px] opacity-70">⌘E</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <button class="px-2.5 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 transition">窗口</button>
+                    <div class="hidden group-hover:block absolute left-0 top-full pt-1 w-52 z-50">
+                        <div class="bg-[#ECEAE0] dark:bg-[#1E2028] border border-black/15 dark:border-white/10 shadow-xl rounded-md p-1 text-xs">
+                            <button onclick="tileWindows()" class="w-full text-left px-2.5 py-1.5 hover:bg-[#F54E00] hover:text-white rounded transition">台前调度 / 整齐排列</button>
+                            <button onclick="openAllWindows()" class="w-full text-left px-2.5 py-1.5 hover:bg-[#F54E00] hover:text-white rounded transition">显示所有应用窗口</button>
+                            <button onclick="minimizeAllWindows()" class="w-full text-left px-2.5 py-1.5 hover:bg-[#F54E00] hover:text-white rounded transition">最小化全部 (欣赏卡通壁纸)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="openWindow('handbook')" class="px-2.5 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 transition">个人手册</button>
+                <button onclick="openWindow('design')" class="px-2.5 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 transition">设计规范</button>
+                <button onclick="openWindow('settings')" class="px-2.5 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 transition text-[#F54E00] font-semibold">系统设置</button>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+            <!-- Live Telemetry Pill -->
+            <button onclick="openWindow('analytics')" class="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 transition text-[11px] font-mono">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#28C840] live-dot"></span>
+                <span>Events: <strong id="menubar-events-count">12</strong></span>
+            </button>
+
+            <!-- Spotlight Search Trigger -->
+            <button onclick="toggleCommandPalette()" title="Spotlight 搜索 (⌘K)" class="px-2 py-0.5 rounded hover:bg-black/5 dark:hover:bg-white/10 flex items-center gap-1 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span class="hidden lg:inline text-[11px] font-mono opacity-75">⌘K</span>
+            </button>
+
+            <!-- Date & Clock -->
+            <div class="flex items-center gap-1.5 pl-1 font-medium text-gray-800 dark:text-gray-200">
+                <span id="os-date" class="hidden sm:inline text-[11px]">10月15日 周四</span>
+                <span id="os-clock" class="font-mono text-[11px]">12:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN macOS DESKTOP WORKSPACE WITH CRISP CARTOON CHARACTER BACKGROUND ================= -->
+    <main id="desktop-area" class="relative flex-1 w-full desktop-wallpaper overflow-hidden">
+
+        <!-- ================= CRISP VECTOR CARTOON CHARACTER WALLPAPER LAYER ================= -->
+        <div id="cartoon-wallpaper-layer" class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+            
+            <!-- SCENE 1: MAX THE HEDGEHOG ENGINEER (PostHog Inspired Cozy Outdoor Coding Hilltop) -->
+            <div id="cartoon-scene-0" class="w-full h-full relative">
+                <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Sky Background (Adapts to Light / Dark Mode via CSS classes) -->
+                    <rect width="1440" height="900" class="fill-[#EDEAE0] dark:fill-[#111520] transition-colors duration-300"/>
+                    
+                    <!-- Subtle Retro Engineering Dot Grid in Sky -->
+                    <pattern id="skyGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1" class="fill-[#1D1F27]/[0.07] dark:fill-white/[0.06]"/>
+                    </pattern>
+                    <rect width="1440" height="900" fill="url(#skyGrid)"/>
+
+                    <!-- Minimalist Geometric Sun / Moon in Top Right Sky -->
+                    <g class="anim-float">
+                        <circle cx="1150" cy="165" r="52" class="fill-[#FEBC2E]/90 dark:fill-[#F59E0B]/80 stroke-[#1D1F27] dark:stroke-white/60" stroke-width="2.5"/>
+                    </g>
+
+                    <!-- Crisp Stylized Clouds (Reduced to 1 subtle cloud for less clutter) -->
+                    <g class="anim-float-delayed">
+                        <path d="M820 145 H910 A18 18 0 0 0 910 109 A26 26 0 0 0 862 96 A20 20 0 0 0 820 112 A16 16 0 0 0 820 145 Z" class="fill-white/90 dark:fill-[#23293A] stroke-[#1D1F27] dark:stroke-white/30" stroke-width="2"/>
+                    </g>
+
+                    <!-- Distant Stylized Mountains & Rolling Hills -->
+                    <path d="M-60 900 L220 620 L480 800 L820 560 L1120 790 L1350 590 L1520 900 Z" class="fill-[#E2DEC9] dark:fill-[#161B29] stroke-[#1D1F27]/70 dark:stroke-white/20" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M-80 900 Q340 690 760 780 T1520 690 L1520 900 Z" class="fill-[#D0DEC0] dark:fill-[#1A2524] stroke-[#1D1F27] dark:stroke-white/25" stroke-width="2.5"/>
+                    <path d="M480 900 Q980 650 1500 740 L1500 900 Z" class="fill-[#BECDAA] dark:fill-[#1D2D28] stroke-[#1D1F27] dark:stroke-white/30" stroke-width="2.5"/>
+
+                    <!-- ================= MAIN CARTOON CHARACTER: MAX THE HEDGEHOG AT HIS DESK (Right Side) ================= -->
+                    <g transform="translate(810, 385)">
+                        <!-- Cozy Wooden Outdoor Desk -->
+                        <rect x="40" y="290" width="420" height="22" rx="4" fill="#D98A4E" stroke="#1D1F27" stroke-width="3"/>
+                        <rect x="75" y="312" width="22" height="160" fill="#B56B35" stroke="#1D1F27" stroke-width="3"/>
+                        <rect x="403" y="312" width="22" height="160" fill="#B56B35" stroke="#1D1F27" stroke-width="3"/>
+
+                        <!-- Potted Succulent Plant on Left of Desk -->
+                        <g transform="translate(65, 225)">
+                            <path d="M12 35 C2 15 18 0 28 18 C32 0 48 15 38 35 Z" fill="#28C840" stroke="#1D1F27" stroke-width="2.5"/>
+                            <polygon points="8,35 42,35 37,65 13,65" fill="#E06D53" stroke="#1D1F27" stroke-width="2.5" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Hedgehog Spiky Hair / Quills (Back Layer) -->
+                        <path d="M165 175 L130 135 L165 120 L150 75 L195 85 L210 45 L250 70 L285 45 L295 85 L335 80 L315 125 L345 150 L315 185 Z"
+                              fill="#5C4033" stroke="#1D1F27" stroke-width="3.5" stroke-linejoin="round"/>
+
+                        <!-- Hedgehog Rounded Ears -->
+                        <circle cx="178" cy="135" r="20" fill="#E6B88A" stroke="#1D1F27" stroke-width="3"/>
+                        <circle cx="178" cy="135" r="10" fill="#D49B6A"/>
+                        <circle cx="305" cy="135" r="20" fill="#E6B88A" stroke="#1D1F27" stroke-width="3"/>
+                        <circle cx="305" cy="135" r="10" fill="#D49B6A"/>
+
+                        <!-- Hedgehog Body (Signature PostHog Orange Developer Hoodie!) -->
+                        <path d="M155 290 C155 215 190 195 242 195 C294 195 328 215 328 290 Z"
+                              fill="#F54E00" stroke="#1D1F27" stroke-width="3.5" stroke-linejoin="round"/>
+                        <!-- Hoodie Drawstrings & Pocket -->
+                        <path d="M228 215 V250 M256 215 V250" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M195 290 L208 255 H276 L289 290 Z" fill="#D94300" stroke="#1D1F27" stroke-width="2.5"/>
+
+                        <!-- Hedgehog Face / Head -->
+                        <ellipse cx="242" cy="158" rx="68" ry="54" fill="#F3CFA6" stroke="#1D1F27" stroke-width="3.5"/>
+
+                        <!-- Rosy Cheeks -->
+                        <ellipse cx="192" cy="172" rx="10" ry="6" fill="#FF7A70" opacity="0.65"/>
+                        <ellipse cx="292" cy="172" rx="10" ry="6" fill="#FF7A70" opacity="0.65"/>
+
+                        <!-- Round Geeky Glasses -->
+                        <circle cx="212" cy="152" r="19" fill="#FFFFFF" fill-opacity="0.55" stroke="#1D1F27" stroke-width="3.5"/>
+                        <circle cx="272" cy="152" r="19" fill="#FFFFFF" fill-opacity="0.55" stroke="#1D1F27" stroke-width="3.5"/>
+                        <line x1="231" y1="152" x2="253" y2="152" stroke="#1D1F27" stroke-width="3.5"/>
+                        <line x1="175" y1="146" x2="193" y2="150" stroke="#1D1F27" stroke-width="3"/>
+                        <line x1="291" y1="150" x2="309" y2="146" stroke="#1D1F27" stroke-width="3"/>
+
+                        <!-- Sparkling Cartoon Eyes -->
+                        <circle cx="212" cy="152" r="6.5" fill="#1D1F27"/>
+                        <circle cx="210" cy="149" r="2.2" fill="#FFFFFF"/>
+                        <circle cx="272" cy="152" r="6.5" fill="#1D1F27"/>
+                        <circle cx="270" cy="149" r="2.2" fill="#FFFFFF"/>
+
+                        <!-- Cute Hedgehog Snout / Nose & Happy Smile -->
+                        <ellipse cx="242" cy="166" rx="8" ry="5.5" fill="#1D1F27"/>
+                        <ellipse cx="240" cy="164" rx="2.5" ry="1.5" fill="#FFFFFF"/>
+                        <path d="M228 180 Q242 192 256 180" stroke="#1D1F27" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+
+                        <!-- Laptop on Desk in front of Max -->
+                        <g transform="translate(175, 212)">
+                            <rect x="0" y="0" width="134" height="78" rx="4" fill="#E4E6DF" stroke="#1D1F27" stroke-width="3"/>
+                            <rect x="-12" y="72" width="158" height="8" rx="2" fill="#C8CBC2" stroke="#1D1F27" stroke-width="2.5"/>
+                            <!-- Laptop Back Sticker (Orange Star/Diamond) -->
+                            <circle cx="67" cy="39" r="13" fill="#F54E00" stroke="#1D1F27" stroke-width="2.2"/>
+                            <polygon points="67,31 70,36 75,36 71,40 72,45 67,42 62,45 63,40 59,36 64,36" fill="#FEBC2E"/>
+                        </g>
+
+                        <!-- Steaming Coffee Mug on Desk -->
+                        <g transform="translate(345, 246)">
+                            <path class="anim-steam" d="M14 -8 Q8 -18 16 -26" stroke="#F54E00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            <path class="anim-steam-2" d="M26 -6 Q32 -16 24 -24" stroke="#F54E00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            <rect x="4" y="0" width="32" height="42" rx="4" fill="#FEBC2E" stroke="#1D1F27" stroke-width="3"/>
+                            <path d="M36 10 H44 A8 8 0 0 1 44 30 H36" stroke="#1D1F27" stroke-width="3" fill="none"/>
+                        </g>
+
+                        <!-- Cute Yellow Rubber Duck Debugging Companion on Right Corner of Desk -->
+                        <g transform="translate(405, 250)" class="anim-float">
+                            <path d="M10 38 C2 38 0 26 8 22 C6 12 14 4 24 6 C32 7 35 15 31 22 C40 23 44 38 30 38 Z" fill="#FEBC2E" stroke="#1D1F27" stroke-width="2.5" stroke-linejoin="round"/>
+                            <circle cx="24" cy="14" r="2.5" fill="#1D1F27"/>
+                            <polygon points="31,14 40,17 31,20" fill="#F54E00" stroke="#1D1F27" stroke-width="2" stroke-linejoin="round"/>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- SCENE 2: ASTRO SHIBA INU ON MOON BASE (Switchable via Top Bar) -->
+            <div id="cartoon-scene-1" class="w-full h-full relative hidden">
+                <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="1440" height="900" class="fill-[#E5EAF3] dark:fill-[#0F1322]"/>
+                    <!-- Ringed Planet -->
+                    <g class="anim-float" transform="translate(1050, 160)">
+                        <circle cx="80" cy="80" r="54" fill="#8B5CF6" stroke="#1D1F27" stroke-width="3"/>
+                        <ellipse cx="80" cy="80" rx="95" ry="22" transform="rotate(-18 80 80)" stroke="#FEBC2E" stroke-width="6" fill="none"/>
+                    </g>
+                    <!-- Moon Surface -->
+                    <path d="M-80 900 Q720 560 1520 720 L1520 900 Z" class="fill-[#D5DCE8] dark:fill-[#1D243B] stroke-[#1D1F27] dark:stroke-white/30" stroke-width="3"/>
+                    <!-- Cute Cartoon Shiba Inu Astronaut -->
+                    <g transform="translate(880, 390)" class="anim-float">
+                        <!-- Ears -->
+                        <polygon points="155,115 135,55 195,85" fill="#E59846" stroke="#1D1F27" stroke-width="3.5" stroke-linejoin="round"/>
+                        <polygon points="285,115 305,55 245,85" fill="#E59846" stroke="#1D1F27" stroke-width="3.5" stroke-linejoin="round"/>
+                        <!-- Shiba Head -->
+                        <ellipse cx="220" cy="145" rx="68" ry="56" fill="#E59846" stroke="#1D1F27" stroke-width="3.5"/>
+                        <path d="M165 155 Q220 120 275 155 C275 185 250 201 220 201 C190 201 165 185 165 155 Z" fill="#FFFDF9"/>
+                        <!-- White Eyebrow Dots -->
+                        <ellipse cx="195" cy="118" rx="7" ry="4.5" fill="#FFFDF9"/>
+                        <ellipse cx="245" cy="118" rx="7" ry="4.5" fill="#FFFDF9"/>
+                        <!-- Eyes & Nose -->
+                        <circle cx="195" cy="140" r="6.5" fill="#1D1F27"/>
+                        <circle cx="245" cy="140" r="6.5" fill="#1D1F27"/>
+                        <ellipse cx="220" cy="156" rx="8" ry="5.5" fill="#1D1F27"/>
+                        <path d="M206 168 Q220 178 234 168" stroke="#1D1F27" stroke-width="3" stroke-linecap="round" fill="none"/>
+                        <!-- Glass Astronaut Helmet Ring -->
+                        <circle cx="220" cy="138" r="92" fill="#60A5FA" fill-opacity="0.14" stroke="#1D1F27" stroke-width="3.5"/>
+                        <path d="M155 90 A72 72 0 0 1 205 62" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                        <!-- Spacesuit Body -->
+                        <path d="M140 310 C140 230 175 215 220 215 C265 215 300 230 300 310 Z" fill="#FFFFFF" stroke="#1D1F27" stroke-width="3.5"/>
+                        <rect x="190" y="245" width="60" height="36" rx="8" fill="#007AFF" stroke="#1D1F27" stroke-width="2.5"/>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- SCENE 3: LO-FI PIXEL/VECTOR BLACK CAT CODER (Switchable via Top Bar) -->
+            <div id="cartoon-scene-2" class="w-full h-full relative hidden">
+                <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="1440" height="900" class="fill-[#E9E4EC] dark:fill-[#161321]"/>
+                    <path d="M-80 900 Q680 620 1520 700 L1520 900 Z" class="fill-[#D4C9DF] dark:fill-[#221D33] stroke-[#1D1F27] dark:stroke-white/30" stroke-width="3"/>
+                    <!-- Cute Black Cat with Orange Headphones -->
+                    <g transform="translate(880, 400)" class="anim-float">
+                        <!-- Cat Tail Waving -->
+                        <path d="M290 280 Q360 250 345 190" stroke="#232634" stroke-width="22" stroke-linecap="round" fill="none"/>
+                        <!-- Cat Ears -->
+                        <polygon points="155,130 145,55 205,95" fill="#232634" stroke="#1D1F27" stroke-width="3.5" stroke-linejoin="round"/>
+                        <polygon points="285,130 295,55 235,95" fill="#232634" stroke="#1D1F27" stroke-width="3.5" stroke-linejoin="round"/>
+                        <!-- Cat Head & Body -->
+                        <path d="M150 300 C150 220 180 200 220 200 C260 200 290 220 290 300 Z" fill="#232634" stroke="#1D1F27" stroke-width="3.5"/>
+                        <ellipse cx="220" cy="150" rx="66" ry="54" fill="#232634" stroke="#1D1F27" stroke-width="3.5"/>
+                        <!-- Big Golden Cat Eyes -->
+                        <circle cx="194" cy="148" r="13" fill="#FEBC2E" stroke="#1D1F27" stroke-width="2.5"/>
+                        <circle cx="194" cy="148" r="5" fill="#1D1F27"/>
+                        <circle cx="246" cy="148" r="13" fill="#FEBC2E" stroke="#1D1F27" stroke-width="2.5"/>
+                        <circle cx="246" cy="148" r="5" fill="#1D1F27"/>
+                        <!-- Whiskers -->
+                        <path d="M135 152 H162 M138 166 H164 M278 152 H305 M276 166 H302" stroke="#1D1F27" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Orange Headphones -->
+                        <path d="M148 150 A74 74 0 0 1 292 150" stroke="#F54E00" stroke-width="10" fill="none"/>
+                        <rect x="136" y="132" width="20" height="38" rx="8" fill="#F54E00" stroke="#1D1F27" stroke-width="2.5"/>
+                        <rect x="284" y="132" width="20" height="38" rx="8" fill="#F54E00" stroke="#1D1F27" stroke-width="2.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Interactive Cartoon Character Speech Bubble (Translucent Frosted Card) -->
+        <div id="mascot-bubble-container" class="hidden md:flex flex-col items-end absolute bottom-20 right-28 z-10 pointer-events-auto">
+            <button onclick="talkToMascot()" class="mac-window relative px-3.5 py-2.5 text-xs max-w-[260px] text-left hover:-translate-y-0.5 transition">
+                <div class="flex items-center justify-between gap-3 mb-1">
+                    <span id="mascot-name-tag" class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#F54E00]">MAX THE HEDGEHOG</span>
+                    <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400">切换台词 ↻</span>
+                </div>
+                <p id="mascot-speech-text" class="leading-relaxed text-gray-700 dark:text-gray-300 text-[11px]">
+                    “已去掉厚重的拟物边框与重阴影，换成了轻盈通透的微磨砂玻璃质感~”
+                </p>
+            </button>
+        </div>
+
+        <!-- Optional Desktop Widgets (Hidden by default to keep desktop clean; toggleable in Settings) -->
+        <div id="desktop-widgets-container" class="!hidden xl:flex flex-col gap-2.5 absolute top-4 left-4 w-56 z-10 pointer-events-auto">
+            <div class="mac-window p-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] font-mono uppercase tracking-wider text-gray-500 font-semibold">STATUS</span>
+                    <span class="inline-flex items-center gap-1 text-[10px] font-mono text-[#1E9E3E] dark:text-[#4ADE80] bg-[#28C840]/10 px-1.5 py-0.5 rounded border border-[#28C840]/20">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#28C840] live-dot"></span>Online
+                    </span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded bg-[#F54E00]/10 border border-[#F54E00]/20 flex items-center justify-center text-[#F54E00]">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div>
+                        <div class="font-display font-bold text-xs text-gray-900 dark:text-white">Alex Chen</div>
+                        <div class="text-[10px] text-gray-500 dark:text-gray-400 font-mono">Product Engineer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- macOS Convention: Desktop Alias Icons Aligned on the Top-Right -->
+        <div class="hidden sm:flex flex-col items-center gap-3.5 absolute top-4 right-4 z-10 w-20">
+            <!-- Alias 1: README.mdx -->
+            <button onclick="openWindow('readme')" class="group flex flex-col items-center text-center p-1 rounded focus:outline-none">
+                <div class="frosted-icon w-11 h-11 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:border-[#F54E00]/50 group-hover:text-[#F54E00] group-hover:-translate-y-0.5 transition">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium text-gray-700 dark:text-gray-200 bg-white/45 dark:bg-black/35 backdrop-blur-md group-hover:bg-[#F54E00] group-hover:text-white transition">
+                    README.mdx
+                </span>
+            </button>
+
+            <!-- Alias 2: Projects.app -->
+            <button onclick="openWindow('projects')" class="group flex flex-col items-center text-center p-1 rounded focus:outline-none">
+                <div class="frosted-icon w-11 h-11 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:border-[#F54E00]/50 group-hover:text-[#F54E00] group-hover:-translate-y-0.5 transition">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium text-gray-700 dark:text-gray-200 bg-white/45 dark:bg-black/35 backdrop-blur-md group-hover:bg-[#F54E00] group-hover:text-white transition">
+                    Projects
+                </span>
+            </button>
+
+            <!-- Alias 3: Design.fig -->
+            <button onclick="openWindow('design')" class="group flex flex-col items-center text-center p-1 rounded focus:outline-none">
+                <div class="frosted-icon w-11 h-11 flex items-center justify-center text-[#F54E00] group-hover:border-[#F54E00]/50 group-hover:-translate-y-0.5 transition">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                        <circle cx="11" cy="11" r="2"></circle>
+                    </svg>
+                </div>
+                <span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium text-[#C83E00] dark:text-[#FF641A] bg-white/45 dark:bg-black/35 backdrop-blur-md group-hover:bg-[#F54E00] group-hover:text-white transition">
+                    Design.fig
+                </span>
+            </button>
+
+            <!-- Alias 4: Settings.app -->
+            <button onclick="openWindow('settings')" class="group flex flex-col items-center text-center p-1 rounded focus:outline-none">
+                <div class="frosted-icon w-11 h-11 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:border-[#F54E00]/50 group-hover:text-[#F54E00] group-hover:-translate-y-0.5 transition">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </div>
+                <span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium text-gray-700 dark:text-gray-200 bg-white/45 dark:bg-black/35 backdrop-blur-md group-hover:bg-[#F54E00] group-hover:text-white transition">
+                    Settings
+                </span>
+            </button>
+        </div>
+
+        <!-- ================= WINDOW 1: README.mdx (Positioned cleanly on the left with breathing room) ================= -->
+        <section id="win-readme" onmousedown="focusWindow('readme')"
+            style="top: 24px; left: max(48px, 6vw); width: min(680px, 92vw); height: min(520px, 75vh); z-index: 35;"
+            class="mac-window active-window absolute flex flex-col overflow-hidden">
+            
+            <!-- macOS Unified Title Bar with Left Traffic Lights -->
+            <div onmousedown="startDrag(event, 'readme')" ontouchstart="startDrag(event, 'readme')"
+                class="mac-titlebar h-10 border-b border-black/[0.08] dark:border-white/[0.08] px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <!-- Left: Traffic Lights with Vector Symbols -->
+                <div class="traffic-group flex items-center gap-2 w-20">
+                    <button onclick="closeWindow('readme')" class="traffic-dot bg-[#FF5F57]" title="关闭">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('readme')" class="traffic-dot bg-[#FEBC2E]" title="最小化至 Dock">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('readme')" class="traffic-dot bg-[#28C840]" title="全屏/缩放">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+
+                <!-- Center: Document Title & Pill -->
+                <div class="flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    <span class="font-mono font-semibold text-xs text-gray-800 dark:text-gray-200">README.mdx</span>
+                    <span class="hidden sm:inline-block px-1.5 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.06] font-mono text-[10px] text-gray-500 dark:text-gray-400">v3.7</span>
+                </div>
+
+                <!-- Right: Quick Action Button -->
+                <div class="w-20 flex justify-end">
+                    <button onclick="copyEmail()" class="ph-btn px-2.5 py-0.5 text-[11px] font-medium text-gray-700 dark:text-gray-200">
+                        联系我
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 flex overflow-hidden selectable-text">
+                <!-- Left Finder-Style Sidebar -->
+                <aside class="mac-sidebar hidden md:flex flex-col justify-between w-44 border-r border-black/[0.07] dark:border-white/[0.07] p-3 shrink-0">
+                    <div class="space-y-4">
+                        <div>
+                            <div class="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-1.5 px-2">OUTLINE</div>
+                            <nav class="space-y-0.5 text-xs">
+                                <a href="#sec-intro" class="flex items-center gap-2 px-2 py-1.5 rounded bg-black/[0.06] dark:bg-white/[0.08] text-gray-900 dark:text-white font-medium">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#F54E00]"></span>
+                                    <span>关于我</span>
+                                </a>
+                                <a href="#sec-stack" class="flex items-center gap-2 px-2 py-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                    <span>技术栈矩阵</span>
+                                </a>
+                                <a href="#sec-exp" class="flex items-center gap-2 px-2 py-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                    <span>履历里程碑</span>
+                                </a>
+                            </nav>
+                        </div>
+
+                        <div>
+                            <div class="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-1.5 px-2">WORKSPACE</div>
+                            <div class="space-y-0.5 text-xs font-mono">
+                                <button onclick="openWindow('projects')" class="w-full flex items-center gap-2 px-2 py-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition text-left">
+                                    <span>Projects.app</span>
+                                </button>
+                                <button onclick="openWindow('design')" class="w-full flex items-center gap-2 px-2 py-1.5 rounded text-[#F54E00] font-medium hover:bg-[#F54E00]/10 transition text-left">
+                                    <span>Design_Spec.fig</span>
+                                </button>
+                                <button onclick="openWindow('settings')" class="w-full flex items-center gap-2 px-2 py-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition text-left">
+                                    <span>Settings.app</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2.5 rounded bg-[#DAD7C8]/70 dark:bg-[#1E222E] border border-black/[0.09] dark:border-white/[0.08] text-[11px]">
+                        <div class="font-mono font-semibold text-gray-800 dark:text-gray-200 mb-0.5 flex items-center gap-1.5 text-[10px]">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#28C840]"></span>
+                            <span>WARM STONE UI</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-[11px]">
+                            无刺眼纯白块，采用暖石托盘与羊皮纸键帽层级。
+                        </p>
+                    </div>
+                </aside>
+
+                <div class="mac-body flex-1 overflow-y-auto p-6 space-y-5">
+                    <!-- Hero Profile Header -->
+                    <div id="sec-intro" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-black/[0.07] dark:border-white/[0.07]">
+                        <div class="flex items-center gap-3.5">
+                            <div class="frosted-icon w-12 h-12 flex items-center justify-center text-[#F54E00] shrink-0">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                    <polyline points="2 17 12 22 22 17"></polyline>
+                                    <polyline points="2 12 12 17 22 12"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#F54E00]/10 text-[#F54E00] font-mono text-[10px] font-semibold mb-1">
+                                    <span>PRODUCT ENGINEER & INDIE MAKER</span>
+                                </div>
+                                <h1 class="font-display text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Alex Chen (陈宇航)</h1>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                    专注于构建有温度的开发者工具、AI Agent 工作流与桌面级 Web 体验。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 shrink-0">
+                            <button onclick="openWindow('projects')" class="ph-btn-primary px-3 py-1.5 font-medium text-xs">
+                                浏览作品集
+                            </button>
+                            <button onclick="openWindow('design')" class="ph-btn px-3 py-1.5 font-medium text-xs text-gray-700 dark:text-gray-200">
+                                视觉降噪规范
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bento Summary Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bento-card p-3.5 sm:col-span-2 flex items-start gap-3">
+                            <div class="w-6 h-6 rounded bg-[#F54E00]/10 text-[#F54E00] flex items-center justify-center shrink-0 mt-0.5">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            </div>
+                            <div class="text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+                                <strong class="text-gray-900 dark:text-white font-semibold">设计哲学：</strong>
+                                7 年全栈与产品工程经验。通过<strong>克制的 6px~8px 工程圆角</strong>、<strong>单色主辅层级 + 品牌橙点缀</strong>与微立体键帽交互，打造耐看且秩序井然的数字工作台。
+                            </div>
+                        </div>
+                        <div class="bento-card p-3.5 flex flex-col justify-between">
+                            <span class="text-[10px] font-mono uppercase text-gray-400">GITHUB STARS</span>
+                            <div class="font-display text-2xl font-bold text-gray-900 dark:text-white my-0.5 flex items-center gap-1.5">
+                                <span class="text-[#F54E00] text-lg">★</span>
+                                <span>14.2k</span>
+                            </div>
+                            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-mono">6 Open Source Kits</span>
+                        </div>
+                    </div>
+
+                    <div id="sec-stack">
+                        <h2 class="font-mono text-[11px] uppercase tracking-wider font-semibold text-gray-400 mb-2.5">
+                            核心技术栈 (TECH STACK)
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="bento-card p-3.5">
+                                <div class="font-mono text-[11px] font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#F54E00]"></span>
+                                    <span>Frontend & Craft</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 text-[11px] font-mono text-gray-600 dark:text-gray-300">
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">React / Next.js</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">TypeScript</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">Tailwind CSS</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">Design Systems</span>
+                                </div>
+                            </div>
+                            <div class="bento-card p-3.5">
+                                <div class="font-mono text-[11px] font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+                                    <span>Backend & Data</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 text-[11px] font-mono text-gray-600 dark:text-gray-300">
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">Rust / Go</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">ClickHouse</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">PostgreSQL</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">Node.js</span>
+                                </div>
+                            </div>
+                            <div class="bento-card p-3.5">
+                                <div class="font-mono text-[11px] font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+                                    <span>AI & Agents</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 text-[11px] font-mono text-gray-600 dark:text-gray-300">
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">LLM Workflows</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">MCP Server</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">RAG Pipeline</span>
+                                    <span class="px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded">Evals</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience Changelog -->
+                    <div id="sec-exp">
+                        <h2 class="font-mono text-[11px] uppercase tracking-wider font-semibold text-gray-400 mb-2.5">
+                            履历里程碑 (CAREER CHANGELOG)
+                        </h2>
+                        <div class="space-y-2 text-xs">
+                            <div class="bento-card flex flex-col sm:flex-row sm:items-center justify-between p-3.5">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-1.5 py-0.5 rounded bg-[#F54E00]/10 text-[#F54E00] font-mono font-semibold text-[10px]">v3.0</span>
+                                        <strong class="font-semibold text-gray-900 dark:text-white text-xs">Staff Product Engineer @ HyperScale AI</strong>
+                                    </div>
+                                    <p class="text-gray-500 dark:text-gray-400 mt-1">主导下一代云端工作台与实时遥测分析引擎，打造高密度桌面交互架构。</p>
+                                </div>
+                                <span class="font-mono text-[11px] text-gray-400 shrink-0 mt-1.5 sm:mt-0">2024 — Present</span>
+                            </div>
+                            <div class="bento-card flex flex-col sm:flex-row sm:items-center justify-between p-3.5">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-1.5 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08] text-gray-600 dark:text-gray-300 font-mono font-semibold text-[10px]">v2.0</span>
+                                        <strong class="font-semibold text-gray-900 dark:text-white text-xs">Senior Frontend Architect @ DataPulse</strong>
+                                    </div>
+                                    <p class="text-gray-500 dark:text-gray-400 mt-1">从 0 到 1 构建开源可视化组件库与设计系统（GitHub 8.4k Stars）。</p>
+                                </div>
+                                <span class="font-mono text-[11px] text-gray-400 shrink-0 mt-1.5 sm:mt-0">2021 — 2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WINDOW 2: DESIGN_SPEC.fig (Crisp Geometry & Decluttering Guide) ================= -->
+        <section id="win-design" onmousedown="focusWindow('design')"
+            style="top: 52px; left: max(180px, 14vw); width: min(740px, 94vw); height: min(510px, 75vh); z-index: 40;"
+            class="mac-window hidden absolute flex flex-col overflow-hidden">
+            
+            <!-- macOS Title Bar with Segmented Control -->
+            <div onmousedown="startDrag(event, 'design')" ontouchstart="startDrag(event, 'design')"
+                class="mac-titlebar h-11 border-b border-black/[0.07] dark:border-white/[0.07] px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <!-- Left: Traffic Lights -->
+                <div class="traffic-group flex items-center gap-2">
+                    <button onclick="closeWindow('design')" class="traffic-dot bg-[#FF5F57]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('design')" class="traffic-dot bg-[#FEBC2E]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('design')" class="traffic-dot bg-[#28C840]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+
+                <!-- Center: Segmented Control (Recessed Warm Stone Track) -->
+                <div class="segmented-track flex items-center p-0.5 rounded text-xs">
+                    <button onclick="switchDesignTab('layout')" id="dtab-layout" class="segmented-pill-active px-3 py-1 rounded font-medium text-gray-900 dark:text-white transition">
+                        1. 告别大白块与降噪指南
+                    </button>
+                    <button onclick="switchDesignTab('tokens')" id="dtab-tokens" class="px-3 py-1 rounded text-gray-600 dark:text-gray-400 font-medium transition">
+                        2. 暖石与羊皮纸色阶
+                    </button>
+                    <button onclick="switchDesignTab('ia')" id="dtab-ia" class="px-3 py-1 rounded text-gray-600 dark:text-gray-400 font-medium transition">
+                        3. 模块映射架构
+                    </button>
+                </div>
+
+                <!-- Right Label -->
+                <div class="hidden sm:flex items-center gap-1.5 text-xs font-mono text-gray-400">
+                    <span>Design.fig</span>
+                </div>
+            </div>
+
+            <div class="mac-body flex-1 overflow-y-auto p-6 selectable-text space-y-4">
+                <!-- TAB 1: Crisp Radius & Decluttering Rules -->
+                <div id="dpanel-layout" class="space-y-4">
+                    <div class="bento-card p-4 border-l-2 border-l-[#F54E00]">
+                        <h3 class="font-display font-bold text-sm text-gray-900 dark:text-white mb-1">
+                            为什么之前显得「圆角太大、风格杂乱」？我们做了这 3 项核心修正：
+                        </h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                            当界面同时存在插画背景、多窗口、悬浮小组件与彩虹色图标，且全部使用 <code class="font-mono bg-black/5 dark:bg-white/10 px-1 py-0.5 rounded">16px~24px</code> 大圆角时，界面会显得像臃肿的玩具。收紧圆角曲率并收敛色彩后，立刻恢复了<strong>精密仪器般的工程秩序感</strong>。
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bento-card p-4">
+                            <div class="font-mono text-[10px] font-bold text-[#F54E00] mb-1">RULE 01 / 几何收敛</div>
+                            <h4 class="font-semibold text-xs text-gray-900 dark:text-white mb-1.5">严格的三级微圆角阶梯</h4>
+                            <ul class="text-[11px] text-gray-500 dark:text-gray-400 space-y-1 font-mono">
+                                <li>• 窗口外框: <strong class="text-gray-800 dark:text-gray-200">8px</strong> (原 16px)</li>
+                                <li>• 内容卡片: <strong class="text-gray-800 dark:text-gray-200">6px</strong> (原 16px)</li>
+                                <li>• 按钮/标签: <strong class="text-gray-800 dark:text-gray-200">4px~5px</strong> (原胶囊)</li>
+                            </ul>
+                        </div>
+
+                        <div class="bento-card p-4">
+                            <div class="font-mono text-[10px] font-bold text-gray-700 dark:text-gray-300 mb-1">RULE 02 / 色彩降噪</div>
+                            <h4 class="font-semibold text-xs text-gray-900 dark:text-white mb-1.5">告别彩虹色，单色+橙点缀</h4>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                                桌面与 Dock 图标统一收敛为<strong>深石墨灰（#374151）</strong>，仅在悬停或核心强调处使用 <strong>PostHog 橙（#F54E00）</strong>，消除花哨感。
+                            </p>
+                        </div>
+
+                        <div class="bento-card p-4">
+                            <div class="font-mono text-[10px] font-bold text-gray-700 dark:text-gray-300 mb-1">RULE 03 / 空间留白</div>
+                            <h4 class="font-semibold text-xs text-gray-900 dark:text-white mb-1.5">清理背景贴纸与冗余悬浮块</h4>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                                移除了插画天空中漂浮的文字徽章，默认收起左上角状态组件，让左侧窗口与右侧插画角色形成清晰的左右呼吸留白。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: Color & Keycap Tokens -->
+                <div id="dpanel-tokens" class="hidden space-y-4">
+                    <div>
+                        <h4 class="font-mono text-[11px] font-semibold uppercase text-gray-400 mb-2.5">点击色卡可直接复制色值（85% 中性色 + 10% 石墨墨水色 + 5% 品牌橙）：</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                            <button onclick="copyHex('#EAE8DF', 'Warm Stone')" class="bento-card p-2.5 text-left">
+                                <div class="h-8 w-full rounded border border-black/10 bg-[#EAE8DF] mb-2"></div>
+                                <div class="font-semibold text-xs">Warm Stone</div>
+                                <div class="font-mono text-[10px] text-gray-400">#EAE8DF (背景)</div>
+                            </button>
+                            <button onclick="copyHex('#FAFBF8', 'Paper Surface')" class="bento-card p-2.5 text-left">
+                                <div class="h-8 w-full rounded border border-black/10 bg-[#FAFBF8] mb-2"></div>
+                                <div class="font-semibold text-xs">Paper Surface</div>
+                                <div class="font-mono text-[10px] text-gray-400">#FAFBF8 (窗口)</div>
+                            </button>
+                            <button onclick="copyHex('#1D1F27', 'Graphite Ink')" class="bento-card p-2.5 text-left">
+                                <div class="h-8 w-full rounded bg-[#1D1F27] mb-2"></div>
+                                <div class="font-semibold text-xs">Graphite Ink</div>
+                                <div class="font-mono text-[10px] text-gray-400">#1D1F27 (主文字/图标)</div>
+                            </button>
+                            <button onclick="copyHex('#F54E00', 'PostHog Orange')" class="bento-card p-2.5 text-left">
+                                <div class="h-8 w-full rounded bg-[#F54E00] mb-2"></div>
+                                <div class="font-semibold text-xs">Accent Orange</div>
+                                <div class="font-mono text-[10px] text-gray-400">#F54E00 (唯一主强调)</div>
+                            </button>
+                            <button onclick="copyHex('#28C840', 'Signal Green')" class="bento-card p-2.5 text-left">
+                                <div class="h-8 w-full rounded bg-[#28C840] mb-2"></div>
+                                <div class="font-semibold text-xs">Signal Green</div>
+                                <div class="font-mono text-[10px] text-gray-400">#28C840 (在线状态点)</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: IA Mapping -->
+                <div id="dpanel-ia" class="hidden space-y-3">
+                    <div class="overflow-x-auto rounded border border-black/[0.08] dark:border-white/[0.08]">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead class="bg-black/[0.04] dark:bg-white/[0.05] font-mono text-[11px] text-gray-500">
+                                <tr>
+                                    <th class="p-2.5">个人网站模块</th>
+                                    <th class="p-2.5">macOS 应用形态</th>
+                                    <th class="p-2.5">视觉与交互规范</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-black/[0.05] dark:divide-white/[0.06]">
+                                <tr>
+                                    <td class="p-2.5 font-medium">关于我与履历</td>
+                                    <td class="p-2.5 font-mono text-[#F54E00]">README.mdx</td>
+                                    <td class="p-2.5 text-gray-500 dark:text-gray-400">8px 窗口圆角 + 6px 矩阵卡片 + 4px 方形技术标签</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-medium">作品集展示</td>
+                                    <td class="p-2.5 font-mono text-gray-700 dark:text-gray-300">Projects.app</td>
+                                    <td class="p-2.5 text-gray-500 dark:text-gray-400">顶栏内嵌分段控制器过滤项目类别</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-medium">个性化与壁纸</td>
+                                    <td class="p-2.5 font-mono text-gray-700 dark:text-gray-300">Settings.app</td>
+                                    <td class="p-2.5 text-gray-500 dark:text-gray-400">集中管理卡通壁纸、深浅色与桌面小组件显隐</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WINDOW 3: PROJECTS.app (Portfolio Explorer) ================= -->
+        <section id="win-projects" onmousedown="focusWindow('projects')"
+            style="top: 58px; left: max(160px, 12vw); width: min(740px, 94vw); height: min(510px, 75vh); z-index: 40;"
+            class="mac-window hidden absolute flex flex-col overflow-hidden">
+            
+            <!-- macOS Title Bar with Integrated Filter Segmented Control -->
+            <div onmousedown="startDrag(event, 'projects')" ontouchstart="startDrag(event, 'projects')"
+                class="mac-titlebar h-11 border-b border-black/[0.07] dark:border-white/[0.07] px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <div class="traffic-group flex items-center gap-2">
+                    <button onclick="closeWindow('projects')" class="traffic-dot bg-[#FF5F57]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('projects')" class="traffic-dot bg-[#FEBC2E]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('projects')" class="traffic-dot bg-[#28C840]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+
+                <!-- Segmented Filter Bar inside Titlebar -->
+                <div class="segmented-track flex items-center p-0.5 rounded text-xs">
+                    <button onclick="filterProjects('all')" data-filter="all" class="proj-filter-btn segmented-pill-active px-3 py-1 rounded font-medium text-gray-900 dark:text-white transition">全部 (6)</button>
+                    <button onclick="filterProjects('ai')" data-filter="ai" class="proj-filter-btn px-3 py-1 rounded text-gray-600 dark:text-gray-400 font-medium transition">AI & Agent</button>
+                    <button onclick="filterProjects('oss')" data-filter="oss" class="proj-filter-btn px-3 py-1 rounded text-gray-600 dark:text-gray-400 font-medium transition">开源工具</button>
+                    <button onclick="filterProjects('saas')" data-filter="saas" class="proj-filter-btn px-3 py-1 rounded text-gray-600 dark:text-gray-400 font-medium transition">独立 SaaS</button>
+                </div>
+
+                <div class="hidden sm:flex items-center gap-1 text-[11px] font-mono text-gray-400">
+                    <span class="text-[#F54E00]">★</span>
+                    <span>14.2k Stars</span>
+                </div>
+            </div>
+
+            <!-- Projects Bento Grid -->
+            <div id="projects-grid" class="mac-body flex-1 overflow-y-auto p-5 grid grid-cols-1 md:grid-cols-2 gap-3.5 selectable-text">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- ================= WINDOW 4: ANALYTICS.db (Telemetry Insights) ================= -->
+        <section id="win-analytics" onmousedown="focusWindow('analytics')"
+            style="top: 76px; left: max(190px, 15vw); width: min(740px, 94vw); height: min(500px, 74vh); z-index: 21;"
+            class="mac-window hidden absolute flex flex-col overflow-hidden">
+            
+            <!-- macOS Title Bar -->
+            <div onmousedown="startDrag(event, 'analytics')" ontouchstart="startDrag(event, 'analytics')"
+                class="mac-titlebar h-10 border-b border-black/[0.07] dark:border-white/[0.07] px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <div class="traffic-group flex items-center gap-2 w-20">
+                    <button onclick="closeWindow('analytics')" class="traffic-dot bg-[#FF5F57]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('analytics')" class="traffic-dot bg-[#FEBC2E]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('analytics')" class="traffic-dot bg-[#28C840]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-mono font-semibold">
+                    <span>Insights.db — 实时遥测事件流</span>
+                </div>
+                <div class="w-20 text-right font-mono text-[10px] text-[#28C840]">● LIVE</div>
+            </div>
+
+            <!-- Analytics Body -->
+            <div class="mac-body flex-1 overflow-y-auto p-5 space-y-4 selectable-text">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bento-card p-3.5">
+                        <div class="text-[10px] font-mono text-gray-400 uppercase">年度 Git Commits</div>
+                        <div class="font-display text-2xl font-bold mt-1">1,842</div>
+                        <div class="text-[11px] font-mono text-[#28C840] mt-0.5">+24.8% YoY</div>
+                    </div>
+                    <div class="bento-card p-3.5">
+                        <div class="text-[10px] font-mono text-gray-400 uppercase">手冲咖啡消耗</div>
+                        <div class="font-display text-2xl font-bold mt-1">614 杯</div>
+                        <div class="text-[11px] font-mono text-gray-400 mt-0.5">均值 2.1 杯/日</div>
+                    </div>
+                    <div class="bento-card p-3.5">
+                        <div class="text-[10px] font-mono text-gray-400 uppercase">开源 PR 响应率</div>
+                        <div class="font-display text-2xl font-bold mt-1">94.2%</div>
+                        <div class="text-[11px] font-mono text-gray-500 mt-0.5">平均 &lt; 4h</div>
+                    </div>
+                    <div class="bento-card p-3.5">
+                        <div class="text-[10px] font-mono text-gray-400 uppercase">本次会话交互事件</div>
+                        <div id="metric-session-events" class="font-display text-2xl font-bold mt-1 text-[#F54E00]">12</div>
+                        <div class="text-[11px] font-mono text-gray-400 mt-0.5">posthog.capture()</div>
+                    </div>
+                </div>
+
+                <!-- Live Event Stream -->
+                <div class="bg-[#161820] border border-black/20 dark:border-white/10 text-gray-200 p-4 rounded-md">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-mono text-[11px] font-medium text-gray-300 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#28C840] live-dot"></span>
+                            实时事件流 (您在桌面上的点击操作会被实时记录)
+                        </span>
+                        <span class="font-mono text-[10px] text-gray-500">HogQL Stream</span>
+                    </div>
+                    <div id="live-event-log" class="space-y-1 font-mono text-[11px] max-h-40 overflow-y-auto"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WINDOW 5: TERMINAL.sh (Crisp Matte Terminal) ================= -->
+        <section id="win-terminal" onmousedown="focusWindow('terminal')"
+            style="top: 88px; left: max(220px, 18vw); width: min(620px, 92vw); height: min(400px, 70vh); z-index: 22;"
+            class="mac-window hidden absolute flex flex-col overflow-hidden">
+            
+            <div onmousedown="startDrag(event, 'terminal')" ontouchstart="startDrag(event, 'terminal')"
+                class="h-10 bg-[#1B1D24] text-gray-300 border-b border-white/10 px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <div class="traffic-group flex items-center gap-2 w-20">
+                    <button onclick="closeWindow('terminal')" class="traffic-dot bg-[#FF5F57]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('terminal')" class="traffic-dot bg-[#FEBC2E]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('terminal')" class="traffic-dot bg-[#28C840]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+                <div class="font-mono text-xs text-gray-300 flex items-center gap-1.5">
+                    <span>alex — -zsh — 80×24</span>
+                </div>
+                <div class="w-20"></div>
+            </div>
+
+            <div class="bg-[#161820] border-b border-white/5 px-3.5 py-1.5 flex items-center gap-1.5 flex-wrap text-[11px] font-mono shrink-0">
+                <span class="text-gray-500">快捷命令:</span>
+                <button onclick="runTerminalCmd('help')" class="px-2 py-0.5 rounded bg-white/5 text-gray-300 hover:bg-[#F54E00] hover:text-white transition">help</button>
+                <button onclick="runTerminalCmd('neofetch')" class="px-2 py-0.5 rounded bg-white/5 text-[#28C840] hover:bg-[#F54E00] hover:text-white transition">neofetch</button>
+                <button onclick="runTerminalCmd('skills')" class="px-2 py-0.5 rounded bg-white/5 text-gray-300 hover:bg-[#F54E00] hover:text-white transition">skills</button>
+                <button onclick="runTerminalCmd('clear')" class="px-2 py-0.5 rounded bg-white/5 text-gray-400 hover:bg-white/15 transition">clear</button>
+            </div>
+
+            <div onclick="document.getElementById('terminal-input').focus()" class="flex-1 bg-[#12141A] text-gray-200 p-4 font-mono text-xs overflow-y-auto selectable-text cursor-text">
+                <div id="terminal-output" class="space-y-2">
+                    <div class="text-gray-500">Last login: Thu Oct 15 on ttys001 (Alex.OS Crisp Edition)</div>
+                    <div class="text-gray-400">输入 <span class="text-[#FEBC2E]">help</span> 或点击上方按钮体验命令。</div>
+                </div>
+                <form onsubmit="handleTerminalSubmit(event)" class="mt-3 flex items-center gap-2">
+                    <span class="text-[#28C840] font-semibold shrink-0">alex@MacBook-Pro ~ %</span>
+                    <input id="terminal-input" type="text" autocomplete="off" spellcheck="false"
+                        placeholder="输入命令..."
+                        class="w-full bg-transparent text-white focus:outline-none font-mono text-xs" />
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= WINDOW 6: HANDBOOK.wiki (Editorial Notes Style) ================= -->
+        <section id="win-handbook" onmousedown="focusWindow('handbook')"
+            style="top: 68px; left: max(200px, 16vw); width: min(680px, 92vw); height: min(470px, 74vh); z-index: 23;"
+            class="mac-window hidden absolute flex flex-col overflow-hidden">
+            
+            <div onmousedown="startDrag(event, 'handbook')" ontouchstart="startDrag(event, 'handbook')"
+                class="mac-titlebar h-10 border-b border-black/[0.07] dark:border-white/[0.07] px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <div class="traffic-group flex items-center gap-2 w-20">
+                    <button onclick="closeWindow('handbook')" class="traffic-dot bg-[#FF5F57]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('handbook')" class="traffic-dot bg-[#FEBC2E]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('handbook')" class="traffic-dot bg-[#28C840]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-mono font-semibold">
+                    <span>Handbook.wiki — 个人工程手册</span>
+                </div>
+                <div class="w-20"></div>
+            </div>
+
+            <div class="mac-body flex-1 overflow-y-auto p-6 space-y-4 selectable-text">
+                <div class="border-b border-black/[0.07] dark:border-white/[0.07] pb-4">
+                    <span class="px-2 py-0.5 bg-[#F54E00]/10 text-[#F54E00] font-mono text-[10px] font-semibold rounded">HOW I WORK</span>
+                    <h2 class="font-display text-lg font-bold mt-2">我的工程原则与协作手册</h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        受 PostHog 开源手册启发，这里记录了我对待代码、设计与团队协作的核心原则。
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <div class="bento-card p-4">
+                        <div class="font-mono text-[10px] font-semibold text-[#F54E00] mb-1">01 / SHIPPING</div>
+                        <h3 class="font-display font-bold text-sm mb-1">小步快跑，真实反馈优先</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                            一个今天就能在用户浏览器里顺滑交互的原型，远胜于在文档里空谈三个月的宏大架构。
+                        </p>
+                    </div>
+                    <div class="bento-card p-4">
+                        <div class="font-mono text-[10px] font-semibold text-gray-700 dark:text-gray-300 mb-1">02 / CRAFT</div>
+                        <h3 class="font-display font-bold text-sm mb-1">工程与审美合一</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                            优秀的产品工程师既能优化 SQL 查询耗时，也会在乎圆角曲率、字重对比与按键回弹阻尼。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WINDOW 7: CONTACT.msg (Mail Compose Sheet) ================= -->
+        <section id="win-contact" onmousedown="focusWindow('contact')"
+            style="top: 78px; left: max(240px, 20vw); width: min(520px, 92vw); height: min(460px, 75vh); z-index: 24;"
+            class="mac-window hidden absolute flex flex-col overflow-hidden">
+            
+            <div onmousedown="startDrag(event, 'contact')" ontouchstart="startDrag(event, 'contact')"
+                class="mac-titlebar h-10 border-b border-black/[0.07] dark:border-white/[0.07] px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <div class="traffic-group flex items-center gap-2 w-20">
+                    <button onclick="closeWindow('contact')" class="traffic-dot bg-[#FF5F57]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('contact')" class="traffic-dot bg-[#FEBC2E]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('contact')" class="traffic-dot bg-[#28C840]">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-mono font-semibold">
+                    <span>Mail.msg — 联系与访客留言</span>
+                </div>
+                <div class="w-20 flex justify-end">
+                    <button onclick="copyEmail()" class="text-[11px] text-[#F54E00] font-medium hover:underline">拷贝邮箱</button>
+                </div>
+            </div>
+
+            <div class="mac-body flex-1 overflow-y-auto p-5 space-y-4 selectable-text">
+                <form onsubmit="submitContactForm(event)" class="space-y-2.5 text-xs">
+                    <div class="flex items-center border-b border-black/[0.07] dark:border-white/[0.07] pb-2">
+                        <span class="text-gray-400 w-16 shrink-0">收件人:</span>
+                        <span class="px-2 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08] font-mono text-[11px]">alex@posthog-style.dev</span>
+                    </div>
+                    <div class="flex items-center border-b border-black/[0.07] dark:border-white/[0.07] pb-2">
+                        <span class="text-gray-400 w-16 shrink-0">您的称呼:</span>
+                        <input id="contact-name" type="text" required placeholder="例如：Sarah @ Linear"
+                            class="w-full bg-transparent focus:outline-none text-gray-800 dark:text-gray-100" />
+                    </div>
+                    <div class="flex items-center border-b border-black/[0.07] dark:border-white/[0.07] pb-2">
+                        <span class="text-gray-400 w-16 shrink-0">主题:</span>
+                        <select id="contact-topic" class="w-full bg-transparent focus:outline-none text-gray-800 dark:text-gray-100">
+                            <option value="产品研发合作">[合作] 产品顾问 / 全栈研发合作</option>
+                            <option value="核心岗位邀请">[职位] 团队核心岗位邀请</option>
+                            <option value="技术交流">[交流] 开源项目探讨 / 约咖啡</option>
+                        </select>
+                    </div>
+                    <textarea id="contact-msg" rows="3" required placeholder="写下您的想法，发送后将同步至下方留言板..."
+                        class="w-full pt-1 bg-transparent focus:outline-none text-gray-800 dark:text-gray-100"></textarea>
+                    <div class="flex justify-end">
+                        <button type="submit" class="ph-btn-primary px-3.5 py-1.5 font-medium text-xs flex items-center gap-1.5">
+                            <span>发送信件</span>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="pt-3 border-t border-black/[0.07] dark:border-white/[0.07]">
+                    <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-2">最近访客留言 (GUESTBOOK)</div>
+                    <div id="guestbook-list" class="space-y-2 text-xs">
+                        <div class="bento-card p-3">
+                            <div class="flex justify-between font-mono text-[10px] text-gray-400">
+                                <span class="font-semibold text-gray-700 dark:text-gray-200">@design_lover</span>
+                                <span>Just now</span>
+                            </div>
+                            <p class="mt-1 text-gray-600 dark:text-gray-300">把圆角收紧到 6px~8px、统一图标颜色之后，整个界面的秩序感舒服太多了！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WINDOW 8: SETTINGS.app (macOS System Settings Panel) ================= -->
+        <section id="win-settings" onmousedown="focusWindow('settings')"
+            style="top: 60px; left: max(220px, 18vw); width: min(660px, 94vw); height: min(490px, 76vh); z-index: 42;"
+            class="mac-window hidden absolute flex flex-col overflow-hidden">
+            
+            <!-- macOS Title Bar -->
+            <div onmousedown="startDrag(event, 'settings')" ontouchstart="startDrag(event, 'settings')"
+                class="mac-titlebar h-10 border-b border-black/[0.07] dark:border-white/[0.07] px-3.5 flex items-center justify-between cursor-move select-none shrink-0">
+                <div class="traffic-group flex items-center gap-2 w-20">
+                    <button onclick="closeWindow('settings')" class="traffic-dot bg-[#FF5F57]" title="关闭">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M2 2l6 6M8 2L2 8"/></svg>
+                    </button>
+                    <button onclick="minimizeWindow('settings')" class="traffic-dot bg-[#FEBC2E]" title="最小化">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M1.5 5h7"/></svg>
+                    </button>
+                    <button onclick="maximizeWindow('settings')" class="traffic-dot bg-[#28C840]" title="全屏/缩放">
+                        <svg class="traffic-symbol w-2 h-2" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.7"><path d="M5 1.5v7M1.5 5h7"/></svg>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 text-xs font-mono font-semibold text-gray-800 dark:text-gray-200">
+                    <span>Settings.app — 系统设置</span>
+                </div>
+
+                <div class="w-20 text-right font-mono text-[10px] text-gray-400">⌘,</div>
+            </div>
+
+            <!-- Settings Split View: Sidebar + Content -->
+            <div class="flex-1 flex overflow-hidden selectable-text">
+                <!-- Left Settings Navigation Sidebar -->
+                <aside class="mac-sidebar hidden sm:flex flex-col justify-between w-44 border-r border-black/[0.07] dark:border-white/[0.07] p-3 shrink-0">
+                    <div class="space-y-1 text-xs">
+                        <div class="px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-gray-400 font-semibold">PREFERENCES</div>
+                        <a href="#set-wallpaper" class="flex items-center gap-2 px-2 py-1.5 rounded bg-black/[0.06] dark:bg-white/[0.08] text-gray-900 dark:text-white font-medium">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#F54E00]"></span>
+                            <span>卡通角色壁纸</span>
+                        </a>
+                        <a href="#set-appearance" class="flex items-center gap-2 px-2 py-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                            <span>深浅色外观</span>
+                        </a>
+                        <a href="#set-sound" class="flex items-center gap-2 px-2 py-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                            <span>声音与桌面组件</span>
+                        </a>
+                    </div>
+
+                    <div class="p-2.5 rounded bg-[#DAD7C8]/70 dark:bg-[#1E222E] border border-black/[0.09] dark:border-white/[0.08] text-[11px]">
+                        <div class="font-mono text-[10px] text-gray-500 dark:text-gray-400">ACTIVE WALLPAPER</div>
+                        <div id="settings-active-wallpaper-name" class="font-semibold text-gray-900 dark:text-white mt-0.5">刺猬工程师 Max</div>
+                    </div>
+                </aside>
+
+                <!-- Right Settings Controls -->
+                <div class="mac-body flex-1 overflow-y-auto p-5 space-y-5">
+                    <!-- Section 1: Cartoon Character Wallpapers -->
+                    <div id="set-wallpaper">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <h3 class="font-display font-bold text-sm text-gray-900 dark:text-white">桌面卡通角色壁纸 (Cartoon Wallpaper)</h3>
+                                <p class="text-[11px] text-gray-500 dark:text-gray-400">选择干净清爽的全矢量角色桌面背景</p>
+                            </div>
+                            <button onclick="minimizeAllWindows()" class="ph-btn px-2.5 py-1 text-[11px] font-medium text-gray-700 dark:text-gray-200">
+                                最小化窗口预览
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <!-- Wallpaper Card 0: Max the Hedgehog -->
+                            <button onclick="selectCartoonWallpaper(0)" id="wp-card-0" class="bento-card p-2.5 text-left ring-2 ring-[#F54E00] transition">
+                                <div class="h-16 w-full rounded bg-[#EDEAE0] dark:bg-[#181E2E] border border-black/10 dark:border-white/10 mb-2 flex items-center justify-center relative">
+                                    <span class="px-2 py-0.5 rounded bg-[#F54E00] text-white font-mono font-bold text-[10px]">MAX</span>
+                                </div>
+                                <div class="font-display font-bold text-xs text-gray-900 dark:text-white">刺猬工程师 Max</div>
+                                <div class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">阳光山丘与露天代码桌</div>
+                            </button>
+
+                            <!-- Wallpaper Card 1: Astro Shiba Inu -->
+                            <button onclick="selectCartoonWallpaper(1)" id="wp-card-1" class="bento-card p-2.5 text-left transition">
+                                <div class="h-16 w-full rounded bg-[#E5EAF3] dark:bg-[#1D243B] border border-black/10 dark:border-white/10 mb-2 flex items-center justify-center relative">
+                                    <span class="px-2 py-0.5 rounded bg-[#1D1F27] text-white font-mono font-bold text-[10px]">SHIBA</span>
+                                </div>
+                                <div class="font-display font-bold text-xs text-gray-900 dark:text-white">太空柴犬宇航员</div>
+                                <div class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">月球边缘节点与环状星</div>
+                            </button>
+
+                            <!-- Wallpaper Card 2: Lo-Fi Black Cat -->
+                            <button onclick="selectCartoonWallpaper(2)" id="wp-card-2" class="bento-card p-2.5 text-left transition">
+                                <div class="h-16 w-full rounded bg-[#E9E4EC] dark:bg-[#221D33] border border-black/10 dark:border-white/10 mb-2 flex items-center justify-center relative">
+                                    <span class="px-2 py-0.5 rounded bg-[#232634] text-[#FEBC2E] font-mono font-bold text-[10px]">CAT</span>
+                                </div>
+                                <div class="font-display font-bold text-xs text-gray-900 dark:text-white">极客黑猫 Coder</div>
+                                <div class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">降噪耳机与暮色山谷</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Appearance -->
+                    <div id="set-appearance" class="pt-4 border-t border-black/[0.07] dark:border-white/[0.07]">
+                        <h3 class="font-display font-bold text-sm text-gray-900 dark:text-white mb-2.5">外观模式 (Appearance)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button onclick="setThemeMode('light')" id="theme-btn-light" class="bento-card p-3 flex items-center justify-between ring-2 ring-[#F54E00] transition">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded bg-[#EAE8DF] border border-black/15 flex items-center justify-center text-gray-800">
+                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                                    </div>
+                                    <div class="text-left">
+                                        <div class="font-semibold text-xs text-gray-900 dark:text-white">浅色暖石模式 (Light)</div>
+                                        <div class="text-[10px] text-gray-500 dark:text-gray-400">温润纸感与日间配色</div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button onclick="setThemeMode('dark')" id="theme-btn-dark" class="bento-card p-3 flex items-center justify-between transition">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded bg-[#161922] border border-white/15 flex items-center justify-center text-[#FEBC2E]">
+                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                                    </div>
+                                    <div class="text-left">
+                                        <div class="font-semibold text-xs text-gray-900 dark:text-white">深色暗夜模式 (Dark)</div>
+                                        <div class="text-[10px] text-gray-500 dark:text-gray-400">深邃夜空与暗色面板</div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Toggles for Sound, Widgets, Mascot Bubble -->
+                    <div id="set-sound" class="pt-4 border-t border-black/[0.07] dark:border-white/[0.07] space-y-2">
+                        <h3 class="font-display font-bold text-sm text-gray-900 dark:text-white mb-2">桌面减法与音效控制</h3>
+
+                        <!-- Sound Toggle Row -->
+                        <div class="bento-card p-3 flex items-center justify-between">
+                            <div>
+                                <div class="font-semibold text-xs text-gray-900 dark:text-white">轻柔机械按键音效 (Tactile Audio)</div>
+                                <div class="text-[11px] text-gray-500 dark:text-gray-400">点击窗口、切换标签或壁纸时播放微音效</div>
+                            </div>
+                            <button id="settings-sound-btn" onclick="toggleSound()" class="ph-btn-primary px-3 py-1 text-xs font-medium">
+                                已开启
+                            </button>
+                        </div>
+
+                        <!-- Mascot Speech Bubble Toggle Row -->
+                        <div class="bento-card p-3 flex items-center justify-between">
+                            <div>
+                                <div class="font-semibold text-xs text-gray-900 dark:text-white">右下角卡通角色对话气泡 (Mascot Speech)</div>
+                                <div class="text-[11px] text-gray-500 dark:text-gray-400">显示或隐藏卡通角色上方的互动台词卡片</div>
+                            </div>
+                            <button id="settings-bubble-btn" onclick="toggleMascotBubble()" class="ph-btn-primary px-3 py-1 text-xs font-medium">
+                                显示中
+                            </button>
+                        </div>
+
+                        <!-- Desktop Widgets Toggle Row (Default Hidden for Clean Desktop) -->
+                        <div class="bento-card p-3 flex items-center justify-between">
+                            <div>
+                                <div class="font-semibold text-xs text-gray-900 dark:text-white">桌面左上角状态小组件 (Desktop Widgets)</div>
+                                <div class="text-[11px] text-gray-500 dark:text-gray-400">默认隐藏以保持桌面清爽留白，可按需开启</div>
+                            </div>
+                            <button id="settings-widgets-btn" onclick="toggleDesktopWidgets()" class="ph-btn px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300">
+                                已隐藏
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+        <!-- ================= FLOATING macOS TRANSLUCENT FROSTED DOCK ================= -->
+        <nav aria-label="macOS Dock" class="fixed bottom-2.5 left-1/2 -translate-x-1/2 z-50">
+            <div class="mac-dock-tray rounded-[10px] px-2.5 py-1.5 flex items-center gap-2">
+            
+            <!-- Dock App 1: README -->
+            <button onclick="dockClick('readme')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">README.mdx</span>
+                <div class="frosted-icon w-10 h-10 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:text-[#F54E00] transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <span id="dock-dot-readme" class="w-1 h-1 rounded-full bg-[#F54E00] mt-1"></span>
+            </button>
+
+            <!-- Dock App 2: Design Spec -->
+            <button onclick="dockClick('design')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">设计规范 (Design.fig)</span>
+                <div class="frosted-icon w-10 h-10 flex items-center justify-center text-[#F54E00] transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                        <circle cx="11" cy="11" r="2"></circle>
+                    </svg>
+                </div>
+                <span id="dock-dot-design" class="w-1 h-1 rounded-full bg-transparent mt-1"></span>
+            </button>
+
+            <!-- Dock App 3: Projects -->
+            <button onclick="dockClick('projects')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">作品集 (Projects)</span>
+                <div class="frosted-icon w-10 h-10 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:text-[#F54E00] transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <span id="dock-dot-projects" class="w-1 h-1 rounded-full bg-transparent mt-1"></span>
+            </button>
+
+            <!-- Dock App 4: Insights -->
+            <button onclick="dockClick('analytics')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">数据遥测 (Insights)</span>
+                <div class="frosted-icon w-10 h-10 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:text-[#F54E00] transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <span id="dock-dot-analytics" class="w-1 h-1 rounded-full bg-transparent mt-1"></span>
+            </button>
+
+            <!-- Dock App 5: Handbook -->
+            <button onclick="dockClick('handbook')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">工作手册 (Handbook)</span>
+                <div class="frosted-icon w-10 h-10 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:text-[#F54E00] transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                </div>
+                <span id="dock-dot-handbook" class="w-1 h-1 rounded-full bg-transparent mt-1"></span>
+            </button>
+
+            <!-- Dock App 6: Contact -->
+            <button onclick="dockClick('contact')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">联系与留言 (Mail)</span>
+                <div class="frosted-icon w-10 h-10 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:text-[#F54E00] transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <span id="dock-dot-contact" class="w-1 h-1 rounded-full bg-transparent mt-1"></span>
+            </button>
+
+            <!-- macOS Dock Hairline Divider -->
+            <div class="h-6 w-[1px] bg-black/[0.12] dark:bg-white/[0.15] mx-0.5 self-center"></div>
+
+            <!-- Dock App 7: Terminal -->
+            <button onclick="dockClick('terminal')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">终端 (Terminal.sh)</span>
+                <div class="w-10 h-10 rounded-[8px] bg-[#1D1F27] text-gray-200 group-hover:text-[#28C840] border border-white/15 flex items-center justify-center transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"></polyline>
+                        <line x1="12" y1="19" x2="20" y2="19"></line>
+                    </svg>
+                </div>
+                <span id="dock-dot-terminal" class="w-1 h-1 rounded-full bg-transparent mt-1"></span>
+            </button>
+
+            <!-- Dock App 8: System Settings -->
+            <button onclick="dockClick('settings')" class="dock-item group flex flex-col items-center focus:outline-none">
+                <span class="dock-tooltip absolute -top-8 left-1/2 px-2 py-0.5 rounded bg-[#1D1F27]/90 backdrop-blur-md text-[#F5F4EC] text-[11px] font-mono whitespace-nowrap">系统设置 (Settings)</span>
+                <div class="frosted-icon w-10 h-10 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:text-[#F54E00] transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </div>
+                <span id="dock-dot-settings" class="w-1 h-1 rounded-full bg-transparent mt-1"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ================= SYSTEM MENU DROPDOWN (Top-Left Brand Icon) ================= -->
+    <div id="start-menu" class="hidden fixed top-8 left-2.5 w-52 mac-window z-50 p-1 text-xs">
+        <div class="px-2.5 py-1.5 border-b border-black/5 dark:border-white/10">
+            <div class="font-bold text-gray-900 dark:text-white">Alex.OS 工作台</div>
+            <div class="font-mono text-[10px] text-gray-500">Frosted Matte v3.9</div>
+        </div>
+        <div class="py-1 space-y-0.5">
+            <button onclick="openWindow('readme'); toggleStartMenu();" class="w-full text-left px-2.5 py-1.5 rounded hover:bg-[#F54E00] hover:text-white flex items-center justify-between transition">
+                <span>个人简介 (README)</span><span class="font-mono text-[10px] opacity-60">⌘1</span>
+            </button>
+            <button onclick="openWindow('settings'); toggleStartMenu();" class="w-full text-left px-2.5 py-1.5 rounded hover:bg-[#F54E00] hover:text-white flex items-center justify-between transition font-semibold text-[#F54E00]">
+                <span>系统设置 (壁纸与外观)...</span><span class="font-mono text-[10px] opacity-60">⌘,</span>
+            </button>
+            <button onclick="openWindow('design'); toggleStartMenu();" class="w-full text-left px-2.5 py-1.5 rounded hover:bg-[#F54E00] hover:text-white flex items-center justify-between transition">
+                <span>视觉降噪与圆角规范...</span><span class="font-mono text-[10px] opacity-60">⌘3</span>
+            </button>
+            <button onclick="minimizeAllWindows(); toggleStartMenu();" class="w-full text-left px-2.5 py-1.5 rounded hover:bg-[#F54E00] hover:text-white flex items-center justify-between transition">
+                <span>显示桌面 (欣赏卡通壁纸)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= macOS SPOTLIGHT SEARCH MODAL (Cmd/Ctrl + K) ================= -->
+    <div id="cmd-palette" onclick="if(event.target === this) toggleCommandPalette()" class="hidden fixed inset-0 bg-black/20 backdrop-blur-[2px] z-50 flex items-start justify-center pt-24 px-4">
+        <div class="w-full max-w-lg mac-window overflow-hidden">
+            <div class="px-4 py-3 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center gap-3">
+                <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input id="cmd-search-input" oninput="filterCommandPalette(this.value)" type="text" placeholder="Spotlight 搜索应用或命令 (如: design, settings, dark)..."
+                    class="w-full bg-transparent text-xs sm:text-sm focus:outline-none text-gray-900 dark:text-white font-mono" />
+                <kbd onclick="toggleCommandPalette()" class="cursor-pointer px-1.5 py-0.5 text-[10px] font-mono text-gray-500 bg-black/5 dark:bg-white/10 rounded">ESC</kbd>
+            </div>
+            <div id="cmd-results" class="p-1.5 max-h-72 overflow-y-auto space-y-0.5 text-xs"></div>
+        </div>
+    </div>
+
+    <!-- ================= macOS NOTIFICATION BANNER (Top Right) ================= -->
+    <div id="os-toast" class="fixed top-9 right-4 z-50 pointer-events-none transform translate-x-8 opacity-0 transition-all duration-200">
+        <div class="mac-window text-gray-900 dark:text-white px-3.5 py-2 rounded-md text-xs flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#F54E00]"></span>
+            <span id="os-toast-text" class="font-medium">操作已执行</span>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT OS KERNEL ================= -->
+    <script>
+        /* --- 1. WINDOW REGISTRY --- */
+        const windowsConfig = {
+            readme:    { id: 'readme',    title: 'README.mdx',      open: true,  minimized: false, maximized: false, z: 35 },
+            design:    { id: 'design',    title: 'Design_Spec.fig', open: false, minimized: false, maximized: false, z: 40 },
+            projects:  { id: 'projects',  title: 'Projects.app',    open: false, minimized: false, maximized: false, z: 20 },
+            analytics: { id: 'analytics', title: 'Insights.db',     open: false, minimized: false, maximized: false, z: 21 },
+            terminal:  { id: 'terminal',  title: 'Terminal.sh',     open: false, minimized: false, maximized: false, z: 22 },
+            handbook:  { id: 'handbook',  title: 'Handbook.wiki',   open: false, minimized: false, maximized: false, z: 23 },
+            contact:   { id: 'contact',   title: 'Mail.msg',        open: false, minimized: false, maximized: false, z: 24 },
+            settings:  { id: 'settings',  title: 'Settings.app',    open: false, minimized: false, maximized: false, z: 42 }
+        };
+
+        let topZIndex = 45;
+        let activeWindowId = 'readme';
+        let soundEnabled = true;
+        let sessionEventCount = 12;
+
+        /* --- CARTOON WALLPAPER & MASCOT DIALOGUE STATE --- */
+        let currentWallpaperIdx = 0;
+        const cartoonWallpapers = [
+            {
+                name: '刺猬工程师 Max',
+                tag: 'MAX THE HEDGEHOG',
+                quotes: [
+                    '“嗨！壁纸切换和外观音效现在都整理到『系统设置』面板里啦！”',
+                    '“手冲咖啡配 TypeScript，今天又消灭了 3 个棘手的 Bug！”',
+                    '“小提示：点击顶栏『窗口 -> 最小化全部』可以无遮挡欣赏整张插画壁纸哦。”'
+                ]
+            },
+            {
+                name: '太空柴犬宇航员',
+                tag: 'ASTRO SHIBA INU',
+                quotes: [
+                    '“汪！这里是月球边缘节点，网络延迟只有 12ms！”',
+                    '“正在观测您的开源仓库 Star 增长曲线，一切运行良好！”'
+                ]
+            },
+            {
+                name: '极客黑猫 Coder',
+                tag: 'LO-FI CAT CODER',
+                quotes: [
+                    '“戴上降噪耳机写 Rust，连编译通过的声音都像 Lo-Fi 音乐。”',
+                    '“呼噜呼噜……别忘了按 ⌘K 试试全局命令面板！”'
+                ]
+            }
+        ];
+        let quoteIdx = 0;
+
+        function selectCartoonWallpaper(targetIdx) {
+            playTactileClick(620, 0.018);
+            document.getElementById(`cartoon-scene-${currentWallpaperIdx}`).classList.add('hidden');
+            currentWallpaperIdx = targetIdx;
+            document.getElementById(`cartoon-scene-${currentWallpaperIdx}`).classList.remove('hidden');
+
+            [0, 1, 2].forEach(i => {
+                const card = document.getElementById(`wp-card-${i}`);
+                if (!card) return;
+                if (i === currentWallpaperIdx) {
+                    card.classList.add('ring-2', 'ring-[#F54E00]');
+                } else {
+                    card.classList.remove('ring-2', 'ring-[#F54E00]');
+                }
+            });
+
+            const scene = cartoonWallpapers[currentWallpaperIdx];
+            const activeNameEl = document.getElementById('settings-active-wallpaper-name');
+            if (activeNameEl) activeNameEl.textContent = scene.name;
+            document.getElementById('mascot-name-tag').textContent = scene.tag;
+            quoteIdx = 0;
+            document.getElementById('mascot-speech-text').textContent = scene.quotes[0];
+            showToast(`已切换卡通角色壁纸：${scene.name}`);
+            captureTelemetryEvent('cartoon_wallpaper_switched', { character: scene.name });
+        }
+
+        function cycleCartoonWallpaper() {
+            const nextIdx = (currentWallpaperIdx + 1) % cartoonWallpapers.length;
+            selectCartoonWallpaper(nextIdx);
+        }
+
+        function talkToMascot() {
+            playTactileClick(680, 0.016);
+            const scene = cartoonWallpapers[currentWallpaperIdx];
+            quoteIdx = (quoteIdx + 1) % scene.quotes.length;
+            document.getElementById('mascot-speech-text').textContent = scene.quotes[quoteIdx];
+            captureTelemetryEvent('mascot_clicked', { character: scene.name });
+        }
+
+        /* --- 2. PROJECTS PORTFOLIO DATASET --- */
+        const projectsData = [
+            {
+                title: 'HogQL-Studio',
+                category: 'oss',
+                badge: '5.8k',
+                color: '#F54E00',
+                desc: '浏览器端轻量级 SQL & ClickHouse 查询工作台，内置高速虚拟滚动与一键图表生成。',
+                stack: ['TypeScript', 'React', 'DuckDB-Wasm'],
+                metric: '42k+ MAU'
+            },
+            {
+                title: 'AgentReplay.ai',
+                category: 'ai',
+                badge: '3.9k',
+                color: '#007AFF',
+                desc: '专为 LLM Agent 打造的会话回放与推理链路追踪器，可视化调试 Prompt 与工具调用。',
+                stack: ['Next.js', 'Python', 'OpenTelemetry'],
+                metric: '12M+ Traces'
+            },
+            {
+                title: 'MatteUI.kit',
+                category: 'oss',
+                badge: '2.7k',
+                color: '#FEBC2E',
+                desc: '融合 macOS 哑光颗粒感与 PostHog 微立体键帽美学的 React 组件库，零外部图标依赖。',
+                stack: ['Tailwind', 'Radix UI', 'SVG'],
+                metric: '18k dl/wk'
+            },
+            {
+                title: 'Changelogs.sh',
+                category: 'saas',
+                badge: '$4.2k MRR',
+                color: '#28C840',
+                desc: '将 Git Commit 记录自动转化为精美产品更新周报的独立 SaaS 工具。',
+                stack: ['Go', 'PostgreSQL', 'Stripe'],
+                metric: '190+ Teams'
+            },
+            {
+                title: 'MCP-Desktop-Bridge',
+                category: 'ai',
+                badge: '1.8k',
+                color: '#8B5CF6',
+                desc: '让本地大模型安全读写个人笔记与终端的工作流桥接器，支持细粒度权限确认。',
+                stack: ['Rust', 'Tauri', 'MCP'],
+                metric: 'Latency < 8ms'
+            },
+            {
+                title: 'FeatureFlag.mini',
+                category: 'saas',
+                badge: 'Beta',
+                color: '#EC4899',
+                desc: '面向独立开发者的极简特性开关与 A/B 实验服务，单文件 SDK 仅 1.8KB。',
+                stack: ['Cloudflare Workers', 'Edge KV'],
+                metric: '12ms Edge'
+            }
+        ];
+
+        /* --- 3. SUBTLE AUDIO FEEDBACK & VECTOR ICON TOGGLES --- */
+        let audioCtx = null;
+        function playTactileClick(freq = 520, duration = 0.016) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + duration);
+                gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.004, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        const svgSpeakerOn = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`;
+        const svgSpeakerOff = `<svg class="w-3.5 h-3.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`;
+
+        const svgSun = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>`;
+        const svgMoon = `<svg class="w-3.5 h-3.5 text-[#FEBC2E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('settings-sound-btn');
+            if (btn) {
+                btn.textContent = soundEnabled ? '已开启' : '已关闭';
+                btn.className = soundEnabled
+                    ? 'ph-btn-primary px-3 py-1 rounded-xl text-xs font-medium'
+                    : 'ph-btn px-3 py-1 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-300';
+            }
+            if (soundEnabled) playTactileClick(580, 0.016);
+            showToast(soundEnabled ? '已开启轻柔按键音' : '已静音');
+        }
+
+        function toggleMascotBubble() {
+            playTactileClick(540, 0.015);
+            const container = document.getElementById('mascot-bubble-container');
+            const btn = document.getElementById('settings-bubble-btn');
+            const isHidden = container.classList.toggle('!hidden');
+            if (btn) {
+                btn.textContent = isHidden ? '已隐藏' : '显示中';
+                btn.className = isHidden
+                    ? 'ph-btn px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300'
+                    : 'ph-btn-primary px-3 py-1 text-xs font-medium';
+            }
+            showToast(isHidden ? '已隐藏右下角角色对话气泡' : '已显示角色对话气泡');
+        }
+
+        function toggleDesktopWidgets() {
+            playTactileClick(540, 0.015);
+            const container = document.getElementById('desktop-widgets-container');
+            const btn = document.getElementById('settings-widgets-btn');
+            const isHidden = container.classList.toggle('!hidden');
+            if (btn) {
+                btn.textContent = isHidden ? '已隐藏' : '显示中';
+                btn.className = isHidden
+                    ? 'ph-btn px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300'
+                    : 'ph-btn-primary px-3 py-1 text-xs font-medium';
+            }
+            showToast(isHidden ? '已隐藏桌面左上角小组件' : '已显示桌面小组件');
+        }
+
+        /* --- 4. macOS DOCK & WINDOW MANAGEMENT --- */
+        function updateDockIndicators() {
+            Object.values(windowsConfig).forEach(win => {
+                const dot = document.getElementById(`dock-dot-${win.id}`);
+                if (!dot) return;
+                if (win.open) {
+                    dot.className = `w-1 h-1 rounded-full mt-1 transition-all ${
+                        activeWindowId === win.id && !win.minimized
+                            ? 'bg-[#F54E00] scale-125'
+                            : 'bg-gray-600 dark:bg-gray-400'
+                    }`;
+                } else {
+                    dot.className = 'w-1 h-1 rounded-full bg-transparent mt-1';
+                }
+            });
+        }
+
+        function dockClick(id) {
+            const win = windowsConfig[id];
+            if (!win) return;
+            if (!win.open || win.minimized) {
+                openWindow(id);
+            } else if (activeWindowId === id) {
+                minimizeWindow(id);
+            } else {
+                focusWindow(id);
+            }
+        }
+
+        function focusWindow(id) {
+            const winObj = windowsConfig[id];
+            if (!winObj) return;
+            topZIndex++;
+            winObj.z = topZIndex;
+            activeWindowId = id;
+
+            Object.keys(windowsConfig).forEach(key => {
+                const el = document.getElementById(`win-${key}`);
+                if (!el) return;
+                if (key === id) {
+                    el.style.zIndex = winObj.z;
+                    el.classList.add('active-window');
+                } else {
+                    el.classList.remove('active-window');
+                }
+            });
+
+            document.getElementById('menubar-active-app').textContent = winObj.title;
+            updateDockIndicators();
+        }
+
+        function openWindow(id) {
+            playTactileClick(580, 0.016);
+            const winObj = windowsConfig[id];
+            const el = document.getElementById(`win-${id}`);
+            if (!winObj || !el) return;
+
+            winObj.open = true;
+            winObj.minimized = false;
+            el.classList.remove('hidden');
+
+            if (window.innerWidth < 640) {
+                el.style.left = '3vw';
+                el.style.top = '10px';
+                el.style.width = '94vw';
+                el.style.height = '76vh';
+            }
+
+            focusWindow(id);
+            captureTelemetryEvent(`app_launched`, { app: winObj.title });
+        }
+
+        function closeWindow(id) {
+            playTactileClick(380, 0.016);
+            const winObj = windowsConfig[id];
+            const el = document.getElementById(`win-${id}`);
+            if (!winObj || !el) return;
+
+            winObj.open = false;
+            winObj.minimized = false;
+            el.classList.add('hidden');
+            captureTelemetryEvent(`window_closed`, { app: winObj.title });
+            updateDockIndicators();
+        }
+
+        function minimizeWindow(id) {
+            playTactileClick(440, 0.015);
+            const winObj = windowsConfig[id];
+            const el = document.getElementById(`win-${id}`);
+            if (!winObj || !el) return;
+
+            winObj.minimized = true;
+            el.classList.add('hidden');
+            updateDockIndicators();
+        }
+
+        function maximizeWindow(id) {
+            playTactileClick(640, 0.018);
+            const winObj = windowsConfig[id];
+            const el = document.getElementById(`win-${id}`);
+            if (!winObj || !el) return;
+
+            focusWindow(id);
+            if (!winObj.maximized) {
+                winObj.prevRect = {
+                    top: el.style.top,
+                    left: el.style.left,
+                    width: el.style.width,
+                    height: el.style.height
+                };
+                el.style.top = '8px';
+                el.style.left = '8px';
+                el.style.width = 'calc(100vw - 16px)';
+                el.style.height = 'calc(100vh - 108px)';
+                winObj.maximized = true;
+            } else {
+                if (winObj.prevRect) {
+                    el.style.top = winObj.prevRect.top;
+                    el.style.left = winObj.prevRect.left;
+                    el.style.width = winObj.prevRect.width;
+                    el.style.height = winObj.prevRect.height;
+                }
+                winObj.maximized = false;
+            }
+        }
+
+        function tileWindows() {
+            playTactileClick(560, 0.02);
+            const openWins = Object.values(windowsConfig).filter(w => w.open && !w.minimized);
+            if (openWins.length === 0) {
+                openWindow('readme');
+                openWindow('design');
+                return;
+            }
+            const baseLeft = window.innerWidth < 1280 ? 24 : 268;
+            const baseTop = 18;
+            openWins.forEach((win, idx) => {
+                const el = document.getElementById(`win-${win.id}`);
+                win.maximized = false;
+                el.style.left = `${baseLeft + idx * 36}px`;
+                el.style.top = `${baseTop + idx * 28}px`;
+                el.style.width = 'min(740px, 90vw)';
+                el.style.height = 'min(510px, 74vh)';
+                focusWindow(win.id);
+            });
+            showToast(`已为您整齐排列 ${openWins.length} 个窗口`);
+        }
+
+        function openAllWindows() {
+            Object.keys(windowsConfig).forEach(k => openWindow(k));
+            tileWindows();
+        }
+
+        function minimizeAllWindows() {
+            Object.keys(windowsConfig).forEach(k => {
+                if (windowsConfig[k].open) minimizeWindow(k);
+            });
+            showToast('已最小化全部窗口');
+        }
+
+        /* --- 5. DRAGGABLE WINDOWS ENGINE --- */
+        let dragTarget = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        function startDrag(e, id) {
+            if (e.target.closest('button')) return;
+            focusWindow(id);
+            const winObj = windowsConfig[id];
+            if (winObj.maximized) return;
+
+            const el = document.getElementById(`win-${id}`);
+            dragTarget = el;
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const rect = el.getBoundingClientRect();
+
+            dragOffsetX = clientX - rect.left;
+            dragOffsetY = clientY - rect.top;
+
+            document.addEventListener('mousemove', onDragMove);
+            document.addEventListener('mouseup', onDragEnd);
+            document.addEventListener('touchmove', onDragMove, { passive: false });
+            document.addEventListener('touchend', onDragEnd);
+        }
+
+        function onDragMove(e) {
+            if (!dragTarget) return;
+            if (e.cancelable) e.preventDefault();
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            let newLeft = clientX - dragOffsetX;
+            let newTop = clientY - dragOffsetY - 28;
+
+            newTop = Math.max(4, Math.min(window.innerHeight - 120, newTop));
+            newLeft = Math.max(-200, Math.min(window.innerWidth - 120, newLeft));
+
+            dragTarget.style.left = `${newLeft}px`;
+            dragTarget.style.top = `${newTop}px`;
+        }
+
+        function onDragEnd() {
+            dragTarget = null;
+            document.removeEventListener('mousemove', onDragMove);
+            document.removeEventListener('mouseup', onDragEnd);
+            document.removeEventListener('touchmove', onDragMove);
+            document.removeEventListener('touchend', onDragEnd);
+        }
+
+        /* --- 6. RENDER PROJECTS & SEGMENTED TABS --- */
+        function renderProjects(filter = 'all') {
+            const grid = document.getElementById('projects-grid');
+            const list = filter === 'all' ? projectsData : projectsData.filter(p => p.category === filter);
+
+            grid.innerHTML = list.map(p => `
+                <div class="bento-card p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full" style="background:${p.color}"></span>
+                                <h3 class="font-display font-bold text-sm text-gray-900 dark:text-white">${p.title}</h3>
+                            </div>
+                            <span class="px-1.5 py-0.5 rounded bg-black/[0.04] dark:bg-white/[0.06] font-mono text-[10px] font-medium text-gray-600 dark:text-gray-300">
+                                ★ ${p.badge}
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">${p.desc}</p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 mb-3">
+                            ${p.stack.map(s => `<span class="px-1.5 py-0.5 text-[10px] font-mono bg-black/[0.04] dark:bg-white/[0.06] text-gray-500 dark:text-gray-400 rounded">${s}</span>`).join('')}
+                        </div>
+                        <div class="pt-2.5 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-gray-400">${p.metric}</span>
+                            <button onclick="showToast('已打开项目详情: ${p.title}'); captureTelemetryEvent('project_inspected', {project: '${p.title}'})"
+                                class="text-[#F54E00] font-sans font-medium hover:underline flex items-center gap-0.5">
+                                <span>查看详情</span>
+                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProjects(category) {
+            playTactileClick(540, 0.015);
+            document.querySelectorAll('.proj-filter-btn').forEach(btn => {
+                if (btn.dataset.filter === category) {
+                    btn.className = 'proj-filter-btn segmented-pill-active px-3 py-1 rounded font-medium text-gray-900 dark:text-white transition';
+                } else {
+                    btn.className = 'proj-filter-btn px-3 py-1 rounded text-gray-600 dark:text-gray-400 font-medium transition';
+                }
+            });
+            renderProjects(category);
+        }
+
+        function switchDesignTab(tab) {
+            playTactileClick(560, 0.015);
+            ['layout', 'tokens', 'ia'].forEach(t => {
+                const btn = document.getElementById(`dtab-${t}`);
+                const panel = document.getElementById(`dpanel-${t}`);
+                if (t === tab) {
+                    btn.className = 'segmented-pill-active px-3 py-1 rounded font-medium text-gray-900 dark:text-white transition';
+                    panel.classList.remove('hidden');
+                } else {
+                    btn.className = 'px-3 py-1 rounded text-gray-600 dark:text-gray-400 font-medium transition';
+                    panel.classList.add('hidden');
+                }
+            });
+        }
+
+        /* --- 7. INTERACTIVE TERMINAL --- */
+        function handleTerminalSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('terminal-input');
+            const cmd = input.value.trim();
+            if (!cmd) return;
+            input.value = '';
+            runTerminalCmd(cmd);
+        }
+
+        function runTerminalCmd(rawCmd) {
+            playTactileClick(500, 0.015);
+            const cmd = rawCmd.toLowerCase();
+            const out = document.getElementById('terminal-output');
+
+            const appendLine = (html) => {
+                const div = document.createElement('div');
+                div.innerHTML = html;
+                out.appendChild(div);
+                out.parentElement.scrollTop = out.parentElement.scrollHeight;
+            };
+
+            appendLine(`<span class="text-[#28C840] font-semibold">alex@MacBook-Pro ~ %</span> <span class="text-white">${rawCmd}</span>`);
+
+            if (cmd === 'help') {
+                appendLine(`<div class="p-2.5 bg-white/5 rounded-xl border border-white/10 text-gray-300 space-y-1">
+                    <div><span class="text-[#FEBC2E] font-semibold">neofetch</span> — 查看 macOS 磨砂系统架构配置</div>
+                    <div><span class="text-[#FEBC2E] font-semibold">skills</span>   — 打印全栈技术栈熟练度</div>
+                    <div><span class="text-[#FEBC2E] font-semibold">clear</span>    — 清空终端屏幕</div>
+                </div>`);
+            } else if (cmd === 'neofetch') {
+                appendLine(`<pre class="text-[#F54E00] leading-tight">
+       /\\      <span class="text-white font-semibold">alex@macOS-Frosted-Edition</span>
+      /  \\     --------------------------
+     / /\\ \\    <span class="text-gray-400">Surface:</span> Matte Frosted Acrylic (Blur 30px)
+    / /__\\ \\   <span class="text-gray-400">Icons:</span> 100% Bespoke Vector SVGs
+   /________\\  <span class="text-gray-400">Palette:</span> Warm Stone (#E3E4DD)
+               <span class="text-gray-400">Font:</span> SF Pro / Plus Jakarta Sans
+</pre>`);
+            } else if (cmd === 'skills') {
+                appendLine(`<div class="space-y-1 text-gray-300">
+                    <div>TypeScript / React  [<span class="text-[#28C840]">██████████████████░░</span>] 95%</div>
+                    <div>Rust / Go Backend   [<span class="text-[#FEBC2E]">████████████████░░░░</span>] 85%</div>
+                    <div>Apple HIG & UI      [<span class="text-[#F54E00]">███████████████████░</span>] 94%</div>
+                </div>`);
+            } else if (cmd === 'clear') {
+                out.innerHTML = '';
+            } else {
+                appendLine(`<div class="text-red-400">zsh: command not found: ${rawCmd}</div>`);
+            }
+
+            captureTelemetryEvent('terminal_command', { cmd });
+        }
+
+        /* --- 8. LIVE TELEMETRY & SPOTLIGHT (Zero Emojis) --- */
+        function captureTelemetryEvent(eventName, props = {}) {
+            sessionEventCount++;
+            const counterEl = document.getElementById('metric-session-events');
+            const topCounterEl = document.getElementById('menubar-events-count');
+            if (counterEl) counterEl.textContent = sessionEventCount;
+            if (topCounterEl) topCounterEl.textContent = sessionEventCount;
+
+            const logContainer = document.getElementById('live-event-log');
+            if (!logContainer) return;
+
+            const now = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between py-0.5 border-b border-white/5';
+            row.innerHTML = `
+                <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#28C840] inline-block"></span>
+                    <span class="text-gray-200 font-medium">${eventName}</span>
+                    <span class="text-gray-500 ml-1">${JSON.stringify(props)}</span>
+                </div>
+                <span class="text-gray-500">${now}</span>
+            `;
+            logContainer.prepend(row);
+        }
+
+        const commandItems = [
+            { tag: 'SET', label: '打开系统设置 (切换卡通壁纸、深浅色外观与音效)', action: () => openWindow('settings') },
+            { tag: 'DOC', label: '打开 README.mdx (个人简介)', action: () => openWindow('readme') },
+            { tag: 'FIG', label: '打开 Design_Spec.fig (磨砂与设计规范)', action: () => openWindow('design') },
+            { tag: 'APP', label: '打开 Projects.app (查看作品集)', action: () => openWindow('projects') },
+            { tag: 'SQL', label: '打开 Insights (实时遥测数据看板)', action: () => openWindow('analytics') },
+            { tag: 'CLI', label: '打开 Terminal.sh (交互式命令行)', action: () => openWindow('terminal') },
+            { tag: 'WIKI', label: '打开 Handbook.wiki (工作原则手册)', action: () => openWindow('handbook') },
+            { tag: 'MSG', label: '打开 Mail (发送信件与留言)', action: () => openWindow('contact') },
+            { tag: 'SYS', label: '切换明暗磨砂外观模式 (Light / Dark)', action: () => toggleTheme() },
+            { tag: 'WIN', label: '台前调度：自动整理平铺窗口', action: () => tileWindows() },
+            { tag: 'COPY', label: '拷贝个人邮箱 (alex@posthog-style.dev)', action: () => copyEmail() }
+        ];
+
+        function toggleCommandPalette() {
+            const modal = document.getElementById('cmd-palette');
+            const isHidden = modal.classList.contains('hidden');
+            if (isHidden) {
+                modal.classList.remove('hidden');
+                const input = document.getElementById('cmd-search-input');
+                input.value = '';
+                filterCommandPalette('');
+                setTimeout(() => input.focus(), 50);
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function filterCommandPalette(query) {
+            const q = query.toLowerCase();
+            const container = document.getElementById('cmd-results');
+            const filtered = commandItems.filter(item => item.label.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q));
+
+            container.innerHTML = filtered.map((item) => `
+                <button onclick="runCommandIndex(${commandItems.indexOf(item)})"
+                    class="w-full text-left px-3 py-2 rounded-xl hover:bg-[#007AFF] hover:text-white flex items-center justify-between transition text-gray-800 dark:text-gray-200 group">
+                    <div class="flex items-center gap-2.5">
+                        <span class="px-1.5 py-0.5 rounded bg-black/[0.06] dark:bg-white/[0.08] group-hover:bg-white/20 font-mono text-[10px] font-semibold">${item.tag}</span>
+                        <span>${item.label}</span>
+                    </div>
+                    <span class="text-[10px] font-mono opacity-60">Enter</span>
+                </button>
+            `).join('') || `<div class="p-3 text-gray-400 text-center">未找到匹配的 Spotlight 结果</div>`;
+        }
+
+        function runCommandIndex(idx) {
+            toggleCommandPalette();
+            if (commandItems[idx]) commandItems[idx].action();
+        }
+
+        function toggleStartMenu() {
+            playTactileClick(520, 0.015);
+            document.getElementById('start-menu').classList.toggle('hidden');
+        }
+
+        function setThemeMode(mode) {
+            playTactileClick(600, 0.02);
+            const html = document.documentElement;
+            const isDark = mode === 'dark';
+            html.classList.toggle('dark', isDark);
+            html.classList.toggle('light', !isDark);
+
+            const lightBtn = document.getElementById('theme-btn-light');
+            const darkBtn = document.getElementById('theme-btn-dark');
+            if (lightBtn && darkBtn) {
+                lightBtn.classList.toggle('ring-2', !isDark);
+                lightBtn.classList.toggle('ring-[#F54E00]', !isDark);
+                darkBtn.classList.toggle('ring-2', isDark);
+                darkBtn.classList.toggle('ring-[#F54E00]', isDark);
+            }
+
+            showToast(isDark ? '已切换至深色暗夜模式' : '已切换至浅色暖石模式');
+            captureTelemetryEvent('theme_toggled', { mode: isDark ? 'dark' : 'light' });
+        }
+
+        function toggleTheme() {
+            const isCurrentlyDark = document.documentElement.classList.contains('dark');
+            setThemeMode(isCurrentlyDark ? 'light' : 'dark');
+        }
+
+        function copyTextToClipboard(text, message) {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast(message);
+            captureTelemetryEvent('clipboard_copied', { value: text });
+        }
+
+        function copyEmail() {
+            copyTextToClipboard('alex@posthog-style.dev', '已拷贝邮箱: alex@posthog-style.dev');
+        }
+
+        function copyHex(hex, name) {
+            copyTextToClipboard(hex, `已拷贝 ${name}: ${hex}`);
+        }
+
+        function submitContactForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value.trim();
+            const topic = document.getElementById('contact-topic').value;
+            const msg = document.getElementById('contact-msg').value.trim();
+            if (!name || !msg) return;
+
+            const wall = document.getElementById('guestbook-list');
+            const card = document.createElement('div');
+            card.className = 'bento-card p-3 rounded-xl';
+            card.innerHTML = `
+                <div class="flex justify-between font-mono text-[10px] text-gray-400">
+                    <span class="font-semibold text-[#F54E00]">${name} · ${topic}</span>
+                    <span>Just now</span>
+                </div>
+                <p class="mt-1 text-gray-600 dark:text-gray-300">${msg}</p>
+            `;
+            wall.prepend(card);
+            e.target.reset();
+            showToast('信件已发送并同步至留言板');
+            captureTelemetryEvent('guestbook_signed', { from: name });
+        }
+
+        let toastTimer = null;
+        function showToast(text) {
+            const toast = document.getElementById('os-toast');
+            document.getElementById('os-toast-text').textContent = text;
+            toast.classList.remove('translate-x-8', 'opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('translate-x-8', 'opacity-0');
+            }, 2400);
+        }
+
+        /* --- 9. SHORTCUTS & BOOT --- */
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                toggleCommandPalette();
+            } else if (e.key === 'Escape') {
+                document.getElementById('cmd-palette').classList.add('hidden');
+                document.getElementById('start-menu').classList.add('hidden');
+            }
+        });
+
+        window.onload = function () {
+            renderProjects('all');
+            focusWindow('readme');
+            captureTelemetryEvent('os_boot_completed', { style: 'Matte_Frosted_SVG' });
+
+            const updateClock = () => {
+                const now = new Date();
+                const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+                document.getElementById('os-date').textContent = `${now.getMonth() + 1}月${now.getDate()}日 ${days[now.getDay()]}`;
+                document.getElementById('os-clock').textContent = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
+            };
+            updateClock();
+            setInterval(updateClock, 10000);
+        };
+    </script>
+</body>
+</html>

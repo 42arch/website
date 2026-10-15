@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import localFont from 'next/font/local'
-import { DesktopStateProvider } from '@/components/desktop/desktop-state-provider'
+import { Shell } from '@/components/shell/shell'
 import { ThemeProvider } from '@/components/theme-provider'
 import { cn } from '@/lib/utils'
 import './globals.css'
@@ -23,8 +23,8 @@ const geistHeading = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Starllow — Dan 的数字自留地',
-  description: '欢迎来到 Dan 的个人桌面。探索 Web3D、地图可视化、开源项目与学习笔记。',
+  title: 'Starllow.OS — macOS × PostHog 磨砂质感个人数字工作台',
+  description: 'Starllow.OS — 融合 macOS 窗口操作系统与 PostHog 极客美学的个人数字工作台，搭载 8 套专属应用与暖石磨砂材质系统。',
 }
 
 export default async function RootLayout({
@@ -49,7 +49,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <DesktopStateProvider>{children}</DesktopStateProvider>
+            <Shell>{children}</Shell>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

@@ -31,6 +31,7 @@ export function LanguageSwitcher() {
     }
 
     startTransition(async () => {
+      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
       await setUserLocale(newLocale)
       setIsOpen(false)
       window.location.reload()

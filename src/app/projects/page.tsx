@@ -1,5 +1,5 @@
-import { Desktop } from '@/components/desktop/desktop'
+import { ProjectsApp } from '@/components/apps/projects-app'
 
 export default function ProjectsPage() {
-  return <Desktop />
+  return <ProjectsApp />
 }

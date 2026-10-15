@@ -1,30 +1,161 @@
 {
-  "Home": {
-    "title": "Next.js 16 + Tailwind v4",
-    "description": "一个集成了 shadcn-ui (v4)、Phosphor 图标和严格 ESLint 配置的高性能 Web 开发脚手架模板。",
-    "cards": {
-      "nextjs": {
-        "title": "Next.js 16",
-        "description": "基于 App Router 和 React 服务端组件构建。",
-        "content": "利用最新的框架特性，获得极致的性能优化与绝佳的开发体验。"
-      },
-      "tailwind": {
-        "title": "Tailwind v4",
-        "description": "开箱即用的现代化 CSS 开发引擎。",
-        "content": "感受 Tailwind 下一代编译器带来的闪电般的 CSS 处理速度。"
-      },
-      "typesafety": {
-        "title": "类型安全",
-        "description": "严格的 TypeScript 和 ESLint 配置。",
-        "content": "通过 @antfu/eslint-config 和完整的 TS 支持，保持卓越的代码质量。"
-      }
+  "common": {
+    "close": "关闭窗口",
+    "minimize": "最小化至 Dock",
+    "maximize": "全屏缩放",
+    "restore": "还原窗口",
+    "search": "Spotlight 全局搜索",
+    "settings": "系统设置",
+    "copy": "拷贝",
+    "copied": "已拷贝",
+    "live": "实时",
+    "events": "事件"
+  },
+  "menubar": {
+    "systemTitle": "Starllow.OS 工作台",
+    "systemVersion": "Frosted Matte v3.9",
+    "file": "文件",
+    "window": "窗口",
+    "handbook": "个人手册",
+    "settings": "系统设置",
+    "openReadme": "打开 README.mdx",
+    "openProjects": "浏览作品集 (Projects)",
+    "openNotes": "浏览技术笔记 (Notes)",
+    "openGallery": "浏览画册 (Gallery)",
+    "copyEmail": "拷贝个人邮箱",
+    "tileWindows": "台前调度 / 整齐排列",
+    "showAllWindows": "显示所有应用窗口",
+    "minimizeAllWindows": "最小化全部 (欣赏壁纸)",
+    "showDesktop": "显示桌面 (欣赏卡通壁纸)",
+    "aboutMe": "个人简介 (README)",
+    "network": "网络信号",
+    "battery": "电池电量"
+  },
+  "dock": {
+    "readme": "README.mdx",
+    "projects": "作品集 (Projects)",
+    "notes": "技术笔记 (Notes.app)",
+    "gallery": "视觉画册 (Gallery.app)",
+    "handbook": "工作手册 (Handbook)",
+    "contact": "联系与留言 (Mail)",
+    "terminal": "终端 (Terminal.sh)",
+    "settings": "系统设置 (Settings)"
+  },
+  "search": {
+    "placeholder": "输入命令或搜索应用（例如 'settings', 'projects', 'readme', 'gallery'）...",
+    "esc": "ESC 退出",
+    "navigate": "↑↓ 选择",
+    "enter": "回车执行",
+    "noResults": "未找到匹配的命令或应用"
+  },
+  "wallpaper": {
+    "max": "刺猬工程师 Max",
+    "shiba": "太空柴犬宇航员",
+    "cat": "极客黑猫 Coder",
+    "cycleQuote": "切换台词 ↻",
+    "online": "在线运行"
+  },
+  "apps": {
+    "readme": {
+      "title": "README.mdx",
+      "badge": "v3.7",
+      "contactMe": "联系我",
+      "outline": "大纲导览",
+      "aboutMe": "关于我",
+      "techStack": "技术栈矩阵",
+      "milestones": "履历里程碑",
+      "viewProjects": "浏览作品集",
+      "viewGallery": "视觉画册",
+      "philosophyTitle": "设计哲学：",
+      "starsLabel": "GITHUB STARS",
+      "techTitle": "核心技术栈 (TECH STACK)",
+      "careerTitle": "履历里程碑 (CAREER CHANGELOG)"
     },
-    "cta": {
-      "getStarted": "开始使用",
-      "viewComponents": "查看组件"
+    "gallery": {
+      "title": "Gallery.app — 视觉画册",
+      "subtitle": "矢量小画、几何实验与色彩调色板",
+      "category": "VISUAL PLAYGROUND",
+      "pieces": "精选画作",
+      "format": "纯矢量 SVG",
+      "copyColor": "点击色块可直接复制 HEX 色值"
     },
-    "footer": {
-      "text": "准备好构建令人惊叹的应用了吗？从运行 <code>pnpm dev</code> 开始。"
+    "projects": {
+      "title": "Projects.app",
+      "all": "全部 (6)",
+      "ai": "AI & Agent",
+      "oss": "开源工具",
+      "saas": "独立 SaaS",
+      "viewDetail": "查看详情"
+    },
+    "notes": {
+      "title": "Notes.app — 技术笔记",
+      "all": "全部",
+      "searchPlaceholder": "搜索文章标题、简介或标签...",
+      "copyLink": "拷贝链接",
+      "copiedLink": "已拷贝文章直达链接至剪贴板",
+      "empty": "未找到匹配的技术笔记",
+      "backToList": "返回文章列表",
+      "readArticle": "阅读全文",
+      "prevArticle": "上一篇",
+      "nextArticle": "下一篇",
+      "articlesCount": "{count} 篇笔记"
+    },
+    "terminal": {
+      "title": "Terminal.sh — 交互式终端",
+      "lastLogin": "Last login: Thu Oct 15 on ttys001 (Starllow.OS Matte Edition)",
+      "hint": "输入 help 或点击上方快捷按钮体验命令。",
+      "quickCmds": "快捷命令:",
+      "inputPlaceholder": "输入命令..."
+    },
+    "handbook": {
+      "title": "Handbook.wiki — 个人工程手册",
+      "tabPrinciples": "工程原则",
+      "tabArticles": "技术笔记 (Fumadocs)",
+      "howIWork": "HOW I WORK",
+      "heading": "我的工程原则与协作手册",
+      "subtitle": "受 PostHog 开源文化启发，这里记录了我对待软件工程、产品设计与团队协作的核心理念。",
+      "notesHeading": "技术长文与知识笔记",
+      "notesDesc": "基于 content/notes 体系维护的 WebGL、3D 渲染与数据结构技术总结。",
+      "backToList": "返回列表",
+      "readMore": "阅读详情"
+    },
+    "contact": {
+      "title": "Mail.msg — 联系与访客留言",
+      "copyEmail": "拷贝邮箱",
+      "recipient": "收件人:",
+      "yourName": "您的称呼:",
+      "namePlaceholder": "例如: Alex / Sarah",
+      "topic": "主题分类:",
+      "topicCollab": "[合作] 产品顾问 / 全栈研发合作",
+      "topicRole": "[职位] 团队核心岗位邀请",
+      "topicChat": "[交流] 开源项目探讨 / 约咖啡",
+      "message": "留言内容:",
+      "messagePlaceholder": "写下想交流的想法、技术建议或合作机会...",
+      "submit": "发送信件并同步留言",
+      "guestbook": "访客留言墙 (实时前端状态同步):",
+      "justNow": "刚刚",
+      "sentToast": "信件已发送并同步至下方留言板"
+    },
+    "settings": {
+      "title": "Settings.app — 系统设置",
+      "preferences": "偏好设置",
+      "wallpaper": "卡通角色壁纸",
+      "appearance": "深浅色外观",
+      "soundAndWidgets": "声音与小组件",
+      "language": "语言与地区 (Language)",
+      "wallpaperHeading": "桌面卡通角色壁纸 (Cartoon Wallpaper)",
+      "wallpaperDesc": "选择干净清爽的全矢量角色桌面背景",
+      "appearanceHeading": "界面外观模式 (Appearance)",
+      "appearanceDesc": "浅色羊皮纸暖石微磨砂与深色极客暗夜模式",
+      "light": "浅色暖石 (Warm Stone)",
+      "dark": "深色暗夜 (Dark Night)",
+      "soundHeading": "声音与反馈 (Tactile Sound)",
+      "soundDesc": "通过 Web Audio API 合成的轻柔机械微音效（免音频文件加载）",
+      "soundToggle": "机械按键微反馈音效",
+      "mascotToggle": "显示右下角角色台词气泡",
+      "widgetsToggle": "显示桌面状态指示小组件",
+      "languageHeading": "语言设置 (Language)",
+      "languageDesc": "切换工作台界面语言（简体中文 / English）"
     }
   },
   "LanguageSwitcher": {

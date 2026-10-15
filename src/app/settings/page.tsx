@@ -1,5 +1,5 @@
-import { Desktop } from '@/components/desktop/desktop'
+import { SettingsApp } from '@/components/apps/settings-app'
 
 export default function SettingsPage() {
-  return <Desktop />
+  return <SettingsApp />
 }

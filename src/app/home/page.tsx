@@ -1,5 +1,5 @@
-import { Desktop } from '@/components/desktop/desktop'
+import { ReadmeApp } from '@/components/apps/readme-app'
 
-export default function HomeAppPage() {
-  return <Desktop />
+export default function HomePage() {
+  return <ReadmeApp />
 }

@@ -1,5 +1,5 @@
-import { Desktop } from '@/components/desktop/desktop'
+import { ContactApp } from '@/components/apps/contact-app'
 
 export default function ContactPage() {
-  return <Desktop />
+  return <ContactApp />
 }
