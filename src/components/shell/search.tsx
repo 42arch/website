@@ -31,7 +31,9 @@ export function ShellSearch({ notesList }: { notesList: NoteMeta[] }) {
   const tMenubar = useTranslations('menubar')
   const tDock = useTranslations('dock')
   const [query, setQuery] = useState('')
+  const [visualViewport, setVisualViewport] = useState({ width: 0, height: 0, offsetTop: 0 })
   const inputRef = useRef<HTMLInputElement>(null)
+  const isMobileViewport = visualViewport.width > 0 && visualViewport.width < 640
 
   const commandItems: CommandAction[] = [
     { tag: 'SET', label: tMenubar('settings'), action: () => openWindow('settings') },
@@ -95,6 +97,31 @@ export function ShellSearch({ notesList }: { notesList: NoteMeta[] }) {
     return () => cancelAnimationFrame(frame)
   }, [commandPaletteOpen])
 
+  useEffect(() => {
+    if (!commandPaletteOpen)
+      return
+
+    const viewport = window.visualViewport
+    function updateViewport() {
+      setVisualViewport({
+        width: window.innerWidth,
+        height: viewport?.height ?? window.innerHeight,
+        offsetTop: viewport?.offsetTop ?? 0,
+      })
+    }
+
+    updateViewport()
+    window.addEventListener('resize', updateViewport)
+    viewport?.addEventListener('resize', updateViewport)
+    viewport?.addEventListener('scroll', updateViewport)
+
+    return () => {
+      window.removeEventListener('resize', updateViewport)
+      viewport?.removeEventListener('resize', updateViewport)
+      viewport?.removeEventListener('scroll', updateViewport)
+    }
+  }, [commandPaletteOpen])
+
   function executeItem(item: CommandAction) {
     setCommandPaletteOpen(false)
     item.action()
@@ -102,18 +129,29 @@ export function ShellSearch({ notesList }: { notesList: NoteMeta[] }) {
 
   return (
     <Dialog open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen}>
-      <DialogContent className="top-24 max-w-lg translate-y-0 gap-0 overflow-hidden p-0 sm:max-w-lg" showCloseButton={false}>
+      <DialogContent
+        className="top-[42%] max-h-[calc(100dvh-1.5rem)] max-w-[calc(100%-1rem)] -translate-y-1/2 gap-0 overflow-hidden p-0 sm:top-24 sm:max-h-[calc(100dvh-8rem)] sm:max-w-lg sm:translate-y-0"
+        showCloseButton={false}
+        style={isMobileViewport
+          ? {
+              top: `${visualViewport.offsetTop + visualViewport.height * 0.42}px`,
+              maxHeight: `${Math.max(160, visualViewport.height - 24)}px`,
+            }
+          : undefined}
+      >
         <DialogHeader className="sr-only">
           <DialogTitle>{t('placeholder')}</DialogTitle>
         </DialogHeader>
-        <Command className="max-h-96" shouldFilter>
+        <Command className="min-h-0 max-h-[calc(100dvh-1.5rem)] sm:max-h-96" shouldFilter>
           <CommandInput
             ref={inputRef}
             value={query}
             onValueChange={setQuery}
             placeholder={t('placeholder')}
           />
-          <CommandList>
+          <CommandList
+            style={isMobileViewport ? { maxHeight: `${Math.min(288, Math.max(120, visualViewport.height - 64))}px` } : undefined}
+          >
             <CommandEmpty>{t('noResults')}</CommandEmpty>
             <CommandGroup>
               {commandItems.map(item => (
@@ -122,10 +160,11 @@ export function ShellSearch({ notesList }: { notesList: NoteMeta[] }) {
                   value={`${item.tag} ${item.label}`}
                   keywords={item.keywords}
                   onSelect={() => executeItem(item)}
+                  className="min-h-11 px-3 sm:min-h-0 sm:px-2"
                 >
                   <span className="font-mono text-[10px] text-muted-foreground">{item.tag}</span>
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                  <CommandShortcut>Enter</CommandShortcut>
+                  <CommandShortcut className="hidden sm:inline">Enter</CommandShortcut>
                 </CommandItem>
               ))}
             </CommandGroup>

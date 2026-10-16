@@ -13,6 +13,8 @@ export interface WindowState {
   z: number
   x?: number
   y?: number
+  width?: number
+  height?: number
   prevRect?: {
     x?: number
     y?: number
@@ -132,6 +134,7 @@ export interface ShellStore {
   maximizeWindow: (id: AppId) => void
   toggleWindow: (id: AppId) => void
   updateWindowPosition: (id: AppId, x: number, y: number) => void
+  updateWindowRect: (id: AppId, x: number, y: number, width: number, height: number) => void
   setDraggingWindow: (id: AppId | null) => void
   tileWindows: () => void
   minimizeAllWindows: () => void
@@ -371,6 +374,20 @@ export const useShellStore = create<ShellStore>((set, get) => ({
       windows: {
         ...windows,
         [id]: { ...target, x, y },
+      },
+    })
+  },
+
+  updateWindowRect: (id: AppId, x: number, y: number, width: number, height: number) => {
+    const { windows } = get()
+    const target = windows[id]
+    if (!target)
+      return
+
+    set({
+      windows: {
+        ...windows,
+        [id]: { ...target, x, y, width, height },
       },
     })
   },

@@ -26,8 +26,8 @@ const geistHeading = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Starllow.OS — macOS × PostHog 磨砂质感个人数字工作台',
-  description: 'Starllow.OS — 融合 macOS 窗口操作系统与 PostHog 极客美学的个人数字工作台，搭载 8 套专属应用与暖石磨砂材质系统。',
+  title: 'Starllow.OS',
+  description: 'Starllow.OS',
 }
 
 export default async function RootLayout({
