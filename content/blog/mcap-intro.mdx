@@ -20,13 +20,16 @@ MCAP（Message Capture）是一种用于记录机器人、自动驾驶等场景�
 - **Message**：一条带有时间戳的消息；
 - **Chunk**：把一组消息打包成一个数据块。
 
-```typescript
+```ts twoslash
 // 记录格式伪代码示意
 interface McapRecord {
   opCode: number
   recordLength: bigint
   payload: Uint8Array
 }
+
+const chunkSize = new Uint8Array(128).byteLength
+//    ^?
 ```
 
 ## 压缩与索引

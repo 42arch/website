@@ -56,21 +56,22 @@ export const cartoonWallpapers: CartoonSceneInfo[] = [
 ]
 
 const initialWindows: Record<AppId, WindowState> = {
-  readme: { id: 'readme', title: 'README.mdx', open: false, minimized: false, maximized: false, z: 20 },
+  finder: { id: 'finder', title: 'Finder', open: false, minimized: false, maximized: false, z: 19 },
   projects: { id: 'projects', title: 'Projects.app', open: false, minimized: false, maximized: false, z: 20 },
   gallery: { id: 'gallery', title: 'Albums', open: false, minimized: false, maximized: false, z: 21 },
   terminal: { id: 'terminal', title: 'Terminal.sh', open: false, minimized: false, maximized: false, z: 22 },
   notes: { id: 'notes', title: 'Notes.app', open: false, minimized: false, maximized: false, z: 24 },
+  blog: { id: 'blog', title: 'Blog.app', open: false, minimized: false, maximized: false, z: 24 },
   handbook: { id: 'handbook', title: 'Handbook.wiki', open: false, minimized: false, maximized: false, z: 23 },
   contact: { id: 'contact', title: 'Mail.msg', open: false, minimized: false, maximized: false, z: 24 },
   settings: { id: 'settings', title: 'Settings.app', open: false, minimized: false, maximized: false, z: 42 },
   about: { id: 'about', title: 'About This Computer', open: false, minimized: false, maximized: false, z: 43 },
-  design: { id: 'design', title: 'Design_Spec.fig', open: false, minimized: false, maximized: false, z: 25 },
   analytics: { id: 'analytics', title: 'Insights.db', open: false, minimized: false, maximized: false, z: 26 },
+  game: { id: 'game', title: 'Snake.app', open: false, minimized: false, maximized: false, z: 27 },
 }
 
 const defaultDockAppIds: AppId[] = [
-  'readme',
+  'blog',
   'projects',
   'notes',
   'gallery',
@@ -97,7 +98,7 @@ function readDockAppIds(value: string | null): AppId[] | null {
   if (!Array.isArray(parsed))
     return null
 
-  return [...new Set(parsed.filter((id: unknown): id is AppId => typeof id === 'string' && isAppId(id)))]
+  return [...new Set(parsed.filter((id: unknown): id is AppId => typeof id === 'string' && isAppId(id) && id !== 'finder'))]
 }
 
 export interface ShellStore {
@@ -382,7 +383,7 @@ export const useShellStore = create<ShellStore>((set, get) => ({
 
     const openWins = Object.values(windows).filter(w => w.open && !w.minimized)
     if (openWins.length === 0) {
-      get().openWindow('readme')
+      get().openWindow('blog')
       get().openWindow('projects')
       return
     }
@@ -453,7 +454,7 @@ export const useShellStore = create<ShellStore>((set, get) => ({
 
       const legacyIds = readDockAppIds(localStorage.getItem(legacyDockStorageKey))
       if (legacyIds) {
-        const migratedIds = legacyIds.filter(id => id !== 'handbook')
+        const migratedIds = legacyIds.filter(id => id !== 'handbook' && id !== 'finder')
         set({ dockAppIds: migratedIds })
         localStorage.setItem(dockStorageKey, JSON.stringify(migratedIds))
       }
@@ -488,9 +489,10 @@ export const useShellStore = create<ShellStore>((set, get) => ({
   },
 
   setDockAppIds: (ids: AppId[]) => {
-    set({ dockAppIds: ids })
+    const dockAppIds = [...new Set(ids.filter(id => id !== 'finder'))]
+    set({ dockAppIds })
     try {
-      localStorage.setItem(dockStorageKey, JSON.stringify(ids))
+      localStorage.setItem(dockStorageKey, JSON.stringify(dockAppIds))
     }
     catch {
       // Keep the current session preference when local storage is unavailable.

@@ -18,9 +18,8 @@
     "window": "Window",
     "handbook": "Handbook",
     "settings": "Settings",
-    "openReadme": "Open README.mdx",
     "openProjects": "Explore Projects.app",
-    "openNotes": "Open Notes.app",
+    "openNotes": "Open Short Notes (Notes)",
     "openGallery": "Explore Albums",
     "copyEmail": "Copy Email Address",
     "tileWindows": "Tile / Organize Windows",
@@ -29,21 +28,23 @@
     "showDesktop": "Show Desktop (View Mascot)",
     "aboutThisComputer": "About This Computer",
     "network": "Network Signal",
-    "battery": "Battery Level"
+    "battery": "Battery Level",
+    "openBlog": "Browse Long-form Articles (Blog)"
   },
   "dock": {
-    "readme": "README.mdx",
+    "finder": "Finder",
     "projects": "Portfolio (Projects)",
-    "notes": "Technical Notes (Notes.app)",
+    "notes": "Short Notes (Notes.app)",
     "gallery": "Albums",
     "handbook": "Handbook (Wiki)",
     "contact": "Contact & Mail",
     "terminal": "Terminal.sh",
     "settings": "Settings.app",
     "about": "About This Computer",
-    "design": "Design Spec",
     "analytics": "Analytics",
-    "removeFromDock": "Remove from Dock"
+    "game": "Snake (Snake.app)",
+    "removeFromDock": "Remove from Dock",
+    "blog": "Blog (Blog.app)"
   },
   "launchpad": {
     "title": "Launchpad",
@@ -54,7 +55,7 @@
     "alreadyInDock": "Already in Dock"
   },
   "search": {
-    "placeholder": "Type a command or search apps (e.g. 'settings', 'projects', 'readme', 'albums')...",
+    "placeholder": "Type a command or search apps (e.g. 'settings', 'projects', 'blog', 'albums')...",
     "esc": "ESC to Exit",
     "navigate": "↑↓ Navigate",
     "enter": "Enter to Run",
@@ -68,20 +69,33 @@
     "online": "System Online"
   },
   "apps": {
-    "readme": {
-      "title": "README.mdx",
-      "badge": "v3.7",
-      "contactMe": "Contact Me",
-      "outline": "OUTLINE",
-      "aboutMe": "About Me",
-      "techStack": "Tech Stack Matrix",
-      "milestones": "Milestones",
-      "viewProjects": "View Projects",
-      "viewGallery": "Albums",
-      "philosophyTitle": "Philosophy:",
-      "starsLabel": "GITHUB STARS",
-      "techTitle": "CORE TECH STACK",
-      "careerTitle": "CAREER CHANGELOG"
+    "finder": {
+      "title": "Finder",
+      "locations": "Locations",
+      "favorites": "Favorites",
+      "documents": "Documents",
+      "pictures": "Pictures",
+      "back": "Back to previous folder",
+      "path": "Current path",
+      "view": "View mode",
+      "listView": "List view",
+      "gridView": "Icon grid",
+      "search": "Search this folder",
+      "searchScope": "Search this folder and its subfolders",
+      "empty": "No matching items in this folder",
+      "itemCount": "{count} items",
+      "name": "Name",
+      "kindLabel": "Kind",
+      "modifiedAt": "Date Modified",
+      "size": "Size",
+      "byteSize": "{size} bytes",
+      "kind": {
+        "directory": "Folder",
+        "blog": "Blog article",
+        "note": "Short note",
+        "project": "Project",
+        "image": "Image"
+      }
     },
     "gallery": {
       "title": "Albums",
@@ -115,40 +129,71 @@
       "ai": "AI & Agent",
       "oss": "Open Source",
       "saas": "Indie SaaS",
-      "viewDetail": "Inspect"
+      "viewDetail": "Inspect",
+      "empty": "No projects yet"
     },
     "notes": {
-      "title": "Notes.app — Technical Notes",
-      "all": "All",
-      "searchPlaceholder": "Search notes, intro, or tags...",
+      "title": "Notes.app — Short Notes",
+      "subtitle": "Short notes and quick ideas",
+      "searchPlaceholder": "Search notes, content, or tags…",
       "clearSearch": "Clear search",
-      "copyLink": "Copy Link",
-      "copiedLink": "Note direct link copied to clipboard",
-      "empty": "No matching technical notes found",
-      "backToList": "Back to Notes",
-      "readArticle": "Read Article",
-      "prevArticle": "Previous",
-      "nextArticle": "Next",
-      "articlesCount": "{count} Notes"
+      "empty": "No matching short notes found",
+      "notesCount": "{count} notes"
     },
     "terminal": {
-      "title": "Terminal.sh — Interactive Shell",
-      "lastLogin": "Last login: Thu Oct 15 on ttys001 (Starllow.OS Matte Edition)",
-      "hint": "Type 'help' or click buttons above to run commands.",
-      "quickCmds": "Quick Commands:",
-      "inputPlaceholder": "Type command..."
+      "title": "Terminal.sh — Portfolio Terminal",
+      "welcomeTitle": "Welcome to Starllow Terminal",
+      "examplesTitle": "Try these commands",
+      "inputPlaceholder": "Enter a command…",
+      "inputLabel": "Terminal command",
+      "detecting": "Reading…",
+      "unknown": "Unknown",
+      "operatingSystem": "Operating system",
+      "browser": "Browser",
+      "language": "Language",
+      "version": "Version",
+      "stack": "Tech stack",
+      "helpTitle": "Available commands",
+      "helpCommand": "Show command help",
+      "appsCommand": "List Launchpad apps",
+      "systemCommand": "Show browser-readable environment details",
+      "openCommand": "Open or focus an app",
+      "pwdCommand": "Show the current directory",
+      "lsCommand": "List directory contents",
+      "treeCommand": "Show contents as a tree",
+      "cdCommand": "Change directory",
+      "catCommand": "Print a text file",
+      "blogListCommand": "List blog articles",
+      "notesListCommand": "List short notes",
+      "projectsListCommand": "List projects",
+      "galleryListCommand": "List theme albums",
+      "clearCommand": "Clear terminal output",
+      "appsTitle": "Launchpad apps",
+      "appsDescription": "Choose an app to open it. Commands use the app ID.",
+      "systemTitle": "Runtime environment",
+      "listFound": "{count} items in {category}",
+      "listEmpty": "There is no content in {category} yet.",
+      "usage": "Usage: {command}",
+      "fileNotFound": "Path “{path}” was not found.",
+      "notDirectory": "“{path}” is not a folder.",
+      "cannotReadDirectory": "“{path}” is a folder and cannot be read with cat.",
+      "notTextFile": "“{path}” is not a readable text file.",
+      "fileOpened": "Opening {name} in its associated app",
+      "unknownApp": "App “{app}” was not found. Type apps to see app IDs.",
+      "appOpened": "Opened {app}",
+      "unknownCommand": "Unknown command “{command}”. Type help to see available commands."
     },
     "handbook": {
       "title": "Handbook.wiki — Engineering Handbook",
       "tabPrinciples": "Core Principles",
-      "tabArticles": "Technical Notes (Fumadocs)",
+      "tabArticles": "Long-form Articles (Fumadocs)",
       "howIWork": "HOW I WORK",
       "heading": "Engineering Principles & Playbook",
       "subtitle": "Inspired by PostHog open-source culture, outlining core tenets of craft, simplicity, and shipping.",
-      "notesHeading": "Long-form Notes & Articles",
-      "notesDesc": "WebGL, 3D rendering algorithms, and data structure walkthroughs based on content/notes.",
+      "notesHeading": "Long-form Technical Articles",
+      "notesDesc": "WebGL, 3D rendering, and data structure articles maintained in content/blog.",
       "backToList": "Back to list",
-      "readMore": "Read Note"
+      "readMore": "Read Article"
     },
     "contact": {
       "title": "Mail.msg — Contact & Guestbook",
@@ -188,9 +233,18 @@
       "previewDesktop": "Minimize windows to preview",
       "previewDone": "Windows minimized. Your desktop is ready to preview.",
       "wallpapers": {
-        "max": { "name": "Max the Hedgehog Engineer", "description": "Sunny hills and an outdoor coding desk" },
-        "shiba": { "name": "Astro Shiba Inu", "description": "The lunar edge and a ringed planet" },
-        "cat": { "name": "Lo-Fi Cat Coder", "description": "Noise-canceling headphones at dusk" }
+        "max": {
+          "name": "Max the Hedgehog Engineer",
+          "description": "Sunny hills and an outdoor coding desk"
+        },
+        "shiba": {
+          "name": "Astro Shiba Inu",
+          "description": "The lunar edge and a ringed planet"
+        },
+        "cat": {
+          "name": "Lo-Fi Cat Coder",
+          "description": "Noise-canceling headphones at dusk"
+        }
       },
       "desktopHeading": "Desktop elements",
       "desktopDesc": "Control desktop character messages and status information.",
@@ -213,6 +267,39 @@
       "cancel": "Cancel",
       "restoreConfirm": "Restore defaults",
       "restoreDone": "Default settings restored"
+    },
+    "blog": {
+      "title": "Blog.app — Articles",
+      "all": "All",
+      "searchPlaceholder": "Search article titles, summaries, or tags…",
+      "clearSearch": "Clear search",
+      "copyLink": "Copy Link",
+      "copiedLink": "Article link copied to clipboard",
+      "empty": "No matching articles found",
+      "backToList": "Back to articles",
+      "readArticle": "Read Article",
+      "prevArticle": "Previous",
+      "nextArticle": "Next",
+      "articlesCount": "{count} articles"
+    },
+    "game": {
+      "title": "Snake — Snake.app",
+      "windowTitle": "SNAKE.EXE",
+      "score": "Score",
+      "best": "Best",
+      "start": "Start Game",
+      "restart": "Restart",
+      "pause": "Pause",
+      "resume": "Resume",
+      "boardLabel": "Snake game board",
+      "readyTitle": "Ready to play?",
+      "readyDescription": "Eat the orange food, grow your snake, and beat your best score.",
+      "pausedTitle": "Game paused",
+      "pausedDescription": "Resume when you are ready.",
+      "overTitle": "Game over",
+      "overDescription": "You hit the wall or your tail. Try another round.",
+      "keyboardHelp": "Arrow keys or WASD to move · Space to pause",
+      "touchHelp": "On mobile, swipe on the board to change direction"
     }
   },
   "LanguageSwitcher": {

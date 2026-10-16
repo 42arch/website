@@ -2,10 +2,11 @@
 
 import { ArrowLeftIcon, ArrowRightIcon, ImagesIcon, XIcon } from '@phosphor-icons/react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ShellWindow } from '@/components/shell/window'
 import { Button } from '@/components/ui/button'
 import galleryConfig from '@/data/gallery.json'
+import { useGalleryStore } from '@/stores/apps/gallery-store'
 
 interface GalleryImage {
   id: string
@@ -26,10 +27,14 @@ const albums: Album[] = galleryConfig.albums
 
 export function GalleryApp() {
   const t = useTranslations('apps.gallery')
-  const [activeAlbumId, setActiveAlbumId] = useState<Album['id'] | null>(null)
-  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null)
+  const activeAlbumId = useGalleryStore(state => state.activeAlbumId)
+  const activeImageIndex = useGalleryStore(state => state.activeImageIndex)
+  const setActiveAlbumId = useGalleryStore(state => state.setActiveAlbumId)
+  const setActiveImageIndex = useGalleryStore(state => state.setActiveImageIndex)
   const activeAlbum = albums.find(album => album.id === activeAlbumId)
   const activeImage = activeAlbum && activeImageIndex !== null ? activeAlbum.images[activeImageIndex] : undefined
+  const filteredAlbums = albums
+  const filteredImages = activeAlbum?.images.map((image, index) => ({ image, index }))
 
   useEffect(() => {
     if (!activeAlbum || activeImageIndex === null)
@@ -67,7 +72,7 @@ export function GalleryApp() {
             ? (
                 <>
                   <div className="mb-5 flex items-start gap-3">
-                    <Button variant="ghost" size="icon" className="-ml-2 size-9 shrink-0" aria-label={t('backToAlbums')} onClick={() => setActiveAlbumId(null)}>
+                      <Button variant="ghost" size="icon" className="-ml-2 size-9 shrink-0" aria-label={t('backToAlbums')} onClick={() => { setActiveAlbumId(null); setActiveImageIndex(null) }}>
                       <ArrowLeftIcon size={18} />
                     </Button>
                     <div>
@@ -78,7 +83,7 @@ export function GalleryApp() {
                   </div>
 
                   <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
-                    {activeAlbum.images.map((image, index) => (
+                    {filteredImages?.map(({ image, index }) => (
                       <button
                         key={image.id}
                         type="button"
@@ -105,13 +110,13 @@ export function GalleryApp() {
                   </header>
 
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {albums.map(album => {
+                    {filteredAlbums.map(album => {
                       const cover = album.images[0]
                       return (
                         <button
                           key={album.id}
                           type="button"
-                          onClick={() => setActiveAlbumId(album.id)}
+                          onClick={() => { setActiveAlbumId(album.id); setActiveImageIndex(null) }}
                           className="group overflow-hidden rounded-2xl bg-ph-sidebar text-left shadow-sm transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ph-orange"
                         >
                           <div className="overflow-hidden">

@@ -1,37 +1,40 @@
 'use client'
 
-import type { AppId } from '@/lib/shell-routes'
+import type { AppId, LaunchpadAppId } from '@/lib/shell-routes'
 import {
   ArticleIcon,
   BookOpenIcon,
   ChartLineUpIcon,
   EnvelopeSimpleIcon,
-  FileTextIcon,
   FolderSimpleIcon,
+  GameControllerIcon,
   GearIcon,
   ImagesIcon,
   MagnifyingGlassIcon,
-  PaletteIcon,
+  NotePencilIcon,
   TerminalWindowIcon,
 } from '@phosphor-icons/react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 import { ContextMenu, ContextMenuContent, ContextMenuGroup, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { launchpadAppIds } from '@/lib/shell-routes'
 import { useShellStore } from '@/stores/shell-store'
 
-const launchpadApps: { id: AppId, icon: typeof FileTextIcon, tone: string }[] = [
-  { id: 'readme', icon: FileTextIcon, tone: 'bg-[#f4eee5] text-[#61594f]' },
-  { id: 'projects', icon: FolderSimpleIcon, tone: 'bg-[#fff0ce] text-[#c88114]' },
-  { id: 'notes', icon: ArticleIcon, tone: 'bg-[#fff0e9] text-ph-orange' },
-  { id: 'gallery', icon: ImagesIcon, tone: 'bg-[#f5eaff] text-[#9253c8]' },
-  { id: 'handbook', icon: BookOpenIcon, tone: 'bg-[#e8f2ff] text-[#397bc0]' },
-  { id: 'contact', icon: EnvelopeSimpleIcon, tone: 'bg-[#e7f4e6] text-[#4b9b50]' },
-  { id: 'terminal', icon: TerminalWindowIcon, tone: 'bg-[#252833] text-[#c9f7d0]' },
-  { id: 'settings', icon: GearIcon, tone: 'bg-[#e9edf2] text-[#64748b]' },
-  { id: 'design', icon: PaletteIcon, tone: 'bg-[#ffe8e2] text-[#e45c45]' },
-  { id: 'analytics', icon: ChartLineUpIcon, tone: 'bg-[#e1f4f0] text-[#168c78]' },
-]
+const appPresentation = {
+  blog: { icon: ArticleIcon, tone: 'bg-[#fff0e9] text-ph-orange' },
+  projects: { icon: FolderSimpleIcon, tone: 'bg-[#fff0ce] text-[#c88114]' },
+  notes: { icon: NotePencilIcon, tone: 'bg-[#fff0e9] text-ph-orange' },
+  gallery: { icon: ImagesIcon, tone: 'bg-[#f5eaff] text-[#9253c8]' },
+  handbook: { icon: BookOpenIcon, tone: 'bg-[#e8f2ff] text-[#397bc0]' },
+  contact: { icon: EnvelopeSimpleIcon, tone: 'bg-[#e7f4e6] text-[#4b9b50]' },
+  terminal: { icon: TerminalWindowIcon, tone: 'bg-[#252833] text-[#c9f7d0]' },
+  settings: { icon: GearIcon, tone: 'bg-[#e9edf2] text-[#64748b]' },
+  analytics: { icon: ChartLineUpIcon, tone: 'bg-[#e1f4f0] text-[#168c78]' },
+  game: { icon: GameControllerIcon, tone: 'bg-[#e8f2e3] text-[#47764d]' },
+} satisfies Record<LaunchpadAppId, { icon: typeof ArticleIcon, tone: string }>
+
+export const launchpadApps = launchpadAppIds.map(id => ({ id, ...appPresentation[id] }))
 
 interface LaunchpadProps {
   open: boolean

@@ -322,5 +322,5 @@ interface ShellState {
 4. **第四阶段：国际化、响应式与交互打磨（已完成）**
    - 完善 `messages/zh.json` 与 `messages/en.json` 完整双语言词典（覆盖 MenuBar、Dock、Spotlight、8 大 App、系统设置与通用文案）。
    - 在 MenuBar 顶栏增加极简双语切换胶囊（`ZH / EN`），并在 `SettingsApp` 系统设置中提供双语偏好切换。
-   - `HandbookApp` 增加 Fumadocs 内容管理体系联动，支持直观阅读 `content/notes/*.mdx` 技术笔记与代码实现。
+   - `BlogApp` 使用 Fumadocs 管理 `content/blog/*.mdx` 长篇文章；`NotesApp` 使用独立的 Fumadocs `notes` collection 管理 `content/notes/*.mdx` 短笔记，笔记正文写在 MDX 正文中。
    - 针对超小屏幕与移动端（<375px）完成微微圆角、自适应 Dock 缩放与全屏 Sheet 体验打磨。

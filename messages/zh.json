@@ -18,9 +18,8 @@
     "window": "窗口",
     "handbook": "个人手册",
     "settings": "系统设置",
-    "openReadme": "打开 README.mdx",
     "openProjects": "浏览作品集 (Projects)",
-    "openNotes": "浏览技术笔记 (Notes)",
+    "openNotes": "打开短笔记 (Notes)",
     "openGallery": "浏览画册 (Albums)",
     "copyEmail": "拷贝个人邮箱",
     "tileWindows": "台前调度 / 整齐排列",
@@ -29,21 +28,23 @@
     "showDesktop": "显示桌面 (欣赏卡通壁纸)",
     "aboutThisComputer": "关于本机",
     "network": "网络信号",
-    "battery": "电池电量"
+    "battery": "电池电量",
+    "openBlog": "浏览长篇文章 (Blog)"
   },
   "dock": {
-    "readme": "README.mdx",
+    "finder": "访达 (Finder)",
     "projects": "作品集 (Projects)",
-    "notes": "技术笔记 (Notes.app)",
+    "notes": "短笔记 (Notes.app)",
     "gallery": "画册 (Albums)",
     "handbook": "工作手册 (Handbook)",
     "contact": "联系与留言 (Mail)",
     "terminal": "终端 (Terminal.sh)",
     "settings": "系统设置 (Settings)",
     "about": "关于本机",
-    "design": "设计规范 (Design)",
     "analytics": "数据洞察 (Analytics)",
-    "removeFromDock": "从 Dock 移除"
+    "game": "贪吃蛇 (Snake.app)",
+    "removeFromDock": "从 Dock 移除",
+    "blog": "博客 (Blog.app)"
   },
   "launchpad": {
     "title": "启动台",
@@ -54,7 +55,7 @@
     "alreadyInDock": "已在 Dock 中"
   },
   "search": {
-    "placeholder": "输入命令或搜索应用（例如 'settings', 'projects', 'readme', 'albums'）...",
+    "placeholder": "输入命令或搜索应用（例如 'settings', 'projects', 'blog', 'albums'）...",
     "esc": "ESC 退出",
     "navigate": "↑↓ 选择",
     "enter": "回车执行",
@@ -68,20 +69,33 @@
     "online": "在线运行"
   },
   "apps": {
-    "readme": {
-      "title": "README.mdx",
-      "badge": "v3.7",
-      "contactMe": "联系我",
-      "outline": "大纲导览",
-      "aboutMe": "关于我",
-      "techStack": "技术栈矩阵",
-      "milestones": "履历里程碑",
-      "viewProjects": "浏览作品集",
-      "viewGallery": "画册",
-      "philosophyTitle": "设计哲学：",
-      "starsLabel": "GITHUB STARS",
-      "techTitle": "核心技术栈 (TECH STACK)",
-      "careerTitle": "履历里程碑 (CAREER CHANGELOG)"
+    "finder": {
+      "title": "Finder",
+      "locations": "位置",
+      "favorites": "常用位置",
+      "documents": "文稿",
+      "pictures": "图片",
+      "back": "返回上一个文件夹",
+      "path": "当前路径",
+      "view": "视图方式",
+      "listView": "列表视图",
+      "gridView": "图标网格",
+      "search": "搜索当前文件夹",
+      "searchScope": "搜索当前文件夹及其子文件夹",
+      "empty": "此文件夹没有匹配的内容",
+      "itemCount": "{count} 个项目",
+      "name": "名称",
+      "kindLabel": "种类",
+      "modifiedAt": "修改时间",
+      "size": "大小",
+      "byteSize": "{size} 字节",
+      "kind": {
+        "directory": "文件夹",
+        "blog": "博客文章",
+        "note": "短笔记",
+        "project": "项目",
+        "image": "图片"
+      }
     },
     "gallery": {
       "title": "画册",
@@ -115,40 +129,71 @@
       "ai": "AI & Agent",
       "oss": "开源工具",
       "saas": "独立 SaaS",
-      "viewDetail": "查看详情"
+      "viewDetail": "查看详情",
+      "empty": "暂无项目"
     },
     "notes": {
-      "title": "Notes.app — 技术笔记",
-      "all": "全部",
-      "searchPlaceholder": "搜索文章标题、简介或标签...",
+      "title": "Notes.app — 短笔记",
+      "subtitle": "短笔记与灵感摘录",
+      "searchPlaceholder": "搜索笔记、内容或标签…",
       "clearSearch": "清除搜索",
-      "copyLink": "拷贝链接",
-      "copiedLink": "已拷贝文章直达链接至剪贴板",
-      "empty": "未找到匹配的技术笔记",
-      "backToList": "返回文章列表",
-      "readArticle": "阅读全文",
-      "prevArticle": "上一篇",
-      "nextArticle": "下一篇",
-      "articlesCount": "{count} 篇笔记"
+      "empty": "没有找到匹配的短笔记",
+      "notesCount": "{count} 条笔记"
     },
     "terminal": {
-      "title": "Terminal.sh — 交互式终端",
-      "lastLogin": "Last login: Thu Oct 15 on ttys001 (Starllow.OS Matte Edition)",
-      "hint": "输入 help 或点击上方快捷按钮体验命令。",
-      "quickCmds": "快捷命令:",
-      "inputPlaceholder": "输入命令..."
+      "title": "Terminal.sh — 作品集终端",
+      "welcomeTitle": "欢迎来到 Starllow 终端",
+      "examplesTitle": "试试这些命令",
+      "inputPlaceholder": "输入命令…",
+      "inputLabel": "终端命令",
+      "detecting": "读取中…",
+      "unknown": "未知",
+      "operatingSystem": "操作系统",
+      "browser": "浏览器",
+      "language": "语言",
+      "version": "版本",
+      "stack": "技术栈",
+      "helpTitle": "可用命令",
+      "helpCommand": "显示命令帮助",
+      "appsCommand": "列出启动台中的应用",
+      "systemCommand": "显示浏览器可读的系统信息",
+      "openCommand": "打开或聚焦一个应用",
+      "pwdCommand": "显示当前目录",
+      "lsCommand": "列出目录内容",
+      "treeCommand": "以树形结构列出内容",
+      "cdCommand": "切换目录",
+      "catCommand": "显示文本文件内容",
+      "blogListCommand": "列出博客文章",
+      "notesListCommand": "列出短笔记",
+      "projectsListCommand": "列出项目",
+      "galleryListCommand": "列出主题画册",
+      "clearCommand": "清空终端输出",
+      "appsTitle": "启动台应用",
+      "appsDescription": "选择一个应用即可打开它。命令使用应用 ID。",
+      "systemTitle": "运行环境",
+      "listFound": "{category}共 {count} 项",
+      "listEmpty": "{category}当前没有内容。",
+      "usage": "用法：{command}",
+      "fileNotFound": "找不到路径“{path}”。",
+      "notDirectory": "“{path}”不是文件夹。",
+      "cannotReadDirectory": "“{path}”是文件夹，无法用 cat 读取。",
+      "notTextFile": "“{path}”不是可读取的文本文件。",
+      "fileOpened": "正在关联应用中打开 {name}",
+      "unknownApp": "没有找到应用“{app}”。输入 apps 查看应用 ID。",
+      "appOpened": "已打开 {app}",
+      "unknownCommand": "无法识别命令“{command}”。输入 help 查看可用命令。"
     },
     "handbook": {
       "title": "Handbook.wiki — 个人工程手册",
       "tabPrinciples": "工程原则",
-      "tabArticles": "技术笔记 (Fumadocs)",
+      "tabArticles": "技术长文 (Fumadocs)",
       "howIWork": "HOW I WORK",
       "heading": "我的工程原则与协作手册",
       "subtitle": "受 PostHog 开源文化启发，这里记录了我对待软件工程、产品设计与团队协作的核心理念。",
-      "notesHeading": "技术长文与知识笔记",
-      "notesDesc": "基于 content/notes 体系维护的 WebGL、3D 渲染与数据结构技术总结。",
+      "notesHeading": "技术长文与知识文章",
+      "notesDesc": "基于 content/blog 体系维护的 WebGL、3D 渲染与数据结构技术文章。",
       "backToList": "返回列表",
-      "readMore": "阅读详情"
+      "readMore": "阅读全文"
     },
     "contact": {
       "title": "Mail.msg — 联系与访客留言",
@@ -188,9 +233,18 @@
       "previewDesktop": "最小化窗口预览桌面",
       "previewDone": "窗口已最小化，可以预览桌面",
       "wallpapers": {
-        "max": { "name": "刺猬工程师 Max", "description": "阳光山丘与露天代码桌" },
-        "shiba": { "name": "太空柴犬宇航员", "description": "月球边缘与环状星轨" },
-        "cat": { "name": "极客黑猫 Coder", "description": "降噪耳机与暮色山谷" }
+        "max": {
+          "name": "刺猬工程师 Max",
+          "description": "阳光山丘与露天代码桌"
+        },
+        "shiba": {
+          "name": "太空柴犬宇航员",
+          "description": "月球边缘与环状星轨"
+        },
+        "cat": {
+          "name": "极客黑猫 Coder",
+          "description": "降噪耳机与暮色山谷"
+        }
       },
       "desktopHeading": "桌面元素",
       "desktopDesc": "控制桌面上的角色提示与状态信息。",
@@ -213,6 +267,39 @@
       "cancel": "取消",
       "restoreConfirm": "恢复默认",
       "restoreDone": "已恢复默认设置"
+    },
+    "blog": {
+      "title": "Blog.app — 技术文章",
+      "all": "全部",
+      "searchPlaceholder": "搜索文章标题、简介或标签…",
+      "clearSearch": "清除搜索",
+      "copyLink": "拷贝链接",
+      "copiedLink": "已拷贝文章直达链接至剪贴板",
+      "empty": "未找到匹配的文章",
+      "backToList": "返回文章列表",
+      "readArticle": "阅读全文",
+      "prevArticle": "上一篇",
+      "nextArticle": "下一篇",
+      "articlesCount": "{count} 篇文章"
+    },
+    "game": {
+      "title": "贪吃蛇 — Snake.app",
+      "windowTitle": "SNAKE.EXE",
+      "score": "得分",
+      "best": "最高分",
+      "start": "开始游戏",
+      "restart": "重新开始",
+      "pause": "暂停",
+      "resume": "继续游戏",
+      "boardLabel": "贪吃蛇游戏棋盘",
+      "readyTitle": "准备好了吗？",
+      "readyDescription": "吃到橙色食物，让蛇变长并挑战自己的最高分。",
+      "pausedTitle": "游戏已暂停",
+      "pausedDescription": "准备好后继续游戏。",
+      "overTitle": "游戏结束",
+      "overDescription": "撞到边界或蛇身了，再来一局吧。",
+      "keyboardHelp": "方向键或 WASD 移动 · 空格键暂停",
+      "touchHelp": "移动设备：在棋盘上滑动来改变方向"
     }
   },
   "LanguageSwitcher": {

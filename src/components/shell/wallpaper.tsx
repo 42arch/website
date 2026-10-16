@@ -1,8 +1,8 @@
 'use client'
 
 import {
+  ArticleIcon,
   CodeIcon,
-  FileTextIcon,
   FolderSimpleIcon,
   GearIcon,
   ImagesIcon,
@@ -77,17 +77,17 @@ export function ShellWallpaper() {
 
       {/* ================= TOP-RIGHT ALIAS SHORTCUT ICONS ================= */}
       <div className="hidden sm:flex flex-col items-center gap-3.5 absolute top-4 right-4 z-10 w-20 pointer-events-auto">
-        {/* Alias 1: README.mdx */}
+        {/* Alias 1: Blog.app */}
         <button
           type="button"
-          onClick={() => openWindow('readme')}
+          onClick={() => openWindow('blog')}
           className="group flex flex-col items-center text-center p-1 rounded focus:outline-none cursor-pointer"
         >
           <div className="w-11 h-11 flex items-center justify-center rounded-[8px] border bg-white/50 dark:bg-white/5 backdrop-blur-[12px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] text-gray-700 dark:text-gray-200 group-hover:border-ph-orange/50 group-hover:text-ph-orange group-hover:-translate-y-0.5 transition-all">
-            <FileTextIcon size={20} weight="regular" />
+            <ArticleIcon size={20} weight="regular" />
           </div>
           <span className="mt-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium text-ph-ink bg-white/45 dark:bg-black/35 backdrop-blur-md group-hover:bg-ph-orange group-hover:text-white transition-colors">
-            README.mdx
+            Blog.app
           </span>
         </button>
 

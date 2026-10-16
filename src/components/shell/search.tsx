@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandShortcut } from '@/components/ui/command'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { staticNotesList } from '@/lib/notes-data'
+import { staticBlogList } from '@/lib/blog-data'
+import type { NoteMeta } from '@/lib/notes-data'
+import { useBlogStore } from '@/stores/apps/blog-store'
 import { useNotesStore } from '@/stores/apps/notes-store'
 import { useShellStore } from '@/stores/shell-store'
 
@@ -16,7 +18,7 @@ interface CommandAction {
   keywords?: string[]
 }
 
-export function ShellSearch() {
+export function ShellSearch({ notesList }: { notesList: NoteMeta[] }) {
   const router = useRouter()
   const commandPaletteOpen = useShellStore(state => state.commandPaletteOpen)
   const setCommandPaletteOpen = useShellStore(state => state.setCommandPaletteOpen)
@@ -33,11 +35,12 @@ export function ShellSearch() {
 
   const commandItems: CommandAction[] = [
     { tag: 'SET', label: tMenubar('settings'), action: () => openWindow('settings') },
-    { tag: 'DOC', label: tDock('readme'), action: () => openWindow('readme') },
     { tag: 'APP', label: tDock('projects'), action: () => openWindow('projects') },
     { tag: 'NOTE', label: tDock('notes'), action: () => openWindow('notes') },
+    { tag: 'BLOG', label: tDock('blog'), action: () => openWindow('blog') },
     { tag: 'ART', label: tDock('gallery'), action: () => openWindow('gallery') },
     { tag: 'CLI', label: tDock('terminal'), action: () => openWindow('terminal') },
+    { tag: 'GAME', label: tDock('game'), action: () => openWindow('game') },
     { tag: 'WIKI', label: tDock('handbook'), action: () => openWindow('handbook') },
     { tag: 'MSG', label: tDock('contact'), action: () => openWindow('contact') },
     { tag: 'SYS', label: 'Theme (Light / Dark)', action: () => toggleTheme() },
@@ -50,14 +53,23 @@ export function ShellSearch() {
         showToast(`${tCommon('copied')}: alex@posthog-style.dev`)
       },
     },
-    ...staticNotesList.map(note => ({
+    ...staticBlogList.map(article => ({
+      tag: 'BLOG',
+      label: `${article.title} (${article.category})`,
+      keywords: [article.intro, ...article.tags, article.slug],
+      action: () => {
+        useBlogStore.getState().setSelectedSlug(article.slug)
+        openWindow('blog')
+        router.push(`/blog/${article.slug}`)
+      },
+    })),
+    ...notesList.map(note => ({
       tag: 'NOTE',
       label: `${note.title} (${note.category})`,
       keywords: [note.intro, ...note.tags, note.slug],
       action: () => {
-        useNotesStore.getState().setSelectedSlug(note.slug)
+        useNotesStore.getState().setSearchQuery(note.title)
         openWindow('notes')
-        router.push(`/notes/${note.slug}`)
       },
     })),
   ]

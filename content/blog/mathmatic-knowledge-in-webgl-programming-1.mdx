@@ -23,11 +23,14 @@ tags:
 
 例如向量 $(3, 4, 0)$ 的长度是 $5$。把各分量除以长度，就得到了保留方向、长度为 $1$ 的单位向量（Normalized Vector）：
 
-```typescript
+```ts twoslash
 function normalize(v: [number, number, number]): [number, number, number] {
   const length = Math.hypot(v[0], v[1], v[2])
   return length === 0 ? [0, 0, 0] : [v[0] / length, v[1] / length, v[2] / length]
 }
+
+const direction = normalize([3, 4, 0])
+//    ^?
 ```
 
 这是理解相机观察方向、表面法线（Normal）、光照计算与物体运动的基础。

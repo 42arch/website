@@ -2,8 +2,11 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import localFont from 'next/font/local'
+import 'katex/dist/katex.css'
 import { Shell } from '@/components/shell/shell'
 import { ThemeProvider } from '@/components/theme-provider'
+import { getNotesList } from '@/lib/notes-data'
+import { getVirtualFileSystem } from '@/lib/virtual-file-system'
 import { cn } from '@/lib/utils'
 import './globals.css'
 
@@ -34,6 +37,8 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale()
   const messages = await getMessages()
+  const notesList = getNotesList()
+  const virtualFiles = getVirtualFileSystem(notesList)
 
   return (
     <html
@@ -48,7 +53,7 @@ export default async function RootLayout({
             defaultTheme="light"
             disableTransitionOnChange
           >
-            <Shell>{children}</Shell>
+          <Shell notesList={notesList} virtualFiles={virtualFiles}>{children}</Shell>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

@@ -173,14 +173,6 @@ export function ShellMenubar() {
                 <div className="bg-[#ECEAE0] dark:bg-[#1E2028] border border-black/15 dark:border-white/10 shadow-xl rounded-md p-1 text-xs">
                   <button
                     type="button"
-                    onClick={() => openWindow('readme')}
-                    className="w-full text-left px-2.5 py-1.5 hover:bg-ph-orange hover:text-white rounded-[4px] flex justify-between items-center transition-colors cursor-pointer text-ph-ink"
-                  >
-                    <span>{t('openReadme')}</span>
-                    <span className="font-mono text-[10px] opacity-70">⌘1</span>
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => openWindow('projects')}
                     className="w-full text-left px-2.5 py-1.5 hover:bg-ph-orange hover:text-white rounded-[4px] flex justify-between items-center transition-colors cursor-pointer text-ph-ink"
                   >
@@ -194,6 +186,14 @@ export function ShellMenubar() {
                   >
                     <span>{t('openNotes')}</span>
                     <span className="font-mono text-[10px] opacity-70">⌘3</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openWindow('blog')}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-ph-orange hover:text-white rounded-[4px] flex justify-between items-center transition-colors cursor-pointer text-ph-ink"
+                  >
+                    <span>{t('openBlog')}</span>
+                    <span className="font-mono text-[10px] opacity-70">⌘1</span>
                   </button>
                   <button
                     type="button"

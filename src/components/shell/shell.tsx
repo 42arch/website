@@ -1,6 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import type { NoteMeta } from '@/lib/notes-data'
+import type { VirtualFile } from '@/lib/virtual-file-types'
 import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { AppWindows } from '@/components/apps/app-windows'
@@ -14,9 +16,11 @@ import { ShellWallpaper } from './wallpaper'
 
 interface ShellProps {
   children?: ReactNode
+  notesList: NoteMeta[]
+  virtualFiles: VirtualFile[]
 }
 
-export function Shell({ children }: ShellProps) {
+export function Shell({ children, notesList, virtualFiles }: ShellProps) {
   const pathname = usePathname()
   const renderedSegment = useSelectedLayoutSegment()
   const openWindow = useShellStore(state => state.openWindow)
@@ -84,7 +88,7 @@ export function Shell({ children }: ShellProps) {
 
         {/* Windows Rendering Layer */}
         <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-          <AppWindows exclude={renderedAppId} />
+          <AppWindows exclude={renderedAppId} notesList={notesList} virtualFiles={virtualFiles} />
           {children}
         </div>
       </main>
@@ -93,7 +97,7 @@ export function Shell({ children }: ShellProps) {
       <ShellDock />
 
       {/* ================= OVERLAYS (Spotlight & Toasts) ================= */}
-      <ShellSearch />
+      <ShellSearch notesList={notesList} />
       <ShellToast />
     </div>
   )

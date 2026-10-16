@@ -1,21 +1,36 @@
 export const shellAppIds = [
-  'readme',
+  'finder',
   'projects',
   'gallery',
   'terminal',
   'notes',
+  'blog',
   'handbook',
   'contact',
   'settings',
   'about',
-  'design',
   'analytics',
+  'game',
 ] as const
 
 export type AppId = (typeof shellAppIds)[number]
 
+export const launchpadAppIds = [
+  'blog',
+  'projects',
+  'notes',
+  'gallery',
+  'handbook',
+  'contact',
+  'terminal',
+  'settings',
+  'analytics',
+  'game',
+] as const satisfies readonly AppId[]
+
+export type LaunchpadAppId = (typeof launchpadAppIds)[number]
+
 export const appAliases: Record<string, AppId> = {
-  home: 'readme',
   art: 'gallery',
   artwork: 'gallery',
 }

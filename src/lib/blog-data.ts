@@ -1,13 +1,13 @@
-export interface NoteMeta {
+export interface BlogMeta {
   slug: string
   title: string
-  date: string
+  date?: string
   category: string
   intro: string
   tags: string[]
 }
 
-export const staticNotesList: NoteMeta[] = [
+export const staticBlogList: BlogMeta[] = [
   {
     slug: 'gpu-picking',
     title: '让 GPU 帮你找到那个物体',
@@ -32,6 +32,13 @@ export const staticNotesList: NoteMeta[] = [
     intro: '用于记录机器人、自动驾驶场景下结构化消息数据的日志容器格式。解析 Channel、Schema、Message 与 Chunk 核心数据结构。',
     tags: ['MCAP', '数据格式', '自动驾驶'],
   },
+  {
+    slug: 'macos-storage-clean',
+    title: '清理 macOS mediaanalysisd 占用的存储空间',
+    category: '系统与工具',
+    intro: '认识 mediaanalysisd 的 E5RT 缓存，清理过期临时 bundle，并了解停用服务对照片识别功能的影响。',
+    tags: ['macOS', '存储空间', '命令行'],
+  },
 ]
 
-export const noteCategories = ['全部', 'WebGL', '图形学基础', '数据与工具'] as const
+export const blogCategories = ['全部', ...new Set(staticBlogList.map(article => article.category))] as const

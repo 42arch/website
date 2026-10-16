@@ -9,43 +9,9 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { detectClientEnvironment } from '@/lib/client-environment'
+import { technologyStack } from '@/lib/app-info'
 import packageJson from '../../../package.json'
-
-interface ClientEnvironment {
-  browser: string | null
-  operatingSystem: string | null
-  language: string
-}
-
-function detectClientEnvironment(): ClientEnvironment {
-  const { language, userAgent } = window.navigator
-  let browser: string | null = null
-  let operatingSystem: string | null = null
-
-  if (/Edg\//.test(userAgent))
-    browser = 'Microsoft Edge'
-  else if (/OPR\//.test(userAgent))
-    browser = 'Opera'
-  else if (/Firefox\//.test(userAgent))
-    browser = 'Mozilla Firefox'
-  else if (/Chrome\//.test(userAgent))
-    browser = 'Google Chrome'
-  else if (/Safari\//.test(userAgent))
-    browser = 'Safari'
-
-  if (/Windows NT/.test(userAgent))
-    operatingSystem = 'Windows'
-  else if (/Android/.test(userAgent))
-    operatingSystem = 'Android'
-  else if (/iPhone|iPad|iPod/.test(userAgent))
-    operatingSystem = 'iOS / iPadOS'
-  else if (/Macintosh|Mac OS X/.test(userAgent))
-    operatingSystem = 'macOS'
-  else if (/Linux/.test(userAgent))
-    operatingSystem = 'Linux'
-
-  return { browser, operatingSystem, language }
-}
 
 function InfoRow({ icon, label, value }: { icon: ReactNode, label: string, value: string }) {
   return (
@@ -59,12 +25,10 @@ function InfoRow({ icon, label, value }: { icon: ReactNode, label: string, value
   )
 }
 
-const technologyStack = ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Zustand']
-
 export function AboutApp() {
   const t = useTranslations('apps.about')
   const locale = useLocale()
-  const [environment, setEnvironment] = useState<ClientEnvironment | null>(null)
+  const [environment, setEnvironment] = useState<ReturnType<typeof detectClientEnvironment> | null>(null)
 
   useEffect(() => {
     setEnvironment(detectClientEnvironment())

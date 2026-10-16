@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import 'fumadocs-twoslash/twoslash.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -37,6 +38,14 @@
   --color-ph-muted: var(--ph-muted);
   --color-ph-border: var(--ph-border);
   --color-ph-border-subtle: var(--ph-border-subtle);
+
+  /* Map Fumadocs Twoslash popovers to the application palette. */
+  --color-fd-border: var(--ph-border);
+  --color-fd-foreground: var(--ph-ink);
+  --color-fd-muted-foreground: var(--ph-muted);
+  --color-fd-primary: var(--primary);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
 
   /* PostHog Accent Colors */
   --color-ph-orange: #f54e00;
@@ -116,6 +125,7 @@
   --input: rgba(29, 31, 39, 0.08);
   --ring: #f54e00;
   --radius: 8px;
+  --twoslash-error-bg: rgba(212, 86, 86, 0.12);
 }
 
 .dark, html.dark {
@@ -147,6 +157,40 @@
   --border: var(--ph-border-subtle);
   --input: rgba(255, 255, 255, 0.08);
   --ring: #ff641a;
+  --twoslash-error-bg: rgba(255, 95, 87, 0.16);
+}
+
+.mdx-code-block pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 1rem;
+  font-family: var(--font-geist-mono);
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.mdx-code-block pre code {
+  display: block;
+  min-width: max-content;
+}
+
+.mdx-code-block pre.shiki {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 1rem;
+}
+
+.mdx-code-block pre.shiki,
+.mdx-code-block pre.shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+.dark .mdx-code-block pre.shiki,
+.dark .mdx-code-block pre.shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
 }
 
 @layer base {
