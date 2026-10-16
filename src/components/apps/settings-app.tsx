@@ -1,11 +1,42 @@
 'use client'
 
-import type { Locale } from '@/i18n/config'
-import { GearIcon, MoonIcon, SunIcon } from '@phosphor-icons/react'
+import type { ReactNode } from 'react'
+import {
+  ArrowCounterClockwiseIcon,
+  DesktopIcon,
+  GearIcon,
+  MoonIcon,
+  SpeakerHighIcon,
+  SunIcon,
+  TranslateIcon,
+} from '@phosphor-icons/react'
 import { useLocale, useTranslations } from 'next-intl'
-import { cartoonWallpapers, useShellStore } from '@/stores/shell-store'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+import type { Locale } from '@/i18n/config'
+import { WallpaperScene } from '@/components/shell/wallpaper-scene'
 import { ShellWindow } from '@/components/shell/window'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { setUserLocale } from '@/services/locale'
+import { cartoonWallpapers, useShellStore } from '@/stores/shell-store'
+
+type SettingsSection = 'appearance' | 'desktop' | 'sound' | 'language'
+
+const wallpaperKeys = ['max', 'shiba', 'cat'] as const
 
 export function SettingsApp() {
   const wallpaperIndex = useShellStore(state => state.wallpaperIndex)
@@ -19,269 +50,292 @@ export function SettingsApp() {
   const widgetsVisible = useShellStore(state => state.widgetsVisible)
   const toggleWidgets = useShellStore(state => state.toggleWidgets)
   const minimizeAllWindows = useShellStore(state => state.minimizeAllWindows)
+  const restorePreferences = useShellStore(state => state.restorePreferences)
+  const showToast = useShellStore(state => state.showToast)
+  const settingsOpen = useShellStore(state => state.windows.settings.open && !state.windows.settings.minimized)
+  const { setTheme } = useTheme()
   const locale = useLocale() as Locale
   const t = useTranslations('apps.settings')
+  const [activeSection, setActiveSection] = useState<SettingsSection>('appearance')
+  const [restoreDialogOpen, setRestoreDialogOpen] = useState(false)
+
+  useEffect(() => {
+    if (!settingsOpen)
+      setActiveSection('appearance')
+  }, [settingsOpen])
+
+  const sections: { id: SettingsSection, label: string, icon: ReactNode }[] = [
+    { id: 'appearance', label: t('appearance'), icon: <SunIcon /> },
+    { id: 'desktop', label: t('desktop'), icon: <DesktopIcon /> },
+    { id: 'sound', label: t('sound'), icon: <SpeakerHighIcon /> },
+    { id: 'language', label: t('language'), icon: <TranslateIcon /> },
+  ]
 
   async function handleLanguageSelect(newLocale: Locale) {
     if (newLocale === locale)
       return
+
     document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
     await setUserLocale(newLocale)
     window.location.reload()
   }
 
-  const activeWallpaper = cartoonWallpapers[wallpaperIndex] || cartoonWallpapers[0]
+  function handleRestorePreferences() {
+    restorePreferences()
+    setTheme('light')
+    setRestoreDialogOpen(false)
+    showToast(t('restoreDone'))
+  }
+
+  function handlePreviewDesktop() {
+    minimizeAllWindows()
+    showToast(t('previewDone'))
+  }
+
+  function updateActiveSection(value: string) {
+    if (value === 'appearance' || value === 'desktop' || value === 'sound' || value === 'language')
+      setActiveSection(value)
+  }
 
   return (
     <ShellWindow
       id="settings"
       title={t('title')}
-      defaultWidth="min(680px, 94vw)"
-      defaultHeight="min(510px, 76vh)"
-      defaultLeft={220}
-      defaultTop={60}
+      defaultWidth="min(900px, 95vw)"
+      defaultHeight="min(680px, 86vh)"
+      defaultLeft={160}
+      defaultTop={42}
       icon={<GearIcon size={14} weight="regular" className="text-ph-muted" />}
-      headerRight={<span className="font-mono text-[10px] text-ph-muted">⌘,</span>}
     >
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Settings Sidebar */}
-        <aside className="hidden sm:flex flex-col justify-between w-44 bg-ph-sidebar border-r border-ph-border-subtle p-3 shrink-0 select-none">
-          <div className="space-y-1 text-xs">
-            <div className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-ph-muted font-semibold">{t('preferences')}</div>
-            <a href="#set-wallpaper" className="flex items-center gap-2 px-2 py-1.5 rounded-[4px] bg-black/[0.06] dark:bg-white/[0.08] text-ph-ink font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-ph-orange" />
-              <span>{t('wallpaper')}</span>
-            </a>
-            <a href="#set-appearance" className="flex items-center gap-2 px-2 py-1.5 rounded-[4px] text-ph-muted hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors">
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-              <span>{t('appearance')}</span>
-            </a>
-            <a href="#set-sound" className="flex items-center gap-2 px-2 py-1.5 rounded-[4px] text-ph-muted hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors">
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-              <span>{t('soundAndWidgets')}</span>
-            </a>
-            <a href="#set-language" className="flex items-center gap-2 px-2 py-1.5 rounded-[4px] text-ph-muted hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors">
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-              <span>{t('language')}</span>
-            </a>
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-ph-surface-body text-ph-ink">
+        <Tabs
+          orientation="vertical"
+          value={activeSection}
+          onValueChange={updateActiveSection}
+          className="flex min-h-0 flex-1 flex-col gap-0 sm:flex-row"
+        >
+          <div className="shrink-0 border-b bg-ph-sidebar p-3 sm:hidden">
+            <Select value={activeSection} onValueChange={updateActiveSection}>
+              <SelectTrigger aria-label={t('sectionNavigation')} className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {sections.map(section => (
+                    <SelectItem key={section.id} value={section.id}>{section.label}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
 
-          <div className="p-2.5 rounded-[6px] bg-[#DAD7C8]/70 dark:bg-[#1E222E] border border-ph-border-subtle text-[11px]">
-            <div className="font-mono text-[10px] text-ph-muted">ACTIVE WALLPAPER</div>
-            <div className="font-semibold text-ph-ink mt-0.5">{activeWallpaper.name}</div>
+          <TabsList aria-label={t('sectionNavigation')} className="hidden h-auto w-52 shrink-0 flex-col items-stretch justify-start gap-1 rounded-none border-r bg-ph-sidebar p-3 sm:flex">
+            <div className="px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ph-muted">
+              {t('preferences')}
+            </div>
+            {sections.map(section => (
+              <TabsTrigger
+                key={section.id}
+                value={section.id}
+                className="h-auto flex-none justify-start gap-2.5 rounded-lg px-3 py-2.5 text-left text-xs text-ph-muted data-[state=active]:bg-ph-orange/10 data-[state=active]:font-semibold data-[state=active]:text-ph-orange"
+              >
+                <span data-icon="inline-start" className="flex size-4 items-center justify-center">{section.icon}</span>
+                <span>{section.label}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+            <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
+              <TabsContent value="appearance" className="mt-0 flex flex-col gap-5">
+                <header>
+                  <h2 className="text-lg font-semibold tracking-tight">{t('appearanceHeading')}</h2>
+                  <p className="mt-1 text-xs text-ph-muted">{t('appearanceDesc')}</p>
+                </header>
+
+                <Card className="bg-ph-sidebar">
+                  <CardHeader>
+                    <CardTitle>{t('themeHeading')}</CardTitle>
+                    <CardDescription>{t('themeDesc')}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ToggleGroup
+                      type="single"
+                      value={themeMode}
+                      onValueChange={(value) => {
+                        if (value === 'light' || value === 'dark') {
+                          setThemeMode(value)
+                          setTheme(value)
+                        }
+                      }}
+                      variant="outline"
+                      className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2"
+                      aria-label={t('themeHeading')}
+                    >
+                      <ToggleGroupItem value="light" className="h-auto justify-start gap-3 p-3 text-left">
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-ph-surface text-ph-orange">
+                          <SunIcon />
+                        </span>
+                        <span className="text-left">
+                          <span className="block font-semibold">{t('light')}</span>
+                          <span className="mt-0.5 block text-[11px] text-ph-muted">{t('lightDesc')}</span>
+                        </span>
+                      </ToggleGroupItem>
+                      <ToggleGroupItem value="dark" className="h-auto justify-start gap-3 p-3 text-left">
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-ph-surface text-ph-ink">
+                          <MoonIcon />
+                        </span>
+                        <span className="text-left">
+                          <span className="block font-semibold">{t('dark')}</span>
+                          <span className="mt-0.5 block text-[11px] text-ph-muted">{t('darkDesc')}</span>
+                        </span>
+                      </ToggleGroupItem>
+                    </ToggleGroup>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-ph-sidebar">
+                  <CardHeader>
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="flex flex-col gap-1">
+                        <CardTitle>{t('wallpaperHeading')}</CardTitle>
+                        <CardDescription>{t('wallpaperDesc')}</CardDescription>
+                      </div>
+                      <Button type="button" onClick={handlePreviewDesktop} variant="outline" size="sm">
+                        {t('previewDesktop')}
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ToggleGroup
+                      type="single"
+                      value={String(wallpaperIndex)}
+                      onValueChange={(value) => {
+                        const index = Number(value)
+                        if (value && Number.isInteger(index) && index >= 0 && index < cartoonWallpapers.length)
+                          setWallpaperIndex(index)
+                      }}
+                      variant="outline"
+                      className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3"
+                      aria-label={t('wallpaperHeading')}
+                    >
+                      {wallpaperKeys.map((key, index) => (
+                        <ToggleGroupItem key={key} value={String(index)} className="h-auto w-full flex-col items-stretch gap-2 p-2.5 text-left">
+                          <span className="relative block aspect-video w-full overflow-hidden rounded-md bg-ph-surface">
+                            <WallpaperScene index={index} />
+                          </span>
+                          <span>
+                            <span className="block font-semibold">{t(`wallpapers.${key}.name`)}</span>
+                            <span className="mt-0.5 block text-[11px] text-ph-muted">{t(`wallpapers.${key}.description`)}</span>
+                          </span>
+                        </ToggleGroupItem>
+                      ))}
+                    </ToggleGroup>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="desktop" className="mt-0 flex flex-col gap-5">
+                <header>
+                  <h2 className="text-lg font-semibold tracking-tight">{t('desktopHeading')}</h2>
+                  <p className="mt-1 text-xs text-ph-muted">{t('desktopDesc')}</p>
+                </header>
+                <Card className="bg-ph-sidebar">
+                  <CardContent className="flex flex-col gap-1 pt-4">
+                    <div className="flex items-center justify-between gap-5 rounded-lg px-1 py-3">
+                      <div>
+                        <div className="text-sm font-medium">{t('mascotToggle')}</div>
+                        <p className="mt-1 text-xs text-ph-muted">{t('mascotDesc')}</p>
+                      </div>
+                      <Switch checked={mascotBubbleVisible} onCheckedChange={toggleMascotBubble} aria-label={t('mascotToggle')} />
+                    </div>
+                    <Separator />
+                    <div className="flex items-center justify-between gap-5 rounded-lg px-1 py-3">
+                      <div>
+                        <div className="text-sm font-medium">{t('widgetsToggle')}</div>
+                        <p className="mt-1 text-xs text-ph-muted">{t('widgetsDesc')}</p>
+                      </div>
+                      <Switch checked={widgetsVisible} onCheckedChange={toggleWidgets} aria-label={t('widgetsToggle')} />
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="sound" className="mt-0 flex flex-col gap-5">
+                <header>
+                  <h2 className="text-lg font-semibold tracking-tight">{t('soundHeading')}</h2>
+                  <p className="mt-1 text-xs text-ph-muted">{t('soundPageDesc')}</p>
+                </header>
+                <Card className="bg-ph-sidebar">
+                  <CardContent className="flex items-center justify-between gap-5 pt-4">
+                    <div>
+                      <div className="text-sm font-medium">{t('soundToggle')}</div>
+                      <p className="mt-1 text-xs text-ph-muted">{t('soundDesc')}</p>
+                    </div>
+                    <Switch checked={soundEnabled} onCheckedChange={toggleSound} aria-label={t('soundToggle')} />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="language" className="mt-0 flex flex-col gap-5">
+                <header>
+                  <h2 className="text-lg font-semibold tracking-tight">{t('languageHeading')}</h2>
+                  <p className="mt-1 text-xs text-ph-muted">{t('languageDesc')}</p>
+                </header>
+                <Card className="bg-ph-sidebar">
+                  <CardContent className="pt-4">
+                    <ToggleGroup
+                      type="single"
+                      value={locale}
+                      onValueChange={(value) => {
+                        if (value === 'zh' || value === 'en')
+                          void handleLanguageSelect(value)
+                      }}
+                      variant="outline"
+                      className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2"
+                      aria-label={t('languageHeading')}
+                    >
+                      <ToggleGroupItem value="zh" className="h-auto justify-start p-3 text-left">
+                        <span>
+                          <span className="block font-semibold">{t('chinese')}</span>
+                          <span className="mt-0.5 block text-[11px] text-ph-muted">zh-CN</span>
+                        </span>
+                      </ToggleGroupItem>
+                      <ToggleGroupItem value="en" className="h-auto justify-start p-3 text-left">
+                        <span>
+                          <span className="block font-semibold">{t('english')}</span>
+                          <span className="mt-0.5 block text-[11px] text-ph-muted">en-US</span>
+                        </span>
+                      </ToggleGroupItem>
+                    </ToggleGroup>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </div>
+
+            <Separator />
+            <footer className="flex shrink-0 items-center justify-between gap-3 bg-ph-sidebar px-4 py-3">
+              <span className="text-[11px] text-ph-muted">{t('autoSaved')}</span>
+              <Button type="button" variant="ghost" size="sm" onClick={() => setRestoreDialogOpen(true)}>
+                <ArrowCounterClockwiseIcon data-icon="inline-start" />
+                {t('restore')}
+              </Button>
+            </footer>
           </div>
-        </aside>
+        </Tabs>
 
-        {/* Right Settings Controls */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5">
-          {/* Section 1: Cartoon Character Wallpapers */}
-          <div id="set-wallpaper">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <h3 className="font-bold text-sm text-ph-ink">{t('wallpaperHeading')}</h3>
-                <p className="text-[11px] text-ph-muted">{t('wallpaperDesc')}</p>
-              </div>
-              <button
-                type="button"
-                onClick={minimizeAllWindows}
-                className="rounded-[5px] border border-ph-border bg-white/50 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/15 px-2.5 py-1 text-[11px] font-medium text-ph-ink transition-all cursor-pointer"
-              >
-                最小化窗口预览
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {/* Card 0: Max the Hedgehog */}
-              <button
-                type="button"
-                onClick={() => setWallpaperIndex(0)}
-                className={`rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-2.5 text-left transition-all cursor-pointer ${
-                  wallpaperIndex === 0 ? 'ring-2 ring-ph-orange' : 'hover:border-ph-border'
-                }`}
-              >
-                <div className="h-16 w-full rounded-[4px] bg-[#EDEAE0] dark:bg-[#181E2E] border border-black/10 dark:border-white/10 mb-2 flex items-center justify-center">
-                  <span className="px-2 py-0.5 rounded-[4px] bg-ph-orange text-white font-mono font-bold text-[10px]">MAX</span>
-                </div>
-                <div className="font-bold text-xs text-ph-ink">刺猬工程师 Max</div>
-                <div className="text-[10px] text-ph-muted mt-0.5">阳光山丘与露天代码桌</div>
-              </button>
-
-              {/* Card 1: Astro Shiba Inu */}
-              <button
-                type="button"
-                onClick={() => setWallpaperIndex(1)}
-                className={`rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-2.5 text-left transition-all cursor-pointer ${
-                  wallpaperIndex === 1 ? 'ring-2 ring-ph-orange' : 'hover:border-ph-border'
-                }`}
-              >
-                <div className="h-16 w-full rounded-[4px] bg-[#E5EAF3] dark:bg-[#1D243B] border border-black/10 dark:border-white/10 mb-2 flex items-center justify-center">
-                  <span className="px-2 py-0.5 rounded-[4px] bg-[#1D1F27] text-white font-mono font-bold text-[10px]">SHIBA</span>
-                </div>
-                <div className="font-bold text-xs text-ph-ink">太空柴犬宇航员</div>
-                <div className="text-[10px] text-ph-muted mt-0.5">月球边缘节点与环状星</div>
-              </button>
-
-              {/* Card 2: Lo-Fi Black Cat */}
-              <button
-                type="button"
-                onClick={() => setWallpaperIndex(2)}
-                className={`rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-2.5 text-left transition-all cursor-pointer ${
-                  wallpaperIndex === 2 ? 'ring-2 ring-ph-orange' : 'hover:border-ph-border'
-                }`}
-              >
-                <div className="h-16 w-full rounded-[4px] bg-[#E9E4EC] dark:bg-[#221D33] border border-black/10 dark:border-white/10 mb-2 flex items-center justify-center">
-                  <span className="px-2 py-0.5 rounded-[4px] bg-[#232634] text-ph-yellow font-mono font-bold text-[10px]">CAT</span>
-                </div>
-                <div className="font-bold text-xs text-ph-ink">极客黑猫 Coder</div>
-                <div className="text-[10px] text-ph-muted mt-0.5">降噪耳机与暮色山谷</div>
-              </button>
-            </div>
-          </div>
-
-          {/* Section 2: Appearance Mode */}
-          <div id="set-appearance" className="pt-4 border-t border-ph-border-subtle">
-            <h3 className="font-bold text-sm text-ph-ink mb-2.5">{t('appearanceHeading')}</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setThemeMode('light')}
-                className={`rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3 flex items-center justify-between transition-all cursor-pointer ${
-                  themeMode === 'light' ? 'ring-2 ring-ph-orange' : 'hover:border-ph-border'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-[4px] bg-[#EAE8DF] border border-black/15 flex items-center justify-center text-gray-800">
-                    <SunIcon size={16} weight="bold" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-semibold text-xs text-ph-ink">{t('light')}</div>
-                    <div className="text-[10px] text-ph-muted">Warm Stone</div>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setThemeMode('dark')}
-                className={`rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3 flex items-center justify-between transition-all cursor-pointer ${
-                  themeMode === 'dark' ? 'ring-2 ring-ph-orange' : 'hover:border-ph-border'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-[4px] bg-[#161922] border border-white/15 flex items-center justify-center text-ph-yellow">
-                    <MoonIcon size={16} weight="fill" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-semibold text-xs text-ph-ink">{t('dark')}</div>
-                    <div className="text-[10px] text-ph-muted">Dark Night</div>
-                  </div>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          {/* Section 3: Sound & Widgets Toggles */}
-          <div id="set-sound" className="pt-4 border-t border-ph-border-subtle space-y-2">
-            <h3 className="font-bold text-sm text-ph-ink mb-2">{t('soundHeading')}</h3>
-
-            {/* Sound Toggle */}
-            <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3 flex items-center justify-between">
-              <div>
-                <div className="font-semibold text-xs text-ph-ink">{t('soundToggle')}</div>
-                <div className="text-[11px] text-ph-muted">{t('soundDesc')}</div>
-              </div>
-              <button
-                type="button"
-                onClick={toggleSound}
-                className={`px-3 py-1 rounded-[5px] text-xs font-medium transition-all cursor-pointer ${
-                  soundEnabled
-                    ? 'bg-ph-orange text-white shadow-sm'
-                    : 'border border-ph-border bg-white/50 dark:bg-white/10 text-ph-muted'
-                }`}
-              >
-                {soundEnabled ? 'ON' : 'OFF'}
-              </button>
-            </div>
-
-            {/* Mascot Bubble Toggle */}
-            <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3 flex items-center justify-between">
-              <div>
-                <div className="font-semibold text-xs text-ph-ink">{t('mascotToggle')}</div>
-              </div>
-              <button
-                type="button"
-                onClick={toggleMascotBubble}
-                className={`px-3 py-1 rounded-[5px] text-xs font-medium transition-all cursor-pointer ${
-                  mascotBubbleVisible
-                    ? 'bg-ph-orange text-white shadow-sm'
-                    : 'border border-ph-border bg-white/50 dark:bg-white/10 text-ph-muted'
-                }`}
-              >
-                {mascotBubbleVisible ? 'ON' : 'OFF'}
-              </button>
-            </div>
-
-            {/* Desktop Widgets Toggle */}
-            <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3 flex items-center justify-between">
-              <div>
-                <div className="font-semibold text-xs text-ph-ink">{t('widgetsToggle')}</div>
-              </div>
-              <button
-                type="button"
-                onClick={toggleWidgets}
-                className={`px-3 py-1 rounded-[5px] text-xs font-medium transition-all cursor-pointer ${
-                  widgetsVisible
-                    ? 'bg-ph-orange text-white shadow-sm'
-                    : 'border border-ph-border bg-white/50 dark:bg-white/10 text-ph-muted'
-                }`}
-              >
-                {widgetsVisible ? 'ON' : 'OFF'}
-              </button>
-            </div>
-          </div>
-
-          {/* Section 4: Language & Region */}
-          <div id="set-language" className="space-y-3 pt-3 border-t border-ph-border-subtle">
-            <div>
-              <h3 className="font-bold text-sm text-ph-ink">{t('languageHeading')}</h3>
-              <p className="text-[11px] text-ph-muted">{t('languageDesc')}</p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => handleLanguageSelect('zh')}
-                className={`p-3 rounded-[6px] border text-left transition-all cursor-pointer ${
-                  locale === 'zh'
-                    ? 'border-ph-orange/60 bg-ph-orange/5 ring-1 ring-ph-orange/20 shadow-sm'
-                    : 'border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] hover:bg-white/70 dark:hover:bg-white/[0.06]'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-bold text-xs text-ph-ink">简体中文</span>
-                  {locale === 'zh' && <span className="w-1.5 h-1.5 rounded-full bg-ph-orange" />}
-                </div>
-                <div className="text-[10px] text-ph-muted font-mono">zh-CN (默认)</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleLanguageSelect('en')}
-                className={`p-3 rounded-[6px] border text-left transition-all cursor-pointer ${
-                  locale === 'en'
-                    ? 'border-ph-orange/60 bg-ph-orange/5 ring-1 ring-ph-orange/20 shadow-sm'
-                    : 'border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] hover:bg-white/70 dark:hover:bg-white/[0.06]'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-bold text-xs text-ph-ink">English</span>
-                  {locale === 'en' && <span className="w-1.5 h-1.5 rounded-full bg-ph-orange" />}
-                </div>
-                <div className="text-[10px] text-ph-muted font-mono">en-US (International)</div>
-              </button>
-            </div>
-          </div>
-        </div>
+        <Dialog open={restoreDialogOpen} onOpenChange={setRestoreDialogOpen}>
+          <DialogContent showCloseButton={false}>
+            <DialogHeader>
+              <DialogTitle>{t('restoreTitle')}</DialogTitle>
+              <DialogDescription>{t('restoreDesc')}</DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setRestoreDialogOpen(false)}>{t('cancel')}</Button>
+              <Button type="button" variant="destructive" onClick={handleRestorePreferences}>{t('restoreConfirm')}</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </ShellWindow>
   )

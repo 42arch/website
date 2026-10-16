@@ -3,6 +3,7 @@
 import { ArrowLeftIcon, ArrowRightIcon, BookOpenIcon } from '@phosphor-icons/react'
 import { useTranslations } from 'next-intl'
 import { ShellWindow } from '@/components/shell/window'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useHandbookStore } from '@/stores/apps/handbook-store'
 
 interface ArticleItem {
@@ -105,39 +106,32 @@ function idToColor(id: number): [number, number, number] {
       defaultTop={64}
       icon={<BookOpenIcon size={14} weight="regular" className="text-ph-muted" />}
       headerCenter={(
-        <div className="flex items-center p-0.5 rounded-[4px] bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-xs select-none">
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('principles')
+        <ToggleGroup
+          type="single"
+          value={activeTab}
+          onValueChange={(value) => {
+            if (value === 'principles') {
+              setActiveTab(value)
               setSelectedNote(null)
-            }}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              activeTab === 'principles'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            01 / {t('tabPrinciples')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('notes')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              activeTab === 'notes'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            02 / {t('tabArticles')} ({articles.length})
-          </button>
-        </div>
+            }
+            else if (value === 'notes') {
+              setActiveTab(value)
+            }
+          }}
+          variant="outline"
+          size="sm"
+          spacing={0}
+          aria-label={t('title')}
+        >
+          <ToggleGroupItem value="principles">01 / {t('tabPrinciples')}</ToggleGroupItem>
+          <ToggleGroupItem value="notes">02 / {t('tabArticles')} ({articles.length})</ToggleGroupItem>
+        </ToggleGroup>
       )}
     >
       <div className="flex-1 overflow-y-auto p-6 space-y-5">
         {activeTab === 'principles' && (
           <>
-            <div className="border-b border-ph-border-subtle pb-4">
+            <div className="border-b pb-4">
               <span className="px-2 py-0.5 bg-ph-orange/10 text-ph-orange font-mono text-[10px] font-semibold rounded-[4px]">
                 {t('howIWork')}
               </span>
@@ -149,7 +143,7 @@ function idToColor(id: number): [number, number, number] {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               {principles.map(p => (
-                <div key={p.num} className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-4 flex flex-col justify-between">
+                <div key={p.num} className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-4 flex flex-col justify-between">
                   <div>
                     <div className={`font-mono text-[10px] font-semibold mb-1 ${p.highlight ? 'text-ph-orange' : 'text-ph-muted'}`}>
                       {p.num}
@@ -165,7 +159,7 @@ function idToColor(id: number): [number, number, number] {
 
         {activeTab === 'notes' && (
           <div className="space-y-4">
-            <div className="border-b border-ph-border-subtle pb-3">
+            <div className="border-b pb-3">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="px-2 py-0.5 bg-ph-green/10 text-ph-green font-mono text-[10px] font-semibold rounded-[4px]">
@@ -191,7 +185,7 @@ function idToColor(id: number): [number, number, number] {
 
             {currentArticle ? (
               <div className="space-y-3.5">
-                <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-4 space-y-3">
+                <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-mono text-ph-orange font-semibold">{currentArticle.category}</span>
                     <span className="text-[11px] font-mono text-ph-muted">{currentArticle.date}</span>
@@ -218,7 +212,7 @@ function idToColor(id: number): [number, number, number] {
                   <div
                     key={article.slug}
                     onClick={() => setSelectedNote(article.slug)}
-                    className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] hover:bg-white/75 dark:hover:bg-white/[0.06] p-4 transition-colors cursor-pointer"
+                    className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] hover:bg-white/75 dark:hover:bg-white/[0.06] p-4 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-[10px] font-mono font-semibold text-ph-orange">{article.category}</span>
@@ -226,7 +220,7 @@ function idToColor(id: number): [number, number, number] {
                     </div>
                     <h3 className="text-sm font-bold text-ph-ink mb-1">{article.title}</h3>
                     <p className="text-xs text-ph-muted leading-relaxed line-clamp-2">{article.intro}</p>
-                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-ph-border-subtle">
+                    <div className="flex items-center justify-between mt-3 pt-2 border-t">
                       <div className="flex gap-1.5">
                         {article.tags.map(t => (
                           <span key={t} className="px-1.5 py-0.5 rounded-[4px] bg-black/[0.04] dark:bg-white/[0.06] text-[10px] font-mono text-ph-muted">

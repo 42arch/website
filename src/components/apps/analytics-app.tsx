@@ -34,22 +34,22 @@ export function AnalyticsApp() {
       <div className="flex-1 overflow-y-auto p-5 space-y-4">
         {/* Metric Cards Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3.5">
+          <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-3.5">
             <div className="text-[10px] font-mono text-ph-muted uppercase">年度 Git Commits</div>
             <div className="text-2xl font-bold text-ph-ink mt-1">1,842</div>
             <div className="text-[11px] font-mono text-ph-green mt-0.5">+24.8% YoY</div>
           </div>
-          <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3.5">
+          <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-3.5">
             <div className="text-[10px] font-mono text-ph-muted uppercase">手冲咖啡消耗</div>
             <div className="text-2xl font-bold text-ph-ink mt-1">614 杯</div>
             <div className="text-[11px] font-mono text-ph-muted mt-0.5">均值 2.1 杯/日</div>
           </div>
-          <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3.5">
+          <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-3.5">
             <div className="text-[10px] font-mono text-ph-muted uppercase">开源 PR 响应率</div>
             <div className="text-2xl font-bold text-ph-ink mt-1">94.2%</div>
             <div className="text-[11px] font-mono text-ph-muted mt-0.5">平均 &lt; 4h</div>
           </div>
-          <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3.5">
+          <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-3.5">
             <div className="text-[10px] font-mono text-ph-muted uppercase">本次会话交互事件</div>
             <div className="text-2xl font-bold text-ph-orange mt-1">{sessionCount}</div>
             <div className="text-[11px] font-mono text-ph-muted mt-0.5">posthog.capture()</div>

@@ -7,6 +7,7 @@ export const shellAppIds = [
   'handbook',
   'contact',
   'settings',
+  'about',
   'design',
   'analytics',
 ] as const

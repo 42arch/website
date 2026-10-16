@@ -18,6 +18,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 import { ShellWindow } from '@/components/shell/window'
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { noteCategories, staticNotesList } from '@/lib/notes-data'
 import { captureTelemetryEvent } from '@/lib/telemetry'
 import { useNotesStore } from '@/stores/apps/notes-store'
@@ -98,7 +100,8 @@ export function NotesApp({
 
   function handleBackToList() {
     setSelectedSlug(null)
-    captureTelemetryEvent('note_back_to_list', { from: activeSlug })
+    if (activeSlug)
+      captureTelemetryEvent('note_back_to_list', { from: activeSlug })
     router.push('/notes')
   }
 
@@ -124,23 +127,28 @@ export function NotesApp({
       defaultTop={48}
       icon={<ArticleIcon size={14} weight="regular" className="text-ph-orange" />}
       headerCenter={!isDetail ? (
-        <div className="hidden sm:flex items-center p-0.5 rounded-[4px] bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-xs select-none">
+        <ToggleGroup
+          type="single"
+          value={selectedCategory === '全部' ? 'all' : selectedCategory}
+          onValueChange={(value) => {
+            if (value)
+              setSelectedCategory(value)
+          }}
+          variant="outline"
+          size="sm"
+          spacing={0}
+          className="hidden sm:flex"
+          aria-label={t('title')}
+        >
           {noteCategories.map(cat => (
-            <button
+            <ToggleGroupItem
               key={cat}
-              type="button"
-              onClick={() => setSelectedCategory(cat === '全部' ? 'all' : cat)}
-              className={`px-2.5 py-0.5 rounded-[4px] font-medium transition-colors cursor-pointer ${
-                (cat === '全部' && (selectedCategory === 'all' || selectedCategory === '全部'))
-                || selectedCategory === cat
-                  ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                  : 'text-ph-muted hover:text-ph-ink'
-              }`}
+              value={cat === '全部' ? 'all' : cat}
             >
               {cat === '全部' ? t('all') : cat}
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
       ) : (
         <button
           type="button"
@@ -157,7 +165,7 @@ export function NotesApp({
             type="button"
             onClick={handleCopyLink}
             title={t('copyLink')}
-            className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] border border-ph-border bg-white/50 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/15 text-[11px] font-mono text-ph-ink transition-colors cursor-pointer"
+            className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] border bg-white/50 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/15 text-[11px] font-mono text-ph-ink transition-colors cursor-pointer"
           >
             <CopyIcon size={12} weight="bold" />
             <span className="hidden sm:inline">{t('copyLink')}</span>
@@ -174,11 +182,11 @@ export function NotesApp({
         <article className="flex-1 flex flex-col overflow-y-auto p-5 sm:p-7 bg-ph-surface">
           <div className="max-w-3xl w-full mx-auto space-y-5">
             {/* Top Return Link */}
-            <div className="flex items-center justify-between border-b border-ph-border-subtle pb-3">
+            <div className="flex items-center justify-between border-b pb-3">
               <button
                 type="button"
                 onClick={handleBackToList}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-mono border border-ph-border-subtle bg-black/[0.03] dark:bg-white/[0.06] hover:bg-ph-orange hover:text-white transition-colors cursor-pointer text-ph-ink"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] text-xs font-mono border bg-black/[0.03] dark:bg-white/[0.06] hover:bg-ph-orange hover:text-white transition-colors cursor-pointer text-ph-ink"
               >
                 <ArrowLeftIcon size={12} weight="bold" />
                 <span>{t('backToList')}</span>
@@ -229,7 +237,7 @@ export function NotesApp({
               )}
             </header>
 
-            <div className="border-t border-ph-border-subtle" />
+            <div className="border-t" />
 
             {/* Rendered MDX Content */}
             <div className="notes-prose text-xs sm:text-sm text-ph-ink/90 leading-relaxed space-y-4 select-text">
@@ -238,7 +246,7 @@ export function NotesApp({
                   <p className="leading-relaxed">
                     {activeNote.intro}
                   </p>
-                  <div className="p-4 rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] space-y-2">
+                  <div className="p-4 rounded-[6px] border bg-white/45 dark:bg-white/[0.035] space-y-2">
                     <div className="font-mono text-xs font-semibold text-ph-orange">
                       Fumadocs Route
                     </div>
@@ -251,7 +259,7 @@ export function NotesApp({
             </div>
 
             {/* Bottom Navigation (Prev / Next) */}
-            <div className="pt-6 mt-6 border-t border-ph-border-subtle flex items-center justify-between gap-3 text-xs font-mono">
+            <div className="pt-6 mt-6 border-t flex items-center justify-between gap-3 text-xs font-mono">
               <div>
                 {prevNote ? (
                   <button
@@ -286,50 +294,54 @@ export function NotesApp({
           {/* Top Search & Filter Bar */}
           <div className="space-y-3 mb-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="relative flex-1">
-                <MagnifyingGlassIcon
-                  size={14}
-                  weight="bold"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-ph-muted pointer-events-none"
-                />
-                <input
+              <InputGroup className="flex-1">
+                <InputGroupAddon>
+                  <MagnifyingGlassIcon weight="bold" />
+                </InputGroupAddon>
+                <InputGroupInput
                   type="text"
+                  aria-label={t('searchPlaceholder')}
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   placeholder={t('searchPlaceholder')}
-                  className="w-full pl-9 pr-8 py-2 rounded-[6px] bg-black/[0.03] dark:bg-white/[0.05] border border-ph-border-subtle text-xs text-ph-ink placeholder:text-ph-muted/70 focus:outline-none focus:border-ph-orange/50 transition-colors font-mono"
+                  className="font-mono"
                 />
                 {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-ph-muted hover:text-ph-ink cursor-pointer"
-                  >
-                    <XIcon size={12} weight="bold" />
-                  </button>
+                  <InputGroupAddon align="inline-end">
+                    <InputGroupButton
+                      size="icon-xs"
+                      onClick={() => setSearchQuery('')}
+                      aria-label={t('clearSearch')}
+                    >
+                      <XIcon weight="bold" />
+                    </InputGroupButton>
+                  </InputGroupAddon>
                 )}
-              </div>
+              </InputGroup>
 
               {/* Mobile Category Chips */}
               <div className="sm:hidden flex items-center gap-1 overflow-x-auto pb-1 text-xs">
                 <span className="text-ph-muted shrink-0 mr-1">
                   <FunnelIcon size={12} weight="bold" />
                 </span>
-                {noteCategories.map(cat => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setSelectedCategory(cat === '全部' ? 'all' : cat)}
-                    className={`px-2 py-0.5 rounded-[4px] text-xs font-mono whitespace-nowrap transition-colors cursor-pointer ${
-                      (cat === '全部' && (selectedCategory === 'all' || selectedCategory === '全部'))
-                      || selectedCategory === cat
-                        ? 'bg-ph-orange text-white'
-                        : 'text-ph-muted bg-black/5 dark:bg-white/5'
-                    }`}
-                  >
-                    {cat === '全部' ? t('all') : cat}
-                  </button>
-                ))}
+                <ToggleGroup
+                  type="single"
+                  value={selectedCategory === '全部' ? 'all' : selectedCategory}
+                  onValueChange={(value) => {
+                    if (value)
+                      setSelectedCategory(value)
+                  }}
+                  variant="outline"
+                  size="sm"
+                  spacing={0}
+                  aria-label={t('title')}
+                >
+                  {noteCategories.map(cat => (
+                    <ToggleGroupItem key={cat} value={cat === '全部' ? 'all' : cat}>
+                      {cat === '全部' ? t('all') : cat}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
               </div>
             </div>
           </div>
@@ -341,7 +353,7 @@ export function NotesApp({
                 <div
                   key={note.slug}
                   onClick={() => handleOpenNote(note.slug)}
-                  className="rounded-[8px] border border-ph-border-subtle bg-white/50 dark:bg-white/[0.035] hover:bg-white/80 dark:hover:bg-white/[0.07] hover:border-ph-orange/50 p-4 sm:p-5 transition-all cursor-pointer group shadow-xs hover:shadow-sm"
+                  className="rounded-[8px] border bg-white/50 dark:bg-white/[0.035] hover:bg-white/80 dark:hover:bg-white/[0.07] hover:border-ph-orange/50 p-4 sm:p-5 transition-all cursor-pointer group shadow-xs hover:shadow-sm"
                 >
                   <div className="flex items-center justify-between text-xs font-mono mb-2">
                     <span className="px-2 py-0.5 rounded-[4px] bg-ph-orange/10 text-ph-orange font-semibold">
@@ -363,7 +375,7 @@ export function NotesApp({
                     {note.intro}
                   </p>
 
-                  <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-ph-border-subtle text-[11px] font-mono">
+                  <div className="flex items-center justify-between mt-3 pt-2.5 border-t text-[11px] font-mono">
                     <div className="flex flex-wrap gap-1.5">
                       {note.tags.map(tag => (
                         <span

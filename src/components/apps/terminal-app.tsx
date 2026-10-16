@@ -5,6 +5,8 @@ import { TerminalWindowIcon } from '@phosphor-icons/react'
 import { useTranslations } from 'next-intl'
 import { useRef } from 'react'
 import { ShellWindow } from '@/components/shell/window'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { captureTelemetryEvent } from '@/lib/telemetry'
 import { useTerminalStore } from '@/stores/apps/terminal-store'
 
@@ -123,34 +125,42 @@ export function TerminalApp() {
         {/* Quick Commands Toolbar */}
         <div className="bg-[#161820] border-b border-white/5 px-3.5 py-1.5 flex items-center gap-1.5 flex-wrap shrink-0">
           <span className="text-gray-500 text-[11px]">{t('quickCmds')}</span>
-          <button
+          <Button
             type="button"
             onClick={() => runCmd('help')}
-            className="px-2 py-0.5 rounded-[4px] bg-white/5 text-gray-300 hover:bg-ph-orange hover:text-white transition-colors cursor-pointer"
+            variant="ghost"
+            size="xs"
+            className="bg-white/5 text-gray-300"
           >
             help
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={() => runCmd('neofetch')}
-            className="px-2 py-0.5 rounded-[4px] bg-white/5 text-ph-green hover:bg-ph-orange hover:text-white transition-colors cursor-pointer"
+            variant="ghost"
+            size="xs"
+            className="bg-white/5 text-ph-green"
           >
             neofetch
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={() => runCmd('skills')}
-            className="px-2 py-0.5 rounded-[4px] bg-white/5 text-gray-300 hover:bg-ph-orange hover:text-white transition-colors cursor-pointer"
+            variant="ghost"
+            size="xs"
+            className="bg-white/5 text-gray-300"
           >
             skills
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={() => runCmd('clear')}
-            className="px-2 py-0.5 rounded-[4px] bg-white/5 text-gray-400 hover:bg-white/15 transition-colors cursor-pointer"
+            variant="ghost"
+            size="xs"
+            className="bg-white/5 text-gray-400"
           >
             clear
-          </button>
+          </Button>
         </div>
 
         {/* Console Log Area */}
@@ -169,7 +179,7 @@ export function TerminalApp() {
           {/* Prompt Form */}
           <form onSubmit={handleSubmit} className="flex items-center gap-2 pt-1">
             <span className="text-ph-green font-semibold shrink-0">alex@MacBook-Pro ~ %</span>
-            <input
+            <Input
               ref={inputRef}
               type="text"
               value={inputVal}
@@ -177,7 +187,7 @@ export function TerminalApp() {
               autoComplete="off"
               spellCheck="false"
               placeholder={t('inputPlaceholder')}
-              className="w-full bg-transparent text-white focus:outline-none font-mono text-xs"
+              className="border-0 bg-transparent px-0 font-mono text-white shadow-none focus-visible:ring-0"
             />
           </form>
           <div ref={terminalEndRef} />

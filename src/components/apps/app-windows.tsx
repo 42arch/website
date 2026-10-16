@@ -1,6 +1,7 @@
 'use client'
 
 import type { AppId } from '@/lib/shell-routes'
+import { AboutApp } from '@/components/apps/about-app'
 import { AnalyticsApp } from '@/components/apps/analytics-app'
 import { ContactApp } from '@/components/apps/contact-app'
 import { DesignApp } from '@/components/apps/design-app'
@@ -23,6 +24,7 @@ export function AppWindows({ exclude }: { exclude: AppId | null }) {
       {exclude !== 'handbook' && <HandbookApp />}
       {exclude !== 'contact' && <ContactApp />}
       {exclude !== 'settings' && <SettingsApp />}
+      {exclude !== 'about' && <AboutApp />}
       {exclude !== 'design' && <DesignApp />}
       {exclude !== 'analytics' && <AnalyticsApp />}
     </>

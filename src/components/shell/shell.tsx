@@ -22,10 +22,15 @@ export function Shell({ children }: ShellProps) {
   const openWindow = useShellStore(state => state.openWindow)
   const activeWindowId = useShellStore(state => state.activeWindowId)
   const draggingWindowId = useShellStore(state => state.draggingWindowId)
+  const hydratePreferences = useShellStore(state => state.hydratePreferences)
   const isInitialSync = useRef(true)
   const segment = pathname.replace(/^\//, '').split('/')[0]
   // The route tree stays mounted when window focus only changes the URL.
   const renderedAppId = renderedSegment === null ? null : (resolveAppId(renderedSegment) ?? null)
+
+  useEffect(() => {
+    hydratePreferences()
+  }, [hydratePreferences])
 
   // Sync route pathname -> window opening
   useEffect(() => {

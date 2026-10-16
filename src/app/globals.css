@@ -7,6 +7,22 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-heading);
@@ -30,10 +46,10 @@
   --color-ph-red: #ff5f57;
   --color-ph-blue: #007aff;
 
-  /* Strict 3-Tier Micro-radii */
-  --radius-window: 8px;
-  --radius-card: 6px;
-  --radius-btn: 5px;
+  /* Standard Tailwind radius utilities follow the project's three sizes. */
+  --radius-sm: 5px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
 
   /* Shadows */
   --shadow-mac: 0 12px 32px -8px rgba(24, 24, 20, 0.08), 0 2px 6px -1px rgba(24, 24, 20, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
@@ -93,8 +109,10 @@
   --secondary-foreground: #1d1f27;
   --muted: rgba(29, 31, 39, 0.05);
   --muted-foreground: #5a5e6b;
+  --accent: rgba(29, 31, 39, 0.06);
+  --accent-foreground: #1d1f27;
   --destructive: #ff5f57;
-  --border: rgba(29, 31, 39, 0.08);
+  --border: var(--ph-border-subtle);
   --input: rgba(29, 31, 39, 0.08);
   --ring: #f54e00;
   --radius: 8px;
@@ -123,15 +141,18 @@
   --secondary-foreground: #f3f4f6;
   --muted: rgba(255, 255, 255, 0.06);
   --muted-foreground: #9ca3af;
+  --accent: rgba(255, 255, 255, 0.08);
+  --accent-foreground: #f3f4f6;
   --destructive: #ff5f57;
-  --border: rgba(255, 255, 255, 0.08);
+  --border: var(--ph-border-subtle);
   --input: rgba(255, 255, 255, 0.08);
   --ring: #ff641a;
 }
 
 @layer base {
-  * {
+  *, *::before, *::after {
     box-sizing: border-box;
+    border-color: var(--border);
     -webkit-font-smoothing: antialiased;
   }
   body {

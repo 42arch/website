@@ -3,10 +3,13 @@
 import { ArrowRightIcon, FolderSimpleIcon, StarIcon } from '@phosphor-icons/react'
 import { useTranslations } from 'next-intl'
 import { ShellWindow } from '@/components/shell/window'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { projectsData } from '@/lib/shell-content'
 import { captureTelemetryEvent } from '@/lib/telemetry'
 import { useProjectsStore } from '@/stores/apps/projects-store'
 import { useShellStore } from '@/stores/shell-store'
+
+const projectFilters = ['all', 'ai', 'oss', 'saas'] as const
 
 export function ProjectsApp() {
   const t = useTranslations('apps.projects')
@@ -33,52 +36,21 @@ export function ProjectsApp() {
       defaultLeft={160}
       defaultTop={58}
       headerCenter={(
-        <div className="flex items-center p-0.5 rounded-[4px] bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-xs select-none">
-          <button
-            type="button"
-            onClick={() => setFilter('all')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              filter === 'all'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            {t('all')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('ai')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              filter === 'ai'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            {t('ai')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('oss')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              filter === 'oss'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            {t('oss')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('saas')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              filter === 'saas'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            {t('saas')}
-          </button>
-        </div>
+        <ToggleGroup
+          type="single"
+          value={filter}
+          onValueChange={(value) => {
+            const nextFilter = projectFilters.find(item => item === value)
+            if (nextFilter)
+              setFilter(nextFilter)
+          }}
+          variant="outline"
+          size="sm"
+          spacing={0}
+          aria-label={t('title')}
+        >
+          {projectFilters.map(item => <ToggleGroupItem key={item} value={item}>{t(item)}</ToggleGroupItem>)}
+        </ToggleGroup>
       )}
       headerRight={(
         <div className="hidden sm:flex items-center gap-1 text-[11px] font-mono text-ph-muted">
@@ -89,7 +61,7 @@ export function ProjectsApp() {
     >
       <div className="flex-1 overflow-y-auto p-5 grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {filteredProjects.map(p => (
-          <div key={p.title} className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] hover:bg-white/70 dark:hover:bg-white/[0.06] p-4 flex flex-col justify-between transition-colors">
+          <div key={p.title} className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] hover:bg-white/70 dark:hover:bg-white/[0.06] p-4 flex flex-col justify-between transition-colors">
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2">
@@ -110,7 +82,7 @@ export function ProjectsApp() {
                   </span>
                 ))}
               </div>
-              <div className="pt-2.5 border-t border-ph-border-subtle flex items-center justify-between text-[11px] font-mono">
+              <div className="pt-2.5 border-t flex items-center justify-between text-[11px] font-mono">
                 <span className="text-ph-muted">{p.metric}</span>
                 <button
                   type="button"

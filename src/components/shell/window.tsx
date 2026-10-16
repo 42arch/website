@@ -162,14 +162,14 @@ export function ShellWindow({
         width: win.maximized || isMobile ? undefined : defaultWidth,
         height: win.maximized || isMobile ? undefined : defaultHeight,
       }}
-      className={`absolute flex flex-col rounded-[8px] border border-ph-border bg-ph-surface/90 dark:bg-ph-surface/85 backdrop-blur-[22px] saturate-[145%] overflow-hidden pointer-events-auto transition-[box-shadow,transform] duration-150 ${
+      className={`absolute flex flex-col rounded-[8px] border bg-ph-surface/90 dark:bg-ph-surface/85 backdrop-blur-[22px] saturate-[145%] overflow-hidden pointer-events-auto transition-[box-shadow,transform] duration-150 ${
         isActive
           ? 'shadow-mac-active dark:shadow-mac-active-dark ring-1 ring-ph-orange/20'
           : 'shadow-mac dark:shadow-mac-dark'
       } ${
         win.maximized
           ? 'inset-x-2 top-2 bottom-14 !w-auto !h-auto max-sm:inset-1 max-sm:bottom-16'
-          : 'max-sm:inset-x-2 max-sm:top-2 max-sm:bottom-16 max-sm:w-auto max-sm:h-auto'
+          : 'max-sm:!inset-x-2 max-sm:!top-2 max-sm:!bottom-16 max-sm:!w-auto max-sm:!h-auto'
       }`}
     >
       {/* Title Bar */}
@@ -180,7 +180,7 @@ export function ShellWindow({
         onPointerCancel={handlePointerUp}
         onLostPointerCapture={handlePointerUp}
         onDoubleClick={() => maximizeWindow(id)}
-        className="h-10 bg-ph-header border-b border-ph-border-subtle px-3.5 flex items-center justify-between cursor-move select-none shrink-0"
+        className="h-10 bg-ph-header border-b px-3.5 flex items-center justify-between cursor-move select-none shrink-0"
       >
         {/* Left: Traffic Light Control Group */}
         <div className="group flex items-center gap-2 w-20">

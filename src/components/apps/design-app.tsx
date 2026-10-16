@@ -1,9 +1,16 @@
 'use client'
 
 import { ShellWindow } from '@/components/shell/window'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { colorTokens } from '@/lib/shell-content'
 import { useDesignStore } from '@/stores/apps/design-store'
 import { useShellStore } from '@/stores/shell-store'
+
+const designTabs = [
+  { value: 'layout', label: '1. 降噪与圆角指南' },
+  { value: 'tokens', label: '2. 暖石与色阶' },
+  { value: 'ia', label: '3. 模块映射架构' },
+] as const
 
 export function DesignApp() {
   const activeTab = useDesignStore(state => state.activeTab)
@@ -24,41 +31,21 @@ export function DesignApp() {
       defaultLeft={180}
       defaultTop={52}
       headerCenter={(
-        <div className="flex items-center p-0.5 rounded-[4px] bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-xs select-none">
-          <button
-            type="button"
-            onClick={() => setActiveTab('layout')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              activeTab === 'layout'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            1. 降噪与圆角指南
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('tokens')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              activeTab === 'tokens'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            2. 暖石与色阶
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('ia')}
-            className={`px-3 py-1 rounded-[4px] font-medium transition-colors cursor-pointer ${
-              activeTab === 'ia'
-                ? 'bg-white/70 dark:bg-white/15 text-ph-ink shadow-sm'
-                : 'text-ph-muted hover:text-ph-ink'
-            }`}
-          >
-            3. 模块映射架构
-          </button>
-        </div>
+        <ToggleGroup
+          type="single"
+          value={activeTab}
+          onValueChange={(value) => {
+            const nextTab = designTabs.find(tab => tab.value === value)
+            if (nextTab)
+              setActiveTab(nextTab.value)
+          }}
+          variant="outline"
+          size="sm"
+          spacing={0}
+          aria-label="Design_Spec.fig"
+        >
+          {designTabs.map(tab => <ToggleGroupItem key={tab.value} value={tab.value}>{tab.label}</ToggleGroupItem>)}
+        </ToggleGroup>
       )}
       headerRight={(
         <div className="hidden sm:flex items-center gap-1.5 text-xs font-mono text-ph-muted">
@@ -70,7 +57,7 @@ export function DesignApp() {
         {/* TAB 1: Layout & Decluttering Rules */}
         {activeTab === 'layout' && (
           <div className="space-y-4">
-            <div className="rounded-[6px] border border-ph-border-subtle border-l-2 border-l-ph-orange bg-white/45 dark:bg-white/[0.035] p-4">
+            <div className="rounded-[6px] border border-l-2 border-l-ph-orange bg-white/45 dark:bg-white/[0.035] p-4">
               <h3 className="font-bold text-sm text-ph-ink mb-1">
                 为什么之前显得「圆角太大、风格杂乱」？我们做了这 3 项核心修正：
               </h3>
@@ -80,7 +67,7 @@ export function DesignApp() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-4">
+              <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-4">
                 <div className="font-mono text-[10px] font-bold text-ph-orange mb-1">RULE 01 / 几何收敛</div>
                 <h4 className="font-semibold text-xs text-ph-ink mb-1.5">严格的三级微圆角阶梯</h4>
                 <ul className="text-[11px] text-ph-muted space-y-1 font-mono">
@@ -90,7 +77,7 @@ export function DesignApp() {
                 </ul>
               </div>
 
-              <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-4">
+              <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-4">
                 <div className="font-mono text-[10px] font-bold text-ph-ink mb-1">RULE 02 / 色彩降噪</div>
                 <h4 className="font-semibold text-xs text-ph-ink mb-1.5">告别彩虹色，单色+橙点缀</h4>
                 <p className="text-[11px] text-ph-muted leading-relaxed">
@@ -98,7 +85,7 @@ export function DesignApp() {
                 </p>
               </div>
 
-              <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-4">
+              <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-4">
                 <div className="font-mono text-[10px] font-bold text-ph-ink mb-1">RULE 03 / 空间留白</div>
                 <h4 className="font-semibold text-xs text-ph-ink mb-1.5">清理背景贴纸与冗余悬浮块</h4>
                 <p className="text-[11px] text-ph-muted leading-relaxed">
@@ -122,10 +109,10 @@ export function DesignApp() {
                     key={token.hex}
                     type="button"
                     onClick={() => copyHex(token.hex, token.name)}
-                    className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] hover:bg-white/70 dark:hover:bg-white/[0.06] p-2.5 text-left transition-colors cursor-pointer"
+                    className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] hover:bg-white/70 dark:hover:bg-white/[0.06] p-2.5 text-left transition-colors cursor-pointer"
                   >
                     <div
-                      className="h-8 w-full rounded-[4px] border border-black/10 dark:border-white/10 mb-2"
+                      className="h-8 w-full rounded-[4px] border mb-2"
                       style={{ backgroundColor: token.hex }}
                     />
                     <div className="font-semibold text-xs text-ph-ink">{token.name}</div>
@@ -141,7 +128,7 @@ export function DesignApp() {
         {/* TAB 3: IA Mapping */}
         {activeTab === 'ia' && (
           <div className="space-y-3">
-            <div className="overflow-x-auto rounded-[6px] border border-ph-border-subtle">
+            <div className="overflow-x-auto rounded-[6px] border">
               <table className="w-full text-left border-collapse text-xs">
                 <thead className="bg-black/[0.04] dark:bg-white/[0.05] font-mono text-[11px] text-ph-muted">
                   <tr>

@@ -124,7 +124,8 @@ export function ShellMenubar() {
     showToast('已拷贝个人邮箱: alex@posthog-style.dev')
   }
 
-  const activeTitle = activeWindowId && windows[activeWindowId] ? windows[activeWindowId].title : 'Starllow.OS'
+  const activeWindow = activeWindowId ? windows[activeWindowId] : null
+  const activeTitle = activeWindowId === 'about' ? t('aboutThisComputer') : activeWindow?.title ?? 'Starllow.OS'
 
   const BatteryIcon = isCharging
     ? BatteryChargingIcon
@@ -136,7 +137,7 @@ export function ShellMenubar() {
 
   return (
     <>
-      <header className="h-10 sm:h-7 w-full px-3 sm:px-3.5 flex items-center justify-between z-50 shrink-0 text-[13px] sm:text-[12px] bg-[#ECE9DE]/70 dark:bg-[#141720]/70 backdrop-blur-md saturate-[140%] border-b border-ph-border-subtle select-none">
+      <header className="h-10 sm:h-7 w-full px-3 sm:px-3.5 flex items-center justify-between z-50 shrink-0 text-[13px] sm:text-[12px] bg-[#ECE9DE]/70 dark:bg-[#141720]/70 backdrop-blur-md saturate-[140%] border-b select-none">
         {/* Left: Brand Emblem + Active App Title + macOS Menus */}
         <div className="flex items-center space-x-1 sm:space-x-1">
           {/* Brand Icon Button */}
@@ -309,7 +310,7 @@ export function ShellMenubar() {
       {startMenuOpen && (
         <div
           ref={startMenuRef}
-          className="fixed top-11 sm:top-8 left-2 sm:left-2.5 w-56 sm:w-52 rounded-[8px] border border-ph-border bg-ph-surface backdrop-blur-[22px] saturate-[145%] shadow-mac dark:shadow-mac-dark z-50 p-1 text-xs select-none"
+          className="fixed top-11 sm:top-8 left-2 sm:left-2.5 w-56 sm:w-52 rounded-[8px] border bg-ph-surface backdrop-blur-[22px] saturate-[145%] shadow-mac dark:shadow-mac-dark z-50 p-1 text-xs select-none"
         >
           <div className="px-3 py-2 sm:px-2.5 sm:py-1.5 border-b border-black/5 dark:border-white/10">
             <div className="font-bold text-ph-ink">{t('systemTitle')}</div>
@@ -319,46 +320,12 @@ export function ShellMenubar() {
             <button
               type="button"
               onClick={() => {
-                openWindow('readme')
+                openWindow('about')
                 setStartMenuOpen(false)
               }}
               className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
             >
-              <span>{t('aboutMe')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘1</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                openWindow('projects')
-                setStartMenuOpen(false)
-              }}
-              className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
-            >
-              <span>{t('openProjects')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘2</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                openWindow('notes')
-                setStartMenuOpen(false)
-              }}
-              className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
-            >
-              <span>{t('openNotes')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘3</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                openWindow('gallery')
-                setStartMenuOpen(false)
-              }}
-              className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
-            >
-              <span>{t('openGallery')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘4</span>
+              <span>{t('aboutThisComputer')}</span>
             </button>
             <button
               type="button"

@@ -7,6 +7,7 @@ import {
   StarIcon,
 } from '@phosphor-icons/react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import { careerChangelog, profileData, techStackCategories } from '@/lib/shell-content'
 import { ShellWindow } from '@/components/shell/window'
 import { useShellStore } from '@/stores/shell-store'
@@ -36,7 +37,7 @@ export function ReadmeApp() {
         <button
           type="button"
           onClick={copyEmail}
-          className="rounded-[5px] border border-ph-border bg-white/50 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/15 px-2.5 py-0.5 text-[11px] font-medium text-ph-ink transition-all cursor-pointer"
+          className="rounded-[5px] border bg-white/50 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/15 px-2.5 py-0.5 text-[11px] font-medium text-ph-ink transition-all cursor-pointer"
         >
           {t('contactMe')}
         </button>
@@ -44,7 +45,7 @@ export function ReadmeApp() {
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Left Finder-Style Sidebar */}
-        <aside className="hidden md:flex flex-col justify-between w-44 bg-ph-sidebar border-r border-ph-border-subtle p-3 shrink-0 select-none">
+        <aside className="hidden md:flex flex-col justify-between w-44 bg-ph-sidebar border-r p-3 shrink-0 select-none">
           <div className="space-y-4">
             <div>
               <div className="text-[10px] font-mono uppercase tracking-wider text-ph-muted mb-1.5 px-2">{t('outline')}</div>
@@ -88,7 +89,7 @@ export function ReadmeApp() {
                   onClick={() => openWindow('gallery')}
                   className="w-full flex items-center gap-2 px-2 py-1.5 rounded-[4px] text-ph-orange font-medium hover:bg-ph-orange/10 transition-colors text-left cursor-pointer"
                 >
-                  <span>Gallery.app</span>
+                  <span>Albums</span>
                 </button>
                 <button
                   type="button"
@@ -101,7 +102,7 @@ export function ReadmeApp() {
             </div>
           </div>
 
-          <div className="p-2.5 rounded-[6px] bg-[#DAD7C8]/70 dark:bg-[#1E222E] border border-ph-border-subtle text-[11px]">
+          <div className="p-2.5 rounded-[6px] bg-[#DAD7C8]/70 dark:bg-[#1E222E] border text-[11px]">
             <div className="font-mono font-semibold text-ph-ink mb-0.5 flex items-center gap-1.5 text-[10px]">
               <span className="w-1.5 h-1.5 rounded-full bg-ph-green" />
               <span>WARM STONE UI</span>
@@ -115,9 +116,9 @@ export function ReadmeApp() {
         {/* Right Main Body Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
           {/* Hero Profile Header */}
-          <div id="sec-intro" className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-ph-border-subtle">
+          <div id="sec-intro" className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-[8px] border border-ph-border bg-white/50 dark:bg-white/5 backdrop-blur-[12px] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] flex items-center justify-center text-ph-orange shrink-0">
+              <div className="w-12 h-12 rounded-[8px] border bg-white/50 dark:bg-white/5 backdrop-blur-[12px] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] flex items-center justify-center text-ph-orange shrink-0">
                 <SparkleIcon size={24} weight="regular" />
               </div>
               <div>
@@ -133,26 +134,27 @@ export function ReadmeApp() {
               </div>
             </div>
             <div className="flex gap-2 shrink-0">
-              <button
+              <Button
                 type="button"
                 onClick={() => openWindow('projects')}
-                className="rounded-[5px] bg-ph-orange hover:bg-ph-orange-hover text-white px-3 py-1.5 font-medium text-xs border border-black/10 active:scale-[0.98] transition-all cursor-pointer"
+                size="sm"
               >
                 {t('viewProjects')}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={() => openWindow('gallery')}
-                className="rounded-[5px] border border-ph-border bg-white/50 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/15 px-3 py-1.5 font-medium text-xs text-ph-ink transition-all cursor-pointer"
+                variant="outline"
+                size="sm"
               >
                 {t('viewGallery')}
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Bento Summary Row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3.5 sm:col-span-2 flex items-start gap-3">
+            <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-3.5 sm:col-span-2 flex items-start gap-3">
               <div className="w-6 h-6 rounded bg-ph-orange/10 text-ph-orange flex items-center justify-center shrink-0 mt-0.5">
                 <LightbulbIcon size={14} weight="regular" />
               </div>
@@ -161,7 +163,7 @@ export function ReadmeApp() {
                 {profileData.philosophy}
               </div>
             </div>
-            <div className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3.5 flex flex-col justify-between">
+            <div className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-3.5 flex flex-col justify-between">
               <span className="text-[10px] font-mono uppercase text-ph-muted">{t('starsLabel')}</span>
               <div className="text-2xl font-bold text-ph-ink my-0.5 flex items-center gap-1.5">
                 <StarIcon size={18} weight="fill" className="text-ph-orange" />
@@ -178,7 +180,7 @@ export function ReadmeApp() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {techStackCategories.map(cat => (
-                <div key={cat.title} className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] p-3.5">
+                <div key={cat.title} className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] p-3.5">
                   <div className="font-mono text-[11px] font-semibold text-ph-ink mb-2 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: cat.color }} />
                     <span>{cat.title}</span>
@@ -202,7 +204,7 @@ export function ReadmeApp() {
             </h2>
             <div className="space-y-2 text-xs">
               {careerChangelog.map((c, idx) => (
-                <div key={c.version} className="rounded-[6px] border border-ph-border-subtle bg-white/45 dark:bg-white/[0.035] flex flex-col sm:flex-row sm:items-center justify-between p-3.5">
+                <div key={c.version} className="rounded-[6px] border bg-white/45 dark:bg-white/[0.035] flex flex-col sm:flex-row sm:items-center justify-between p-3.5">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className={`px-1.5 py-0.5 rounded-[4px] font-mono font-semibold text-[10px] ${
