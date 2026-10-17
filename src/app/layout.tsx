@@ -2,9 +2,12 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import localFont from 'next/font/local'
+import { getNotesList } from '@/components/apps/notes/data'
 import { Shell } from '@/components/shell/shell'
 import { ThemeProvider } from '@/components/theme-provider'
 import { cn } from '@/lib/utils'
+import { getVirtualFileSystem } from '@/lib/virtual-file-system'
+import 'katex/dist/katex.css'
 import './globals.css'
 
 const geistSans = localFont({
@@ -23,8 +26,8 @@ const geistHeading = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Starllow.OS — macOS × PostHog 磨砂质感个人数字工作台',
-  description: 'Starllow.OS — 融合 macOS 窗口操作系统与 PostHog 极客美学的个人数字工作台，搭载 8 套专属应用与暖石磨砂材质系统。',
+  title: 'Starllow.OS',
+  description: 'Starllow.OS',
 }
 
 export default async function RootLayout({
@@ -34,6 +37,8 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale()
   const messages = await getMessages()
+  const notesList = getNotesList()
+  const virtualFiles = getVirtualFileSystem(notesList)
 
   return (
     <html
@@ -45,11 +50,10 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="light"
             disableTransitionOnChange
           >
-            <Shell>{children}</Shell>
+            <Shell notesList={notesList} virtualFiles={virtualFiles}>{children}</Shell>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

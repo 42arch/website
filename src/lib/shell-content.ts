@@ -8,37 +8,10 @@ export interface ProjectItem {
   metric: string
 }
 
-export interface ProfileData {
-  name: string
-  title: string
-  bio: string
-  philosophy: string
-  stars: string
-  kitsCount: string
-  email: string
-}
-
-export interface CareerItem {
-  version: string
-  role: string
-  desc: string
-  period: string
-}
-
 export interface ColorToken {
   name: string
   hex: string
   desc: string
-}
-
-export const profileData: ProfileData = {
-  name: 'Alex Chen (陈宇航)',
-  title: 'PRODUCT ENGINEER & INDIE MAKER',
-  bio: '专注于构建有温度的开发者工具、AI Agent 工作流与桌面级 Web 体验。',
-  philosophy: '7 年全栈与产品工程经验。通过克制的 6px~8px 工程圆角、单色主辅层级 + 品牌橙点缀与微立体键帽交互，打造耐看且秩序井然的数字工作台。',
-  stars: '14.2k',
-  kitsCount: '6 Open Source Kits',
-  email: 'alex@posthog-style.dev',
 }
 
 export const techStackCategories = [
@@ -56,21 +29,6 @@ export const techStackCategories = [
     title: 'AI & Agents',
     color: '#6B7280',
     items: ['LLM Workflows', 'MCP Server', 'RAG Pipeline', 'Evals'],
-  },
-]
-
-export const careerChangelog: CareerItem[] = [
-  {
-    version: 'v3.0',
-    role: 'Staff Product Engineer @ HyperScale AI',
-    desc: '主导下一代云端工作台与实时遥测分析引擎，打造高密度桌面交互架构。',
-    period: '2024 — Present',
-  },
-  {
-    version: 'v2.0',
-    role: 'Senior Frontend Architect @ DataPulse',
-    desc: '从 0 到 1 构建开源可视化组件库与设计系统（GitHub 8.4k Stars）。',
-    period: '2021 — 2024',
   },
 ]
 

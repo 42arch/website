@@ -6,7 +6,7 @@ const withNextIntl = createNextIntlPlugin()
 const withMDX = createMDX()
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverExternalPackages: ['typescript'],
 }
 
 export default withNextIntl(withMDX(nextConfig))

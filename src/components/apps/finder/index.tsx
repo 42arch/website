@@ -1,0 +1,394 @@
+'use client'
+
+import type { KeyboardEvent } from 'react'
+import type { FinderSortKey } from '@/components/apps/finder/store'
+import type { VirtualFile } from '@/lib/virtual-file-types'
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CaretRightIcon,
+  FileCodeIcon,
+  FileTextIcon,
+  FolderOpenIcon,
+  FolderSimpleIcon,
+  ImagesIcon,
+  MagnifyingGlassIcon,
+  MusicNotesIcon,
+  NotePencilIcon,
+  RowsIcon,
+  SortAscendingIcon,
+  SquaresFourIcon,
+} from '@phosphor-icons/react'
+import Image from 'next/image'
+import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { useFinderStore } from '@/components/apps/finder/store'
+import { compareFiles, displayName } from '@/components/apps/finder/utils'
+import { ShellWindow } from '@/components/shell/window'
+import { Button } from '@/components/ui/button'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { openVirtualFile } from '@/lib/virtual-file-actions'
+import { getVirtualDirectoryChildren, listVirtualDirectory } from '@/lib/virtual-file-utils'
+import { useShellStore } from '@/stores/shell-store'
+
+interface FinderAppProps {
+  files: VirtualFile[]
+}
+
+const sortKeys: FinderSortKey[] = ['name', 'kind', 'modifiedAt', 'size']
+
+function EntryIcon({ file }: { file: VirtualFile }) {
+  if (file.kind === 'directory')
+    return <FolderSimpleIcon className="shrink-0 text-ph-orange" size={18} weight="fill" />
+  if (file.kind === 'image')
+    return <ImagesIcon className="shrink-0 text-ph-orange" size={18} />
+  if (file.kind === 'audio')
+    return <MusicNotesIcon className="shrink-0 text-ph-orange" size={18} />
+  if (file.kind === 'note')
+    return <NotePencilIcon className="shrink-0 text-ph-orange" size={18} />
+  if (file.kind === 'project')
+    return <FileCodeIcon className="shrink-0 text-ph-orange" size={18} />
+  return <FileTextIcon className="shrink-0 text-ph-orange" size={18} />
+}
+
+function AudioCover({ file }: { file: VirtualFile }) {
+  const [hasCover, setHasCover] = useState(true)
+
+  return (
+    <span className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-md bg-ph-sidebar">
+      {hasCover
+        ? (
+            <Image
+              alt=""
+              className="object-cover"
+              fill
+              onError={() => setHasCover(false)}
+              sizes="160px"
+              src={`/api/music/artwork/${encodeURIComponent(file.id)}`}
+              unoptimized
+            />
+          )
+        : <EntryIcon file={file} />}
+    </span>
+  )
+}
+
+export function FinderApp({ files }: FinderAppProps) {
+  const router = useRouter()
+  const t = useTranslations('apps.finder')
+  const currentWindow = useShellStore(state => state.windows.finder)
+  const currentPreferences = useFinderStore(state => state.preferences)
+  const setView = useFinderStore(state => state.setView)
+  const toggleSort = useFinderStore(state => state.toggleSort)
+  const resetDirectoryPreferences = useFinderStore(state => state.resetDirectoryPreferences)
+  const [currentPath, setCurrentPath] = useState('/Documents')
+  const [selectedPath, setSelectedPath] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
+  const [history, setHistory] = useState<string[]>(['/Documents'])
+  const [historyIndex, setHistoryIndex] = useState(0)
+  const preference = currentPreferences[currentPath] ?? { view: 'list' as const, sortKey: 'name' as const, sortDirection: 'asc' as const }
+  const isGrid = preference.view === 'grid'
+
+  useEffect(() => {
+    resetDirectoryPreferences()
+  }, [resetDirectoryPreferences])
+
+  useEffect(() => {
+    if (!currentWindow?.open) {
+      setCurrentPath('/Documents')
+      setSelectedPath(null)
+      setQuery('')
+      setHistory(['/Documents'])
+      setHistoryIndex(0)
+    }
+  }, [currentWindow?.open])
+
+  const visibleFiles = useMemo(() => {
+    const normalizedQuery = query.trim().toLocaleLowerCase()
+    const source = normalizedQuery
+      ? listVirtualDirectory(files, currentPath).filter(file => [file.name, file.title, file.summary, file.category, ...(file.tags ?? []), file.path]
+          .some(value => value?.toLocaleLowerCase().includes(normalizedQuery)))
+      : getVirtualDirectoryChildren(files, currentPath)
+
+    return [...source].sort((left, right) => compareFiles(left, right, preference.sortKey, preference.sortDirection))
+  }, [currentPath, files, preference.sortDirection, preference.sortKey, query])
+
+  const breadcrumbs = useMemo(() => {
+    const segments = currentPath.split('/').filter(Boolean)
+    return segments.map((segment, index) => ({
+      name: segment,
+      path: `/${segments.slice(0, index + 1).join('/')}`,
+    }))
+  }, [currentPath])
+
+  function navigate(path: string, recordHistory = true) {
+    setCurrentPath(path)
+    setSelectedPath(null)
+    setQuery('')
+    if (!recordHistory)
+      return
+    const nextHistory = [...history.slice(0, historyIndex + 1), path]
+    setHistory(nextHistory)
+    setHistoryIndex(nextHistory.length - 1)
+  }
+
+  function navigateBack() {
+    if (historyIndex <= 0)
+      return
+    const nextIndex = historyIndex - 1
+    setHistoryIndex(nextIndex)
+    navigate(history[nextIndex], false)
+  }
+
+  function openEntry(file: VirtualFile) {
+    if (file.kind === 'directory') {
+      navigate(file.path)
+      return
+    }
+    openVirtualFile(file, router)
+  }
+
+  function handleEntryKeyDown(event: KeyboardEvent<HTMLButtonElement>, file: VirtualFile) {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      openEntry(file)
+    }
+  }
+
+  const selectedFile = files.find(file => file.path === selectedPath)
+  const currentLocation = currentPath.startsWith('/Pictures') ? 'Pictures' : currentPath.startsWith('/Music') ? 'Music' : 'Documents'
+
+  return (
+    <ShellWindow
+      id="finder"
+      title={t('title')}
+      icon={<FolderOpenIcon className="text-ph-orange" size={14} />}
+      defaultWidth="min(1040px, 96vw)"
+      defaultHeight="min(700px, 86vh)"
+      defaultLeft={80}
+      defaultTop={32}
+      headerCenter={<span className="hidden font-mono text-xs text-ph-muted sm:inline">{selectedFile ? displayName(selectedFile) : t('title')}</span>}
+    >
+      <div className="flex min-h-0 flex-1 bg-ph-surface-body text-ph-ink">
+        <aside aria-label={t('locations')} className="hidden w-48 shrink-0 flex-col gap-1 border-r bg-ph-sidebar/70 p-3 sm:flex">
+          <p className="px-2 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-ph-muted">{t('favorites')}</p>
+          {(['Documents', 'Pictures'] as const).map((location) => {
+            const active = currentPath === `/${location}` || currentPath.startsWith(`/${location}/`)
+            const Icon = location === 'Documents' ? FolderSimpleIcon : ImagesIcon
+            return (
+              <button
+                key={location}
+                type="button"
+                onClick={() => navigate(`/${location}`)}
+                aria-current={active ? 'page' : undefined}
+                className={`flex min-w-0 items-center gap-2 rounded-md px-2 py-2 text-left text-xs transition-colors ${active ? 'bg-ph-orange/10 font-medium text-ph-orange' : 'text-ph-muted hover:bg-black/[0.04] hover:text-ph-ink dark:hover:bg-white/[0.06]'}`}
+              >
+                <Icon className="shrink-0" size={17} />
+                <span className="truncate">{t(location === 'Documents' ? 'documents' : 'pictures')}</span>
+              </button>
+            )
+          })}
+          <button
+            type="button"
+            onClick={() => navigate('/Music')}
+            aria-current={currentPath.startsWith('/Music') ? 'page' : undefined}
+            className={`flex min-w-0 items-center gap-2 rounded-md px-2 py-2 text-left text-xs transition-colors ${currentPath.startsWith('/Music') ? 'bg-ph-orange/10 font-medium text-ph-orange' : 'text-ph-muted hover:bg-black/[0.04] hover:text-ph-ink dark:hover:bg-white/[0.06]'}`}
+          >
+            <MusicNotesIcon className="shrink-0" size={17} />
+            <span className="truncate">{t('music')}</span>
+          </button>
+        </aside>
+
+        <section className="flex min-w-0 flex-1 flex-col">
+          <div className="flex shrink-0 flex-col gap-2 border-b bg-ph-surface p-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2 sm:px-4 sm:py-2">
+            <div className="flex min-w-0 items-center gap-1.5 sm:flex-1">
+              <Button aria-label={t('back')} className="size-8 sm:size-7" disabled={historyIndex === 0} onClick={navigateBack} size="icon-sm" variant="ghost">
+                <ArrowLeftIcon />
+              </Button>
+              <Select onValueChange={value => navigate(`/${value}`)} value={currentLocation}>
+                <SelectTrigger aria-label={t('locations')} className="h-8 w-[108px] shrink-0 sm:hidden">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Documents">{t('documents')}</SelectItem>
+                  <SelectItem value="Pictures">{t('pictures')}</SelectItem>
+                  <SelectItem value="Music">{t('music')}</SelectItem>
+                </SelectContent>
+              </Select>
+              <nav aria-label={t('path')} className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden text-xs">
+                {breadcrumbs.map((crumb, index) => (
+                  <span className="flex min-w-0 items-center gap-1" key={crumb.path}>
+                    {index > 0 && <CaretRightIcon className="shrink-0 text-ph-muted" size={12} />}
+                    <button
+                      type="button"
+                      className={`truncate rounded px-1 py-1 hover:bg-ph-orange/10 ${index === breadcrumbs.length - 1 ? 'font-medium text-ph-ink' : 'text-ph-muted'}`}
+                      onClick={() => navigate(crumb.path)}
+                    >
+                      {crumb.name === 'Documents'
+                        ? t('documents')
+                        : crumb.name === 'Pictures'
+                          ? t('pictures')
+                          : crumb.name === 'Music'
+                            ? t('music')
+                          : files.find(file => file.path === crumb.path)?.name ?? crumb.name}
+                    </button>
+                  </span>
+                ))}
+              </nav>
+              <ToggleGroup
+                aria-label={t('view')}
+                className="shrink-0"
+                type="single"
+                value={preference.view}
+                onValueChange={value => value && setView(currentPath, value as 'list' | 'grid')}
+                size="sm"
+                variant="outline"
+              >
+                <ToggleGroupItem aria-label={t('listView')} value="list"><RowsIcon /></ToggleGroupItem>
+                <ToggleGroupItem aria-label={t('gridView')} value="grid"><SquaresFourIcon /></ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+            <div className="flex min-w-0 gap-2 sm:ml-auto sm:w-auto">
+              <InputGroup className="min-w-0 flex-1 sm:max-w-56">
+                <InputGroupAddon><MagnifyingGlassIcon /></InputGroupAddon>
+                <InputGroupInput aria-label={t('search')} onChange={event => setQuery(event.target.value)} placeholder={t('search')} value={query} />
+              </InputGroup>
+              {selectedFile && (
+                <Button className="shrink-0 sm:hidden" onClick={() => openEntry(selectedFile)} size="sm" variant="secondary">
+                  <ArrowRightIcon />
+                  {t('openSelected')}
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {isGrid
+            ? (
+                <ScrollArea className="min-h-0 flex-1">
+                  {visibleFiles.length > 0
+                    ? (
+                        <div className="grid content-start grid-cols-2 gap-1.5 p-2 sm:grid-cols-3 sm:gap-3 sm:p-5 md:grid-cols-4 lg:grid-cols-5">
+                          {visibleFiles.map(file => (
+                            <button
+                              key={file.path}
+                              type="button"
+                              onClick={() => setSelectedPath(file.path)}
+                              onDoubleClick={() => openEntry(file)}
+                              onKeyDown={event => handleEntryKeyDown(event, file)}
+                              aria-pressed={selectedPath === file.path}
+                              className={`group flex min-w-0 flex-col items-center gap-2 rounded-lg p-2 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ph-orange sm:p-3 ${selectedPath === file.path ? 'bg-ph-orange/10 ring-1 ring-ph-orange/25' : 'hover:bg-black/[0.035] dark:hover:bg-white/[0.05]'}`}
+                            >
+                              {file.kind === 'image' && file.src
+                                ? <img alt="" className="aspect-square w-full rounded-md object-cover" loading="lazy" src={file.src} />
+                                : file.kind === 'audio'
+                                  ? <AudioCover file={file} />
+                                : <span className="flex aspect-square w-full items-center justify-center rounded-md bg-ph-sidebar"><EntryIcon file={file} /></span>}
+                              <span className="w-full truncate text-xs">{displayName(file)}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )
+                    : <div className="p-10 text-center text-sm text-ph-muted">{t('empty')}</div>}
+                </ScrollArea>
+              )
+            : (
+                <ScrollArea className="min-h-0 flex-1">
+                  <div className="p-2 sm:hidden">
+                    {visibleFiles.length > 0
+                      ? visibleFiles.map(file => (
+                          <button
+                            key={file.path}
+                            type="button"
+                            onClick={() => setSelectedPath(file.path)}
+                            onKeyDown={event => handleEntryKeyDown(event, file)}
+                            aria-pressed={selectedPath === file.path}
+                            className={`flex w-full min-w-0 items-center gap-3 rounded-md border-b border-ph-ink/5 px-2.5 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ph-orange ${selectedPath === file.path ? 'bg-ph-orange/10' : 'active:bg-ph-orange/5'}`}
+                          >
+                            <EntryIcon file={file} />
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-xs font-medium">{displayName(file)}</span>
+                              <span className="mt-1 block truncate text-[10px] text-ph-muted">
+                                {t(`kind.${file.kind}`)}
+                                {file.modifiedAt ? ` · ${file.modifiedAt}` : ''}
+                                {file.size === null ? '' : ` · ${t('byteSize', { size: file.size })}`}
+                              </span>
+                            </span>
+                            {file.kind === 'directory' && <CaretRightIcon className="shrink-0 text-ph-muted" size={14} />}
+                          </button>
+                        ))
+                      : <div className="p-10 text-center text-sm text-ph-muted">{t('empty')}</div>}
+                  </div>
+                  <div className="hidden min-w-[560px] sm:block">
+                    <div className="sticky top-0 z-10 grid grid-cols-[minmax(220px,1fr)_100px_130px_82px] items-center border-b bg-ph-surface/95 px-3 py-2 text-[10px] font-medium uppercase tracking-wide text-ph-muted backdrop-blur sm:grid-cols-[minmax(260px,1fr)_130px_160px_100px] sm:px-4">
+                      {sortKeys.map(sortKey => (
+                        <button
+                          key={sortKey}
+                          type="button"
+                          onClick={() => toggleSort(currentPath, sortKey)}
+                          className={`flex min-w-0 items-center gap-1 text-left hover:text-ph-ink ${preference.sortKey === sortKey ? 'text-ph-ink' : ''}`}
+                        >
+                          <span className="truncate">{t(sortKey === 'kind' ? 'kindLabel' : sortKey)}</span>
+                          {preference.sortKey === sortKey && <SortAscendingIcon className={preference.sortDirection === 'desc' ? 'rotate-180' : ''} size={12} />}
+                        </button>
+                      ))}
+                    </div>
+                    {visibleFiles.length > 0
+                      ? visibleFiles.map(file => (
+                          <button
+                            key={file.path}
+                            type="button"
+                            onClick={() => setSelectedPath(file.path)}
+                            onDoubleClick={() => openEntry(file)}
+                            onKeyDown={event => handleEntryKeyDown(event, file)}
+                            aria-pressed={selectedPath === file.path}
+                            className={`grid w-full grid-cols-[minmax(220px,1fr)_100px_130px_82px] items-center border-b border-ph-ink/5 px-3 py-2.5 text-left text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ph-orange sm:grid-cols-[minmax(260px,1fr)_130px_160px_100px] sm:px-4 ${selectedPath === file.path ? 'bg-ph-orange/10' : 'hover:bg-black/[0.025] dark:hover:bg-white/[0.04]'}`}
+                          >
+                            <span className="flex min-w-0 items-center gap-2.5 pr-3">
+                              <EntryIcon file={file} />
+                              <span className="truncate">{displayName(file)}</span>
+                            </span>
+                            <span className="truncate pr-3 text-ph-muted">{t(`kind.${file.kind}`)}</span>
+                            <span className="truncate pr-3 text-ph-muted">{file.modifiedAt ?? '—'}</span>
+                            <span className="text-right tabular-nums text-ph-muted">{file.size === null ? '—' : t('byteSize', { size: file.size })}</span>
+                          </button>
+                        ))
+                      : <div className="p-10 text-center text-sm text-ph-muted">{t('empty')}</div>}
+                  </div>
+                  <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+              )}
+
+          <footer className="flex shrink-0 items-center justify-between gap-3 border-t bg-ph-surface px-3 py-2 text-[10px] text-ph-muted sm:px-4">
+            <span>{t('itemCount', { count: visibleFiles.length })}</span>
+            <div className="flex items-center gap-1.5 sm:hidden">
+              <Select onValueChange={value => toggleSort(currentPath, value as FinderSortKey)} value={preference.sortKey}>
+                <SelectTrigger aria-label={t('sortBy')} className="h-7 w-28">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {sortKeys.map(sortKey => (
+                    <SelectItem key={sortKey} value={sortKey}>{t(sortKey === 'kind' ? 'kindLabel' : sortKey)}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                aria-label={t('sortDirection')}
+                className="size-7"
+                onClick={() => toggleSort(currentPath, preference.sortKey)}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <SortAscendingIcon className={preference.sortDirection === 'desc' ? 'rotate-180' : ''} />
+              </Button>
+            </div>
+            <span className="hidden max-w-[60%] truncate sm:block">{query ? t('searchScope') : currentPath}</span>
+          </footer>
+        </section>
+      </div>
+    </ShellWindow>
+  )
+}

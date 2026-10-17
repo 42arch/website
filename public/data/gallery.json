@@ -1,0 +1,109 @@
+{
+  "albums": [
+    {
+      "id": "nature",
+      "title": "自然",
+      "description": "山海之间，收集光与风的痕迹。",
+      "images": [
+        {
+          "id": "forest",
+          "title": "清晨雾林",
+          "description": "晨光穿过薄雾，落在层层深浅的林间。",
+          "time": "2026-03-18 06:20",
+          "src": "/images/albums/nature/forest.jpg"
+        },
+        {
+          "id": "coast",
+          "title": "海边礁石与潮池",
+          "description": "潮水退去，礁石间映着一线金色天光。",
+          "time": "2026-04-09 17:42",
+          "src": "/images/albums/nature/coast.jpg"
+        },
+        {
+          "id": "meadow",
+          "title": "山谷野花草甸",
+          "description": "溪流绕过草甸，野花在山风里轻轻摇曳。",
+          "time": "2026-05-23 10:15",
+          "src": "/images/albums/nature/meadow.jpg"
+        },
+        {
+          "id": "courtyard",
+          "title": "雨后苔石庭院",
+          "description": "细雨初歇，苔痕与石径仍带着湿润的光。",
+          "time": "2026-06-11 08:05",
+          "src": "/images/albums/nature/courtyard.jpg"
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "建筑",
+      "description": "街巷、屋舍与安静的海岸线。",
+      "images": [
+        {
+          "id": "lane",
+          "title": "老街石巷与木窗",
+          "description": "石巷深处，木窗边的藤叶接住午后阳光。",
+          "time": "2026-02-26 15:30",
+          "src": "/images/albums/architecture/lane.jpg"
+        },
+        {
+          "id": "cottage",
+          "title": "现代混凝土小屋",
+          "description": "松林山坡上的小屋，将窗外的暖光留在室内。",
+          "time": "2026-03-30 16:18",
+          "src": "/images/albums/architecture/cottage.jpg"
+        },
+        {
+          "id": "hillside",
+          "title": "山坡白墙红瓦住宅",
+          "description": "白墙与红瓦依着山势层层铺展。",
+          "time": "2026-04-17 11:08",
+          "src": "/images/albums/architecture/hillside.jpg"
+        },
+        {
+          "id": "lighthouse",
+          "title": "海边灯塔与海雾",
+          "description": "雾气漫过海岸，灯塔静静守望潮汐。",
+          "time": "2026-05-05 07:35",
+          "src": "/images/albums/architecture/lighthouse.jpg"
+        }
+      ]
+    },
+    {
+      "id": "stillLife",
+      "title": "静物",
+      "description": "日常器物在暖光里慢慢停驻。",
+      "images": [
+        {
+          "id": "vase",
+          "title": "陶瓶与野花",
+          "description": "几枝刚摘下的野花，安放在手作陶瓶里。",
+          "time": "2026-01-21 09:12",
+          "src": "/images/albums/still-life/vase.jpg"
+        },
+        {
+          "id": "citrus",
+          "title": "柑橘与亚麻桌布",
+          "description": "日光照亮柑橘果皮与柔软的亚麻纹理。",
+          "time": "2026-02-14 10:45",
+          "src": "/images/albums/still-life/citrus.jpg"
+        },
+        {
+          "id": "tea",
+          "title": "蓝釉茶壶与小杯",
+          "description": "一壶清茶与两只小杯，留住安静的早晨。",
+          "time": "2026-03-08 07:50",
+          "src": "/images/albums/still-life/tea.jpg"
+        },
+        {
+          "id": "books",
+          "title": "旧书与眼镜",
+          "description": "翻开的旧书旁，眼镜映着窗边微光。",
+          "time": "2026-04-02 14:25",
+          "src": "/images/albums/still-life/books.jpg"
+        }
+      ]
+    }
+  ]
+}

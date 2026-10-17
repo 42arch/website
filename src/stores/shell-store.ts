@@ -1,6 +1,6 @@
 import type { AppId } from '@/lib/shell-routes'
 import { create } from 'zustand'
-import { playTactileClick } from '@/lib/sound'
+import { isAppId } from '@/lib/shell-routes'
 import { captureTelemetryEvent } from '@/lib/telemetry'
 
 export interface WindowState {
@@ -12,6 +12,8 @@ export interface WindowState {
   z: number
   x?: number
   y?: number
+  width?: number
+  height?: number
   prevRect?: {
     x?: number
     y?: number
@@ -20,67 +22,92 @@ export interface WindowState {
   }
 }
 
-export interface CartoonSceneInfo {
-  name: string
-  tag: string
-  quotes: string[]
+export interface WallpaperSceneInfo {
+  id: 'hills' | 'orbit' | 'city' | 'coast'
+  theme: 'light' | 'dark'
 }
 
-export const cartoonWallpapers: CartoonSceneInfo[] = [
-  {
-    name: '刺猬工程师 Max',
-    tag: 'MAX THE HEDGEHOG',
-    quotes: [
-      '“嗨！壁纸切换和外观音效现在都整理到『系统设置』面板里啦！”',
-      '“手冲咖啡配 TypeScript，今天又消灭了 3 个棘手的 Bug！”',
-      '“小提示：点击顶栏『窗口 -> 最小化全部』可以无遮挡欣赏整张插画壁纸哦。”',
-    ],
-  },
-  {
-    name: '太空柴犬宇航员',
-    tag: 'ASTRO SHIBA INU',
-    quotes: [
-      '“汪！这里是月球边缘节点，网络延迟只有 12ms！”',
-      '“正在观测您的开源仓库 Star 增长曲线，一切运行良好！”',
-    ],
-  },
-  {
-    name: '极客黑猫 Coder',
-    tag: 'LO-FI CAT CODER',
-    quotes: [
-      '“戴上降噪耳机写 Rust，连编译通过的声音都像 Lo-Fi 音乐。”',
-      '“呼噜呼噜……别忘了按 ⌘K 试试全局命令面板！”',
-    ],
-  },
+export interface PetPosition {
+  x: number
+  y: number
+}
+
+export const wallpaperScenes: WallpaperSceneInfo[] = [
+  { id: 'hills', theme: 'light' },
+  { id: 'orbit', theme: 'dark' },
+  { id: 'city', theme: 'dark' },
+  { id: 'coast', theme: 'light' },
 ]
 
 const initialWindows: Record<AppId, WindowState> = {
-  readme: { id: 'readme', title: 'README.mdx', open: false, minimized: false, maximized: false, z: 20 },
+  finder: { id: 'finder', title: 'Finder', open: false, minimized: false, maximized: false, z: 19 },
+  bookmarks: { id: 'bookmarks', title: 'Bookmarks', open: false, minimized: false, maximized: false, z: 20 },
   projects: { id: 'projects', title: 'Projects.app', open: false, minimized: false, maximized: false, z: 20 },
-  gallery: { id: 'gallery', title: 'Gallery.app', open: false, minimized: false, maximized: false, z: 21 },
+  gallery: { id: 'gallery', title: 'Albums', open: false, minimized: false, maximized: false, z: 21 },
+  music: { id: 'music', title: 'Music', open: false, minimized: false, maximized: false, z: 28 },
   terminal: { id: 'terminal', title: 'Terminal.sh', open: false, minimized: false, maximized: false, z: 22 },
   notes: { id: 'notes', title: 'Notes.app', open: false, minimized: false, maximized: false, z: 24 },
+  blog: { id: 'blog', title: 'Blog.app', open: false, minimized: false, maximized: false, z: 24 },
   handbook: { id: 'handbook', title: 'Handbook.wiki', open: false, minimized: false, maximized: false, z: 23 },
   contact: { id: 'contact', title: 'Mail.msg', open: false, minimized: false, maximized: false, z: 24 },
   settings: { id: 'settings', title: 'Settings.app', open: false, minimized: false, maximized: false, z: 42 },
-  design: { id: 'design', title: 'Design_Spec.fig', open: false, minimized: false, maximized: false, z: 25 },
+  about: { id: 'about', title: 'About This Computer', open: false, minimized: false, maximized: false, z: 43 },
   analytics: { id: 'analytics', title: 'Insights.db', open: false, minimized: false, maximized: false, z: 26 },
+  game: { id: 'game', title: 'Snake.app', open: false, minimized: false, maximized: false, z: 27 },
+}
+
+const defaultDockAppIds: AppId[] = [
+  'bookmarks',
+  'blog',
+  'projects',
+  'notes',
+  'gallery',
+  'music',
+  'contact',
+  'terminal',
+  'settings',
+]
+
+const dockStorageKey = 'starllow-os-dock-apps-v3'
+const previousDockStorageKey = 'starllow-os-dock-apps-v2'
+const legacyDockStorageKey = 'starllow-os-dock-apps'
+
+function readDockAppIds(value: string | null): AppId[] | null {
+  if (value === null)
+    return null
+
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(value)
+  }
+  catch {
+    return null
+  }
+
+  if (!Array.isArray(parsed))
+    return null
+
+  const normalizedIds = parsed.map((id: unknown) => id === 'browser' ? 'bookmarks' : id)
+  return [...new Set(normalizedIds.filter((id: unknown): id is AppId => typeof id === 'string' && isAppId(id) && id !== 'finder'))]
 }
 
 export interface ShellStore {
   // Windows
   windows: Record<AppId, WindowState>
+  dockAppIds: AppId[]
   activeWindowId: AppId | null
   draggingWindowId: AppId | null
   topZIndex: number
 
   // Preferences & Appearance
+  hydratePreferences: () => void
+  restorePreferences: () => void
   wallpaperIndex: number
   themeMode: 'light' | 'dark'
-  soundEnabled: boolean
-  mascotBubbleVisible: boolean
   widgetsVisible: boolean
-  mascotQuoteIndex: number
+  petVisible: boolean
+  petPosition: PetPosition
+  preferencesHydrated: boolean
 
   // UI Overlays
   commandPaletteOpen: boolean
@@ -95,19 +122,21 @@ export interface ShellStore {
   maximizeWindow: (id: AppId) => void
   toggleWindow: (id: AppId) => void
   updateWindowPosition: (id: AppId, x: number, y: number) => void
+  updateWindowRect: (id: AppId, x: number, y: number, width: number, height: number) => void
   setDraggingWindow: (id: AppId | null) => void
   tileWindows: () => void
   minimizeAllWindows: () => void
   openAllWindows: () => void
+  hydrateDockAppIds: () => void
+  setDockAppIds: (ids: AppId[]) => void
 
   setWallpaperIndex: (idx: number) => void
   cycleWallpaper: () => void
-  cycleMascotQuote: () => void
   setThemeMode: (mode: 'light' | 'dark') => void
   toggleTheme: () => void
-  toggleSound: () => void
-  toggleMascotBubble: () => void
   toggleWidgets: () => void
+  setPetVisible: (visible: boolean) => void
+  setPetPosition: (position: PetPosition) => void
 
   setCommandPaletteOpen: (open: boolean) => void
   toggleCommandPalette: () => void
@@ -116,33 +145,95 @@ export interface ShellStore {
   showToast: (message: string) => void
 }
 
+type ShellPreferences = Pick<ShellStore, 'wallpaperIndex' | 'themeMode' | 'widgetsVisible' | 'petVisible' | 'petPosition'>
+
+const defaultPreferences: ShellPreferences = {
+  wallpaperIndex: 0,
+  themeMode: 'light',
+  widgetsVisible: false,
+  petVisible: true,
+  petPosition: { x: 0.62, y: 0.72 },
+}
+
+const preferencesStorageKey = 'starllow-os-preferences-v1'
+
+function getStoredPreferences(): ShellPreferences | null {
+  try {
+    const storedValue = localStorage.getItem(preferencesStorageKey)
+    if (!storedValue)
+      return null
+
+    const parsed: unknown = JSON.parse(storedValue)
+    if (typeof parsed !== 'object' || parsed === null)
+      return null
+
+    const value = parsed as Record<string, unknown>
+    const storedPosition = typeof value.petPosition === 'object' && value.petPosition !== null
+      ? value.petPosition as Record<string, unknown>
+      : null
+    return {
+      wallpaperIndex: typeof value.wallpaperIndex === 'number' && Number.isInteger(value.wallpaperIndex)
+        ? Math.max(0, Math.min(wallpaperScenes.length - 1, value.wallpaperIndex))
+        : defaultPreferences.wallpaperIndex,
+      themeMode: value.themeMode === 'dark' ? 'dark' : 'light',
+      widgetsVisible: typeof value.widgetsVisible === 'boolean' ? value.widgetsVisible : defaultPreferences.widgetsVisible,
+      petVisible: typeof value.petVisible === 'boolean' ? value.petVisible : defaultPreferences.petVisible,
+      petPosition: {
+        x: typeof storedPosition?.x === 'number' && Number.isFinite(storedPosition.x)
+          ? Math.max(0, Math.min(1, storedPosition.x))
+          : defaultPreferences.petPosition.x,
+        y: typeof storedPosition?.y === 'number' && Number.isFinite(storedPosition.y)
+          ? Math.max(0, Math.min(1, storedPosition.y))
+          : defaultPreferences.petPosition.y,
+      },
+    }
+  }
+  catch {
+    return null
+  }
+}
+
+function savePreferences(preferences: ShellPreferences) {
+  try {
+    const { wallpaperIndex, themeMode, widgetsVisible, petVisible, petPosition } = preferences
+    localStorage.setItem(preferencesStorageKey, JSON.stringify({ wallpaperIndex, themeMode, widgetsVisible, petVisible, petPosition }))
+  }
+  catch {
+    // Keep preferences in memory when local storage is unavailable.
+  }
+}
+
+function applyThemeMode(mode: ShellPreferences['themeMode']) {
+  if (typeof document === 'undefined')
+    return
+
+  document.documentElement.classList.toggle('dark', mode === 'dark')
+  document.documentElement.classList.toggle('light', mode === 'light')
+}
+
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 
 export const useShellStore = create<ShellStore>((set, get) => ({
   windows: initialWindows,
+  dockAppIds: defaultDockAppIds,
   activeWindowId: null,
   draggingWindowId: null,
   topZIndex: 45,
 
-  wallpaperIndex: 0,
-  themeMode: 'light',
-  soundEnabled: true,
-  mascotBubbleVisible: true,
-  widgetsVisible: false,
-  mascotQuoteIndex: 0,
+  ...defaultPreferences,
+  preferencesHydrated: false,
 
   commandPaletteOpen: false,
   startMenuOpen: false,
   toastMessage: null,
 
   focusWindow: (id: AppId) => {
-    const { topZIndex, windows, soundEnabled } = get()
+    const { topZIndex, windows } = get()
     const target = windows[id]
     if (!target)
       return
 
     const nextZ = topZIndex + 1
-    playTactileClick(540, 0.015, soundEnabled)
 
     set({
       activeWindowId: id,
@@ -155,13 +246,12 @@ export const useShellStore = create<ShellStore>((set, get) => ({
   },
 
   openWindow: (id: AppId) => {
-    const { topZIndex, windows, soundEnabled } = get()
+    const { topZIndex, windows } = get()
     const target = windows[id]
     if (!target)
       return
 
     const nextZ = topZIndex + 1
-    playTactileClick(580, 0.016, soundEnabled)
     captureTelemetryEvent('app_launched', { app: target.title })
 
     set({
@@ -180,12 +270,11 @@ export const useShellStore = create<ShellStore>((set, get) => ({
   },
 
   closeWindow: (id: AppId) => {
-    const { windows, soundEnabled, activeWindowId } = get()
+    const { windows, activeWindowId } = get()
     const target = windows[id]
     if (!target)
       return
 
-    playTactileClick(380, 0.016, soundEnabled)
     captureTelemetryEvent('window_closed', { app: target.title })
 
     const updatedWindows = {
@@ -208,12 +297,10 @@ export const useShellStore = create<ShellStore>((set, get) => ({
   },
 
   minimizeWindow: (id: AppId) => {
-    const { windows, soundEnabled, activeWindowId } = get()
+    const { windows, activeWindowId } = get()
     const target = windows[id]
     if (!target)
       return
-
-    playTactileClick(440, 0.015, soundEnabled)
 
     const updatedWindows = {
       ...windows,
@@ -235,12 +322,10 @@ export const useShellStore = create<ShellStore>((set, get) => ({
   },
 
   maximizeWindow: (id: AppId) => {
-    const { windows, soundEnabled } = get()
+    const { windows } = get()
     const target = windows[id]
     if (!target)
       return
-
-    playTactileClick(640, 0.018, soundEnabled)
 
     set({
       windows: {
@@ -284,15 +369,28 @@ export const useShellStore = create<ShellStore>((set, get) => ({
     })
   },
 
+  updateWindowRect: (id: AppId, x: number, y: number, width: number, height: number) => {
+    const { windows } = get()
+    const target = windows[id]
+    if (!target)
+      return
+
+    set({
+      windows: {
+        ...windows,
+        [id]: { ...target, x, y, width, height },
+      },
+    })
+  },
+
   setDraggingWindow: id => set({ draggingWindowId: id }),
 
   tileWindows: () => {
-    const { windows, soundEnabled, showToast } = get()
-    playTactileClick(560, 0.02, soundEnabled)
+    const { windows, showToast } = get()
 
     const openWins = Object.values(windows).filter(w => w.open && !w.minimized)
     if (openWins.length === 0) {
-      get().openWindow('readme')
+      get().openWindow('blog')
       get().openWindow('projects')
       return
     }
@@ -323,8 +421,7 @@ export const useShellStore = create<ShellStore>((set, get) => ({
   },
 
   minimizeAllWindows: () => {
-    const { windows, soundEnabled, showToast } = get()
-    playTactileClick(400, 0.018, soundEnabled)
+    const { windows, showToast } = get()
 
     const nextWindows = { ...windows }
     Object.keys(nextWindows).forEach((k) => {
@@ -353,55 +450,94 @@ export const useShellStore = create<ShellStore>((set, get) => ({
     get().tileWindows()
   },
 
+  hydrateDockAppIds: () => {
+    try {
+      const savedIds = readDockAppIds(localStorage.getItem(dockStorageKey))
+      if (savedIds) {
+        set({ dockAppIds: savedIds })
+        return
+      }
+
+      const previousIds = readDockAppIds(localStorage.getItem(previousDockStorageKey))
+      if (previousIds) {
+        const migratedIds: AppId[] = [...previousIds.filter(id => id !== 'music'), 'music']
+        set({ dockAppIds: migratedIds })
+        localStorage.setItem(dockStorageKey, JSON.stringify(migratedIds))
+        return
+      }
+
+      const legacyIds = readDockAppIds(localStorage.getItem(legacyDockStorageKey))
+      if (legacyIds) {
+        const migratedIds: AppId[] = [...legacyIds.filter(id => id !== 'handbook' && id !== 'finder' && id !== 'music'), 'music']
+        set({ dockAppIds: migratedIds })
+        localStorage.setItem(dockStorageKey, JSON.stringify(migratedIds))
+      }
+    }
+    catch {
+      // Keep default Dock items when local storage is unavailable or invalid.
+    }
+  },
+
+  hydratePreferences: () => {
+    const preferences = getStoredPreferences() || defaultPreferences
+    set({ ...preferences, preferencesHydrated: true })
+    applyThemeMode(preferences.themeMode)
+    try {
+      localStorage.setItem('theme', preferences.themeMode)
+    }
+    catch {
+      // Keep the stored preference in memory when local storage is unavailable.
+    }
+  },
+
+  restorePreferences: () => {
+    set(defaultPreferences)
+    savePreferences(defaultPreferences)
+    applyThemeMode(defaultPreferences.themeMode)
+    try {
+      localStorage.setItem('theme', defaultPreferences.themeMode)
+    }
+    catch {
+      // Theme remains applied for the current session when local storage is unavailable.
+    }
+  },
+
+  setDockAppIds: (ids: AppId[]) => {
+    const dockAppIds = [...new Set(ids.filter(id => id !== 'finder'))]
+    set({ dockAppIds })
+    try {
+      localStorage.setItem(dockStorageKey, JSON.stringify(dockAppIds))
+    }
+    catch {
+      // Keep the current session preference when local storage is unavailable.
+    }
+  },
+
   setWallpaperIndex: (idx: number) => {
-    const { soundEnabled, showToast } = get()
-    playTactileClick(620, 0.018, soundEnabled)
-    const validIdx = Math.max(0, Math.min(cartoonWallpapers.length - 1, idx))
-    const scene = cartoonWallpapers[validIdx]
+    const validIdx = Math.max(0, Math.min(wallpaperScenes.length - 1, idx))
+    const scene = wallpaperScenes[validIdx]
 
-    set({
-      wallpaperIndex: validIdx,
-      mascotQuoteIndex: 0,
-    })
-
-    showToast(`已切换卡通角色壁纸：${scene.name}`)
-    captureTelemetryEvent('cartoon_wallpaper_switched', { character: scene.name })
+    set({ wallpaperIndex: validIdx })
+    savePreferences({ ...get(), wallpaperIndex: validIdx })
+    captureTelemetryEvent('wallpaper_switched', { scene: scene.id })
   },
 
   cycleWallpaper: () => {
     const { wallpaperIndex, setWallpaperIndex } = get()
-    const next = (wallpaperIndex + 1) % cartoonWallpapers.length
+    const next = (wallpaperIndex + 1) % wallpaperScenes.length
     setWallpaperIndex(next)
   },
 
-  cycleMascotQuote: () => {
-    const { wallpaperIndex, mascotQuoteIndex, soundEnabled } = get()
-    playTactileClick(680, 0.016, soundEnabled)
-    const scene = cartoonWallpapers[wallpaperIndex]
-    const nextIdx = (mascotQuoteIndex + 1) % scene.quotes.length
-
-    set({ mascotQuoteIndex: nextIdx })
-    captureTelemetryEvent('mascot_clicked', { character: scene.name })
-  },
-
   setThemeMode: (mode: 'light' | 'dark') => {
-    const { soundEnabled, showToast } = get()
-    playTactileClick(600, 0.02, soundEnabled)
-
-    if (typeof document !== 'undefined') {
-      const root = document.documentElement
-      if (mode === 'dark') {
-        root.classList.add('dark')
-        root.classList.remove('light')
-      }
-      else {
-        root.classList.remove('dark')
-        root.classList.add('light')
-      }
-    }
-
+    applyThemeMode(mode)
     set({ themeMode: mode })
-    showToast(mode === 'dark' ? '已切换至深色暗夜模式' : '已切换至浅色暖石模式')
+    savePreferences({ ...get(), themeMode: mode })
+    try {
+      localStorage.setItem('theme', mode)
+    }
+    catch {
+      // The selected theme remains applied for the current session.
+    }
     captureTelemetryEvent('theme_toggled', { mode })
   },
 
@@ -410,35 +546,28 @@ export const useShellStore = create<ShellStore>((set, get) => ({
     setThemeMode(themeMode === 'dark' ? 'light' : 'dark')
   },
 
-  toggleSound: () => {
-    const { soundEnabled, showToast } = get()
-    const nextState = !soundEnabled
-    if (nextState)
-      playTactileClick(580, 0.016, true)
-
-    set({ soundEnabled: nextState })
-    showToast(nextState ? '已开启轻柔按键音' : '已静音')
-  },
-
-  toggleMascotBubble: () => {
-    const { mascotBubbleVisible, soundEnabled, showToast } = get()
-    playTactileClick(540, 0.015, soundEnabled)
-    const nextState = !mascotBubbleVisible
-    set({ mascotBubbleVisible: nextState })
-    showToast(nextState ? '已显示角色对话气泡' : '已隐藏右下角角色对话气泡')
-  },
-
   toggleWidgets: () => {
-    const { widgetsVisible, soundEnabled, showToast } = get()
-    playTactileClick(540, 0.015, soundEnabled)
+    const { widgetsVisible } = get()
     const nextState = !widgetsVisible
     set({ widgetsVisible: nextState })
-    showToast(nextState ? '已显示桌面小组件' : '已隐藏桌面左上角小组件')
+    savePreferences({ ...get(), widgetsVisible: nextState })
+  },
+
+  setPetVisible: (visible: boolean) => {
+    set({ petVisible: visible })
+    savePreferences({ ...get(), petVisible: visible })
+  },
+
+  setPetPosition: (position: PetPosition) => {
+    const petPosition = {
+      x: Math.max(0, Math.min(1, position.x)),
+      y: Math.max(0, Math.min(1, position.y)),
+    }
+    set({ petPosition })
+    savePreferences({ ...get(), petPosition })
   },
 
   setCommandPaletteOpen: (open: boolean) => {
-    const { soundEnabled } = get()
-    playTactileClick(open ? 550 : 380, 0.015, soundEnabled)
     set({ commandPaletteOpen: open, startMenuOpen: false })
   },
 
@@ -448,8 +577,6 @@ export const useShellStore = create<ShellStore>((set, get) => ({
   },
 
   setStartMenuOpen: (open: boolean) => {
-    const { soundEnabled } = get()
-    playTactileClick(520, 0.015, soundEnabled)
     set({ startMenuOpen: open })
   },
 

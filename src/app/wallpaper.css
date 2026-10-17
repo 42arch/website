@@ -1,0 +1,44 @@
+.wallpaper-scene {
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+  --mobile-focus: 100%;
+  isolation: isolate;
+  background: #d7d9cb;
+}
+
+.wallpaper-scene--hills { background-color: #d9d3ad; }
+.wallpaper-scene--orbit { background-color: #151d39; }
+.wallpaper-scene--city { background-color: #403b58; }
+.wallpaper-scene--coast { background-color: #dce2d6; }
+
+.wallpaper-scene__image {
+  position: absolute;
+  inset: -1.5%;
+  pointer-events: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: translate3d(var(--parallax-x), var(--parallax-y), 0);
+  transition: transform 750ms ease-out;
+}
+
+.wallpaper-scene--hills .wallpaper-scene__image { background-image: url('/images/wallpapers/scenes/hills.webp'); }
+.wallpaper-scene--orbit .wallpaper-scene__image { background-image: url('/images/wallpapers/scenes/orbit.webp'); }
+.wallpaper-scene--city .wallpaper-scene__image { background-image: url('/images/wallpapers/scenes/city.webp'); }
+.wallpaper-scene--coast .wallpaper-scene__image { background-image: url('/images/wallpapers/scenes/coast.webp'); }
+
+.wallpaper-scene[data-interactive="true"] { animation: wallpaper-enter 500ms ease-out both; }
+
+@keyframes wallpaper-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .wallpaper-scene__image { background-position: var(--mobile-focus) center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper-scene { animation: none !important; }
+  .wallpaper-scene__image { transition: none; }
+}

@@ -1,10 +1,10 @@
-import * as React from "react"
+import * as React from 'react'
 
-import { loadHighlighter } from "@/lib/highlighter"
+import { loadHighlighter } from '@/lib/highlighter'
 
 export function useHighlightedCode(value: string, language: string) {
   // A trailing newline would render as an extra empty line.
-  const code = value.endsWith("\n") ? value.slice(0, -1) : value
+  const code = value.endsWith('\n') ? value.slice(0, -1) : value
   const [loaded, setLoaded] = React.useState<{
     language: string
     highlighter: Awaited<ReturnType<typeof loadHighlighter>>
@@ -33,21 +33,21 @@ export function useHighlightedCode(value: string, language: string) {
     highlighter: typeof highlighter
     text: string
     lines: React.ReactNode[]
-    state?: Parameters<NonNullable<typeof highlighter>["highlight"]>[1]
-  }>({ highlighter: null, text: "", lines: [] })
+    state?: Parameters<NonNullable<typeof highlighter>['highlight']>[1]
+  }>({ highlighter: null, text: '', lines: [] })
 
   let next = done
 
   if (next.highlighter !== highlighter || !code.startsWith(next.text)) {
-    next = { highlighter, text: "", lines: [] }
+    next = { highlighter, text: '', lines: [] }
   }
 
-  const end = code.lastIndexOf("\n") + 1
+  const end = code.lastIndexOf('\n') + 1
 
   if (highlighter && end > next.text.length) {
     const result = highlighter.highlight(
       code.slice(next.text.length, end - 1),
-      next.state
+      next.state,
     )
 
     next = {
@@ -67,7 +67,7 @@ export function useHighlightedCode(value: string, language: string) {
 
   return React.useMemo(() => {
     if (!highlighter) {
-      return code.split("\n")
+      return code.split('\n')
     }
 
     return [...next.lines, highlighter.highlight(tail, next.state).lines[0]]

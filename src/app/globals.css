@@ -1,12 +1,31 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import 'fumadocs-twoslash/twoslash.css';
+@import './wallpaper.css';
+@import './pet.css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-heading);
@@ -22,6 +41,14 @@
   --color-ph-border: var(--ph-border);
   --color-ph-border-subtle: var(--ph-border-subtle);
 
+  /* Map Fumadocs Twoslash popovers to the application palette. */
+  --color-fd-border: var(--ph-border);
+  --color-fd-foreground: var(--ph-ink);
+  --color-fd-muted-foreground: var(--ph-muted);
+  --color-fd-primary: var(--primary);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
+
   /* PostHog Accent Colors */
   --color-ph-orange: #f54e00;
   --color-ph-orange-hover: #ff5b0f;
@@ -30,10 +57,10 @@
   --color-ph-red: #ff5f57;
   --color-ph-blue: #007aff;
 
-  /* Strict 3-Tier Micro-radii */
-  --radius-window: 8px;
-  --radius-card: 6px;
-  --radius-btn: 5px;
+  /* Standard Tailwind radius utilities follow the project's three sizes. */
+  --radius-sm: 5px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
 
   /* Shadows */
   --shadow-mac: 0 12px 32px -8px rgba(24, 24, 20, 0.08), 0 2px 6px -1px rgba(24, 24, 20, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
@@ -93,11 +120,14 @@
   --secondary-foreground: #1d1f27;
   --muted: rgba(29, 31, 39, 0.05);
   --muted-foreground: #5a5e6b;
+  --accent: rgba(29, 31, 39, 0.06);
+  --accent-foreground: #1d1f27;
   --destructive: #ff5f57;
-  --border: rgba(29, 31, 39, 0.08);
+  --border: var(--ph-border-subtle);
   --input: rgba(29, 31, 39, 0.08);
   --ring: #f54e00;
   --radius: 8px;
+  --twoslash-error-bg: rgba(212, 86, 86, 0.12);
 }
 
 .dark, html.dark {
@@ -123,15 +153,52 @@
   --secondary-foreground: #f3f4f6;
   --muted: rgba(255, 255, 255, 0.06);
   --muted-foreground: #9ca3af;
+  --accent: rgba(255, 255, 255, 0.08);
+  --accent-foreground: #f3f4f6;
   --destructive: #ff5f57;
-  --border: rgba(255, 255, 255, 0.08);
+  --border: var(--ph-border-subtle);
   --input: rgba(255, 255, 255, 0.08);
   --ring: #ff641a;
+  --twoslash-error-bg: rgba(255, 95, 87, 0.16);
+}
+
+.mdx-code-block pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 1rem;
+  font-family: var(--font-geist-mono);
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.mdx-code-block pre code {
+  display: block;
+  min-width: max-content;
+}
+
+.mdx-code-block pre.shiki {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 1rem;
+}
+
+.mdx-code-block pre.shiki,
+.mdx-code-block pre.shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+.dark .mdx-code-block pre.shiki,
+.dark .mdx-code-block pre.shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
 }
 
 @layer base {
-  * {
+  *, *::before, *::after {
     box-sizing: border-box;
+    border-color: var(--border);
     -webkit-font-smoothing: antialiased;
   }
   body {

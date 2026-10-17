@@ -7,14 +7,16 @@ import {
   BatteryLowIcon,
   BatteryMediumIcon,
   MagnifyingGlassIcon,
-  SparkleIcon,
   WifiHighIcon,
   WifiSlashIcon,
 } from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { enUS, zhCN } from 'date-fns/locale'
+import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
+import starIcon from '@/app/icon.png'
+import { profile } from '@/lib/desktop-content'
 import { setUserLocale } from '@/services/locale'
 import { useShellStore } from '@/stores/shell-store'
 
@@ -120,11 +122,12 @@ export function ShellMenubar() {
   }, [startMenuOpen, setStartMenuOpen])
 
   function copyEmail() {
-    navigator.clipboard.writeText('alex@posthog-style.dev')
-    showToast('已拷贝个人邮箱: alex@posthog-style.dev')
+    navigator.clipboard.writeText(profile.email)
+    showToast(`${tCommon('copied')}: ${profile.email}`)
   }
 
-  const activeTitle = activeWindowId && windows[activeWindowId] ? windows[activeWindowId].title : 'Starllow.OS'
+  const activeWindow = activeWindowId ? windows[activeWindowId] : null
+  const activeTitle = activeWindowId === 'about' ? t('aboutThisComputer') : activeWindow?.title ?? 'Starllow.OS'
 
   const BatteryIcon = isCharging
     ? BatteryChargingIcon
@@ -136,7 +139,7 @@ export function ShellMenubar() {
 
   return (
     <>
-      <header className="h-10 sm:h-7 w-full px-3 sm:px-3.5 flex items-center justify-between z-50 shrink-0 text-[13px] sm:text-[12px] bg-[#ECE9DE]/70 dark:bg-[#141720]/70 backdrop-blur-md saturate-[140%] border-b border-ph-border-subtle select-none">
+      <header className="h-10 sm:h-7 w-full px-3 sm:px-3.5 flex items-center justify-between z-50 shrink-0 text-[13px] sm:text-[12px] bg-[#ECE9DE]/70 dark:bg-[#141720]/70 backdrop-blur-md saturate-[140%] border-b select-none">
         {/* Left: Brand Emblem + Active App Title + macOS Menus */}
         <div className="flex items-center space-x-1 sm:space-x-1">
           {/* Brand Icon Button */}
@@ -146,7 +149,16 @@ export function ShellMenubar() {
             aria-label={t('systemTitle')}
             className="p-1.5 sm:px-2 sm:py-1 rounded-[6px] sm:rounded-[4px] hover:bg-black/5 dark:hover:bg-white/10 flex items-center gap-1.5 transition-colors text-ph-ink cursor-pointer"
           >
-            <SparkleIcon size={16} weight="fill" className="text-ph-orange sm:w-3.5 sm:h-3.5" />
+            <Image
+              src={starIcon}
+              alt=""
+              width={20}
+              height={20}
+              sizes="20px"
+              loading="eager"
+              draggable={false}
+              className="size-5 shrink-0 object-contain sm:size-[18px]"
+            />
           </button>
 
           {/* Active Window Title */}
@@ -172,14 +184,6 @@ export function ShellMenubar() {
                 <div className="bg-[#ECEAE0] dark:bg-[#1E2028] border border-black/15 dark:border-white/10 shadow-xl rounded-md p-1 text-xs">
                   <button
                     type="button"
-                    onClick={() => openWindow('readme')}
-                    className="w-full text-left px-2.5 py-1.5 hover:bg-ph-orange hover:text-white rounded-[4px] flex justify-between items-center transition-colors cursor-pointer text-ph-ink"
-                  >
-                    <span>{t('openReadme')}</span>
-                    <span className="font-mono text-[10px] opacity-70">⌘1</span>
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => openWindow('projects')}
                     className="w-full text-left px-2.5 py-1.5 hover:bg-ph-orange hover:text-white rounded-[4px] flex justify-between items-center transition-colors cursor-pointer text-ph-ink"
                   >
@@ -193,6 +197,14 @@ export function ShellMenubar() {
                   >
                     <span>{t('openNotes')}</span>
                     <span className="font-mono text-[10px] opacity-70">⌘3</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openWindow('blog')}
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-ph-orange hover:text-white rounded-[4px] flex justify-between items-center transition-colors cursor-pointer text-ph-ink"
+                  >
+                    <span>{t('openBlog')}</span>
+                    <span className="font-mono text-[10px] opacity-70">⌘1</span>
                   </button>
                   <button
                     type="button"
@@ -309,7 +321,7 @@ export function ShellMenubar() {
       {startMenuOpen && (
         <div
           ref={startMenuRef}
-          className="fixed top-11 sm:top-8 left-2 sm:left-2.5 w-56 sm:w-52 rounded-[8px] border border-ph-border bg-ph-surface backdrop-blur-[22px] saturate-[145%] shadow-mac dark:shadow-mac-dark z-50 p-1 text-xs select-none"
+          className="fixed top-11 sm:top-8 left-2 sm:left-2.5 w-56 sm:w-52 rounded-[8px] border bg-ph-surface backdrop-blur-[22px] saturate-[145%] shadow-mac dark:shadow-mac-dark z-50 p-1 text-xs select-none"
         >
           <div className="px-3 py-2 sm:px-2.5 sm:py-1.5 border-b border-black/5 dark:border-white/10">
             <div className="font-bold text-ph-ink">{t('systemTitle')}</div>
@@ -319,46 +331,12 @@ export function ShellMenubar() {
             <button
               type="button"
               onClick={() => {
-                openWindow('readme')
+                openWindow('about')
                 setStartMenuOpen(false)
               }}
               className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
             >
-              <span>{t('aboutMe')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘1</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                openWindow('projects')
-                setStartMenuOpen(false)
-              }}
-              className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
-            >
-              <span>{t('openProjects')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘2</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                openWindow('notes')
-                setStartMenuOpen(false)
-              }}
-              className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
-            >
-              <span>{t('openNotes')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘3</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                openWindow('gallery')
-                setStartMenuOpen(false)
-              }}
-              className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer text-ph-ink"
-            >
-              <span>{t('openGallery')}</span>
-              <span className="font-mono text-[10px] opacity-60">⌘4</span>
+              <span>{t('aboutThisComputer')}</span>
             </button>
             <button
               type="button"
@@ -368,7 +346,10 @@ export function ShellMenubar() {
               }}
               className="w-full text-left px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-[4px] hover:bg-ph-orange hover:text-white flex items-center justify-between transition-colors cursor-pointer font-semibold text-ph-orange"
             >
-              <span>{t('settings')}...</span>
+              <span>
+                {t('settings')}
+                ...
+              </span>
               <span className="font-mono text-[10px] opacity-60">⌘,</span>
             </button>
             <div className="my-1 border-t border-black/10 dark:border-white/10" />

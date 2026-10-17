@@ -1,22 +1,25 @@
 'use client'
 
-import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
-import { MagnifyingGlassIcon } from '@phosphor-icons/react'
+import type { NoteMeta } from '@/components/apps/notes/data'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { staticNotesList } from '@/lib/notes-data'
-import { useNotesStore } from '@/stores/apps/notes-store'
+import { staticBlogList } from '@/components/apps/blog/data'
+import { useBlogStore } from '@/components/apps/blog/store'
+import { useNotesStore } from '@/components/apps/notes/store'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandShortcut } from '@/components/ui/command'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { profile } from '@/lib/desktop-content'
 import { useShellStore } from '@/stores/shell-store'
 
-interface CommandItem {
+interface CommandAction {
   tag: string
   label: string
   action: () => void
-  keywords?: string
+  keywords?: string[]
 }
 
-export function ShellSearch() {
+export function ShellSearch({ notesList }: { notesList: NoteMeta[] }) {
   const router = useRouter()
   const commandPaletteOpen = useShellStore(state => state.commandPaletteOpen)
   const setCommandPaletteOpen = useShellStore(state => state.setCommandPaletteOpen)
@@ -28,170 +31,149 @@ export function ShellSearch() {
   const tCommon = useTranslations('common')
   const tMenubar = useTranslations('menubar')
   const tDock = useTranslations('dock')
-
   const [query, setQuery] = useState('')
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [visualViewport, setVisualViewport] = useState({ width: 0, height: 0, offsetTop: 0 })
   const inputRef = useRef<HTMLInputElement>(null)
+  const isMobileViewport = visualViewport.width > 0 && visualViewport.width < 640
 
-  const commandItems: CommandItem[] = [
+  const commandItems: CommandAction[] = [
     { tag: 'SET', label: tMenubar('settings'), action: () => openWindow('settings') },
-    { tag: 'DOC', label: tDock('readme'), action: () => openWindow('readme') },
+    { tag: 'FAV', label: tDock('bookmarks'), action: () => openWindow('bookmarks') },
     { tag: 'APP', label: tDock('projects'), action: () => openWindow('projects') },
     { tag: 'NOTE', label: tDock('notes'), action: () => openWindow('notes') },
+    { tag: 'BLOG', label: tDock('blog'), action: () => openWindow('blog') },
     { tag: 'ART', label: tDock('gallery'), action: () => openWindow('gallery') },
+    { tag: 'MUS', label: tDock('music'), action: () => openWindow('music') },
     { tag: 'CLI', label: tDock('terminal'), action: () => openWindow('terminal') },
+    { tag: 'GAME', label: tDock('game'), action: () => openWindow('game') },
     { tag: 'WIKI', label: tDock('handbook'), action: () => openWindow('handbook') },
     { tag: 'MSG', label: tDock('contact'), action: () => openWindow('contact') },
     { tag: 'SYS', label: 'Theme (Light / Dark)', action: () => toggleTheme() },
     { tag: 'WIN', label: tMenubar('tileWindows'), action: () => tileWindows() },
     {
       tag: 'COPY',
-      label: `${tMenubar('copyEmail')} (alex@posthog-style.dev)`,
+      label: `${tMenubar('copyEmail')} (${profile.email})`,
       action: () => {
-        navigator.clipboard.writeText('alex@posthog-style.dev')
-        showToast(`${tCommon('copied')}: alex@posthog-style.dev`)
+        navigator.clipboard.writeText(profile.email)
+        showToast(`${tCommon('copied')}: ${profile.email}`)
       },
     },
-    ...staticNotesList.map(note => ({
+    ...staticBlogList.map(article => ({
+      tag: 'BLOG',
+      label: `${article.title} (${article.category})`,
+      keywords: [article.intro, ...article.tags, article.slug],
+      action: () => {
+        useBlogStore.getState().setSelectedSlug(article.slug)
+        openWindow('blog')
+        router.push(`/blog/${article.slug}`)
+      },
+    })),
+    ...notesList.map(note => ({
       tag: 'NOTE',
       label: `${note.title} (${note.category})`,
-      keywords: `${note.intro} ${note.tags.join(' ')} ${note.slug}`,
+      keywords: [note.intro, ...note.tags, note.slug],
       action: () => {
-        useNotesStore.getState().setSelectedSlug(note.slug)
+        useNotesStore.getState().setSearchQuery(note.title)
         openWindow('notes')
-        router.push(`/notes/${note.slug}`)
       },
     })),
   ]
 
-  const filtered = commandItems.filter(item =>
-    item.label.toLowerCase().includes(query.toLowerCase())
-    || item.tag.toLowerCase().includes(query.toLowerCase())
-    || (item.keywords && item.keywords.toLowerCase().includes(query.toLowerCase())),
-  )
-
-  // Global shortcut (⌘K / Ctrl+K / Escape)
   useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault()
+    function handleKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
         setCommandPaletteOpen(!commandPaletteOpen)
       }
-      else if (e.key === 'Escape' && commandPaletteOpen) {
-        e.preventDefault()
-        setCommandPaletteOpen(false)
-      }
     }
+
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [commandPaletteOpen, setCommandPaletteOpen])
 
-  // Focus input on open
   useEffect(() => {
-    if (commandPaletteOpen) {
-      setQuery('')
-      setSelectedIndex(0)
-      setTimeout(() => inputRef.current?.focus(), 50)
+    if (!commandPaletteOpen)
+      return
+
+    setQuery('')
+    const frame = requestAnimationFrame(() => inputRef.current?.focus())
+    return () => cancelAnimationFrame(frame)
+  }, [commandPaletteOpen])
+
+  useEffect(() => {
+    if (!commandPaletteOpen)
+      return
+
+    const viewport = window.visualViewport
+    function updateViewport() {
+      setVisualViewport({
+        width: window.innerWidth,
+        height: viewport?.height ?? window.innerHeight,
+        offsetTop: viewport?.offsetTop ?? 0,
+      })
+    }
+
+    updateViewport()
+    window.addEventListener('resize', updateViewport)
+    viewport?.addEventListener('resize', updateViewport)
+    viewport?.addEventListener('scroll', updateViewport)
+
+    return () => {
+      window.removeEventListener('resize', updateViewport)
+      viewport?.removeEventListener('resize', updateViewport)
+      viewport?.removeEventListener('scroll', updateViewport)
     }
   }, [commandPaletteOpen])
 
-  function executeItem(item: CommandItem) {
+  function executeItem(item: CommandAction) {
     setCommandPaletteOpen(false)
     item.action()
   }
 
-  function handleInputKeyDown(e: ReactKeyboardEvent) {
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setSelectedIndex(prev => (prev + 1) % (filtered.length || 1))
-    }
-    else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setSelectedIndex(prev => (prev - 1 + (filtered.length || 1)) % (filtered.length || 1))
-    }
-    else if (e.key === 'Enter' && filtered[selectedIndex]) {
-      e.preventDefault()
-      executeItem(filtered[selectedIndex])
-    }
-  }
-
-  if (!commandPaletteOpen)
-    return null
-
   return (
-    <div
-      onClick={(e) => {
-        if (e.target === e.currentTarget)
-          setCommandPaletteOpen(false)
-      }}
-      className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-50 flex items-start justify-center pt-24 px-4 select-none"
-    >
-      <div className="w-full max-w-lg rounded-[8px] border border-ph-border bg-ph-surface/95 backdrop-blur-[22px] saturate-[145%] shadow-mac dark:shadow-mac-dark overflow-hidden">
-        {/* Search Input Bar */}
-        <div className="px-4 py-3 border-b border-ph-border-subtle flex items-center gap-3">
-          <MagnifyingGlassIcon size={16} weight="bold" className="text-ph-muted shrink-0" />
-          <input
+    <Dialog open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen}>
+      <DialogContent
+        className="top-[42%] max-h-[calc(100dvh-1.5rem)] max-w-[calc(100%-1rem)] -translate-y-1/2 gap-0 overflow-hidden p-0 sm:top-24 sm:max-h-[calc(100dvh-8rem)] sm:max-w-lg sm:translate-y-0"
+        showCloseButton={false}
+        style={isMobileViewport
+          ? {
+              top: `${visualViewport.offsetTop + visualViewport.height * 0.42}px`,
+              maxHeight: `${Math.max(160, visualViewport.height - 24)}px`,
+            }
+          : undefined}
+      >
+        <DialogHeader className="sr-only">
+          <DialogTitle>{t('placeholder')}</DialogTitle>
+        </DialogHeader>
+        <Command className="min-h-0 max-h-[calc(100dvh-1.5rem)] sm:max-h-96" shouldFilter>
+          <CommandInput
             ref={inputRef}
-            type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value)
-              setSelectedIndex(0)
-            }}
-            onKeyDown={handleInputKeyDown}
+            onValueChange={setQuery}
             placeholder={t('placeholder')}
-            className="w-full bg-transparent text-xs sm:text-sm focus:outline-none text-ph-ink font-mono"
           />
-          <kbd
-            onClick={() => setCommandPaletteOpen(false)}
-            className="cursor-pointer px-1.5 py-0.5 text-[10px] font-mono text-ph-muted bg-black/5 dark:bg-white/10 rounded-[4px] hover:bg-black/10 transition-colors"
+          <CommandList
+            style={isMobileViewport ? { maxHeight: `${Math.min(288, Math.max(120, visualViewport.height - 64))}px` } : undefined}
           >
-            {t('esc')}
-          </kbd>
-        </div>
-
-        {/* Results List */}
-        <div className="p-1.5 max-h-72 overflow-y-auto space-y-0.5 text-xs">
-          {filtered.length > 0
-            ? (
-                filtered.map((item, idx) => {
-                  const isSelected = idx === selectedIndex
-                  return (
-                    <button
-                      key={item.tag + item.label}
-                      type="button"
-                      onClick={() => executeItem(item)}
-                      onMouseEnter={() => setSelectedIndex(idx)}
-                      className={`w-full text-left px-3 py-2 rounded-[6px] flex items-center justify-between transition-colors cursor-pointer ${
-                        isSelected
-                          ? 'bg-ph-orange text-white'
-                          : 'text-ph-ink hover:bg-black/5 dark:hover:bg-white/5'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span
-                          className={`px-1.5 py-0.5 rounded-[4px] font-mono text-[10px] font-semibold ${
-                            isSelected
-                              ? 'bg-white/20 text-white'
-                              : 'bg-black/5 dark:bg-white/10 text-ph-muted'
-                          }`}
-                        >
-                          {item.tag}
-                        </span>
-                        <span className="truncate">{item.label}</span>
-                      </div>
-                      <span className="text-[10px] font-mono opacity-60 ml-2 shrink-0">Enter</span>
-                    </button>
-                  )
-                })
-              )
-            : (
-                <div className="p-4 text-ph-muted text-center text-xs">
-                  {t('noResults')}
-                </div>
-              )}
-        </div>
-      </div>
-    </div>
+            <CommandEmpty>{t('noResults')}</CommandEmpty>
+            <CommandGroup>
+              {commandItems.map(item => (
+                <CommandItem
+                  key={`${item.tag}-${item.label}`}
+                  value={`${item.tag} ${item.label}`}
+                  keywords={item.keywords}
+                  onSelect={() => executeItem(item)}
+                  className="min-h-11 px-3 sm:min-h-0 sm:px-2"
+                >
+                  <span className="font-mono text-[10px] text-muted-foreground">{item.tag}</span>
+                  <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                  <CommandShortcut className="hidden sm:inline">Enter</CommandShortcut>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </DialogContent>
+    </Dialog>
   )
 }

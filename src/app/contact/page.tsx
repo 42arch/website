@@ -1,4 +1,4 @@
-import { ContactApp } from '@/components/apps/contact-app'
+import { ContactApp } from '@/components/apps/contact'
 
 export default function ContactPage() {
   return <ContactApp />

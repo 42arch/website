@@ -1,0 +1,63 @@
+.pet-shell {
+  width: clamp(96px, 11vw, 132px);
+  aspect-ratio: 424 / 400;
+  will-change: transform;
+}
+
+.pet-sprite {
+  background-image: url('/images/pets/astro-shiba-sprite.png');
+  background-repeat: no-repeat;
+  background-size: 300% 309%;
+  background-position: 0% 4.2%;
+  animation: pet-frames 1.8s infinite;
+}
+
+.pet-sprite[data-facing='left'] {
+  transform: scaleX(-1);
+}
+
+.pet-sprite[data-phase='walk'] {
+  background-position-y: 52%;
+  animation-duration: 0.54s;
+}
+
+.pet-sprite[data-phase='happy'] {
+  background-position-y: 98.7%;
+  animation-duration: 0.6s;
+}
+
+.pet-sprite[data-phase='drowsy'],
+.pet-sprite[data-phase='sleep'],
+.pet-sprite[data-phase='stretch'] {
+  background-image: url('/images/pets/astro-shiba-rest-sprite.png');
+}
+
+.pet-sprite[data-phase='drowsy'] {
+  background-position-y: 4.2%;
+  animation-duration: 1.2s;
+  animation-iteration-count: 1;
+}
+
+.pet-sprite[data-phase='sleep'] {
+  background-position-y: 52%;
+  animation-duration: 2.4s;
+}
+
+.pet-sprite[data-phase='stretch'] {
+  background-position-y: 98.7%;
+  animation-duration: 1.2s;
+  animation-iteration-count: 1;
+}
+
+@keyframes pet-frames {
+  0%, 33.32% { background-position-x: 0%; }
+  33.33%, 66.65% { background-position-x: 50%; }
+  66.66%, 100% { background-position-x: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pet-sprite {
+    animation: none;
+    background-position-x: 0%;
+  }
+}

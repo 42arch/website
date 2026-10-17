@@ -17,7 +17,7 @@
 2. **暖石与磨砂质感（Warm Stone & Frosted Matte）**：以温暖的暖石底色配合 22px 亚克力微磨砂、内高光与 SVG 噪点细微颗粒感，界面温润耐看，久看不累。
 3. **响应式外壳架构（Responsive Shell Architecture）**：
    - 统一采用 **Shell（外壳层）** 架构设计：桌面端自适应呈现为多窗口协同工作台（层级堆叠、拖拽边界限制、最小化到 Dock、全屏缩放、台前调度平铺）；移动端自适应呈现为全屏应用阅读视图与移动导航。
-   - 顶栏 MenuBar、悬浮 Dock、Spotlight 全局命令面板（⌘K）、Web Audio 原生触觉微音效与实时遥测事件流。
+   - 顶栏 MenuBar、悬浮 Dock、Spotlight 全局命令面板（⌘K）与实时遥测事件流。
 4. **全矢量生动场景（Vector Illustration & Mascot）**：内置刺猬工程师 Max、太空柴犬与极客黑猫 3 套纯 SVG 矢量壁纸及右下角互动对话气泡。
 5. **现代前端架构支撑**：
    - 基于 **Next.js 16 (App Router)** 与 **React 19**。
@@ -77,7 +77,7 @@
 
 ## 3. 信息架构与 8 大应用矩阵
 
-桌面组织 7 个精简专业应用窗口，覆盖个人履历、项目矩阵、视觉画册、终端、技术思考、联系与系统设置：
+桌面组织 7 个精简专业应用窗口，覆盖站点介绍、项目矩阵、视觉画册、终端、技术思考、联系与系统设置：
 
 ```
                     ┌──────────────────────────────────────────────┐
@@ -87,7 +87,7 @@
            │                                                                 │
            │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────────┐  │
            │  │  README.mdx   │ │ Projects.app  │ │      Gallery.app      │  │
-           │  │ 个人履历与矩阵 │ │ 作品与代码仓库 │ │ 视觉画册与色彩实验   │  │
+           │  │ 站点介绍与技术 │ │ 作品与代码仓库 │ │ 视觉画册与色彩实验   │  │
            │  └───────────────┘ └───────────────┘ └───────────────────────┘  │
            │                                                                 │
            │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────────┐  │
@@ -103,13 +103,12 @@
                     └───────────────── Floating Dock ────────────────┘
 ```
 
-### 3.1 `README.mdx`（关于我与个人工作台）
-- **左侧 Finder 侧边栏**：Outline 大纲导航（关于我、技术栈矩阵、履历里程碑）、工作区快速链接、暖石卡片标牌。
+### 3.1 `README.mdx`（站点介绍与工作台）
+- **左侧 Finder 侧边栏**：Outline 大纲导航（站点介绍、技术栈矩阵）、工作区快速链接、暖石卡片标牌。
 - **右侧工作区**：
-  - **Hero 简介**：头像标志徽章、Product Engineer & Indie Maker 职业标签、一句话愿景。
-  - **Bento 数据行**：设计哲学说明卡片、GitHub Stars（14.2k+ / 6 Open Source Kits）。
+  - **Hero 简介**：站点标志、工作台标签与一句话介绍。
+  - **Bento 数据行**：设计哲学说明卡片与内容入口。
   - **核心技术栈矩阵**：3 列卡片分类（Frontend & Craft、Backend & Data、AI & Agents），带有单色胶囊标签。
-  - **履历里程碑（Career Changelog）**：版本号格式呈现的经历变更日志（如 `v3.0 Staff Product Engineer`）。
 
 ### 3.2 `Projects.app`（作品集展示）
 - **标题栏内嵌分类过滤**：全部（All）、AI & Agent、开源工具（OSS）、独立 SaaS。
@@ -124,9 +123,9 @@
 - **元数据呈现**：展示作画时间、分类标签、设计说明与矢量比例规范。
 
 ### 3.5 `Terminal.sh`（交互式终端）
-- **外观**：磨砂深黑窗口（80×24 风格），zsh 绿色命令提示符 `alex@MacBook-Pro ~ %`。
+- **外观**：磨砂深黑窗口（80×24 风格），zsh 绿色命令提示符 `starllow@desktop ~ %`。
 - **快捷指令工具栏**：支持一键运行 `help`、`neofetch`、`skills`、`clear`。
-- **原生输入支持**：支持键盘输入回车执行，输出 ASCII 系统架构徽标或技术栈熟练度柱状图。
+- **原生输入支持**：支持键盘输入回车执行，输出 ASCII 系统架构徽标或站点技术栈列表。
 
 ### 3.6 `Handbook.wiki`（个人工程手册）
 - **内容架构**：基于 **Fumadocs** 渲染（源文件位于 `content/`），呈现 PostHog 风格团队与产品文化。
@@ -137,11 +136,11 @@
 - **访客留言板（Guestbook）**：发送信件后实时追加到下方留言墙，带有即时相对时间与高亮标签。
 
 ### 3.8 `Settings.app`（系统偏好设置）
-- **左侧分类导航**：卡通角色壁纸、深浅色外观、声音与桌面组件。
+- **左侧分类导航**：外观、桌面与语言地区。
 - **配置面板**：
   - **壁纸切换器**：刺猬工程师 Max、太空柴犬、极客黑猫缩略卡片，选中有品牌橙环绕高光。
   - **外观切换**：浅色暖石模式（Light）与深色暗夜模式（Dark）。
-  - **高级开关**：轻柔机械按键音效（Web Audio API 开关）、右下角角色对话气泡显隐、桌面左上角状态组件显隐。
+  - **高级开关**：桌面宠物显隐、桌面左上角状态组件显隐。
 
 ---
 
@@ -182,10 +181,6 @@
 - 支持按拼音、英文或 Tag 快速过滤应用、设置操作、系统动作（切换主题、平铺窗口、复制邮箱）。
 - 支持键盘 `Enter` 执行与 `Esc` 退出。
 
-### 4.6 触觉微音效系统（Web Audio API）
-- **零静态音频资源依赖**：利用浏览器原生的 `AudioContext` 实时合成正弦微音频（频率 380Hz~680Hz，时长 15ms~20ms）。
-- 在开窗、关窗、切换 Tab、点选壁纸时带来极具质感的轻柔机械按键反馈；支持在设置中一键静音。
-
 ---
 
 ## 5. 状态管理与数据架构
@@ -213,8 +208,6 @@ interface ShellState {
   setWallpaperIndex: (idx: number) => void
   themeMode: 'light' | 'dark'
   setThemeMode: (mode: 'light' | 'dark') => void
-  soundEnabled: boolean
-  toggleSound: () => void
   mascotBubbleVisible: boolean
   toggleMascotBubble: () => void
   widgetsVisible: boolean
@@ -248,15 +241,14 @@ interface ShellState {
 | `src/components/shell/wallpaper.tsx` | 纯矢量 SVG 卡通壁纸层（Max 刺猬、太空柴犬、黑猫）与右下角互动对话气泡组件 |
 | `src/components/shell/search.tsx` | Spotlight 全局命令面板（⌘K）：模糊搜索、快捷执行与键盘导航 |
 | `src/components/shell/window.tsx` | 统一窗口外框：macOS 红绿灯控制组、拖拽碰撞检测、最大化还原、微磨砂亚克力玻璃体 |
-| `src/components/apps/readme-app.tsx` | `README.mdx` 应用：Finder 侧栏、Hero、Bento 设计哲学、技术栈矩阵、履历 Changelog |
-| `src/components/apps/design-app.tsx` | `Design_Spec.fig` 应用：视觉降噪规范、暖石色卡复制、架构映射 |
-| `src/components/apps/projects-app.tsx` | `Projects.app` 应用：分类筛选、Bento 项目卡片、Star / 指标呈现 |
-| `src/components/apps/analytics-app.tsx` | `Insights.db` 应用：关键产出指标卡片与实时 HogQL 事件流日志看板 |
-| `src/components/apps/terminal-app.tsx` | `Terminal.sh` 应用：交互命令行、快捷指令栏、ASCII 架构图与技能输出 |
-| `src/components/apps/handbook-app.tsx` | `Handbook.wiki` 应用：基于 Fumadocs 的工程原则与团队手册渲染 |
-| `src/components/apps/contact-app.tsx` | `Mail.msg` 应用：邮件表单与前端实时访客留言墙（Guestbook） |
-| `src/components/apps/settings-app.tsx` | `Settings.app` 应用：3 款矢量壁纸点选、深浅色模式切换、音效与组件开关 |
-| `src/lib/sound.ts` | Web Audio API 轻柔机械按键微音效合成服务（免音频资源加载） |
+| `src/components/apps/readme/index.tsx` | `README.mdx` 应用：Finder 侧栏、Hero、Bento 设计哲学与技术栈矩阵 |
+| `src/components/apps/design/index.tsx` | `Design_Spec.fig` 应用：视觉降噪规范、暖石色卡复制、架构映射 |
+| `src/components/apps/projects/index.tsx` | `Projects.app` 应用：分类筛选、Bento 项目卡片、Star / 指标呈现 |
+| `src/components/apps/analytics/index.tsx` | `Insights.db` 应用：关键产出指标卡片与实时 HogQL 事件流日志看板 |
+| `src/components/apps/terminal/index.tsx` | `Terminal.sh` 应用：交互命令行、快捷指令栏、ASCII 架构图与技能输出 |
+| `src/components/apps/handbook/index.tsx` | `Handbook.wiki` 应用：基于 Fumadocs 的工程原则与团队手册渲染 |
+| `src/components/apps/contact/index.tsx` | `Mail.msg` 应用：邮件表单与前端实时访客留言墙（Guestbook） |
+| `src/components/apps/settings/index.tsx` | `Settings.app` 应用：壁纸点选、深浅色模式切换、桌面元素开关与语言选择 |
 | `src/lib/telemetry.ts` | 内存遥测事件分发器，驱动顶栏计数器与 Insights 实时日志 |
 | `src/lib/shell-routes.ts` | URL 与应用映射支持（自适应双端路由同步） |
 | `src/lib/shell-content.ts` | 静态数据源：个人信息、Bento 项目列表与配置项 |
@@ -283,14 +275,13 @@ interface ShellState {
 - [ ] 移动端下自动切换为整屏阅读视图与底栏快速切换，无非预期横向溢出。
 
 ### 7.3 应用功能与数据流验收
-- [ ] `README.mdx` 中能完整浏览个人履历、设计哲学与 3 列技术栈矩阵。
+- [ ] `README.mdx` 中能完整浏览站点介绍、设计哲学与 3 列技术栈矩阵。
 - [ ] `Design_Spec.fig` 中的色卡点击可一键复制 HEX 颜色值并弹出 Toast。
 - [ ] `Projects.app` 中的分类过滤器切换流畅，项目卡片指标与标签完整展示。
 - [ ] `Insights.db` 中实时记录用户在桌面上的交互动作，HogQL 日志流实时追加。
 - [ ] `Terminal.sh` 支持点击快捷按钮或键盘输入 `help`, `neofetch`, `skills`, `clear` 并正确打印输出。
 - [ ] `Mail.msg` 提交留言后立即在下方 Guestbook 列表中高亮插入新留言。
-- [ ] `Settings.app` 切换壁纸、明暗外观、音效开关时即时生效，右下角吉祥物气泡同步响应。
-- [ ] 开启音效时，点击操作产生清脆轻柔的机械按键微音效；静音后保持无声。
+- [ ] `Settings.app` 切换壁纸、明暗外观和桌面元素开关时即时生效。
 - [ ] 路由直接访问（如 `/projects`）能与外壳开窗状态平滑同步。
 
 ---
@@ -300,7 +291,7 @@ interface ShellState {
 1. **第一阶段：设计基座与全局状态（已完成）**
    - 更新 `src/app/globals.css`，配置 Tailwind v4 `@theme inline` 变量（暖石调色盘、微圆角、磨砂与噪点）。
    - 创建 `src/stores/shell-store.ts`，基于 Zustand 构建完整的响应式外壳状态管理。
-   - 实现 `src/lib/sound.ts` 与 `src/lib/telemetry.ts` 全局微服务。
+   - 实现 `src/lib/telemetry.ts` 全局遥测服务。
 2. **第二阶段：外壳容器与壁纸层（已完成）**
    - 编写 `src/components/shell/wallpaper.tsx`（完整移植 3 套纯矢量 SVG 壁纸与吉祥物对话气泡）。
    - 实现 `src/components/shell/menubar.tsx`（StartMenu、遥测胶囊、时钟）。
@@ -309,18 +300,18 @@ interface ShellState {
 3. **第三阶段：通用窗口容器与 8 大应用落地（已完成）**
    - 重构 `src/components/shell/window.tsx`（微磨砂窗体、红绿灯控制组、PointerEvents 拖拽约束与移动端视口自适应）。
    - 逐一实现并落地 8 个专属 App 视图组件（位于平级目录 `src/components/apps/`）：
-     - `ReadmeApp` (`README.mdx`）：Finder 侧栏、Hero、Bento 哲学、3 列技术栈、履历 Changelog。
+     - `ReadmeApp` (`README.mdx`）：Finder 侧栏、Hero、Bento 哲学与 3 列技术栈。
      - `DesignApp` (`Design_Spec.fig`）：降噪指南、HEX 颜色复制、模块映射。
      - `ProjectsApp` (`Projects.app`）：分类过滤、6 大精选项目卡片、指标与标签。
      - `AnalyticsApp` (`Insights.db`）：核心产出指标看板、实时 HogQL 事件流日志。
      - `TerminalApp` (`Terminal.sh`）：交互命令行交互、ASCII 图案与快捷指令。
      - `HandbookApp` (`Handbook.wiki`）：PostHog 文化启发的 4 大工程协作原则。
      - `ContactApp` (`Mail.msg`）：邮件拷贝与前端实时留言墙（Guestbook）。
-     - `SettingsApp` (`Settings.app`）：壁纸点选切换、深浅模式、音效开关、小组件显隐。
+     - `SettingsApp` (`Settings.app`）：壁纸点选切换、深浅模式、桌面元素显隐与语言选择。
    - 实现 `src/components/apps/app-windows.tsx` 与 `src/components/apps/index.ts` 集中组装。
    - 全面接管路由：更新 `src/app/page.tsx`、`layout.tsx` 以及所有子路由渲染 `<Shell />` 并实现 URL 双向同步。
 4. **第四阶段：国际化、响应式与交互打磨（已完成）**
    - 完善 `messages/zh.json` 与 `messages/en.json` 完整双语言词典（覆盖 MenuBar、Dock、Spotlight、8 大 App、系统设置与通用文案）。
    - 在 MenuBar 顶栏增加极简双语切换胶囊（`ZH / EN`），并在 `SettingsApp` 系统设置中提供双语偏好切换。
-   - `HandbookApp` 增加 Fumadocs 内容管理体系联动，支持直观阅读 `content/notes/*.mdx` 技术笔记与代码实现。
+   - `BlogApp` 使用 Fumadocs 管理 `content/blog/*.mdx` 长篇文章；`NotesApp` 使用独立的 Fumadocs `notes` collection 管理 `content/notes/*.mdx` 短笔记，笔记正文写在 MDX 正文中。
    - 针对超小屏幕与移动端（<375px）完成微微圆角、自适应 Dock 缩放与全屏 Sheet 体验打磨。
