@@ -2,8 +2,8 @@
 
 import {
   ArticleIcon,
-  BookOpenIcon,
   BookmarkSimpleIcon,
+  BookOpenIcon,
   ChartLineUpIcon,
   EnvelopeSimpleIcon,
   FileMagnifyingGlassIcon,

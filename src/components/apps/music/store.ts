@@ -33,16 +33,6 @@ interface MusicStore {
 
 let audioElement: HTMLAudioElement | null = null
 
-export function bindMusicAudio(element: HTMLAudioElement) {
-  audioElement = element
-  element.volume = useMusicStore.getState().volume
-
-  return () => {
-    if (audioElement === element)
-      audioElement = null
-  }
-}
-
 export const useMusicStore = create<MusicStore>((set, get) => ({
   tracks: [],
   catalogStatus: 'loading',
@@ -172,3 +162,13 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
   setPlaying: isPlaying => set({ isPlaying }),
   setPlaybackError: () => set({ isPlaying: false, error: 'playback' }),
 }))
+
+export function bindMusicAudio(element: HTMLAudioElement) {
+  audioElement = element
+  element.volume = useMusicStore.getState().volume
+
+  return () => {
+    if (audioElement === element)
+      audioElement = null
+  }
+}

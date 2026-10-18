@@ -1,4 +1,9 @@
 {
+  "pwa": {
+    "offlineTitle": "暂时无法连接",
+    "offlineDescription": "请检查网络连接，然后重试。",
+    "retry": "重试"
+  },
   "common": {
     "close": "关闭窗口",
     "minimize": "最小化至 Dock",
@@ -176,10 +181,11 @@
     "projects": {
       "title": "项目",
       "all": "全部 (6)",
-      "ai": "AI & Agent",
-      "oss": "开源工具",
-      "saas": "独立 SaaS",
-      "viewDetail": "查看详情",
+      "shipped": "已发布",
+      "in-progress": "进行中",
+      "archived": "已归档",
+      "sourceCode": "源码",
+      "visitProject": "访问项目",
       "empty": "暂无项目"
     },
     "notes": {
@@ -215,7 +221,6 @@
       "catCommand": "显示文本文件内容",
       "blogListCommand": "列出博客文章",
       "notesListCommand": "列出短笔记",
-      "projectsListCommand": "列出项目",
       "galleryListCommand": "列出主题画册",
       "clearCommand": "清空终端输出",
       "appsTitle": "启动台应用",

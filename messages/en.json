@@ -1,4 +1,9 @@
 {
+  "pwa": {
+    "offlineTitle": "You're offline",
+    "offlineDescription": "Check your connection and try again.",
+    "retry": "Retry"
+  },
   "common": {
     "close": "Close Window",
     "minimize": "Minimize to Dock",
@@ -176,10 +181,11 @@
     "projects": {
       "title": "Projects",
       "all": "All (6)",
-      "ai": "AI & Agent",
-      "oss": "Open Source",
-      "saas": "Indie SaaS",
-      "viewDetail": "Inspect",
+      "shipped": "Shipped",
+      "in-progress": "In progress",
+      "archived": "Archived",
+      "sourceCode": "Source",
+      "visitProject": "Visit project",
       "empty": "No projects yet"
     },
     "notes": {
@@ -215,7 +221,6 @@
       "catCommand": "Print a text file",
       "blogListCommand": "List blog articles",
       "notesListCommand": "List short notes",
-      "projectsListCommand": "List projects",
       "galleryListCommand": "List theme albums",
       "clearCommand": "Clear terminal output",
       "appsTitle": "Launchpad apps",

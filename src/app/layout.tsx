@@ -1,8 +1,10 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import localFont from 'next/font/local'
+import Script from 'next/script'
 import { getNotesList } from '@/components/apps/notes/data'
+import { PwaRegister } from '@/components/pwa-register'
 import { Shell } from '@/components/shell/shell'
 import { ThemeProvider } from '@/components/theme-provider'
 import { cn } from '@/lib/utils'
@@ -28,6 +30,16 @@ const geistHeading = localFont({
 export const metadata: Metadata = {
   title: 'Starllow.OS',
   description: 'Starllow.OS',
+  applicationName: 'Starllow.OS',
+  appleWebApp: {
+    capable: true,
+    title: 'Starllow.OS',
+    statusBarStyle: 'default',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#eae6da',
 }
 
 export default async function RootLayout({
@@ -47,6 +59,12 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+        <PwaRegister />
+        <Script
+          src="https://cloud.umami.is/script.js"
+          strategy="afterInteractive"
+          data-website-id="baa5bf4e-bb03-4100-aa40-c0e68c7f806c"
+        />
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"

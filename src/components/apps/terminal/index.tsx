@@ -106,13 +106,6 @@ export function TerminalApp({ files }: { files: VirtualFile[] }) {
       return
     }
 
-    if (category === 'projects') {
-      useProjectsStore.getState().setFilter('all')
-      useProjectsStore.getState().setSelectedProjectTitle(result.title)
-      openWindow('projects')
-      return
-    }
-
     useGalleryStore.getState().setActiveAlbumId(result.albumId ?? null)
     useGalleryStore.getState().setActiveImageIndex(null)
     openWindow('gallery')
@@ -267,7 +260,7 @@ export function TerminalApp({ files }: { files: VirtualFile[] }) {
         }
       }
     }
-    else if (['blog', 'notes', 'projects', 'gallery'].includes(verb) && args[0]?.toLocaleLowerCase() === 'list') {
+    else if (['blog', 'notes', 'gallery'].includes(verb) && args[0]?.toLocaleLowerCase() === 'list') {
       commandType = `${verb}_list`
       const category = verb as TerminalListCategory
       if (args.length !== 1) {
@@ -360,7 +353,6 @@ export function TerminalApp({ files }: { files: VirtualFile[] }) {
         ['cat <file>', t('catCommand')],
         ['blog list', t('blogListCommand')],
         ['notes list', t('notesListCommand')],
-        ['projects list', t('projectsListCommand')],
         ['gallery list', t('galleryListCommand')],
         ['clear', t('clearCommand')],
       ]

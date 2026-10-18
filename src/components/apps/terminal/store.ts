@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-export type TerminalListCategory = 'blog' | 'notes' | 'projects' | 'gallery'
-export type TerminalListItemKind = 'blog' | 'note' | 'project' | 'album'
+export type TerminalListCategory = 'blog' | 'notes' | 'gallery'
+export type TerminalListItemKind = 'blog' | 'note' | 'album'
 
 export interface TerminalListItem {
   id: string

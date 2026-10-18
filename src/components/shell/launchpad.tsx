@@ -3,8 +3,8 @@
 import type { AppId, LaunchpadAppId } from '@/lib/shell-routes'
 import {
   ArticleIcon,
-  BookOpenIcon,
   BookmarkSimpleIcon,
+  BookOpenIcon,
   ChartLineUpIcon,
   EnvelopeSimpleIcon,
   FolderSimpleIcon,

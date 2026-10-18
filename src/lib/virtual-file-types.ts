@@ -1,4 +1,4 @@
-export type VirtualFileKind = 'directory' | 'blog' | 'note' | 'project' | 'image' | 'audio'
+export type VirtualFileKind = 'directory' | 'blog' | 'note' | 'image' | 'audio'
 
 export interface VirtualFile {
   id: string
@@ -12,6 +12,7 @@ export interface VirtualFile {
   category?: string
   tags?: string[]
   content?: string
+  cover?: string
   slug?: string
   albumId?: string
   imageIndex?: number

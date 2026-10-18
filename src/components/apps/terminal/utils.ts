@@ -27,13 +27,11 @@ export function listEntries(category: TerminalListCategory, files: VirtualFile[]
     ? files.filter(file => file.kind === 'blog')
     : category === 'notes'
       ? files.filter(file => file.kind === 'note')
-      : category === 'projects'
-        ? files.filter(file => file.kind === 'project')
-        : files.filter(file => file.kind === 'directory' && file.albumId)
+      : files.filter(file => file.kind === 'directory' && file.albumId)
 
   return entries.map(file => ({
     id: file.id,
-    kind: category === 'gallery' ? 'album' : category === 'blog' ? 'blog' : category === 'notes' ? 'note' : 'project',
+    kind: category === 'gallery' ? 'album' : category === 'blog' ? 'blog' : 'note',
     title: file.title ?? file.name,
     summary: file.summary ?? '',
     detail: category === 'gallery'

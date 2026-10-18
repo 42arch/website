@@ -7,7 +7,6 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   CaretRightIcon,
-  FileCodeIcon,
   FileTextIcon,
   FolderOpenIcon,
   FolderSimpleIcon,
@@ -19,8 +18,8 @@ import {
   SortAscendingIcon,
   SquaresFourIcon,
 } from '@phosphor-icons/react'
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { useFinderStore } from '@/components/apps/finder/store'
@@ -50,8 +49,6 @@ function EntryIcon({ file }: { file: VirtualFile }) {
     return <MusicNotesIcon className="shrink-0 text-ph-orange" size={18} />
   if (file.kind === 'note')
     return <NotePencilIcon className="shrink-0 text-ph-orange" size={18} />
-  if (file.kind === 'project')
-    return <FileCodeIcon className="shrink-0 text-ph-orange" size={18} />
   return <FileTextIcon className="shrink-0 text-ph-orange" size={18} />
 }
 
@@ -68,7 +65,7 @@ function AudioCover({ file }: { file: VirtualFile }) {
               fill
               onError={() => setHasCover(false)}
               sizes="160px"
-              src={`/api/music/artwork/${encodeURIComponent(file.id)}`}
+              src={file.cover ?? `/api/music/artwork/${encodeURIComponent(file.id)}`}
               unoptimized
             />
           )
@@ -234,7 +231,7 @@ export function FinderApp({ files }: FinderAppProps) {
                           ? t('pictures')
                           : crumb.name === 'Music'
                             ? t('music')
-                          : files.find(file => file.path === crumb.path)?.name ?? crumb.name}
+                            : files.find(file => file.path === crumb.path)?.name ?? crumb.name}
                     </button>
                   </span>
                 ))}
@@ -286,7 +283,7 @@ export function FinderApp({ files }: FinderAppProps) {
                                 ? <img alt="" className="aspect-square w-full rounded-md object-cover" loading="lazy" src={file.src} />
                                 : file.kind === 'audio'
                                   ? <AudioCover file={file} />
-                                : <span className="flex aspect-square w-full items-center justify-center rounded-md bg-ph-sidebar"><EntryIcon file={file} /></span>}
+                                  : <span className="flex aspect-square w-full items-center justify-center rounded-md bg-ph-sidebar"><EntryIcon file={file} /></span>}
                               <span className="w-full truncate text-xs">{displayName(file)}</span>
                             </button>
                           ))}

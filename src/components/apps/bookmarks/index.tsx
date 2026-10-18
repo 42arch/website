@@ -1,5 +1,6 @@
 'use client'
 
+import type { BookmarkCategory, BookmarkSite } from '@/components/apps/bookmarks/manifest'
 import {
   ArrowUpRightIcon,
   BookmarkSimpleIcon,
@@ -10,7 +11,6 @@ import {
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { parseBookmarks } from '@/components/apps/bookmarks/manifest'
-import type { BookmarkCategory, BookmarkSite } from '@/components/apps/bookmarks/manifest'
 import { ShellWindow } from '@/components/shell/window'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { ScrollArea } from '@/components/ui/scroll-area'

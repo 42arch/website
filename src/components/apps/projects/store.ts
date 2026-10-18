@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type ProjectFilter = 'all' | 'ai' | 'oss' | 'saas'
+export type ProjectFilter = 'all' | 'shipped' | 'in-progress' | 'archived'
 
 interface ProjectsState {
   filter: ProjectFilter

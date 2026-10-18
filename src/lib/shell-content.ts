@@ -1,11 +1,13 @@
 export interface ProjectItem {
+  id: string
   title: string
-  category: 'all' | 'ai' | 'oss' | 'saas'
-  badge: string
-  color: string
-  desc: string
-  stack: string[]
-  metric: string
+  description: string
+  tags: string[]
+  status: 'shipped' | 'in-progress' | 'archived'
+  stars?: number
+  sourceUrl: string
+  tech: string[]
+  url: string
 }
 
 export interface ColorToken {
@@ -34,58 +36,69 @@ export const techStackCategories = [
 
 export const projectsData: ProjectItem[] = [
   {
-    title: 'HogQL-Studio',
-    category: 'oss',
-    badge: '5.8k',
-    color: '#F54E00',
-    desc: '浏览器端轻量级 SQL & ClickHouse 查询工作台，内置高速虚拟滚动与一键图表生成。',
-    stack: ['TypeScript', 'React', 'DuckDB-Wasm'],
-    metric: '42k+ MAU',
+    id: 'geojsonio-for-vscode',
+    title: 'GeoJSON IO for VSCode',
+    description: '在 VSCode 中预览，创建和编辑 geojson 文件。',
+    tags: ['Extension', 'VSCode', 'GeoJSON'],
+    status: 'shipped',
+    stars: 29,
+    sourceUrl: 'https://github.com/42arch/geojson.io-for-vscode',
+    tech: ['TypeScript', 'React', 'VSCode', 'MapboxGL'],
+    url: 'https://marketplace.visualstudio.com/items?itemName=swallow.geojson-io-for-vscode',
   },
   {
-    title: 'AgentReplay.ai',
-    category: 'ai',
-    badge: '3.9k',
-    color: '#007AFF',
-    desc: '专为 LLM Agent 打造的会话回放与推理链路追踪器，可视化调试 Prompt 与工具调用。',
-    stack: ['Next.js', 'Python', 'OpenTelemetry'],
-    metric: '12M+ Traces',
+    id: 'hdmap-viewer',
+    title: 'HDMap Viewer',
+    description: '基于 JavaScript 的高精地图解析与可视化工具，支持 OpenDRIVE 等格式。',
+    tags: ['HDMap', 'OpenDRIVE', 'Experimental'],
+    status: 'in-progress',
+    stars: 1,
+    sourceUrl: 'https://github.com/42arch/hdmap-viewer',
+    tech: ['TypeScript', 'Vite', 'ThreeJS'],
+    url: 'https://hdmap-viewer.starllow.com',
   },
   {
-    title: 'MatteUI.kit',
-    category: 'oss',
-    badge: '2.7k',
-    color: '#FEBC2E',
-    desc: '融合 macOS 哑光颗粒感与 PostHog 微立体键帽美学的 React 组件库，零外部图标依赖。',
-    stack: ['Tailwind', 'Radix UI', 'SVG'],
-    metric: '18k dl/wk',
+    id: 'folio-os',
+    title: 'Website - Folio OS',
+    description: '个人网站，界面设计灵感来源于 IDE 和操作系统。',
+    tags: ['Website', 'Portfolio', 'Experimental'],
+    status: 'in-progress',
+    stars: 3,
+    sourceUrl: 'https://github.com/42arch/website',
+    tech: ['Next.js', 'Fumadocs', 'TailwindCSS', 'Zustand'],
+    url: 'https://starllow.com',
   },
   {
-    title: 'Changelogs.sh',
-    category: 'saas',
-    badge: '$4.2k MRR',
-    color: '#28C840',
-    desc: '将 Git Commit 记录自动转化为精美产品更新周报的独立 SaaS 工具。',
-    stack: ['Go', 'PostgreSQL', 'Stripe'],
-    metric: '190+ Teams',
+    id: 'procedural-island-generator',
+    title: 'Procedural Island Generator',
+    description: '多种风格的程序化岛屿地形生成器。',
+    tags: ['Procedural Generation', 'Experimental'],
+    status: 'shipped',
+    stars: 4,
+    sourceUrl: 'https://github.com/42arch/procedural-island-generator',
+    tech: ['WebGL', 'GLSL', 'ThreeJS'],
+    url: 'https://procedural-island-generator.netlify.app',
   },
   {
-    title: 'MCP-Desktop-Bridge',
-    category: 'ai',
-    badge: '1.8k',
-    color: '#8B5CF6',
-    desc: '让本地大模型安全读写个人笔记与终端的工作流桥接器，支持细粒度权限确认。',
-    stack: ['Rust', 'Tauri', 'MCP'],
-    metric: 'Latency < 8ms',
+    id: 'game-of-life',
+    title: 'Game Of Life',
+    description: '一个用 webgl 写的康威生命游戏。',
+    tags: ['graphics', 'creative-tools', 'Experimental'],
+    status: 'archived',
+    stars: 0,
+    sourceUrl: 'https://github.com/42arch/game-of-life',
+    tech: ['WebGL', 'NextJS', 'ThreeJS'],
+    url: 'https://game-of-life.starllow.com/zh',
   },
   {
-    title: 'FeatureFlag.mini',
-    category: 'saas',
-    badge: 'Beta',
-    color: '#EC4899',
-    desc: '面向独立开发者的极简特性开关与 A/B 实验服务，单文件 SDK 仅 1.8KB。',
-    stack: ['Cloudflare Workers', 'Edge KV'],
-    metric: '12ms Edge',
+    id: 'pokemon-zh',
+    title: '宝可梦中文图鉴',
+    description: '快速查询，随时了解你的宝可梦伙伴！',
+    tags: ['WebApp', 'Game'],
+    status: 'shipped',
+    sourceUrl: 'https://github.com/42arch/pokedex-zh',
+    tech: ['TypeScript', 'NextJS', 'TailwindCSS'],
+    url: 'https://pokedex.starllow.com/',
   },
 ]
 
