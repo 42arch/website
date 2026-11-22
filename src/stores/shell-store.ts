@@ -1,5 +1,6 @@
 import type { AppId } from '@/lib/shell-routes'
 import { create } from 'zustand'
+import { defaultDesktopPaths, desktopStorageKey, migrateDesktopPaths, previousDesktopStorageKey, readStoredDesktopPaths } from '@/lib/desktop-items'
 import { isAppId } from '@/lib/shell-routes'
 import { captureTelemetryEvent } from '@/lib/telemetry'
 
@@ -129,6 +130,11 @@ export interface ShellStore {
   openAllWindows: () => void
   hydrateDockAppIds: () => void
   setDockAppIds: (ids: AppId[]) => void
+  desktopPaths: string[]
+  desktopHydrated: boolean
+  hydrateDesktopItems: () => void
+  addDesktopItem: (path: string) => void
+  removeDesktopItem: (path: string) => void
 
   setWallpaperIndex: (idx: number) => void
   cycleWallpaper: () => void
@@ -216,6 +222,8 @@ let toastTimer: ReturnType<typeof setTimeout> | null = null
 export const useShellStore = create<ShellStore>((set, get) => ({
   windows: initialWindows,
   dockAppIds: defaultDockAppIds,
+  desktopPaths: defaultDesktopPaths,
+  desktopHydrated: false,
   activeWindowId: null,
   draggingWindowId: null,
   topZIndex: 45,
@@ -510,6 +518,52 @@ export const useShellStore = create<ShellStore>((set, get) => ({
     }
     catch {
       // Keep the current session preference when local storage is unavailable.
+    }
+  },
+
+  hydrateDesktopItems: () => {
+    let desktopPaths = get().desktopPaths
+    try {
+      const storedPaths = readStoredDesktopPaths(localStorage.getItem(desktopStorageKey))
+      if (storedPaths) {
+        desktopPaths = storedPaths
+      }
+      else {
+        const previousPaths = readStoredDesktopPaths(localStorage.getItem(previousDesktopStorageKey))
+        if (previousPaths) {
+          desktopPaths = migrateDesktopPaths(previousPaths)
+          localStorage.setItem(desktopStorageKey, JSON.stringify(desktopPaths))
+        }
+      }
+    }
+    catch {
+      // Keep the default desktop items when local storage is unavailable.
+    }
+    set({ desktopPaths, desktopHydrated: true })
+  },
+
+  addDesktopItem: (path: string) => {
+    if (!(path.startsWith('/') || isAppId(path)) || get().desktopPaths.includes(path))
+      return
+
+    const desktopPaths = [...get().desktopPaths, path]
+    set({ desktopPaths })
+    try {
+      localStorage.setItem(desktopStorageKey, JSON.stringify(desktopPaths))
+    }
+    catch {
+      // Keep the current session desktop when local storage is unavailable.
+    }
+  },
+
+  removeDesktopItem: (path: string) => {
+    const desktopPaths = get().desktopPaths.filter(item => item !== path)
+    set({ desktopPaths })
+    try {
+      localStorage.setItem(desktopStorageKey, JSON.stringify(desktopPaths))
+    }
+    catch {
+      // Keep the current session desktop when local storage is unavailable.
     }
   },
 

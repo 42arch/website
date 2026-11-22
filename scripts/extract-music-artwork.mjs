@@ -1,13 +1,20 @@
-import { open } from 'node:fs/promises'
+import { mkdir, open, readFile, rm, writeFile } from 'node:fs/promises'
+import { dirname, resolve, sep } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-interface EmbeddedArtwork {
-  contentType: string
-  data: Buffer
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const musicDirectory = resolve(root, 'public/music')
+const outputDirectory = resolve(root, 'public/music/artwork')
+const manifestPath = resolve(root, 'src/components/apps/music/artwork-manifest.json')
+const MAX_TAG_SIZE = 10 * 1024 * 1024
+const extensions = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+  'image/webp': 'webp',
 }
 
-const MAX_TAG_SIZE = 10 * 1024 * 1024
-
-function readSynchsafe(bytes: Buffer, offset: number): number | null {
+function readSynchsafe(bytes, offset) {
   const parts = bytes.subarray(offset, offset + 4)
   if (parts.length !== 4 || parts.some(byte => byte > 0x7F))
     return null
@@ -15,7 +22,7 @@ function readSynchsafe(bytes: Buffer, offset: number): number | null {
   return (parts[0] << 21) | (parts[1] << 14) | (parts[2] << 7) | parts[3]
 }
 
-function readPicture(frame: Buffer): (EmbeddedArtwork & { pictureType: number }) | null {
+function readPicture(frame) {
   if (frame.length < 5)
     return null
 
@@ -26,7 +33,7 @@ function readPicture(frame: Buffer): (EmbeddedArtwork & { pictureType: number })
 
   const mime = frame.toString('latin1', 1, mimeEnd).toLowerCase()
   const contentType = mime === 'image/jpg' ? 'image/jpeg' : mime
-  if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(contentType))
+  if (!Object.hasOwn(extensions, contentType))
     return null
 
   const pictureType = frame[mimeEnd + 1]
@@ -53,7 +60,7 @@ function readPicture(frame: Buffer): (EmbeddedArtwork & { pictureType: number })
   return { contentType, data: Buffer.from(frame.subarray(imageStart)), pictureType }
 }
 
-export async function readMusicArtwork(filePath: string): Promise<EmbeddedArtwork | null> {
+async function readMusicArtwork(filePath) {
   const file = await open(filePath, 'r')
 
   try {
@@ -65,7 +72,6 @@ export async function readMusicArtwork(filePath: string): Promise<EmbeddedArtwor
     if (header.toString('ascii', 0, 3) !== 'ID3' || (version !== 3 && version !== 4))
       return null
 
-    // Extended headers and unsynchronised tags need separate decoding.
     if (header[5] & 0xC0)
       return null
 
@@ -82,7 +88,7 @@ export async function readMusicArtwork(filePath: string): Promise<EmbeddedArtwor
       read += bytesRead
     }
 
-    let firstPicture: EmbeddedArtwork | null = null
+    let firstPicture = null
     let offset = 0
     while (offset + 10 <= tag.length) {
       const frameId = tag.toString('ascii', offset, offset + 4)
@@ -111,3 +117,37 @@ export async function readMusicArtwork(filePath: string): Promise<EmbeddedArtwor
     await file.close()
   }
 }
+
+const manifest = JSON.parse(await readFile(resolve(root, 'public/data/music.json'), 'utf8'))
+await rm(outputDirectory, { recursive: true, force: true })
+await mkdir(outputDirectory, { recursive: true })
+
+const artwork = {}
+if (Array.isArray(manifest)) {
+  for (const track of manifest) {
+    if (!track || typeof track.id !== 'string' || typeof track.src !== 'string' || typeof track.cover === 'string')
+      continue
+    if (!/^[a-z0-9-]+$/.test(track.id))
+      continue
+
+    const source = decodeURIComponent(track.src)
+    if (!source.startsWith('/music/') || source.split('/').includes('..'))
+      continue
+
+    const filePath = resolve(musicDirectory, source.slice('/music/'.length))
+    if (!filePath.startsWith(`${musicDirectory}${sep}`))
+      continue
+
+    const picture = await readMusicArtwork(filePath)
+    const extension = picture ? extensions[picture.contentType] : undefined
+    if (!picture || !extension)
+      continue
+
+    const filename = `${track.id}.${extension}`
+    await writeFile(resolve(outputDirectory, filename), picture.data)
+    artwork[track.id] = `/music/artwork/${filename}`
+  }
+}
+
+await mkdir(dirname(manifestPath), { recursive: true })
+await writeFile(manifestPath, `${JSON.stringify(artwork, null, 2)}\n`)

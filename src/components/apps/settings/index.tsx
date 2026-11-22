@@ -31,7 +31,7 @@ import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { setUserLocale } from '@/services/locale'
+import { saveStoredLocale } from '@/services/locale'
 import { useShellStore, wallpaperScenes } from '@/stores/shell-store'
 
 type SettingsSection = 'appearance' | 'desktop' | 'language'
@@ -66,12 +66,11 @@ export function SettingsApp() {
     { id: 'language', label: t('language'), icon: <TranslateIcon /> },
   ]
 
-  async function handleLanguageSelect(newLocale: Locale) {
+  function handleLanguageSelect(newLocale: Locale) {
     if (newLocale === locale)
       return
 
-    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
-    await setUserLocale(newLocale)
+    saveStoredLocale(newLocale)
     window.location.reload()
   }
 

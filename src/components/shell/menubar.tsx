@@ -17,7 +17,7 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import starIcon from '@/app/icon.png'
 import { profile } from '@/lib/desktop-content'
-import { setUserLocale } from '@/services/locale'
+import { saveStoredLocale } from '@/services/locale'
 import { useShellStore } from '@/stores/shell-store'
 
 interface BatteryManager extends EventTarget {
@@ -56,10 +56,9 @@ export function ShellMenubar() {
   const t = useTranslations('menubar')
   const tCommon = useTranslations('common')
 
-  async function toggleLocale() {
+  function toggleLocale() {
     const next: Locale = locale === 'zh' ? 'en' : 'zh'
-    document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; SameSite=Lax`
-    await setUserLocale(next)
+    saveStoredLocale(next)
     window.location.reload()
   }
 

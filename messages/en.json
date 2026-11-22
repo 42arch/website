@@ -106,6 +106,7 @@
       "documents": "Documents",
       "pictures": "Pictures",
       "music": "Music",
+      "applications": "Applications",
       "back": "Back to previous folder",
       "path": "Current path",
       "view": "View mode",
@@ -123,13 +124,18 @@
       "sortBy": "Sort by",
       "sortDirection": "Change sort direction",
       "byteSize": "{size} bytes",
+      "sendToDesktop": "Send to Desktop",
+      "alreadyOnDesktop": "Already on Desktop",
+      "sentToDesktop": "“{name}” is now on the Desktop",
+      "removeFromDesktop": "Remove from Desktop",
       "kind": {
         "directory": "Folder",
         "blog": "Blog article",
         "note": "Short note",
         "project": "Project",
         "image": "Image",
-        "audio": "Audio file"
+        "audio": "Audio file",
+        "app": "Application"
       }
     },
     "bookmarks": {

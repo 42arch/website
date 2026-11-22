@@ -1,11 +1,11 @@
 import { getRequestConfig } from 'next-intl/server'
-import { getUserLocale } from '../services/locale'
+import { defaultLocale, timeZone } from './config'
+import zh from '../../messages/zh.json'
 
 export default getRequestConfig(async () => {
-  const locale = await getUserLocale()
-
   return {
-    locale,
-    messages: (await import(`../../messages/${locale}.json`)).default,
+    locale: defaultLocale,
+    messages: zh,
+    timeZone,
   }
 })

@@ -1,11 +1,8 @@
-import type { Metadata } from 'next'
 import { NotesApp } from '@/components/apps/notes'
 import { getNotesList } from '@/components/apps/notes/data'
+import { pageMetadata } from '@/lib/site'
 
-export const metadata: Metadata = {
-  title: 'Notes.app — Starllow.OS',
-  description: '短小、随手可读的技术笔记。',
-}
+export const metadata = pageMetadata('短笔记', '短小、随手可读的技术笔记。', '/notes')
 
 export default function NotesIndexPage() {
   return <NotesApp notesList={getNotesList()} />

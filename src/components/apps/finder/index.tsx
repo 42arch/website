@@ -1,6 +1,6 @@
 'use client'
 
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent, ReactElement } from 'react'
 import type { FinderSortKey } from '@/components/apps/finder/store'
 import type { VirtualFile } from '@/lib/virtual-file-types'
 import {
@@ -24,12 +24,15 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { useFinderStore } from '@/components/apps/finder/store'
 import { compareFiles, displayName } from '@/components/apps/finder/utils'
+import { AppIcon } from '@/components/shell/app-icon'
 import { ShellWindow } from '@/components/shell/window'
 import { Button } from '@/components/ui/button'
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { isAppId } from '@/lib/shell-routes'
 import { openVirtualFile } from '@/lib/virtual-file-actions'
 import { getVirtualDirectoryChildren, listVirtualDirectory } from '@/lib/virtual-file-utils'
 import { useShellStore } from '@/stores/shell-store'
@@ -49,15 +52,55 @@ function EntryIcon({ file }: { file: VirtualFile }) {
     return <MusicNotesIcon className="shrink-0 text-ph-orange" size={18} />
   if (file.kind === 'note')
     return <NotePencilIcon className="shrink-0 text-ph-orange" size={18} />
+  if (file.kind === 'app' && file.appId)
+    return <AppIcon className="shrink-0 text-ph-orange" id={file.appId} size={18} />
   return <FileTextIcon className="shrink-0 text-ph-orange" size={18} />
 }
 
+function useFileLabel() {
+  const dockT = useTranslations('dock')
+  return (file: VirtualFile) => {
+    if (file.kind === 'app' && file.appId && isAppId(file.appId))
+      return dockT(file.appId)
+    return displayName(file)
+  }
+}
+
+function FinderEntryMenu({ children, file }: { children: ReactElement, file: VirtualFile }) {
+  const desktopPaths = useShellStore(state => state.desktopPaths)
+  const addDesktopItem = useShellStore(state => state.addDesktopItem)
+  const showToast = useShellStore(state => state.showToast)
+  const t = useTranslations('apps.finder')
+  const label = useFileLabel()
+  const desktopId = file.kind === 'app' && file.appId && isAppId(file.appId) ? file.appId : file.path
+  const onDesktop = desktopPaths.includes(desktopId)
+
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        {children}
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem
+          disabled={onDesktop}
+          onSelect={() => {
+            addDesktopItem(desktopId)
+            showToast(t('sentToDesktop', { name: label(file) }))
+          }}
+        >
+          {onDesktop ? t('alreadyOnDesktop') : t('sendToDesktop')}
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+
 function AudioCover({ file }: { file: VirtualFile }) {
-  const [hasCover, setHasCover] = useState(true)
+  const [hasCover, setHasCover] = useState(Boolean(file.cover))
 
   return (
     <span className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-md bg-ph-sidebar">
-      {hasCover
+      {hasCover && file.cover
         ? (
             <Image
               alt=""
@@ -65,7 +108,7 @@ function AudioCover({ file }: { file: VirtualFile }) {
               fill
               onError={() => setHasCover(false)}
               sizes="160px"
-              src={file.cover ?? `/api/music/artwork/${encodeURIComponent(file.id)}`}
+              src={file.cover}
               unoptimized
             />
           )
@@ -77,11 +120,14 @@ function AudioCover({ file }: { file: VirtualFile }) {
 export function FinderApp({ files }: FinderAppProps) {
   const router = useRouter()
   const t = useTranslations('apps.finder')
+  const label = useFileLabel()
   const currentWindow = useShellStore(state => state.windows.finder)
   const currentPreferences = useFinderStore(state => state.preferences)
   const setView = useFinderStore(state => state.setView)
   const toggleSort = useFinderStore(state => state.toggleSort)
   const resetDirectoryPreferences = useFinderStore(state => state.resetDirectoryPreferences)
+  const requestedPath = useFinderStore(state => state.requestedPath)
+  const clearRequestedPath = useFinderStore(state => state.clearRequestedPath)
   const [currentPath, setCurrentPath] = useState('/Documents')
   const [selectedPath, setSelectedPath] = useState<string | null>(null)
   const [query, setQuery] = useState('')
@@ -104,15 +150,33 @@ export function FinderApp({ files }: FinderAppProps) {
     }
   }, [currentWindow?.open])
 
+  useEffect(() => {
+    if (!requestedPath)
+      return
+
+    if (currentPath === requestedPath) {
+      clearRequestedPath()
+      return
+    }
+
+    const baseHistory = history.slice(0, historyIndex + 1)
+    const nextHistory = baseHistory[baseHistory.length - 1] === requestedPath ? baseHistory : [...baseHistory, requestedPath]
+    setCurrentPath(requestedPath)
+    setSelectedPath(null)
+    setQuery('')
+    setHistory(nextHistory)
+    setHistoryIndex(nextHistory.length - 1)
+  }, [clearRequestedPath, currentPath, history, historyIndex, requestedPath])
+
   const visibleFiles = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase()
     const source = normalizedQuery
-      ? listVirtualDirectory(files, currentPath).filter(file => [file.name, file.title, file.summary, file.category, ...(file.tags ?? []), file.path]
+      ? listVirtualDirectory(files, currentPath).filter(file => [file.name, file.title, label(file), file.summary, file.category, ...(file.tags ?? []), file.path]
           .some(value => value?.toLocaleLowerCase().includes(normalizedQuery)))
       : getVirtualDirectoryChildren(files, currentPath)
 
     return [...source].sort((left, right) => compareFiles(left, right, preference.sortKey, preference.sortDirection))
-  }, [currentPath, files, preference.sortDirection, preference.sortKey, query])
+  }, [currentPath, files, label, preference.sortDirection, preference.sortKey, query])
 
   const breadcrumbs = useMemo(() => {
     const segments = currentPath.split('/').filter(Boolean)
@@ -121,6 +185,20 @@ export function FinderApp({ files }: FinderAppProps) {
       path: `/${segments.slice(0, index + 1).join('/')}`,
     }))
   }, [currentPath])
+
+  function crumbLabel(crumb: { name: string, path: string }) {
+    if (crumb.name === 'Documents')
+      return t('documents')
+    if (crumb.name === 'Pictures')
+      return t('pictures')
+    if (crumb.name === 'Music')
+      return t('music')
+    if (crumb.name === 'Applications')
+      return t('applications')
+
+    const file = files.find(item => item.path === crumb.path)
+    return file ? label(file) : crumb.name
+  }
 
   function navigate(path: string, recordHistory = true) {
     setCurrentPath(path)
@@ -157,7 +235,13 @@ export function FinderApp({ files }: FinderAppProps) {
   }
 
   const selectedFile = files.find(file => file.path === selectedPath)
-  const currentLocation = currentPath.startsWith('/Pictures') ? 'Pictures' : currentPath.startsWith('/Music') ? 'Music' : 'Documents'
+  const currentLocation = currentPath.startsWith('/Pictures')
+    ? 'Pictures'
+    : currentPath.startsWith('/Music')
+      ? 'Music'
+      : currentPath.startsWith('/Applications')
+        ? 'Applications'
+        : 'Documents'
 
   return (
     <ShellWindow
@@ -168,7 +252,7 @@ export function FinderApp({ files }: FinderAppProps) {
       defaultHeight="min(700px, 86vh)"
       defaultLeft={80}
       defaultTop={32}
-      headerCenter={<span className="hidden font-mono text-xs text-ph-muted sm:inline">{selectedFile ? displayName(selectedFile) : t('title')}</span>}
+      headerCenter={<span className="hidden font-mono text-xs text-ph-muted sm:inline">{selectedFile ? label(selectedFile) : t('title')}</span>}
     >
       <div className="flex min-h-0 flex-1 bg-ph-surface-body text-ph-ink">
         <aside aria-label={t('locations')} className="hidden w-48 shrink-0 flex-col gap-1 border-r bg-ph-sidebar/70 p-3 sm:flex">
@@ -198,6 +282,15 @@ export function FinderApp({ files }: FinderAppProps) {
             <MusicNotesIcon className="shrink-0" size={17} />
             <span className="truncate">{t('music')}</span>
           </button>
+          <button
+            type="button"
+            onClick={() => navigate('/Applications')}
+            aria-current={currentPath.startsWith('/Applications') ? 'page' : undefined}
+            className={`flex min-w-0 items-center gap-2 rounded-md px-2 py-2 text-left text-xs transition-colors ${currentPath.startsWith('/Applications') ? 'bg-ph-orange/10 font-medium text-ph-orange' : 'text-ph-muted hover:bg-black/[0.04] hover:text-ph-ink dark:hover:bg-white/[0.06]'}`}
+          >
+            <SquaresFourIcon className="shrink-0" size={17} />
+            <span className="truncate">{t('applications')}</span>
+          </button>
         </aside>
 
         <section className="flex min-w-0 flex-1 flex-col">
@@ -214,6 +307,7 @@ export function FinderApp({ files }: FinderAppProps) {
                   <SelectItem value="Documents">{t('documents')}</SelectItem>
                   <SelectItem value="Pictures">{t('pictures')}</SelectItem>
                   <SelectItem value="Music">{t('music')}</SelectItem>
+                  <SelectItem value="Applications">{t('applications')}</SelectItem>
                 </SelectContent>
               </Select>
               <nav aria-label={t('path')} className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden text-xs">
@@ -225,13 +319,7 @@ export function FinderApp({ files }: FinderAppProps) {
                       className={`truncate rounded px-1 py-1 hover:bg-ph-orange/10 ${index === breadcrumbs.length - 1 ? 'font-medium text-ph-ink' : 'text-ph-muted'}`}
                       onClick={() => navigate(crumb.path)}
                     >
-                      {crumb.name === 'Documents'
-                        ? t('documents')
-                        : crumb.name === 'Pictures'
-                          ? t('pictures')
-                          : crumb.name === 'Music'
-                            ? t('music')
-                            : files.find(file => file.path === crumb.path)?.name ?? crumb.name}
+                      {crumbLabel(crumb)}
                     </button>
                   </span>
                 ))}
@@ -270,22 +358,25 @@ export function FinderApp({ files }: FinderAppProps) {
                     ? (
                         <div className="grid content-start grid-cols-2 gap-1.5 p-2 sm:grid-cols-3 sm:gap-3 sm:p-5 md:grid-cols-4 lg:grid-cols-5">
                           {visibleFiles.map(file => (
-                            <button
-                              key={file.path}
-                              type="button"
-                              onClick={() => setSelectedPath(file.path)}
-                              onDoubleClick={() => openEntry(file)}
-                              onKeyDown={event => handleEntryKeyDown(event, file)}
-                              aria-pressed={selectedPath === file.path}
-                              className={`group flex min-w-0 flex-col items-center gap-2 rounded-lg p-2 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ph-orange sm:p-3 ${selectedPath === file.path ? 'bg-ph-orange/10 ring-1 ring-ph-orange/25' : 'hover:bg-black/[0.035] dark:hover:bg-white/[0.05]'}`}
-                            >
-                              {file.kind === 'image' && file.src
-                                ? <img alt="" className="aspect-square w-full rounded-md object-cover" loading="lazy" src={file.src} />
-                                : file.kind === 'audio'
-                                  ? <AudioCover file={file} />
-                                  : <span className="flex aspect-square w-full items-center justify-center rounded-md bg-ph-sidebar"><EntryIcon file={file} /></span>}
-                              <span className="w-full truncate text-xs">{displayName(file)}</span>
-                            </button>
+                            <FinderEntryMenu key={file.path} file={file}>
+                              <button
+                                type="button"
+                                onClick={() => setSelectedPath(file.path)}
+                                onDoubleClick={() => openEntry(file)}
+                                onKeyDown={event => handleEntryKeyDown(event, file)}
+                                aria-pressed={selectedPath === file.path}
+                                className={`group flex min-w-0 flex-col items-center gap-2 rounded-lg p-2 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ph-orange sm:p-3 ${selectedPath === file.path ? 'bg-ph-orange/10 ring-1 ring-ph-orange/25' : 'hover:bg-black/[0.035] dark:hover:bg-white/[0.05]'}`}
+                              >
+                                {file.kind === 'image' && file.src
+                                  ? <img alt="" className="aspect-square w-full rounded-md object-cover" loading="lazy" src={file.src} />
+                                  : file.kind === 'audio'
+                                    ? <AudioCover file={file} />
+                                    : file.kind === 'app' && file.appId
+                                      ? <span className="flex aspect-square w-full items-center justify-center rounded-md bg-ph-sidebar"><AppIcon className="text-ph-orange" id={file.appId} size={32} /></span>
+                                      : <span className="flex aspect-square w-full items-center justify-center rounded-md bg-ph-sidebar"><EntryIcon file={file} /></span>}
+                                <span className="w-full truncate text-xs">{label(file)}</span>
+                              </button>
+                            </FinderEntryMenu>
                           ))}
                         </div>
                       )
@@ -297,25 +388,26 @@ export function FinderApp({ files }: FinderAppProps) {
                   <div className="p-2 sm:hidden">
                     {visibleFiles.length > 0
                       ? visibleFiles.map(file => (
-                          <button
-                            key={file.path}
-                            type="button"
-                            onClick={() => setSelectedPath(file.path)}
-                            onKeyDown={event => handleEntryKeyDown(event, file)}
-                            aria-pressed={selectedPath === file.path}
-                            className={`flex w-full min-w-0 items-center gap-3 rounded-md border-b border-ph-ink/5 px-2.5 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ph-orange ${selectedPath === file.path ? 'bg-ph-orange/10' : 'active:bg-ph-orange/5'}`}
-                          >
-                            <EntryIcon file={file} />
-                            <span className="min-w-0 flex-1">
-                              <span className="block truncate text-xs font-medium">{displayName(file)}</span>
-                              <span className="mt-1 block truncate text-[10px] text-ph-muted">
-                                {t(`kind.${file.kind}`)}
-                                {file.modifiedAt ? ` · ${file.modifiedAt}` : ''}
-                                {file.size === null ? '' : ` · ${t('byteSize', { size: file.size })}`}
+                          <FinderEntryMenu key={file.path} file={file}>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedPath(file.path)}
+                              onKeyDown={event => handleEntryKeyDown(event, file)}
+                              aria-pressed={selectedPath === file.path}
+                              className={`flex w-full min-w-0 items-center gap-3 rounded-md border-b border-ph-ink/5 px-2.5 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ph-orange ${selectedPath === file.path ? 'bg-ph-orange/10' : 'active:bg-ph-orange/5'}`}
+                            >
+                              <EntryIcon file={file} />
+                              <span className="min-w-0 flex-1">
+                                <span className="block truncate text-xs font-medium">{label(file)}</span>
+                                <span className="mt-1 block truncate text-[10px] text-ph-muted">
+                                  {t(`kind.${file.kind}`)}
+                                  {file.modifiedAt ? ` · ${file.modifiedAt}` : ''}
+                                  {file.size === null ? '' : ` · ${t('byteSize', { size: file.size })}`}
+                                </span>
                               </span>
-                            </span>
-                            {file.kind === 'directory' && <CaretRightIcon className="shrink-0 text-ph-muted" size={14} />}
-                          </button>
+                              {file.kind === 'directory' && <CaretRightIcon className="shrink-0 text-ph-muted" size={14} />}
+                            </button>
+                          </FinderEntryMenu>
                         ))
                       : <div className="p-10 text-center text-sm text-ph-muted">{t('empty')}</div>}
                   </div>
@@ -335,23 +427,24 @@ export function FinderApp({ files }: FinderAppProps) {
                     </div>
                     {visibleFiles.length > 0
                       ? visibleFiles.map(file => (
-                          <button
-                            key={file.path}
-                            type="button"
-                            onClick={() => setSelectedPath(file.path)}
-                            onDoubleClick={() => openEntry(file)}
-                            onKeyDown={event => handleEntryKeyDown(event, file)}
-                            aria-pressed={selectedPath === file.path}
-                            className={`grid w-full grid-cols-[minmax(220px,1fr)_100px_130px_82px] items-center border-b border-ph-ink/5 px-3 py-2.5 text-left text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ph-orange sm:grid-cols-[minmax(260px,1fr)_130px_160px_100px] sm:px-4 ${selectedPath === file.path ? 'bg-ph-orange/10' : 'hover:bg-black/[0.025] dark:hover:bg-white/[0.04]'}`}
-                          >
-                            <span className="flex min-w-0 items-center gap-2.5 pr-3">
-                              <EntryIcon file={file} />
-                              <span className="truncate">{displayName(file)}</span>
-                            </span>
-                            <span className="truncate pr-3 text-ph-muted">{t(`kind.${file.kind}`)}</span>
-                            <span className="truncate pr-3 text-ph-muted">{file.modifiedAt ?? '—'}</span>
-                            <span className="text-right tabular-nums text-ph-muted">{file.size === null ? '—' : t('byteSize', { size: file.size })}</span>
-                          </button>
+                          <FinderEntryMenu key={file.path} file={file}>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedPath(file.path)}
+                              onDoubleClick={() => openEntry(file)}
+                              onKeyDown={event => handleEntryKeyDown(event, file)}
+                              aria-pressed={selectedPath === file.path}
+                              className={`grid w-full grid-cols-[minmax(220px,1fr)_100px_130px_82px] items-center border-b border-ph-ink/5 px-3 py-2.5 text-left text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ph-orange sm:grid-cols-[minmax(260px,1fr)_130px_160px_100px] sm:px-4 ${selectedPath === file.path ? 'bg-ph-orange/10' : 'hover:bg-black/[0.025] dark:hover:bg-white/[0.04]'}`}
+                            >
+                              <span className="flex min-w-0 items-center gap-2.5 pr-3">
+                                <EntryIcon file={file} />
+                                <span className="truncate">{label(file)}</span>
+                              </span>
+                              <span className="truncate pr-3 text-ph-muted">{t(`kind.${file.kind}`)}</span>
+                              <span className="truncate pr-3 text-ph-muted">{file.modifiedAt ?? '—'}</span>
+                              <span className="text-right tabular-nums text-ph-muted">{file.size === null ? '—' : t('byteSize', { size: file.size })}</span>
+                            </button>
+                          </FinderEntryMenu>
                         ))
                       : <div className="p-10 text-center text-sm text-ph-muted">{t('empty')}</div>}
                   </div>

@@ -6,7 +6,7 @@ import { useLocale } from 'next-intl'
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { setUserLocale } from '@/services/locale'
+import { saveStoredLocale } from '@/services/locale'
 
 export function LanguageSwitcher() {
   const locale = useLocale()
@@ -30,9 +30,8 @@ export function LanguageSwitcher() {
       return
     }
 
-    startTransition(async () => {
-      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
-      await setUserLocale(newLocale)
+    startTransition(() => {
+      saveStoredLocale(newLocale)
       setIsOpen(false)
       window.location.reload()
     })

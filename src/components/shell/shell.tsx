@@ -28,6 +28,7 @@ export function Shell({ children, notesList, virtualFiles }: ShellProps) {
   const activeWindowId = useShellStore(state => state.activeWindowId)
   const draggingWindowId = useShellStore(state => state.draggingWindowId)
   const hydratePreferences = useShellStore(state => state.hydratePreferences)
+  const hydrateDesktopItems = useShellStore(state => state.hydrateDesktopItems)
   const isInitialSync = useRef(true)
   const segment = pathname.replace(/^\//, '').split('/')[0]
   // The route tree stays mounted when window focus only changes the URL.
@@ -35,7 +36,8 @@ export function Shell({ children, notesList, virtualFiles }: ShellProps) {
 
   useEffect(() => {
     hydratePreferences()
-  }, [hydratePreferences])
+    hydrateDesktopItems()
+  }, [hydrateDesktopItems, hydratePreferences])
 
   // Sync route pathname -> window opening
   useEffect(() => {
@@ -86,7 +88,7 @@ export function Shell({ children, notesList, virtualFiles }: ShellProps) {
       {/* ================= MAIN RESPONSIVE WORKSPACE ================= */}
       <main id="desktop-area" className="relative flex-1 w-full overflow-hidden">
         {/* Layered wallpaper and desktop shortcuts */}
-        <ShellWallpaper />
+        <ShellWallpaper files={virtualFiles} />
 
         {/* Windows Rendering Layer */}
         <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">

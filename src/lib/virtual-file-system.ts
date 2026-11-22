@@ -4,7 +4,8 @@ import type { VirtualFile } from '@/lib/virtual-file-types'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { parseGalleryAlbums } from '@/components/apps/gallery/data'
-import { parseMusicManifest } from '@/components/apps/music/manifest'
+import { parseMusicManifest, resolveTrackCover } from '@/components/apps/music/manifest'
+import { launchpadAppIds } from '@/lib/shell-routes'
 import { blogSource } from '@/lib/source'
 import galleryConfig from '../../public/data/gallery.json'
 import musicConfig from '../../public/data/music.json'
@@ -32,6 +33,7 @@ export function getVirtualFileSystem(notes: NoteMeta[]): VirtualFile[] {
     { id: 'documents-notes', path: '/Documents/Notes', name: 'Notes', kind: 'directory', modifiedAt: null, size: null },
     { id: 'pictures', path: '/Pictures', name: 'Pictures', kind: 'directory', modifiedAt: null, size: null },
     { id: 'music', path: '/Music', name: 'Music', kind: 'directory', modifiedAt: null, size: null },
+    { id: 'applications', path: '/Applications', name: 'Applications', kind: 'directory', modifiedAt: null, size: null },
     ...galleryAlbums.map(album => ({
       id: `pictures-${album.id}`,
       path: `/Pictures/${album.id}`,
@@ -109,9 +111,19 @@ export function getVirtualFileSystem(notes: NoteMeta[]): VirtualFile[] {
       summary: track.artist,
       category: track.album,
       src: track.src,
-      cover: track.cover,
+      cover: resolveTrackCover(track),
     }
   })
 
-  return [...directories, ...blogFiles, ...noteFiles, ...imageFiles, ...musicFiles]
+  const applicationFiles: VirtualFile[] = launchpadAppIds.map(appId => ({
+    id: `app-${appId}`,
+    path: `/Applications/${appId}.app`,
+    name: `${appId}.app`,
+    kind: 'app',
+    modifiedAt: null,
+    size: null,
+    appId,
+  }))
+
+  return [...directories, ...blogFiles, ...noteFiles, ...imageFiles, ...musicFiles, ...applicationFiles]
 }

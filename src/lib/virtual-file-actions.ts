@@ -3,6 +3,7 @@ import { useBlogStore } from '@/components/apps/blog/store'
 import { useGalleryStore } from '@/components/apps/gallery/store'
 import { useMusicStore } from '@/components/apps/music/store'
 import { useNotesStore } from '@/components/apps/notes/store'
+import { isAppId } from '@/lib/shell-routes'
 import { useShellStore } from '@/stores/shell-store'
 
 export function openVirtualFile(file: VirtualFile, router?: { push: (href: string) => void }) {
@@ -23,6 +24,9 @@ export function openVirtualFile(file: VirtualFile, router?: { push: (href: strin
     useGalleryStore.getState().setActiveAlbumId(file.albumId)
     useGalleryStore.getState().setActiveImageIndex(file.imageIndex)
     openWindow('gallery')
+  }
+  else if (file.kind === 'app' && file.appId && isAppId(file.appId)) {
+    openWindow(file.appId)
   }
   else if (file.kind === 'audio') {
     const musicStore = useMusicStore.getState()

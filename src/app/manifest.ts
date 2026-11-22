@@ -1,11 +1,14 @@
 import type { MetadataRoute } from 'next'
+import { siteDescription } from '@/lib/site'
+
+export const dynamic = 'force-static'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/',
     name: 'Starllow.OS',
     short_name: 'Starllow',
-    description: 'Starllow.OS',
+    description: siteDescription,
     start_url: '/',
     scope: '/',
     display: 'standalone',

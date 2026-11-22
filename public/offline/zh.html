@@ -1,24 +1,5 @@
-import en from '../../../messages/en.json'
-import zh from '../../../messages/zh.json'
-
-const htmlEscapes: Record<string, string> = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  '\'': '&#39;',
-}
-
-function escapeHtml(value: string) {
-  return value.replace(/[&<>"']/g, character => htmlEscapes[character] ?? character)
-}
-
-export function GET(request: Request) {
-  const language = new URL(request.url).searchParams.get('lang') === 'en' ? 'en' : 'zh'
-  const copy = language === 'en' ? en.pwa : zh.pwa
-
-  const html = `<!doctype html>
-<html lang="${language}">
+<!doctype html>
+<html lang="zh">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,17 +18,9 @@ export function GET(request: Request) {
 <body>
   <main>
     <img src="/pwa/icon-192.png" alt="">
-    <h1>${escapeHtml(copy.offlineTitle)}</h1>
-    <p>${escapeHtml(copy.offlineDescription)}</p>
-    <a href="/">${escapeHtml(copy.retry)}</a>
+    <h1>暂时无法连接</h1>
+    <p>请检查网络连接，然后重试。</p>
+    <a href="/">重试</a>
   </main>
 </body>
-</html>`
-
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=0, must-revalidate',
-    },
-  })
-}
+</html>

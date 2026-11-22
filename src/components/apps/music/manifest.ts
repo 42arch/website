@@ -1,3 +1,11 @@
+import artworkManifest from '@/components/apps/music/artwork-manifest.json'
+
+const extractedArtwork = artworkManifest as Record<string, string>
+
+export function resolveTrackCover(track: { id: string, cover?: string }) {
+  return track.cover ?? extractedArtwork[track.id]
+}
+
 export interface MusicTrack {
   id: string
   title: string

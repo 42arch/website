@@ -2,13 +2,14 @@
   "name": "website",
   "version": "2.0.0",
   "private": true,
+  "packageManager": "bun@1.4.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/42arch/website"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/extract-music-artwork.mjs && next dev",
+    "build": "node scripts/extract-music-artwork.mjs && next build",
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
@@ -26,7 +27,7 @@
     "fumadocs-mdx": "^15.4.7",
     "fumadocs-twoslash": "^4.0.2",
     "katex": "^0.19.0",
-    "next": "^16.3.8",
+    "next": "^16.4.6",
     "next-intl": "^4.14.9",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.7.0",
@@ -54,5 +55,10 @@
     "eslint-config-next": "^16.4.0",
     "shadcn": "^4.21.4",
     "typescript": "^6.0.3"
-  }
+  },
+  "trustedDependencies": [
+    "@parcel/watcher",
+    "@swc/core",
+    "esbuild"
+  ]
 }

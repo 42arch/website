@@ -1,7 +1,7 @@
-const CACHE_NAME = 'starllow-pwa-v1'
+const CACHE_NAME = 'starllow-pwa-v2'
 const CACHE_PREFIX = 'starllow-pwa-'
-const OFFLINE_ZH = '/offline?lang=zh'
-const OFFLINE_EN = '/offline?lang=en'
+const OFFLINE_ZH = '/offline/zh.html'
+const OFFLINE_EN = '/offline/en.html'
 const PRECACHE_URLS = [OFFLINE_ZH, OFFLINE_EN, '/pwa/icon-192.png']
 
 globalThis.addEventListener('install', (event) => {

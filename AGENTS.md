@@ -6,11 +6,11 @@
 - **内容管理**：使用 **Fumadocs**（`fumadocs-mdx` / `fumadocs-core`）管理文章与文档内容。
 - **基础 UI**：使用 **shadcn/ui**，项目配置位于 `components.json`，已有组件位于 `src/components/ui/`。
 - **样式方案**：使用 **Tailwind CSS v4**（CSS-first 配置，主题变量维护于 `src/app/globals.css` 中的 `@theme`，无 `tailwind.config.js`）。
-- **包管理**：统一使用 `pnpm`，严禁使用 `npm` 或 `yarn`。
+- **包管理**：统一使用 `bun`，严禁使用 `npm`、`pnpm` 或 `yarn`。
 - **常用命令**：
-  - 本地开发：`pnpm dev`
-  - 语法与格式检查：`pnpm lint` / `pnpm lint:fix`
-  - 生产构建验证：`pnpm build`
+  - 本地开发：`bun dev`
+  - 语法与格式检查：`bun run lint` / `bun run lint:fix`
+  - 生产构建验证：`bun run build`
 
 ## 2. 代码风格与规范
 - **代码规范**：本项目基于 `@antfu/eslint-config`，严格遵守无分号、单引号风格，以及由 `perfectionist/sort-imports` 维护的 import 排序。修改代码后应保证格式符合规则。
@@ -30,5 +30,5 @@
 
 ## 4. 执行限制
 - 未经用户明确指令，不要打开浏览器自行调试。
-- 未经用户明确说明，不要自行执行 `pnpm lint` 和 `pnpm build`。
+- 未经用户明确说明，不要自行执行 `bun run lint` 和 `bun run build`。
 

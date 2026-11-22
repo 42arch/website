@@ -12,9 +12,12 @@ export interface FinderDirectoryPreference {
 
 interface FinderState {
   preferences: Record<string, FinderDirectoryPreference>
+  requestedPath: string | null
   setView: (path: string, view: FinderView) => void
   toggleSort: (path: string, sortKey: FinderSortKey) => void
   resetDirectoryPreferences: () => void
+  requestPath: (path: string) => void
+  clearRequestedPath: () => void
 }
 
 const storageKey = 'starllow-os-finder-preferences-v1'
@@ -58,6 +61,7 @@ function savePreferences(preferences: Record<string, FinderDirectoryPreference>)
 
 export const useFinderStore = create<FinderState>((set, get) => ({
   preferences: {},
+  requestedPath: null,
   setView: (path, view) => {
     const preferences = { ...get().preferences, [path]: { ...(get().preferences[path] ?? defaultPreference), view } }
     set({ preferences })
@@ -80,4 +84,6 @@ export const useFinderStore = create<FinderState>((set, get) => ({
     const preferences = getStoredPreferences()
     set({ preferences })
   },
+  requestPath: path => set({ requestedPath: path }),
+  clearRequestedPath: () => set({ requestedPath: null }),
 }))

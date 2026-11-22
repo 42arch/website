@@ -1,10 +1,15 @@
-import { redirect } from 'next/navigation'
+import { noIndexMetadata } from '@/lib/site'
+import { notesSource } from '@/lib/source'
+import { LegacyNoteRedirect } from './legacy-note-redirect'
 
-export default async function LegacyNotePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
-  const { slug } = await params
-  redirect(`/blog/${slug}`)
+export const metadata = noIndexMetadata
+
+export const dynamicParams = false
+
+export function generateStaticParams() {
+  return notesSource.getPages().map(page => ({ slug: page.slugs[0] }))
+}
+
+export default function LegacyNotePage() {
+  return <LegacyNoteRedirect />
 }
