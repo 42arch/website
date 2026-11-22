@@ -16,4 +16,4 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['typescript'],
 }
 
-export default withNextIntl(withMDX(nextConfig))
+export default withMDX(withNextIntl(nextConfig))

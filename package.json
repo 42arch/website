@@ -8,8 +8,9 @@
     "url": "https://github.com/42arch/website"
   },
   "scripts": {
-    "dev": "node scripts/extract-music-artwork.mjs && next dev",
-    "build": "node scripts/extract-music-artwork.mjs && next build",
+    "postinstall": "fumadocs-mdx",
+    "dev": "fumadocs-mdx && node scripts/extract-music-artwork.mjs && next dev",
+    "build": "fumadocs-mdx && node scripts/extract-music-artwork.mjs && next build",
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
